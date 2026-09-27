@@ -1,0 +1,14 @@
+codigo,base_legal,nombre,periodo_declarado,aplica_a
+IVA_ANT_ISLR_IGTF_RET_IVA_P1,art. 1 lit. a.1,"IVA, anticipos de ISLR, IGTF y retenciones de IVA",operaciones entre los días 01 y 15 del mismo mes,SPE (art. 5: salvo minería/hidrocarburos)
+IVA_ANT_ISLR_IGTF_RET_IVA_P2,art. 1 lit. a.2,"IVA, anticipos de ISLR, IGTF y retenciones de IVA",operaciones entre el día 16 y el último del MES ANTERIOR,SPE (art. 5: salvo minería/hidrocarburos)
+ISLR_ESTIMADAS,art. 1 lit. b,"Estimadas de ISLR (declaración y pago de porciones, ejercicios regulares e irregulares)",,SPE
+ISLR_RETENCIONES,art. 1 lit. c,Retenciones de ISLR,,SPE / agentes de retención
+JUEGOS_ENVITE_AZAR,art. 1 lit. d,Actividades de juegos de envite o azar,,SPE
+ISLR_RET_LOTERIA_P1,art. 1 lit. e.1,Retenciones de ISLR sobre premios de lotería,practicadas entre los días 01 y 15,SPE / agentes de retención
+ISLR_RET_LOTERIA_P2,art. 1 lit. e.2,Retenciones de ISLR sobre premios de lotería,practicadas entre el día 16 y el último del MES ANTERIOR,SPE / agentes de retención
+ISLR_ANUAL_2025,art. 1 lit. f,Autoliquidación anual de ISLR (ejercicio 01/01/2025 al 31/12/2025),ejercicio 2025,SPE
+ISLR_IRREGULARES,art. 1 lit. g,Autoliquidación de ISLR ejercicios irregulares,,SPE
+GRANDES_PATRIMONIOS,art. 1 lit. h,Impuesto a los Grandes Patrimonios,,SPE
+APORTE_70,art. 1 lit. i,"Aporte del 70 % de los ingresos de servicios desconcentrados, autónomos y entes descentralizados",,Entes públicos SPE
+IVA_MENSUAL_MINERIA_HIDROCARBUROS,art. 2,IVA mensual,mes anterior,SPE de minería/hidrocarburos no perceptores de regalías
+IVA_INFORMATIVA_TRIMESTRAL,art. 3,Declaración informativa trimestral de IVA,trimestre,SPE con actividades exclusivamente exentas o exoneradas (usa las fechas del art. 2)

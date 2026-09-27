@@ -1,0 +1,22 @@
+{
+  "descripcion": "Histórico oficial del BCV: Tipo de Cambio de Referencia (Sistema de Mercado Cambiario)",
+  "tasa_oficial": "venta_bs (Venta ASK en Bs./M.E.), igual a la publicada en la portada del BCV",
+  "base_legal": "Convenio Cambiario N° 1, art. 9, parágrafo primero; Resolución N° 19-05-01 (nota al pie de cada hoja)",
+  "generado": "2026-09-27",
+  "rango_fecha_valor": [
+    "2025-01-03",
+    "2026-09-28"
+  ],
+  "ultima": {
+    "fecha_valor": "2026-09-28",
+    "EUR": "976.90091142",
+    "USD": "857.0058"
+  },
+  "conteos": {
+    "archivos": 7,
+    "publicaciones": 417,
+    "tasas": 8757,
+    "monedas": 21,
+    "observaciones": 36
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "instrumento": "Decreto N° 4.944 (Arancel de Aduanas)",
+  "gaceta": "GO Ext. N° 6.804 del 25/04/2024",
+  "fuente_pdf": "GOE-6804_Decreto-4944.pdf",
+  "fuente_sha256": "60e9e089bdf41a4ddc5548ac065e5fb644d1bd0b16ed2b59ca81ef97843cff85",
+  "generado": "2026-09-27",
+  "conteos": {
+    "secciones": 22,
+    "capitulos": 98,
+    "partidas": 1275,
+    "subpartidas": 16310,
+    "terminales": 11834,
+    "terminales_con_aec": 11832,
+    "observaciones_fuente": 47
+  }
+}

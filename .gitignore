@@ -1,0 +1,14 @@
+# Secretos
+.env
+.env.*
+!.env.example
+# Python
+__pycache__/
+*.pyc
+# Node / Next.js
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+# Salidas intermedias de extracción (se regeneran)
+datos/**/extraccion/

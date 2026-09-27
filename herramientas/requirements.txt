@@ -1,0 +1,1 @@
+xlrd==2.0.1   # lectura de los .xls históricos del BCV (herramientas/bcv)

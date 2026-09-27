@@ -1,0 +1,48 @@
+codigo,tipo,detalle,valor_fuente,version
+8701290000,codigo_fuera_de_lugar_en_fuente,"pág 359, dentro del bloque de la partida 9801: 'Los demás' AEC 3 u. Revisar el código correcto",8701.29.00.00,GO Ext. N° 6.804
+9850000000,fila_duplicada_en_fuente,se descarta la aparición de la pág 370,,GO Ext. N° 6.804
+9851000000,fila_duplicada_en_fuente,se descarta la aparición de la pág 370,,GO Ext. N° 6.804
+9852000000,fila_duplicada_en_fuente,se conserva la aparición de la pág 370,,GO Ext. N° 6.804
+0307490000,guiones_no_concuerdan_con_codigo,padre por guiones 030743; se usa padre por código 03074,3,GO Ext. N° 6.804
+293090993,guiones_no_concuerdan_con_codigo,padre por guiones 2930909; se usa padre por código 29309099,3,GO Ext. N° 6.804
+2930909990,guiones_no_concuerdan_con_codigo,padre por guiones 293090993; se usa padre por código 29309099,4,GO Ext. N° 6.804
+4811513000,guiones_no_concuerdan_con_codigo,padre por guiones 4811512; se usa padre por código 481151,4,GO Ext. N° 6.804
+5113002000,guiones_no_concuerdan_con_codigo,padre por guiones 5113001; se usa padre por código 51130000,2,GO Ext. N° 6.804
+8424822,guiones_no_concuerdan_con_codigo,padre por guiones 84248; se usa padre por código 842482,2,GO Ext. N° 6.804
+8424829000,guiones_no_concuerdan_con_codigo,padre por guiones 8424822; se usa padre por código 842482,3,GO Ext. N° 6.804
+84324,guiones_no_concuerdan_con_codigo,padre por guiones 84323; se usa padre por código (partida),2,GO Ext. N° 6.804
+8447203000,guiones_no_concuerdan_con_codigo,padre por guiones 8447202; se usa padre por código 844720,3,GO Ext. N° 6.804
+8471309010,guiones_no_concuerdan_con_codigo,padre por guiones (partida); se usa padre por código 84713090,0,GO Ext. N° 6.804
+8471309090,guiones_no_concuerdan_con_codigo,padre por guiones (partida); se usa padre por código 84713090,0,GO Ext. N° 6.804
+84714,guiones_no_concuerdan_con_codigo,padre por guiones 8471309090; se usa padre por código (partida),1,GO Ext. N° 6.804
+847150,guiones_no_concuerdan_con_codigo,padre por guiones 8471309090; se usa padre por código (partida),1,GO Ext. N° 6.804
+847160,guiones_no_concuerdan_con_codigo,padre por guiones 8471309090; se usa padre por código (partida),1,GO Ext. N° 6.804
+847170,guiones_no_concuerdan_con_codigo,padre por guiones 8471309090; se usa padre por código (partida),1,GO Ext. N° 6.804
+8471800000,guiones_no_concuerdan_con_codigo,padre por guiones 8471309090; se usa padre por código (partida),1,GO Ext. N° 6.804
+847190,guiones_no_concuerdan_con_codigo,padre por guiones 8471309090; se usa padre por código (partida),1,GO Ext. N° 6.804
+8547900000,guiones_no_concuerdan_con_codigo,padre por guiones (partida); se usa padre por código 85479000,1,GO Ext. N° 6.804
+9804000090,guiones_no_concuerdan_con_codigo,padre por guiones 980400005; se usa padre por código (partida),1,GO Ext. N° 6.804
+0402101090,regimen_coma_final,regimen_importacion: se elimina la coma final,"3,5,8,",GO Ext. N° 6.804
+0901120000,regimen_ilegible_en_fuente,regimen_importacion: se deja vacío,"5,612",GO Ext. N° 6.804
+2704009000,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,0 kg,GO Ext. N° 6.804
+2921199400,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+2930904920,terminal_sin_aec_en_fuente,,,GO Ext. N° 6.804
+2930904920,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+38231990,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,2 kg,GO Ext. N° 6.804
+3824994100,regimen_ilegible_en_fuente,regimen_importacion: se deja vacío,2E,GO Ext. N° 6.804
+64069090,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,18 u,GO Ext. N° 6.804
+701090221,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,u,GO Ext. N° 6.804
+701090222,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,u,GO Ext. N° 6.804
+701973,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,kg,GO Ext. N° 6.804
+7019900000,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+81069000,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,kg,GO Ext. N° 6.804
+8501800000,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+8506101,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,u,GO Ext. N° 6.804
+853590,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,u,GO Ext. N° 6.804
+8539311,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,u,GO Ext. N° 6.804
+9508211000,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+9508212000,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+9508219000,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804
+97012,agrupacion_con_valores_en_fuente,valores en una línea de agrupación,u,GO Ext. N° 6.804
+9842000090,terminal_sin_aec_en_fuente,,,GO Ext. N° 6.804
+9842000090,terminal_sin_unidad_en_fuente,,,GO Ext. N° 6.804

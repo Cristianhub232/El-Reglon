@@ -1,0 +1,58 @@
+{
+  "reformas": [
+    {
+      "instrumento": "Decreto N° 5.103",
+      "gaceta": "GO Ext. N° 6.890",
+      "filas": 2085,
+      "duplicados_descartados": 0,
+      "dice_no_coincide": [],
+      "dice_inexistente": [],
+      "dice_fuera_de_lugar": [
+        "8701.29.00.00 (en bloque 9801)"
+      ],
+      "lista_inexistente": [],
+      "lista_no_terminal": [],
+      "incorpora_existente": [],
+      "aplicados": {
+        "nomenclatura": 778,
+        "exaec": 584,
+        "regimen": 23
+      }
+    },
+    {
+      "instrumento": "Decreto N° 5.147",
+      "gaceta": "GO Ext. N° 6.918",
+      "filas": 1365,
+      "duplicados_descartados": 12,
+      "dice_no_coincide": [],
+      "dice_inexistente": [],
+      "dice_fuera_de_lugar": [],
+      "lista_inexistente": [],
+      "lista_no_terminal": [],
+      "incorpora_existente": [],
+      "aplicados": {
+        "nomenclatura": 34,
+        "exaec": 999,
+        "regimen": 309
+      }
+    },
+    {
+      "instrumento": "Decreto N° 5.198",
+      "gaceta": "GO Ext. N° 6.952",
+      "filas": 1505,
+      "duplicados_descartados": 0,
+      "dice_no_coincide": [],
+      "dice_inexistente": [],
+      "dice_fuera_de_lugar": [],
+      "lista_inexistente": [],
+      "lista_no_terminal": [],
+      "incorpora_existente": [],
+      "aplicados": {
+        "nomenclatura": 82,
+        "exaec": 735,
+        "regimen": 636
+      }
+    }
+  ],
+  "formato_invalido": []
+}

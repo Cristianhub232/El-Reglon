@@ -1,0 +1,15 @@
+codigo,instrumento,tipo_contribuyente,base_legal,nombre,aplica_a,requiere,excluye,nota
+IVA_ANT_ISLR_IGTF_RET_IVA_P1,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. a.1,"IVA, anticipos de ISLR, IGTF y retenciones de IVA",SPE (art. 5: salvo minería/hidrocarburos),,MINERIA_HIDROCARBUROS,
+IVA_ANT_ISLR_IGTF_RET_IVA_P2,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. a.2,"IVA, anticipos de ISLR, IGTF y retenciones de IVA",SPE (art. 5: salvo minería/hidrocarburos),,MINERIA_HIDROCARBUROS,La columna de cada mes corresponde a las operaciones del 16 al último día del MES ANTERIOR.
+ISLR_ESTIMADAS,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. b,"Estimadas de ISLR (declaración y pago de porciones, ejercicios regulares e irregulares)",SPE,,,
+ISLR_RETENCIONES,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. c,Retenciones de ISLR,SPE / agentes de retención,,,
+JUEGOS_ENVITE_AZAR,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. d,Actividades de juegos de envite o azar,SPE,JUEGOS_AZAR,,
+ISLR_RET_LOTERIA_P1,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. e.1,Retenciones de ISLR sobre premios de lotería,SPE / agentes de retención,LOTERIA,,
+ISLR_RET_LOTERIA_P2,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. e.2,Retenciones de ISLR sobre premios de lotería,SPE / agentes de retención,LOTERIA,,La columna de cada mes corresponde a las retenciones del 16 al último día del MES ANTERIOR.
+ISLR_ANUAL_2025,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. f,Autoliquidación anual de ISLR (ejercicio 01/01/2025 al 31/12/2025),SPE,,EJERCICIO_IRREGULAR,
+ISLR_IRREGULARES,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. g,Autoliquidación de ISLR ejercicios irregulares,SPE,EJERCICIO_IRREGULAR,,La tabla oficial no tiene columna de marzo.
+GRANDES_PATRIMONIOS,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. h,Impuesto a los Grandes Patrimonios,SPE,GRANDES_PATRIMONIOS,,
+APORTE_70,PROV_SNAT_2025_000091,ESPECIAL,art. 1 lit. i,"Aporte del 70 % de los ingresos de servicios desconcentrados, autónomos y entes descentralizados",Entes públicos SPE,ENTE_PUBLICO,,
+IVA_MENSUAL_MINERIA_HIDROCARBUROS,PROV_SNAT_2025_000091,ESPECIAL,art. 2,IVA mensual,SPE de minería/hidrocarburos no perceptores de regalías,MINERIA_HIDROCARBUROS,,
+IVA_INFORMATIVA_TRIMESTRAL,PROV_SNAT_2025_000091,ESPECIAL,art. 3,Declaración informativa trimestral de IVA,SPE con actividades exclusivamente exentas o exoneradas (usa las fechas del art. 2),SOLO_EXENTO_EXONERADO,,El art. 3 remite a las fechas del art. 2 sin indicar qué meses corresponden a cada trimestre: se publican las 12 fechas; confirmar con el asesor (B21).
+IVA_MENSUAL_ORDINARIO,REGLAMENTO_IVA_1999,ORDINARIO,Reglamento General Ley IVA art. 60; COT art. 10,Declaración y pago mensual del IVA,"Contribuyentes ordinarios (no especiales), cualquier terminal del RIF",,,"Vence el día 15 del mes siguiente al período; si es inhábil (fin de semana, feriado nacional o día bancario no laborable), el primer día hábil siguiente (COT art. 10). No incluye días no laborables decretados después de generar la semilla."

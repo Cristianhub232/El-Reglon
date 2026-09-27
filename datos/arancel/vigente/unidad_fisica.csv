@@ -1,0 +1,13 @@
+sigla,nombre,magnitud
+kg,Kilogramo,Peso
+c/t,Quilate,Peso
+m,Metro,Longitud
+m²,Metro cuadrado,Área
+m³,Metro cúbico,Volumen
+cm³,Centímetro cúbico,Volumen
+l,Litro,Volumen
+1000 kWh,Mil kilovatios hora,Energía eléctrica
+u,Unidades o artículos,Cantidad
+2u,Par,Cantidad
+12u,Docena,Cantidad
+1000 u,Miles de unidades o artículos,Cantidad

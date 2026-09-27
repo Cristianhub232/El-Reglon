@@ -1,0 +1,21 @@
+orden,magnitud,unidad,equivalencia,unidad_equivalente,equivalencia_texto,nota,pagina_gaceta
+1,Longitud,1 pie (12 pulgadas),0.3048,m,"0,3048 m",,6
+2,Longitud,1 pulgada,0.0254,m,"0,0254 m",,6
+3,Longitud,1 yarda,0.9144,m,"0,9144 m",,6
+4,Masa,"1 Libra (UK, USA)",0.45359237,kg,"0,45359237 kg",,6
+5,Masa,1 Onza,0.02834952,kg,"0,02834952 kg",,6
+6,Masa,1 Libra troy,0.3732417,kg,"0,3732417 kg",,6
+7,Masa,1 Onza troy,0.03110348,kg,"0,03110348 kg",,6
+8,Masa,1 quilate,0.0002,kg,"0,0002 kg",,6
+9,Masa,1 quintal métrico,100,kg,100 kg,,6
+10,Masa,1 Tonelada (métrica),1000,kg,"1.000 kg",,6
+11,Masa,"1 Tonelada larga (2.240 lb) (ton UK)",1016.047,kg,"1.016,047 kg",,6
+12,Masa,"1 Tonelada corta (2.000 lb) (ton USA)",907.1847,kg,"907,1847 kg",,6
+13,Superficie,1 Pie cuadrado,0.09290304,m²,"0,09290304 m²",,6
+14,Superficie,1 Pulgada cuadrada,0.00064516,m²,"0,00064516 m²",,6
+15,Volumen,1 Galón (USA líquido),0.003785412,m³,"0,003785412 m³","La Gaceta indica también 3,78 l",6
+16,Volumen,1 Pie cúbico,0.02831685,m³,"0,02831685 m³",,6
+17,Volumen,1 Pie cuadrado (madera),0.002359737,m³,"0,002359737 m³","Así figura en la Gaceta; corresponde al pie tablar (board foot)",6
+18,Volumen,1 Pinta (USA líquida),0.0004731765,m³,"0,0004731765 m³",,6
+19,Volumen,1 Barril de Petróleo (42 galones líquidos USA),0.1589873,m³,"0,1589873 m³",,6
+20,Volumen,1 onza líquida (USA),0.02957353,l,"0,02957353 l",,6

@@ -1,0 +1,24 @@
+# El Renglón · entorno de desarrollo (solo base de datos por ahora)
+# Uso: cp .env.example .env  (y cambiar la contraseña)  →  docker compose up -d db
+services:
+  db:
+    image: postgres:16.14-alpine          # versión fija: builds reproducibles
+    container_name: elrenglon-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-elrenglon}
+      POSTGRES_USER: ${POSTGRES_USER:-elrenglon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD en .env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PUERTO:-55432}:5432"   # solo accesible desde esta máquina
+    volumes:
+      - elrenglon-pgdata:/var/lib/postgresql/data
+      - ./db:/db:ro
+      - ./datos:/datos:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  elrenglon-pgdata:

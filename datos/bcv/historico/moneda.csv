@@ -1,0 +1,22 @@
+codigo,pais,codigo_iso,nota
+ANG,Curazao,ANG,
+ARS,Argentina,ARS,
+BOB,Bolivia,BOB,
+BRL,Brasil,BRL,
+CAD,Canada,CAD,
+CLP,Chile,CLP,
+CNY,China,CNY,
+COP,Colombia,COP,
+CUC,Cuba,CUC,"Peso cubano convertible; retirado por Cuba en 2021, el BCV lo sigue publicando"
+DOP,Republica Dominicana,DOP,
+EUR,Zona Euro,EUR,
+INR,India,INR,
+JPY,Japon,JPY,
+MXP,Mexico,MXN,El BCV usa 'MXP' (código anterior a 1993); el ISO 4217 vigente es MXN
+NIO,Nicaragua,NIO,
+PEN,Perú,PEN,
+RUB,Rusia,RUB,
+TRY,Turquia,TRY,
+TTD,Trinidad y Tobago,TTD,
+USD,E.U.A.,USD,
+UYU,Uruguay,UYU,
