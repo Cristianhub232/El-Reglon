@@ -34,6 +34,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-elrenglon}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD en .env}
       TZ: America/Caracas
+      IVA_OFF: ${IVA_OFF:-1}
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS
     depends_on:

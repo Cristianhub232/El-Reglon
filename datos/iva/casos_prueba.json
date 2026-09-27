@@ -1,0 +1,1361 @@
+{
+ "_nota": "Casos de referencia del clasificador de IVA. Los ejecuta scripts/iva-casos.ts contra datos/iva/catalogo.json (sin base de datos). 'categorias' es el conjunto esperado de categorías de las opciones.",
+ "casos": [
+  {
+   "nombre": "Arroz blanco tipo I 1 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "ARROZ"
+   }
+  },
+  {
+   "nombre": "Arroz blanco tipo I 1 kg",
+   "operacion": "importacion",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ARROZ"
+   }
+  },
+  {
+   "nombre": "Harina de maíz precocida 1kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "HARINA"
+   }
+  },
+  {
+   "nombre": "Harina de trigo leudante",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ],
+    "regla": "HARINA_PREPARADA"
+   }
+  },
+  {
+   "nombre": "Pasta larga espagueti 1 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "PASTAS"
+   }
+  },
+  {
+   "nombre": "Aceite de oliva extra virgen 500 ml",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ACEITE_OLIVA"
+   }
+  },
+  {
+   "nombre": "Aceite de girasol 1 L",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "ACEITE_COMESTIBLE"
+   }
+  },
+  {
+   "nombre": "Aceite de motor 20W50",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "REPUESTOS"
+   }
+  },
+  {
+   "nombre": "Atún en aceite 140 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ],
+    "regla": "ATUN_ACEITE"
+   }
+  },
+  {
+   "nombre": "Atún al natural en agua 170 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "ATUN_NATURAL"
+   }
+  },
+  {
+   "nombre": "Sardinas en salsa de tomate 170 g",
+   "operacion": "nacional",
+   "contexto": {
+    "peso_g": 170
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "SARDINAS"
+   }
+  },
+  {
+   "nombre": "Sardinas en aceite 425 g",
+   "operacion": "nacional",
+   "contexto": {
+    "peso_g": 425
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "SARDINAS"
+   }
+  },
+  {
+   "nombre": "Sardinas en lata",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "SARDINAS"
+   }
+  },
+  {
+   "nombre": "Leche completa en polvo 900 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "LECHE"
+   }
+  },
+  {
+   "nombre": "Leche condensada 395 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "LECHE_ZONA_GRIS"
+   }
+  },
+  {
+   "nombre": "Fórmula infantil de inicio 400 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "FORMULA_INFANTIL"
+   }
+  },
+  {
+   "nombre": "Yogur de fresa",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ],
+    "regla": "YOGUR"
+   }
+  },
+  {
+   "nombre": "Queso blanco duro",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "QUESO_BLANCO"
+   }
+  },
+  {
+   "nombre": "Queso mozzarella 500 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "QUESOS_OTROS"
+   }
+  },
+  {
+   "nombre": "Mantequilla con sal",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "MARGARINA_MANTEQUILLA"
+   }
+  },
+  {
+   "nombre": "Mortadela especial",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "MORTADELA"
+   }
+  },
+  {
+   "nombre": "Jamón de pierna",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "EMBUTIDOS"
+   }
+  },
+  {
+   "nombre": "Pechuga de pollo",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "CARNES_EXENTAS"
+   }
+  },
+  {
+   "nombre": "Carne molida de res",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "CARNES_EXENTAS"
+   }
+  },
+  {
+   "nombre": "Nuggets de pollo empanizados",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ],
+    "regla": "CARNES_PROCESADAS"
+   }
+  },
+  {
+   "nombre": "Carne de chivo",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_REDUCIDA"
+    ],
+    "regla": "CARNES_OTRAS"
+   }
+  },
+  {
+   "nombre": "Filete de merluza congelado",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_REDUCIDA",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "PESCADOS_MARISCOS"
+   }
+  },
+  {
+   "nombre": "Huevos de gallina cartón 30 unidades",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "HUEVOS"
+   }
+  },
+  {
+   "nombre": "Huevo de chocolate",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "GOLOSINAS_SNACKS"
+   }
+  },
+  {
+   "nombre": "Tomates",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "VEGETALES_FRESCOS"
+   }
+  },
+  {
+   "nombre": "Salsa de tomate 397 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "SALSAS_CONDIMENTOS"
+   }
+  },
+  {
+   "nombre": "Vegetales congelados mixtos",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "VEGETALES_PROCESADOS"
+   }
+  },
+  {
+   "nombre": "Caraotas negras 500 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "LEGUMBRES_SECAS"
+   }
+  },
+  {
+   "nombre": "Azúcar refinada 1 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "AZUCAR_PAPELON"
+   }
+  },
+  {
+   "nombre": "Azúcar refinada 1 kg",
+   "operacion": "nacional",
+   "contexto": {
+    "uso": "consumo"
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "AZUCAR_PAPELON"
+   }
+  },
+  {
+   "nombre": "Azúcar refinada saco 50 kg",
+   "operacion": "nacional",
+   "contexto": {
+    "uso": "industrial"
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "AZUCAR_PAPELON"
+   }
+  },
+  {
+   "nombre": "Café molido 250 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "CAFE"
+   }
+  },
+  {
+   "nombre": "Café instantáneo 100 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "CAFE_PREPARADO"
+   }
+  },
+  {
+   "nombre": "Sal refinada 1 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "SAL"
+   }
+  },
+  {
+   "nombre": "Pan canilla",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "PAN"
+   }
+  },
+  {
+   "nombre": "Pan de jamón",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "PAN_ZONA_GRIS"
+   }
+  },
+  {
+   "nombre": "Mayonesa 445 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "MAYONESA"
+   }
+  },
+  {
+   "nombre": "Avena en hojuelas 400 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "AVENA"
+   }
+  },
+  {
+   "nombre": "Galletas de avena",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "GOLOSINAS_SNACKS"
+   }
+  },
+  {
+   "nombre": "Margarina 500 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "MARGARINA_MANTEQUILLA"
+   }
+  },
+  {
+   "nombre": "Manteca vegetal 1 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_REDUCIDA"
+    ],
+    "regla": "MANTECAS"
+   }
+  },
+  {
+   "nombre": "Acetaminofén 500 mg 10 tabletas",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "MEDICAMENTOS"
+   }
+  },
+  {
+   "nombre": "Vitamina C 1000 mg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ],
+    "regla": "SUPLEMENTOS"
+   }
+  },
+  {
+   "nombre": "Fertilizante triple 15",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "FERTILIZANTES"
+   }
+  },
+  {
+   "nombre": "Insecticida en aerosol",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "AGROQUIMICOS"
+   }
+  },
+  {
+   "nombre": "Silla de ruedas plegable",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "AYUDAS_DISCAPACIDAD"
+   }
+  },
+  {
+   "nombre": "Libro Cien años de soledad",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "LIBROS_REVISTAS"
+   }
+  },
+  {
+   "nombre": "Cuaderno de una línea 100 hojas",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "UTILES_ESCOLARES"
+   }
+  },
+  {
+   "nombre": "Alimento para perros adultos 4 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ALIMENTO_MASCOTAS"
+   }
+  },
+  {
+   "nombre": "Alimento concentrado para cerdos",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ALIMENTO_ANIMAL_EXENTO"
+   }
+  },
+  {
+   "nombre": "Refresco de cola 2 L",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "BEBIDAS"
+   }
+  },
+  {
+   "nombre": "Cerveza lata 355 ml",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "BEBIDAS_ALCOHOLICAS"
+   }
+  },
+  {
+   "nombre": "Jabón de tocador",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "HIGIENE_PERSONAL"
+   }
+  },
+  {
+   "nombre": "Detergente en polvo 1 kg",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "LIMPIEZA_HOGAR"
+   }
+  },
+  {
+   "nombre": "Gasolina 91 octanos",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXONERADO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "COMBUSTIBLES"
+   }
+  },
+  {
+   "nombre": "Reloj de pulsera",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "JOYAS_RELOJES"
+   }
+  },
+  {
+   "nombre": "Reloj de pulsera",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 450
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "JOYAS_RELOJES"
+   }
+  },
+  {
+   "nombre": "Reloj de pulsera",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 120
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "JOYAS_RELOJES"
+   }
+  },
+  {
+   "nombre": "Anillo de oro 18k",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 300
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "JOYAS_RELOJES"
+   }
+  },
+  {
+   "nombre": "Collar de fantasía",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "BISUTERIA"
+   }
+  },
+  {
+   "nombre": "Automóvil sedán 2026",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 45000
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "VEHICULOS"
+   }
+  },
+  {
+   "nombre": "Automóvil sedán 2026",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 18000
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "VEHICULOS"
+   }
+  },
+  {
+   "nombre": "Moto 150cc",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 1500
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "MOTOCICLETAS"
+   }
+  },
+  {
+   "nombre": "Rines 17 pulgadas",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "ACCESORIOS_VEHICULO"
+   }
+  },
+  {
+   "nombre": "Cauchos 205/55 R16",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "REPUESTOS"
+   }
+  },
+  {
+   "nombre": "Yate de 40 pies",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "EMBARCACIONES"
+   }
+  },
+  {
+   "nombre": "Pistola 9 mm",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "ARMAS"
+   }
+  },
+  {
+   "nombre": "Pistola de silicón",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "FERRETERIA_HOGAR"
+   }
+  },
+  {
+   "nombre": "Caviar de esturión 50 g",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "CAVIAR"
+   }
+  },
+  {
+   "nombre": "Chaqueta de cuero",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 12000
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "PRENDAS_CUERO_PIEL"
+   }
+  },
+  {
+   "nombre": "Camisa de algodón",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ROPA_CALZADO"
+   }
+  },
+  {
+   "nombre": "Cachorro golden retriever",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ANIMALES_RECREATIVOS"
+   }
+  },
+  {
+   "nombre": "Gato hidráulico 2 toneladas",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ]
+   }
+  },
+  {
+   "nombre": "Teléfono celular",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ELECTRONICA_HOGAR"
+   }
+  },
+  {
+   "nombre": "Consulta médica general",
+   "operacion": "nacional",
+   "tipo": "servicio",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "SALUD"
+   }
+  },
+  {
+   "nombre": "Pasaje en autobús Caracas-Valencia",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "TRANSPORTE_PASAJEROS"
+   }
+  },
+  {
+   "nombre": "Pasaje aéreo Caracas-Maracaibo",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_REDUCIDA"
+    ],
+    "regla": "TRANSPORTE_AEREO"
+   }
+  },
+  {
+   "nombre": "Flete de mercancía",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "TRANSPORTE_MERCANCIAS"
+   }
+  },
+  {
+   "nombre": "Servicio eléctrico",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ELECTRICIDAD"
+   }
+  },
+  {
+   "nombre": "Servicio eléctrico",
+   "operacion": "nacional",
+   "contexto": {
+    "uso": "residencial"
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "ELECTRICIDAD"
+   }
+  },
+  {
+   "nombre": "Honorarios de asesoría contable",
+   "operacion": "nacional",
+   "contexto": {
+    "cliente": "privado"
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "SERVICIOS_PROFESIONALES"
+   }
+  },
+  {
+   "nombre": "Honorarios de asesoría contable",
+   "operacion": "nacional",
+   "contexto": {
+    "cliente": "poder_publico"
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_REDUCIDA"
+    ],
+    "regla": "SERVICIOS_PROFESIONALES"
+   }
+  },
+  {
+   "nombre": "Comisión bancaria por transferencia",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "NO_SUJETO"
+    ],
+    "regla": "BANCOS_SEGUROS"
+   }
+  },
+  {
+   "nombre": "Almuerzo en restaurante",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "RESTAURANTES"
+   }
+  },
+  {
+   "nombre": "Hospedaje en hotel",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ],
+    "regla": "HOSPEDAJE"
+   }
+  },
+  {
+   "nombre": "Entradas a conciertos",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ESPECTACULOS"
+   }
+  },
+  {
+   "nombre": "Membresía de club privado",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "CLUBES_MEMBRESIA"
+   }
+  },
+  {
+   "nombre": "Alquiler de yate",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ALQUILER_EMBARCACION_AERONAVE"
+   }
+  },
+  {
+   "nombre": "xyz123 producto desconocido",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "no_determinado",
+    "categorias": []
+   }
+  },
+  {
+   "nombre": null,
+   "operacion": "nacional",
+   "codigo_arancelario": "1006.30.21.10",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "ARROZ"
+   }
+  },
+  {
+   "nombre": null,
+   "operacion": "nacional",
+   "codigo_arancelario": "1509.20.00.10",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "ACEITE_OLIVA"
+   }
+  },
+  {
+   "nombre": null,
+   "operacion": "nacional",
+   "codigo_arancelario": "0406.10.90.00",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "QUESO_FRESCO_0406_10"
+   }
+  },
+  {
+   "nombre": null,
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 50000
+   },
+   "codigo_arancelario": "8703.23.10.10",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ],
+    "regla": "VEHICULOS"
+   }
+  },
+  {
+   "nombre": null,
+   "operacion": "nacional",
+   "codigo": "9788437604947",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "LIBROS_REVISTAS"
+   }
+  },
+  {
+   "nombre": null,
+   "operacion": "importacion",
+   "codigo": "9788437604947",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "LIBROS_REVISTAS"
+   }
+  },
+  {
+   "nombre": "Galletas de soda",
+   "operacion": "nacional",
+   "codigo_arancelario": "1006.30.21.10",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "ALICUOTA_GENERAL",
+     "EXENTO"
+    ]
+   }
+  },
+  {
+   "nombre": "Empanada de queso",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "COMIDA_PREPARADA"
+   }
+  },
+  {
+   "nombre": "Suero de leche",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "LACTEOS_OTROS"
+   }
+  },
+  {
+   "nombre": "Huevos de codorniz",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "HUEVOS_OTROS"
+   }
+  },
+  {
+   "nombre": "Caraotas negras enlatadas",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "CONSERVAS"
+   }
+  },
+  {
+   "nombre": "Mantequilla de maní",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "GOLOSINAS_SNACKS"
+   }
+  },
+  {
+   "nombre": "Reparación de computadora",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "SERVICIOS_GENERALES"
+   }
+  },
+  {
+   "nombre": "Harina para arepas",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "HARINA"
+   }
+  },
+  {
+   "nombre": "Suero oral",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ],
+    "regla": "MEDICAMENTOS"
+   }
+  },
+  {
+   "nombre": "Mensualidad colegio",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "EDUCACION"
+   }
+  },
+  {
+   "nombre": null,
+   "codigo_arancelario": "0406.10.10.00",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "QUESOS_OTROS"
+   }
+  },
+  {
+   "nombre": null,
+   "codigo_arancelario": "1601.00.00.10",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "condicionado",
+    "categorias": [
+     "EXENTO",
+     "ALICUOTA_GENERAL"
+    ],
+    "regla": "EMBUTIDOS_1601"
+   }
+  },
+  {
+   "nombre": "Mortadela",
+   "codigo_arancelario": "1601.00.00.10",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ]
+   }
+  },
+  {
+   "nombre": "Queso blanco duro",
+   "codigo_arancelario": "0406.10.90.00",
+   "operacion": "nacional",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "EXENTO"
+    ]
+   }
+  },
+  {
+   "nombre": "Rines 17 pulgadas",
+   "codigo_arancelario": "8708.70.00.00",
+   "operacion": "nacional",
+   "contexto": {
+    "precio_usd": 150
+   },
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL_MAS_ADICIONAL"
+    ]
+   }
+  },
+  {
+   "nombre": "Queso mozzarella",
+   "codigo_arancelario": "0406.10.90.00",
+   "operacion": "importacion",
+   "esperado": {
+    "estado": "determinado",
+    "categorias": [
+     "ALICUOTA_GENERAL"
+    ]
+   }
+  }
+ ]
+}

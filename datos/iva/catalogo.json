@@ -1,0 +1,4847 @@
+{
+ "_nota": "Catálogo inicial del clasificador de IVA de El Renglón. PENDIENTE DE VALIDACIÓN POR EL ASESOR TRIBUTARIO. Los textos de base legal se verifican contra las Gacetas al cargar. Los patrones son expresiones regulares sobre el texto normalizado (minúsculas, sin acentos; la ñ se escribe n).",
+ "estado": "pendiente_validacion_asesor",
+ "fuentes": {
+  "iva": "fuentes/iva/GOE-6507_Ley-IVA-reforma-2020.pdf",
+  "go6952": "fuentes/arancel/GOE-6952_Decreto-5198.pdf"
+ },
+ "alicuotas": [
+  {
+   "codigo": "GENERAL",
+   "porcentaje": 16,
+   "vigente_desde": "2020-03-29",
+   "vigente_hasta": null,
+   "instrumento": "Ley de IVA art. 63 (GO Ext. N° 6.507; vigente 60 días después de su publicación, art. 72)"
+  },
+  {
+   "codigo": "REDUCIDA",
+   "porcentaje": 8,
+   "vigente_desde": "2020-03-29",
+   "vigente_hasta": null,
+   "instrumento": "Ley de IVA art. 64 (GO Ext. N° 6.507)"
+  },
+  {
+   "codigo": "ADICIONAL_SUNTUARIA",
+   "porcentaje": 15,
+   "vigente_desde": "2020-03-29",
+   "vigente_hasta": null,
+   "instrumento": "Ley de IVA art. 61 (GO Ext. N° 6.507)"
+  }
+ ],
+ "categorias": [
+  {
+   "codigo": "EXENTO",
+   "denominacion": "Operación exenta",
+   "componentes": [],
+   "marca_exento": true,
+   "concepto_nacional": "Ventas internas no gravadas",
+   "concepto_importacion": "Compras no gravadas y/o sin derecho a crédito fiscal"
+  },
+  {
+   "codigo": "EXONERADO",
+   "denominacion": "Operación exonerada",
+   "componentes": [],
+   "marca_exento": true,
+   "concepto_nacional": "Ventas internas no gravadas",
+   "concepto_importacion": "Compras no gravadas y/o sin derecho a crédito fiscal"
+  },
+  {
+   "codigo": "NO_SUJETO",
+   "denominacion": "Operación no sujeta",
+   "componentes": [],
+   "marca_exento": true,
+   "concepto_nacional": "Ventas internas no gravadas",
+   "concepto_importacion": "Compras no gravadas y/o sin derecho a crédito fiscal"
+  },
+  {
+   "codigo": "ALICUOTA_REDUCIDA",
+   "denominacion": "Gravado por alícuota reducida",
+   "componentes": [
+    "REDUCIDA"
+   ],
+   "marca_exento": false,
+   "concepto_nacional": "Ventas internas gravadas por alícuota reducida",
+   "concepto_importacion": "Importaciones gravadas por alícuota reducida"
+  },
+  {
+   "codigo": "ALICUOTA_GENERAL",
+   "denominacion": "Gravado por alícuota general",
+   "componentes": [
+    "GENERAL"
+   ],
+   "marca_exento": false,
+   "concepto_nacional": "Ventas internas gravadas por alícuota general",
+   "concepto_importacion": "Importaciones gravadas por alícuota general"
+  },
+  {
+   "codigo": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+   "denominacion": "Gravado por alícuota general más adicional (consumo suntuario)",
+   "componentes": [
+    "GENERAL",
+    "ADICIONAL_SUNTUARIA"
+   ],
+   "marca_exento": false,
+   "concepto_nacional": "Ventas internas gravadas por alícuota general más adicional",
+   "concepto_importacion": "Importaciones gravadas por alícuota general más adicional"
+  }
+ ],
+ "decretos": [
+  {
+   "codigo": "DEC-5196",
+   "nombre": "Decreto N° 5.196: suspende las exenciones a la importación (art. 17, num. 1, Ley de IVA)",
+   "gaceta": "GO Ext. N° 6.952 del 31/12/2025",
+   "efecto": "SUSPENDE_EXENCION_IMPORTACION",
+   "vigente_desde": "2025-12-31",
+   "vigente_hasta": null,
+   "base_legal": "DEC-5196-1",
+   "nota": "Sin fecha de término (art. 1); deroga el Decreto 5.145 (art. 17). Las exoneraciones COMEX de su art. 2 vencen el 31/12/2026 y no están modeladas por código arancelario"
+  }
+ ],
+ "base_legal": [
+  {
+   "id": "LIVA-18-1-a",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "a",
+   "texto": "Productos del reino vegetal en su estado natural, considerados alimentos para el consumo humano, y las semillas certificadas en general, material base para la reproducción animal e insumos biológicos para el sector agrícola y pecuario."
+  },
+  {
+   "id": "LIVA-18-1-b",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "b",
+   "texto": "Especies avícolas, los huevos fértiles de gallina; los pollitos, pollitas, pollonas, para la cría, reproducción y producción de carne de pollo; y huevos de gallina."
+  },
+  {
+   "id": "LIVA-18-1-c",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "c",
+   "texto": "Arroz."
+  },
+  {
+   "id": "LIVA-18-1-d",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "d",
+   "texto": "Harina de origen vegetal, incluidas las sémolas."
+  },
+  {
+   "id": "LIVA-18-1-e",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "e",
+   "texto": "Pan y pastas alimenticias."
+  },
+  {
+   "id": "LIVA-18-1-f",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "f",
+   "texto": "Huevos de gallinas."
+  },
+  {
+   "id": "LIVA-18-1-g",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "g",
+   "texto": "Sal."
+  },
+  {
+   "id": "LIVA-18-1-h",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "h",
+   "texto": "Azúcar y papelón, excepto los de uso industrial."
+  },
+  {
+   "id": "LIVA-18-1-i",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "i",
+   "texto": "Café tostado, molido o en grano."
+  },
+  {
+   "id": "LIVA-18-1-j",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "j",
+   "texto": "Mortadela."
+  },
+  {
+   "id": "LIVA-18-1-k",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "k",
+   "texto": "Atún enlatado en presentación natural."
+  },
+  {
+   "id": "LIVA-18-1-l",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "l",
+   "texto": "Sardinas enlatadas con presentación cilíndrica hasta ciento setenta gramos (170 gr.)."
+  },
+  {
+   "id": "LIVA-18-1-m",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "m",
+   "texto": "Leche cruda, pasteurizada, en polvo, modificada, maternizada o humanizada y en sus fórmulas infantiles, incluidas las de soya."
+  },
+  {
+   "id": "LIVA-18-1-n",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "n",
+   "texto": "Queso Blanco."
+  },
+  {
+   "id": "LIVA-18-1-ñ",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "ñ",
+   "texto": "Margarina y mantequilla."
+  },
+  {
+   "id": "LIVA-18-1-o",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "o",
+   "texto": "Carnes de pollo, ganado bovino y porcino en estado natural, refrigeradas, congeladas, saladas o en salmuera."
+  },
+  {
+   "id": "LIVA-18-1-p",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "p",
+   "texto": "Mayonesa."
+  },
+  {
+   "id": "LIVA-18-1-q",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "q",
+   "texto": "Avena."
+  },
+  {
+   "id": "LIVA-18-1-r",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "r",
+   "texto": "Animales vivos destinados al matadero (bovino y porcino)."
+  },
+  {
+   "id": "LIVA-18-1-s",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "s",
+   "texto": "Ganado bovino y porcino para la cría."
+  },
+  {
+   "id": "LIVA-18-1-t",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "1",
+   "literal": "t",
+   "texto": "Aceites comestibles, excepto el de oliva."
+  },
+  {
+   "id": "LIVA-18-2",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "2",
+   "literal": null,
+   "texto": "Los fertilizantes, así como el gas natural utilizado como insumo para la fabricación de los mismos."
+  },
+  {
+   "id": "LIVA-18-3",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "3",
+   "literal": null,
+   "texto": "Los medicamentos y agroquímicos y los principios activos utilizados exclusivamente para su fabricación, incluidas las vacunas, sueros, plasmas y las sustancias humanas o animales preparadas para uso terapéutico o profiláctico, para uso humano, animal y vegetal."
+  },
+  {
+   "id": "LIVA-18-4",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "4",
+   "literal": null,
+   "texto": "Los vehículos automotores con adaptaciones especiales para ser utilizados por personas con discapacidad, sillas de ruedas para personas con movilidad reducida, los marcapasos, catéteres, válvulas, órganos artificiales y prótesis."
+  },
+  {
+   "id": "LIVA-18-5",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "5",
+   "literal": null,
+   "texto": "Los diarios, periódicos y el papel para sus ediciones."
+  },
+  {
+   "id": "LIVA-18-6",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "6",
+   "literal": null,
+   "texto": "Los libros, revistas y folletos, así como los insumos utilizados en la industria editorial."
+  },
+  {
+   "id": "LIVA-18-7",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "7",
+   "literal": null,
+   "texto": "El maíz utilizado en la elaboración de alimentos para consumo humano."
+  },
+  {
+   "id": "LIVA-18-8",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "8",
+   "literal": null,
+   "texto": "El maíz amarillo utilizado para la elaboración de alimentos concentrados para animales."
+  },
+  {
+   "id": "LIVA-18-9",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "9",
+   "literal": null,
+   "texto": "Los aceites vegetales, refinados o no, utilizados exclusivamente como insumos en la elaboración de aceites comestibles, mayonesa y margarina."
+  },
+  {
+   "id": "LIVA-18-10",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "10",
+   "literal": null,
+   "texto": "Los minerales y alimentos líquidos concentrados para animales o especies a que se refieren los literales b), r) y s) del numeral 1 de este artículo, así como las materias primas utilizadas exclusivamente en su elaboración."
+  },
+  {
+   "id": "LIVA-18-11",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "18",
+   "numeral": "11",
+   "literal": null,
+   "texto": "Sorgo y soya."
+  },
+  {
+   "id": "LIVA-19-1",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "1",
+   "literal": null,
+   "texto": "El transporte terrestre y acuático nacional de pasajeros."
+  },
+  {
+   "id": "LIVA-19-2",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "2",
+   "literal": null,
+   "texto": "El transporte de mercancías."
+  },
+  {
+   "id": "LIVA-19-3",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "3",
+   "literal": null,
+   "texto": "Los servicios educativos prestados por instituciones inscritas o registradas en los Ministerios del Poder Popular Para la Educación, Ministerio del Poder Popular Para la Cultura, Ministerio del Poder Popular para el Deporte y Ministerio del Poder Popular para la Educación Superior."
+  },
+  {
+   "id": "LIVA-19-4",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "4",
+   "literal": null,
+   "texto": "Los servicios de hospedaje, alimentación y sus accesorios, a estudiantes, ancianos, personas minusválidas, excepcionales o enfermas, cuando sean prestados dentro de una institución destinada exclusivamente a servir a estos usuarios."
+  },
+  {
+   "id": "LIVA-19-5",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "5",
+   "literal": null,
+   "texto": "Las entradas a parques nacionales, zoológicos, museos, centros culturales e instituciones similares, cuando se trate de entes sin fines de lucro exentos de Impuesto sobre la Renta."
+  },
+  {
+   "id": "LIVA-19-6",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "6",
+   "literal": null,
+   "texto": "Los servicios médico-asistenciales y odontológicos, de cirugía y hospitalización."
+  },
+  {
+   "id": "LIVA-19-7",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "7",
+   "literal": null,
+   "texto": "Las entradas a espectáculos artísticos, culturales y deportivos, siempre que su valor no exceda de dos unidades tributarias (2 U.T.)."
+  },
+  {
+   "id": "LIVA-19-8",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "8",
+   "literal": null,
+   "texto": "El servicio de alimentación prestado a alumnos y trabajadores en restaurantes, comedores y cantinas de escuelas, centros educativos, empresas o instituciones similares, en sus propias sedes."
+  },
+  {
+   "id": "LIVA-19-9",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "9",
+   "literal": null,
+   "texto": "El suministro de electricidad de uso residencial."
+  },
+  {
+   "id": "LIVA-19-10",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "10",
+   "literal": null,
+   "texto": "El servicio nacional de telefonía prestado a través de teléfonos públicos."
+  },
+  {
+   "id": "LIVA-19-11",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "11",
+   "literal": null,
+   "texto": "El suministro de agua residencial."
+  },
+  {
+   "id": "LIVA-19-12",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "12",
+   "literal": null,
+   "texto": "El aseo urbano residencial."
+  },
+  {
+   "id": "LIVA-19-13",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "13",
+   "literal": null,
+   "texto": "El suministro de gas residencial, directo o por bombonas."
+  },
+  {
+   "id": "LIVA-19-14",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "14",
+   "literal": null,
+   "texto": "El servicio de transporte de combustibles derivados de hidrocarburos."
+  },
+  {
+   "id": "LIVA-19-15",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "19",
+   "numeral": "15",
+   "literal": null,
+   "texto": "El servicio de crianza de ganado bovino, caprino, ovino, porcino, aves y demás especies menores, incluyendo su reproducción y producción."
+  },
+  {
+   "id": "LIVA-16-3",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "16",
+   "numeral": "3",
+   "literal": null,
+   "texto": "Los préstamos en dinero."
+  },
+  {
+   "id": "LIVA-16-4",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "16",
+   "numeral": "4",
+   "literal": null,
+   "texto": "Las operaciones y servicios en general realizadas por los bancos, institutos de créditos o empresas regidas por el Decreto con Rango, Valor y Fuerza de Ley de Instituciones del Sector Bancario, incluidas las empresas de arrendamiento financiero y los fondos del mercado monetario, sin perjuicio de lo establecido en el parágrafo segundo del artículo 5 de esta Ley, e igualmente las realizadas por las instituciones bancarias de crédito o financieras regidas por leyes especiales, las instituciones y fondos de ahorro, los fondos de pensión, los fondos de retiro y previsión social, las cooperativas de ahorro, las bolsas de valores, las entidades de ahorro y préstamo, las bolsas agrícolas, así como la comisión que los puestos de bolsas agrícolas cobren a sus clientes por el servicio prestado por la compra de productos y títulos de origen o destino agropecuario."
+  },
+  {
+   "id": "LIVA-16-5",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "16",
+   "numeral": "5",
+   "literal": null,
+   "texto": "Las operaciones de seguro, reaseguro y demás operaciones realizadas por las sociedades de seguros y reaseguros, los agentes de seguros, los corredores de seguros y sociedades de corretaje, los ajustadores y demás auxiliares de seguros, de conformidad con lo establecido en la ley que regula la materia."
+  },
+  {
+   "id": "LIVA-16-6",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "16",
+   "numeral": "6",
+   "literal": null,
+   "texto": "Los servicios prestados bajo relación de dependencia de conformidad con el Decreto con Rango, Valor y Fuerza de Ley Orgánica del Trabajo, los Trabajadores y las Trabajadoras."
+  },
+  {
+   "id": "LIVA-17-1",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "17",
+   "numeral": "1",
+   "literal": null,
+   "texto": "Las importaciones de los bienes y servicios mencionados en el artículo 18 de esta Ley."
+  },
+  {
+   "id": "LIVA-63",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "63",
+   "numeral": null,
+   "literal": null,
+   "texto": "la alícuota impositiva general aplicable a las operaciones gravadas, desde la entrada en vigencia de esta Ley, será del dieciséis por ciento (16%), hasta tanto el Ejecutivo Nacional establezca una alícuota distinta conforme al artículo 27 de esta Ley."
+  },
+  {
+   "id": "LIVA-61",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": null,
+   "literal": null,
+   "texto": "La alícuota impositiva adicional aplicable será del quince por ciento (15%), hasta tanto el Ejecutivo Nacional establezca una alícuota distinta conforme al artículo 27 de esta Ley."
+  },
+  {
+   "id": "LIVA-64",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": null,
+   "literal": null,
+   "texto": "la alícuota impositiva aplicable a las siguientes operaciones será del ocho por ciento (8%)"
+  },
+  {
+   "id": "LIVA-61-1-a",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "a",
+   "texto": "Vehículos automóviles cuyo valor en aduanas o precio de fábrica en el país sea mayor o igual a cuarenta mil dólares de los Estados Unidos de América (US $ 40.000,00)."
+  },
+  {
+   "id": "LIVA-61-1-b",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "b",
+   "texto": "Motocicletas cuyo valor en aduanas o precio de fábrica en el país sea mayor o igual a veinte mil dólares de los Estados Unidos de América (US $ 20.000,00)."
+  },
+  {
+   "id": "LIVA-61-1-c",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "c",
+   "texto": "Aeronaves civiles y sus accesorios destinados a exhibiciones, publicidad, instrucción, recreación y deporte, así como las destinadas al uso particular de sus propietarios."
+  },
+  {
+   "id": "LIVA-61-1-d",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "d",
+   "texto": "Buques destinados a actividades recreativas o deportivas, así como los destinados al uso particular de sus propietarios."
+  },
+  {
+   "id": "LIVA-61-1-e",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "e",
+   "texto": "Máquinas de juegos de envite o azar activadas con monedas, fichas u otros medios, así como las mesas de juegos destinadas a juegos de envite o azar."
+  },
+  {
+   "id": "LIVA-61-1-f",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "f",
+   "texto": "Joyas y relojes, cuyo precio sea mayor o igual a trescientos dólares de los Estados Unidos de América (US $ 300,00)."
+  },
+  {
+   "id": "LIVA-61-1-g",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "g",
+   "texto": "Armas, así como sus accesorios y proyectiles."
+  },
+  {
+   "id": "LIVA-61-1-h",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "h",
+   "texto": "Accesorios para vehículos que no estén incorporados a los mismos en el proceso de ensamblaje, cuyo precio sea mayor o igual a cien dólares de los Estados Unidos de América (US $ 100,00)."
+  },
+  {
+   "id": "LIVA-61-1-i",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "i",
+   "texto": "Obras de arte y antigüedades cuyo precio sea mayor o igual a cuarenta mil dólares de los Estados Unidos de América (US $ 40.000,00)."
+  },
+  {
+   "id": "LIVA-61-1-j",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "j",
+   "texto": "Prendas y accesorios de vestir, elaborados con cuero o pieles naturales cuyo precio sea mayor o igual a diez mil dólares de los Estados Unidos de América (US $ 10.000,00)."
+  },
+  {
+   "id": "LIVA-61-1-k",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "k",
+   "texto": "Animales con fines recreativos o deportivos."
+  },
+  {
+   "id": "LIVA-61-1-l",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "1",
+   "literal": "l",
+   "texto": "Caviar y sus sucedáneos."
+  },
+  {
+   "id": "LIVA-61-2-a",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "2",
+   "literal": "a",
+   "texto": "Membresía y cuotas de mantenimiento de restaurantes, centros nocturnos o bares de acceso restringido."
+  },
+  {
+   "id": "LIVA-61-2-b",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "2",
+   "literal": "b",
+   "texto": "Arrendamiento o cesión de uso de buques destinados a actividades recreativas o deportivas, así como los destinados al uso particular de sus propietarios; y de aeronaves civiles destinadas a exhibiciones, publicidad, instrucción, recreación y deporte, así como las destinadas al uso particular de sus propietarios."
+  },
+  {
+   "id": "LIVA-61-2-c",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "61",
+   "numeral": "2",
+   "literal": "c",
+   "texto": "Los prestados por cuenta de terceros, a través de mensajería de texto u otros medios tecnológicos."
+  },
+  {
+   "id": "LIVA-64-1-a",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "1",
+   "literal": "a",
+   "texto": "Ganado caprino, ovino y especies menores destinados al matadero."
+  },
+  {
+   "id": "LIVA-64-1-b",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "1",
+   "literal": "b",
+   "texto": "Ganado caprino, ovino y especies menores para la cría."
+  },
+  {
+   "id": "LIVA-64-1-c",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "1",
+   "literal": "c",
+   "texto": "Carnes en estado natural, refrigeradas, congeladas, saladas o en salmuera, salvo las mencionadas en el literal \"o\" del numeral 1 del artículo 18 de esta Ley."
+  },
+  {
+   "id": "LIVA-64-1-d",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "1",
+   "literal": "d",
+   "texto": "Mantecas."
+  },
+  {
+   "id": "LIVA-64-2",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "2",
+   "literal": null,
+   "texto": "Las importaciones y ventas de minerales y alimentos líquidos o concentrados para animales o especies a que se refieren los literales \"a\" y \"b\" del numeral 1 de este artículo, así como las materias primas utilizadas exclusivamente en su elaboración."
+  },
+  {
+   "id": "LIVA-64-3",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "3",
+   "literal": null,
+   "texto": "Las prestaciones de servicios al Poder Público, en cualquiera de sus manifestaciones, en el ejercicio de profesiones que no impliquen la realización de actos de comercio y comporten trabajo o actuación predominantemente intelectual."
+  },
+  {
+   "id": "LIVA-64-4",
+   "norma": "Ley que establece el Impuesto al Valor Agregado (texto reformado)",
+   "gaceta": "GO Ext. N° 6.507 del 29/01/2020",
+   "fuente": "iva",
+   "articulo": "64",
+   "numeral": "4",
+   "literal": null,
+   "texto": "El transporte aéreo nacional de pasajeros."
+  },
+  {
+   "id": "DEC-5196-1",
+   "norma": "Decreto N° 5.196 (suspensión de las exenciones a la importación)",
+   "gaceta": "GO Ext. N° 6.952 del 31/12/2025",
+   "fuente": "go6952",
+   "articulo": "1",
+   "numeral": null,
+   "literal": null,
+   "texto": "Se suspende la aplicación de las exenciones previstas en el numeral 1 del artículo 17 del Decreto Constituyente de Reforma Parcial del Decreto con Rango, Valor y Fuerza de Ley que establece el Impuesto al Valor Agregado."
+  },
+  {
+   "id": "DEC-5207",
+   "norma": "Decreto N° 5.207 (exoneración de IVA a combustibles y aditivos)",
+   "gaceta": "GO N° 43.292 (a confirmar, B12)",
+   "fuente": null,
+   "articulo": null,
+   "numeral": null,
+   "literal": null,
+   "texto": "Exonera del IVA la importación y venta nacional de combustibles derivados de hidrocarburos y aditivos para gasolina, por un año (resumen; texto oficial pendiente de verificación)."
+  }
+ ],
+ "reglas": [
+  {
+   "id": "VEGETALES_FRESCOS",
+   "tipo": "BIEN",
+   "nombre": "Frutas, hortalizas y verduras en estado natural",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(tomates?|cebollas?|papas?|yucas?|platanos?|cambur(es)?|bananos?|aguacates?|lechugas?|zanahorias?|pimentone?s?|aji(es)?|ajos?|naranjas?|mandarinas?|limone?s?|mangos?|lechosas?|papayas?|pinas?|patillas?|sandias?|melone?s?|fresas?|manzanas?|peras?|uvas?|duraznos?|guayabas?|parchitas?|maracuyas?|guanabanas?|apios?|names?|ocumos?|batatas?|auyamas?|calabacine?s?|pepinos?|repollos?|brocolis?|coliflore?s?|cilantro|perejil|cebollin|celery|espinacas?|berenjenas?|remolachas?|vainitas?|chayotas?|jengibre|hortalizas?|verduras?|vegetales|frutas?|legumbres? frescas?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(jugos?|nectar\\w*|salsas?|mermeladas?|almibar|enlatad\\w*|latas?|chips?|pastas?|pures?|ketchup|encurtid\\w*|vinagre|sabor\\w*|galletas?|helados?|dulces?|confitad\\w*|polvo|aceites?|shampoo|champu|jabon\\w*|cremas?|te|infusion\\w*|refrescos?|bebidas?|yogur\\w*|compotas?|frit[oa]s?|toston(es)?|papitas|tostad[oa]s?|cotufas?|harinas?|pizza|sopas?|cubitos?|crema)\\b",
+    "\\b(congelad[oa]s?|deshidratad[oa]s?|picad[oa]s?|troceado?s?|en trozos|precortad[oa]s?|rallad[oa]s?|en cubos|julianas?|mixtura|mezcla de vegetales)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:fresh-vegetables",
+    "en:fresh-fruits"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-a"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "VEGETALES_PROCESADOS",
+   "tipo": "BIEN",
+   "nombre": "Frutas u hortalizas congeladas, picadas o deshidratadas",
+   "prioridad": 58,
+   "patrones_incluir": [
+    "\\b(tomates?|cebollas?|papas?|yucas?|platanos?|cambur(es)?|bananos?|aguacates?|lechugas?|zanahorias?|pimentone?s?|aji(es)?|ajos?|naranjas?|mandarinas?|limone?s?|mangos?|lechosas?|papayas?|pinas?|patillas?|sandias?|melone?s?|fresas?|manzanas?|peras?|uvas?|duraznos?|guayabas?|parchitas?|maracuyas?|guanabanas?|apios?|names?|ocumos?|batatas?|auyamas?|calabacine?s?|pepinos?|repollos?|brocolis?|coliflore?s?|cilantro|perejil|cebollin|celery|espinacas?|berenjenas?|remolachas?|vainitas?|chayotas?|jengibre|hortalizas?|verduras?|vegetales|frutas?|legumbres? frescas?)\\b",
+    "\\b(maiz|jojotos?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(jugos?|nectar\\w*|salsas?|mermeladas?|almibar|enlatad\\w*|latas?|chips?|pastas?|pures?|ketchup|encurtid\\w*|vinagre|sabor\\w*|galletas?|helados?|dulces?|confitad\\w*|polvo|aceites?|shampoo|champu|jabon\\w*|cremas?|te|infusion\\w*|refrescos?|bebidas?|yogur\\w*|compotas?|frit[oa]s?|toston(es)?|papitas|tostad[oa]s?|cotufas?|harinas?|pizza|sopas?|cubitos?|crema)\\b"
+   ],
+   "patrones_todos": [
+    "\\b(congelad[oa]s?|deshidratad[oa]s?|picad[oa]s?|troceado?s?|en trozos|precortad[oa]s?|rallad[oa]s?|en cubos|julianas?|mixtura|mezcla de vegetales)\\b"
+   ],
+   "categorias_off": [
+    "en:frozen-vegetables",
+    "en:frozen-fruits",
+    "en:dried-fruits"
+   ],
+   "zona_gris": true,
+   "nota": "Zona gris B1: alcance de 'estado natural'",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-a"
+     ],
+     "condicion": "Si se considera 'en su estado natural' (solo lavado, pelado, picado o congelado, sin otros ingredientes)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si se considera un producto elaborado",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "LEGUMBRES_SECAS",
+   "tipo": "BIEN",
+   "nombre": "Granos y legumbres secas (caraotas, lentejas, arvejas, garbanzos)",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(caraotas?|frijol(es)?|frijolitos?|lentejas?|arvejas?|garbanzos?|quinchonchos?|habas?|trigo en grano|cebada en grano|centeno en grano)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(enlatad\\w*|latas?|sopas?|guisad\\w*|precocid\\w*|cocid\\w*|refrit\\w*|harinas?|snacks?|en salsa)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:legumes",
+    "en:dried-legumes",
+    "en:lentils",
+    "en:beans"
+   ],
+   "zona_gris": false,
+   "nota": "Productos del reino vegetal en estado natural (grano seco). Confirmar con el asesor (B1)",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-a"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SEMILLAS_CERTIFICADAS",
+   "tipo": "BIEN",
+   "nombre": "Semillas certificadas, material base e insumos biológicos agropecuarios",
+   "prioridad": 75,
+   "patrones_incluir": [
+    "\\bsemillas? certificadas?\\b",
+    "\\binsumos? biologicos?\\b",
+    "\\bmaterial base para (la )?reproduccion animal\\b",
+    "\\bsemen (bovino|porcino|de toro)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-a"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "HUEVOS",
+   "tipo": "BIEN",
+   "nombre": "Huevos de gallina",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\bhuevos?\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(chocolate|pascua|codorniz|pato|juguete|sorpresa|kinder|avestruz|revueltos? preparados?|fideos? al huevo|pasta al huevo|mayonesa)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:eggs",
+    "en:chicken-eggs"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-b",
+      "LIVA-18-1-f"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "AVES_CRIA",
+   "tipo": "BIEN",
+   "nombre": "Especies avícolas y aves para cría (pollitos, pollitas, pollonas, huevos fértiles)",
+   "prioridad": 72,
+   "patrones_incluir": [
+    "\\b(pollitos?|pollitas?|pollonas?|gallinas? ponedoras?|huevos? fertil(es)?|aves? (vivas?|de corral|para cria))\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-b"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ARROZ",
+   "tipo": "BIEN",
+   "nombre": "Arroz",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\barroz\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(con leche|galletas?|inflad\\w*|tortas?|cereal\\w*|harina|vinagre|papel|chino|con pollo|salsa|bebida|sabor\\w*|pudin|tortitas?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:rices",
+    "en:white-rices"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-c"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "HARINA",
+   "tipo": "BIEN",
+   "nombre": "Harinas de origen vegetal y sémolas",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(harinas?|semolas?|semolinas?|fecula)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(pescado|huesos?|sangre|carne|preparad[oa]s?|mezclas?|pancakes?|panquecas?|tortas?|brownies?|reposteria|para hornear|lactea|leudante|bizcochos?|galletas?|empanizar|rebozar|tempura|pan rallado)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:flours",
+    "en:wheat-flours",
+    "en:corn-flours",
+    "en:maize-flours",
+    "en:rice-flours"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-d"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "HARINA_PREPARADA",
+   "tipo": "BIEN",
+   "nombre": "Harinas preparadas y mezclas (leudante, para tortas o panquecas)",
+   "prioridad": 66,
+   "patrones_incluir": [
+    "\\bharinas?\\b.*\\b(preparad[oa]s?|leudante|para (tortas|panquecas|pancakes|hornear|bizcochos|empanizar))\\b",
+    "\\bmezclas? (lista )?para (tortas|panquecas|pancakes|brownies?|bizcochos?|galletas|reposteria)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si se considera una preparación con otros ingredientes (no 'harina')",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-d"
+     ],
+     "condicion": "Si se considera harina de origen vegetal",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PASTAS",
+   "tipo": "BIEN",
+   "nombre": "Pastas alimenticias",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(pastas?|espaguetis?|spaghettis?|fideos?|macarron\\w*|tallarin\\w*|vermicell?i|coditos?|lasanas?|lasagnas?|fettuccin\\w*|penne|pasta corta|pasta larga|plumitas?|conchitas?|tornillitos?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(dental|dientes|de tomate|de mani|de ajo|de ajonjoli|de cacao|de hojaldre|para pizza|de pescado|de guayaba|de dulce|de lustrar|de sal|de modelar|laminada|rellen\\w*|ravioli\\w*|raviole\\w*|tortellin\\w*|capelet\\w*|sopa instantanea|ramen|lista para comer|con salsa|de curry|termica|de soldar)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:pastas",
+    "en:dry-pastas",
+    "en:spaghetti"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-e"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PASTAS_RELLENAS",
+   "tipo": "BIEN",
+   "nombre": "Pastas rellenas o preparadas",
+   "prioridad": 66,
+   "patrones_incluir": [
+    "\\b(pastas? rellenas?|raviol\\w*|tortellin\\w*|capelet\\w*|sopa instantanea|ramen|pasta lista para comer|pasta con salsa)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-e"
+     ],
+     "condicion": "Si se considera 'pasta alimenticia'",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si se considera un plato o producto preparado",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PAN",
+   "tipo": "BIEN",
+   "nombre": "Pan",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\bpan(es)?\\b",
+    "\\b(canilla|pan campesino|pan salado|pan de sandwich|pan de molde|pan integral|pan arabe|pan frances|pan de hamburguesa|pan de perro caliente|bollos? de pan)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(dulces?|jamon|tostad[oa]s?|rallad[oa]s?|panett?one|panetones?|guayaba|chocolate|rellen\\w*|de queso|de horno de|pan de ano|golfeado|cachito|pinata|tostadora|panela|pantalon\\w*|pancetas?|panqueca\\w*|panaderia equipos)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:breads",
+    "en:white-breads",
+    "en:sliced-breads"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-e"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PAN_ZONA_GRIS",
+   "tipo": "BIEN",
+   "nombre": "Pan dulce, relleno, tostado o de pastelería",
+   "prioridad": 64,
+   "patrones_incluir": [
+    "\\bpan (dulce|de jamon|tostado|rallado|de queso|de guayaba|de chocolate|relleno|de ano)\\b",
+    "\\b(panett?one|panetones?|golfeados?|cachitos?|tostadas? de pan|pan de horno)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B2: qué productos cuentan como pan",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-e"
+     ],
+     "condicion": "Si se considera 'pan' (18.1.e)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si se considera producto de pastelería o panadería fina",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SAL",
+   "tipo": "BIEN",
+   "nombre": "Sal",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\bsal\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(de frutas|de ajo|de cebolla|de epsom|inglesa|de bano|sales|con especias|de apio|parrillera|condimento\\w*|sazonador\\w*|de uvas|y pimienta|sin sal|bajo en sal|baja en sal|sal y vinagre|con sal|en sal|a la sal)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:salts",
+    "en:table-salts"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-g"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "AZUCAR_PAPELON",
+   "tipo": "BIEN",
+   "nombre": "Azúcar y papelón",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(azucar|papelon|panela)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(sin azucar|glaseado|algodon|caramelos?|chupetas?|gomas?|de mascar|endulzante\\w*|edulcorante\\w*|stevia|sucralosa|refrescos?|bebidas?|galletas?|cereal\\w*|jugos?|mermeladas?|light|0 azucar|zero)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:sugars",
+    "en:white-sugars",
+    "en:brown-sugars",
+    "en:panela"
+   ],
+   "zona_gris": false,
+   "nota": "Indique atributos.uso = 'consumo' o 'industrial' para una respuesta única",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-h"
+     ],
+     "condicion": "Para consumo (no industrial)",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "=",
+      "valor": "consumo"
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "De uso industrial (excepción del art. 18.1.h)",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "!=",
+      "valor": "consumo"
+     }
+    }
+   ]
+  },
+  {
+   "id": "CAFE",
+   "tipo": "BIEN",
+   "nombre": "Café tostado, molido o en grano",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\bcafe\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(instantaneo|soluble|capuchino|cappuccino|mocaccino|mokaccino|latte|con leche|frappe|3 en 1|licor|crema|sabor a cafe|cafeteras?|filtros?|tazas?|helados?|galletas?|chocolates?|bebidas?|listo para|capsulas?|mezcla para|caramelos?|cafe con)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:ground-coffees",
+    "en:coffee-beans",
+    "en:roasted-coffee-beans"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-i"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CAFE_PREPARADO",
+   "tipo": "BIEN",
+   "nombre": "Café instantáneo, soluble o bebidas de café",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\bcafe\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [
+    "\\b(instantaneo|soluble|capuchino|cappuccino|mocaccino|mokaccino|latte|con leche|frappe|3 en 1|listo para|capsulas?|bebida)\\b"
+   ],
+   "categorias_off": [
+    "en:instant-coffees"
+   ],
+   "zona_gris": false,
+   "nota": "El art. 18.1.i solo menciona el café tostado, molido o en grano",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MORTADELA",
+   "tipo": "BIEN",
+   "nombre": "Mortadela",
+   "prioridad": 80,
+   "patrones_incluir": [
+    "\\bmortadela\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:mortadella"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-j"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "EMBUTIDOS",
+   "tipo": "BIEN",
+   "nombre": "Embutidos y fiambres (excepto mortadela)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(jamon\\w*|salchich\\w*|chorizos?|tocinetas?|tocino|salami|pepperoni|peperoni|morcillas?|pates?|diablitos|fiambres?|queso de cochino|pastrami|butifarras?|longanizas?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\bmortadela\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:hams",
+    "en:sausages",
+    "en:salamis"
+   ],
+   "zona_gris": false,
+   "nota": "Solo la mortadela está exenta (art. 18.1.j)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ATUN_NATURAL",
+   "tipo": "BIEN",
+   "nombre": "Atún enlatado al natural",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\batun\\b"
+   ],
+   "patrones_excluir": [
+    "\\baceite\\b"
+   ],
+   "patrones_todos": [
+    "\\b(natural|en agua|al agua)\\b"
+   ],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-k"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ATUN_ACEITE",
+   "tipo": "BIEN",
+   "nombre": "Atún en aceite",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\batun\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [
+    "\\b(aceite|oliva)\\b"
+   ],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B3",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si 'presentación natural' excluye el atún en aceite",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-k"
+     ],
+     "condicion": "Si se considera atún enlatado en presentación natural",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ATUN",
+   "tipo": "BIEN",
+   "nombre": "Atún enlatado (presentación no indicada)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\batun\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(fresco|filetes?|lomos? fresco|sushi|congelado|alimento para|gatos?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:canned-tunas",
+    "en:tunas"
+   ],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-k"
+     ],
+     "condicion": "Si es atún enlatado al natural (en agua)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si es en aceite u otra presentación",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SARDINAS",
+   "tipo": "BIEN",
+   "nombre": "Sardinas enlatadas",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\bsardinas?\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(frescas?|congeladas?|alimento para)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:canned-sardines",
+    "en:sardines"
+   ],
+   "zona_gris": false,
+   "nota": "La forma cilíndrica del envase no puede verificarse automáticamente",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-l"
+     ],
+     "condicion": "Lata cilíndrica de hasta 170 g",
+     "condicion_eval": {
+      "campo": "peso_g",
+      "op": "<=",
+      "valor": 170
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Más de 170 g o envase no cilíndrico",
+     "condicion_eval": {
+      "campo": "peso_g",
+      "op": ">",
+      "valor": 170
+     }
+    }
+   ]
+  },
+  {
+   "id": "LECHE",
+   "tipo": "BIEN",
+   "nombre": "Leche (cruda, pasteurizada, en polvo, modificada)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\bleches?\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(dulce de leche|de coco|condensada|evaporada|chocolate\\w*|limpiadora|corporal|hidratante|de magnesia|arequipe|malteada|merengada|saborizada|sabor|fresa|vainilla|batida|almendras?|avena|arroz|soya|galletas?|cafe|jabon|cremas?|uht|larga duracion|de burra|condensed|leche de tigre|shampoo|champu)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:milks",
+    "en:whole-milks",
+    "en:skimmed-milks",
+    "en:powdered-milks",
+    "en:semi-skimmed-milks"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-m"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "FORMULA_INFANTIL",
+   "tipo": "BIEN",
+   "nombre": "Fórmulas infantiles y leches maternizadas",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(formulas? (infantil\\w*|lacte\\w*|de inicio|de continuacion|para lactantes)|leches? (maternizad[oa]s?|humanizad[oa]s?|de formula|infantil\\w*))\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:baby-milks",
+    "en:infant-formulas"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-m"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "LECHE_SOYA",
+   "tipo": "BIEN",
+   "nombre": "Leche o bebida de soya",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(leche|bebida) de soya\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-m"
+     ],
+     "condicion": "Si es fórmula infantil de soya (18.1.m)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si es bebida de soya de consumo general",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "LECHE_ZONA_GRIS",
+   "tipo": "BIEN",
+   "nombre": "Leche condensada, evaporada, saborizada o de larga duración",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\bleches?\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(dulce de leche|limpiadora|corporal|jabon)\\b"
+   ],
+   "patrones_todos": [
+    "\\b(condensada|evaporada|saborizada|chocolatada|uht|larga duracion|de sabor|con sabor|fresa|vainilla|malteada|achocolatada)\\b"
+   ],
+   "categorias_off": [
+    "en:condensed-milks",
+    "en:flavoured-milks",
+    "en:uht-milks"
+   ],
+   "zona_gris": true,
+   "nota": "Zona gris B4",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-m"
+     ],
+     "condicion": "Si se considera leche modificada (18.1.m)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si se considera un producto lácteo elaborado",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "BEBIDAS_VEGETALES",
+   "tipo": "BIEN",
+   "nombre": "Bebidas vegetales (almendra, avena, arroz, coco)",
+   "prioridad": 66,
+   "patrones_incluir": [
+    "\\b(leche|bebida) de (almendras?|avena|arroz|coco|merey|nueces|mani)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "YOGUR",
+   "tipo": "BIEN",
+   "nombre": "Yogur y leches fermentadas",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(yogur\\w*|yogh?urt\\w*|kumis|kefir)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:yogurts"
+   ],
+   "zona_gris": true,
+   "nota": "Zona gris B4",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Criterio literal: el art. 18.1.m no menciona el yogur",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-m"
+     ],
+     "condicion": "Si se asimila a leche modificada",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "QUESO_BLANCO",
+   "tipo": "BIEN",
+   "nombre": "Queso blanco (incluidas variedades venezolanas de queso blanco)",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\bquesos? (blanco|llanero|duro|telita|guayanes|de mano|palmita|paisa|fresco|pasteurizado|semiduro|de ano|crineja|blanco duro|blanco suave|de freir|rallado blanco)\\b",
+    "\\bcuajada\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Variedades venezolanas de queso blanco: confirmar con el asesor cuáles se consideran 'queso blanco'",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-n"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "QUESOS_OTROS",
+   "tipo": "BIEN",
+   "nombre": "Otros quesos (amarillo, mozzarella, parmesano, crema, etc.)",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\bquesos?\\b"
+   ],
+   "patrones_excluir": [
+    "\\bde cochino\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:cheeses"
+   ],
+   "zona_gris": false,
+   "nota": "Solo el queso blanco está exento (art. 18.1.n)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MARGARINA_MANTEQUILLA",
+   "tipo": "BIEN",
+   "nombre": "Margarina y mantequilla",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(margarinas?|mantequillas?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(de mani|de cacao|de karite|corporal|galletas?|sabor a)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:margarines",
+    "en:butters"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-ñ"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CARNES_EXENTAS",
+   "tipo": "BIEN",
+   "nombre": "Carnes de pollo, bovino y porcino en estado natural",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(pollos?|pechugas?|muslos?|contramuslos?|alas de pollo|alitas|carne de res|carne molida|molida de res|res|bistec\\w*|lomito|solomo|punta trasera|costillas?|chuletas?|cerdo|cochino|pernil|higado|mondongo|lengua de res|osobuco|falda|carne para mechar|churrasco|ribeye|muchacho|pulpa negra|chuleton|carne de cerdo|lomo de cerdo|carne)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(jamon\\w*|salchich\\w*|chorizo\\w*|tocineta|pate|enlatad\\w*|latas?|diablitos|mortadela|asad[oa]s?|frit[oa]s?|sabor\\w*|consome|cubitos?|caldos?|sopas?|alimento para|perros?|gatos?|mascotas?|perrarina|chicharron\\w*|pavos?|patos?|codorniz\\w*|chivos?|cabr\\w*|corderos?|carner\\w*|conejos?|pescad\\w*|soya|vegetal\\w*|empanadas?|pastelitos?|pizza|arepas?)\\b",
+    "\\b(nuggets?|empanizad\\w*|apanad\\w*|milanesas?|adobad\\w*|marinad\\w*|precocid\\w*|hamburguesas?|croquetas?|ahumad\\w*|condimentad\\w*|rellen\\w*|cordon bleu|tequenos?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:chicken-meats",
+    "en:beef",
+    "en:pork",
+    "en:meats"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-o"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CARNES_PROCESADAS",
+   "tipo": "BIEN",
+   "nombre": "Carnes procesadas (empanizadas, adobadas, ahumadas, hamburguesas)",
+   "prioridad": 58,
+   "patrones_incluir": [
+    "\\b(pollos?|pechugas?|muslos?|contramuslos?|alas de pollo|alitas|carne de res|carne molida|molida de res|res|bistec\\w*|lomito|solomo|punta trasera|costillas?|chuletas?|cerdo|cochino|pernil|higado|mondongo|lengua de res|osobuco|falda|carne para mechar|churrasco|ribeye|muchacho|pulpa negra|chuleton|carne de cerdo|lomo de cerdo|carne)\\b",
+    "\\b(nuggets?|hamburguesas?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(alimento para|perros?|gatos?|pavo|pato|chivo|cordero|conejo|pescad\\w*|soya|vegetal\\w*)\\b"
+   ],
+   "patrones_todos": [
+    "\\b(nuggets?|empanizad\\w*|apanad\\w*|milanesas?|adobad\\w*|marinad\\w*|precocid\\w*|hamburguesas?|croquetas?|ahumad\\w*|condimentad\\w*|rellen\\w*|cordon bleu|tequenos?)\\b"
+   ],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "No está 'en estado natural' ni solo salada o en salmuera",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-o"
+     ],
+     "condicion": "Si el proceso (p. ej. adobo) no altera su estado natural",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CARNES_OTRAS",
+   "tipo": "BIEN",
+   "nombre": "Carnes de otras especies (chivo, cordero, conejo, pavo, pato)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(chivos?|cabras?|cabritos?|corderos?|carneros?|ovejas?|ovejos?|conejos?|pavos?|patos?|codornices|codorniz|gansos?|venados?|chiguires?|lapas?|avestruz)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(nuggets?|empanizad\\w*|apanad\\w*|milanesas?|adobad\\w*|marinad\\w*|precocid\\w*|hamburguesas?|croquetas?|ahumad\\w*|condimentad\\w*|rellen\\w*|cordon bleu|tequenos?)\\b",
+    "\\b(alimento para|en pie|vivos?|para cria|huevos?|jamon\\w*|salchich\\w*|peluches?|juguetes?|mascotas?|enanos?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Carnes distintas a pollo, bovino y porcino (art. 64.1.c)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-1-c",
+      "LIVA-64"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PESCADOS_MARISCOS",
+   "tipo": "BIEN",
+   "nombre": "Pescados y mariscos frescos o congelados",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(pescad[oa]s?|salmon|merluza|pargo|mero|tilapia|curvina|corocoro|cazon|bagre|truchas?|robalo|jurel|carite|sierra|camarone?s?|langostinos?|calamar(es)?|pulpos?|mejillone?s?|almejas?|guacucos?|chipichipi|pepitonas?|cangrejos?|langostas?|mariscos?|filetes? de (atun|pescado|merluza|salmon)|atun fresco)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(enlatad\\w*|latas?|empanizad\\w*|nuggets?|croquetas?|harinas?|aceite|ahumad\\w*|seco|palitos|surimi|sabor\\w*|caldos?|consome|en salsa|alimento para|gatos?|peces ornamentales|acuario)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B5",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-1-c",
+      "LIVA-64"
+     ],
+     "condicion": "Si 'carnes' (64.1.c) incluye pescados y mariscos",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si no se consideran 'carnes'",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MANTECAS",
+   "tipo": "BIEN",
+   "nombre": "Mantecas",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\bmantecas?\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(de cacao|de karite|corporal|de mani|labial|capilar|de coco)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:lards",
+    "en:shortenings"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-1-d",
+      "LIVA-64"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MAYONESA",
+   "tipo": "BIEN",
+   "nombre": "Mayonesa",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\bmayonesas?\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:mayonnaises"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-p"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "AVENA",
+   "tipo": "BIEN",
+   "nombre": "Avena",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\bavena\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(galletas?|barras?|bebidas?|leche de avena|cereal\\w*|granola|jabon\\w*|cremas?|shampoo|champu|mascarillas?|chocolate|sabor\\w*)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:oat-flakes",
+    "en:rolled-oats",
+    "en:oats"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-q"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "BOVINO_PORCINO_VIVO",
+   "tipo": "BIEN",
+   "nombre": "Ganado bovino y porcino vivo (matadero o cría)",
+   "prioridad": 72,
+   "patrones_incluir": [
+    "\\bganado (bovino|vacuno|porcino)\\b",
+    "\\b(res(es)?|novill\\w*|becerr\\w*|toros?|vacas?|mautes?|cerdos?|cochinos?|lechon(es)?|bufalos?) (en pie|vivos?|para (cria|matadero|beneficio|engorde|reproduccion))\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Para matadero o cría",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-r",
+      "LIVA-18-1-s"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CAPRINO_OVINO_VIVO",
+   "tipo": "BIEN",
+   "nombre": "Ganado caprino, ovino y especies menores vivos",
+   "prioridad": 72,
+   "patrones_incluir": [
+    "\\bganado (caprino|ovino)\\b",
+    "\\b(chivos?|cabras?|corderos?|ovejas?|ovejos?|carneros?|conejos?) (en pie|vivos?|para (cria|matadero|beneficio|reproduccion))\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-1-a",
+      "LIVA-64-1-b",
+      "LIVA-64"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ACEITE_OLIVA",
+   "tipo": "BIEN",
+   "nombre": "Aceite de oliva",
+   "prioridad": 90,
+   "patrones_incluir": [
+    "\\baceites? (de )?oliva\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:olive-oils",
+    "en:extra-virgin-olive-oils"
+   ],
+   "zona_gris": false,
+   "nota": "Excepción expresa del art. 18.1.t",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-18-1-t",
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ACEITE_COMESTIBLE",
+   "tipo": "BIEN",
+   "nombre": "Aceites comestibles (excepto oliva)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\baceites?\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(oliva|motor|lubricante\\w*|bebe|corporal|capilar|cabello|esencial\\w*|ricino|mineral|autos?|carros?|hidraulico|linaza|almendras|masaje|aromaterapia|2t|4t|frenos?|transmision|de pescado|omega|capsulas?|atun|sardinas?|en aceite|motos?|cadena|maquina|bano|aceitera|aceitunas?|aceitoso)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:vegetable-oils",
+    "en:sunflower-oils",
+    "en:corn-oils",
+    "en:soybean-oils",
+    "en:palm-oils"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-t"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ACEITE_VEGETAL_INSUMO",
+   "tipo": "BIEN",
+   "nombre": "Aceites vegetales crudos como insumo industrial",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\baceites? vegetal(es)? (crudos?|sin refinar|a granel para (la )?industria)\\b",
+    "\\baceite crudo de (palma|soya|girasol|maiz)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Solo si se usa exclusivamente como insumo de aceites comestibles, mayonesa o margarina",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-9"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "FERTILIZANTES",
+   "tipo": "BIEN",
+   "nombre": "Fertilizantes",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(fertilizantes?|abonos? (organicos?|quimicos?|foliar(es)?)|urea|compost|humus|nitrato de amonio|triple 15|npk)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-2"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MEDICAMENTOS",
+   "tipo": "BIEN",
+   "nombre": "Medicamentos, vacunas y sueros",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(medicamentos?|medicinas?|acetaminofen|paracetamol|ibuprofeno|diclofenac\\w*|amoxicilina|azitromicina|cefalexina|ciprofloxacina|losartan|enalapril|amlodipino|metformina|atorvastatina|omeprazol|esomeprazol|loratadina|cetirizina|salbutamol|insulinas?|prednisona|dexametasona|metronidazol|clonazepam|sertralina|levotiroxina|aspirina|acido acetilsalicilico|antibiotic\\w*|antigripal\\w*|jarabe para la tos|suero oral|sales de rehidratacion|vacunas?|sueros?|antialergic\\w*|analgesic\\w*|antiinflamatori\\w*|antihipertensiv\\w*)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(pastillero|organizador|botiquin vacio|sueros? (facial|capilar|de leche|costeno|lacteo|llanero))\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Requiere registro sanitario como medicamento",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-3"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SUPLEMENTOS",
+   "tipo": "BIEN",
+   "nombre": "Vitaminas y suplementos",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(vitaminas?|multivitaminic\\w*|suplementos?( dietetic\\w*| alimentici\\w*| nutricional\\w*)?|omega 3|colageno|whey|creatina|melatonina|probioticos?|complejo b)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B7",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si es suplemento o alimento",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-3"
+     ],
+     "condicion": "Si tiene registro sanitario como medicamento",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "AGROQUIMICOS",
+   "tipo": "BIEN",
+   "nombre": "Agroquímicos y plaguicidas",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(insecticidas?|herbicidas?|fungicidas?|plaguicidas?|pesticidas?|raticidas?|acaricidas?|nematicidas?|glifosato|agroquimicos?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-3"
+     ],
+     "condicion": "Agroquímico de uso agrícola, pecuario o vegetal",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Producto de uso doméstico (p. ej. insecticida en aerosol)",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "AYUDAS_DISCAPACIDAD",
+   "tipo": "BIEN",
+   "nombre": "Sillas de ruedas, prótesis, marcapasos, catéteres, válvulas",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(sillas? de ruedas|marcapasos|cateter\\w*|valvulas? (cardiacas?|mitral\\w*|aortic\\w*)|protesis|organos? artificial(es)?|vehiculos? adaptad[oa]s?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-4"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PRENSA",
+   "tipo": "BIEN",
+   "nombre": "Diarios y periódicos",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(periodicos?|diarios? impresos?|prensa escrita|papel periodico)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-5"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "LIBROS_REVISTAS",
+   "tipo": "BIEN",
+   "nombre": "Libros, revistas y folletos",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(libros?|revistas?|folletos?|enciclopedias?|diccionarios?|novelas?|textos? escolar(es)?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(libretas?|cuadernos?|contable|de actas|libro diario|revisteros?|agendas?|electronic[oa]s?|ebook|kindle|lector|estantes?|repisas?|portalibros)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:books"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-6"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "UTILES_ESCOLARES",
+   "tipo": "BIEN",
+   "nombre": "Útiles escolares y de oficina",
+   "prioridad": 58,
+   "patrones_incluir": [
+    "\\b(cuadernos?|libretas?|lapices|lapiz|boligrafos?|creyones|colores|carpetas?|resmas?|hojas blancas|papel bond|morral(es)?|mochilas?|sacapuntas|borrador(es)?|reglas? escolar(es)?|marcador(es)?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "No están en el art. 18 (solo libros, revistas y folletos)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MAIZ",
+   "tipo": "BIEN",
+   "nombre": "Maíz en grano (consumo humano o alimento animal)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(maiz|jojotos?|mazorcas?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(harinas?|cotufas?|palomitas|tostitos|doritos|chips?|pastas?|enlatad\\w*|latas?|dulce|cereal\\w*|hojuelas|aceites?|fecula|maicena|almidon|tortillas?|arepas?|nachos|snacks?|golosinas?|piras?|congelad\\w*|crema de)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-a",
+      "LIVA-18-7",
+      "LIVA-18-8"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ALIMENTO_ANIMAL_EXENTO",
+   "tipo": "BIEN",
+   "nombre": "Alimento concentrado para aves, bovinos y porcinos",
+   "prioridad": 66,
+   "patrones_incluir": [
+    "\\b(alimentos? (concentrados?|balanceados?)|alimento para (aves|pollos|gallinas|cerdos|ganado|vacas|becerros|bovinos|porcinos|lechones)|concentrado para (aves|pollos|cerdos|ganado)|sales minerales para ganado|melaza para ganado)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(perros?|gatos?|mascotas?|peces|chivos?|cabras?|ovejas?|conejos?|caprinos?|ovinos?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "El art. 18.10 menciona 'minerales y alimentos líquidos concentrados'; confirmar con el asesor el tratamiento del alimento concentrado sólido",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-10"
+     ],
+     "condicion": "Minerales, alimentos líquidos concentrados o materias primas exclusivas para aves, bovinos o porcinos (texto literal del 18.10)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si el alimento concentrado sólido no se considera comprendido en el art. 18.10",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ALIMENTO_ANIMAL_REDUCIDA",
+   "tipo": "BIEN",
+   "nombre": "Alimento para ganado caprino, ovino y especies menores",
+   "prioridad": 66,
+   "patrones_incluir": [
+    "\\balimentos? (concentrados? |balanceados? )?para (chivos|cabras|ovejas|conejos|ovinos|caprinos|especies menores)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-2",
+      "LIVA-64"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ALIMENTO_MASCOTAS",
+   "tipo": "BIEN",
+   "nombre": "Alimento para mascotas",
+   "prioridad": 66,
+   "patrones_incluir": [
+    "\\b(perrarina|gatarina|alimentos? para (perros|gatos|mascotas|peces|aves de compania|pajaros|hamster)|comida para (perros|gatos|mascotas)|dog chow|cat chow|pedigree|whiskas)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:dog-foods",
+    "en:cat-foods",
+    "en:pet-foods"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SORGO_SOYA",
+   "tipo": "BIEN",
+   "nombre": "Sorgo y soya (grano)",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(sorgo|soya|soja)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(salsa|leche|bebida|aceite|lecitina|proteina texturizada|carne de soya|milanesa|hamburguesa)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-11"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SALSAS_CONDIMENTOS",
+   "tipo": "BIEN",
+   "nombre": "Salsas, aderezos y condimentos",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(salsas?|ketchup|mostaza|vinagre|adobos?|sazonador\\w*|cubitos?|consome|caldos?|condimento\\w*|especias|oregano|comino|onoto|pimienta|aderezos?|salsa de soya)\\b"
+   ],
+   "patrones_excluir": [
+    "\\bmayonesa\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "BEBIDAS",
+   "tipo": "BIEN",
+   "nombre": "Refrescos, jugos, maltas, agua embotellada y bebidas",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(refrescos?|gaseosas?|colas?|jugos?|nectar\\w*|maltas?|maltin\\w*|agua (mineral|potable|embotellada|saborizada|con gas)|bebidas? (energetic\\w*|isotonic\\w*|gaseosas?|achocolatadas?)|te frio|energizantes?|limonada|chicha)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:sodas",
+    "en:juices",
+    "en:fruit-juices",
+    "en:waters",
+    "en:carbonated-drinks"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "BEBIDAS_ALCOHOLICAS",
+   "tipo": "BIEN",
+   "nombre": "Bebidas alcohólicas",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(cervezas?|ron|rones|whisky|whiskey|vodka|vinos?|sangria|tequila|ginebra|gin|anis|aguardiente|cocuy|licor\\w*|champagne|champana|sidra|brandy|cocteles?|sangria)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:beers",
+    "en:wines",
+    "en:spirits",
+    "en:rums"
+   ],
+   "zona_gris": false,
+   "nota": "Además aplican impuestos específicos al alcohol (no son IVA)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TABACO",
+   "tipo": "BIEN",
+   "nombre": "Cigarrillos y tabaco",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(cigarrillos?|cigarros?|tabacos?|habanos?|vapeador\\w*|vapes?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "GOLOSINAS_SNACKS",
+   "tipo": "BIEN",
+   "nombre": "Galletas, chocolates, golosinas, snacks y cereales",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(galletas?|chocolates?|chocolatinas?|caramelos?|chupetas?|chicles?|gomitas?|golosinas?|chucherias?|tortas?|ponques?|helados?|papas fritas|papitas|pepitos|doritos|cheetos|tostitos|platanitos|snacks?|cereal(es)?|hojuelas de maiz|corn flakes|mermeladas?|compotas?|gelatinas?|pudines?|flan|nutella|cotufas?|palomitas|pasapalos|mantequilla de mani|crema de mani)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:biscuits",
+    "en:chocolates",
+    "en:candies",
+    "en:snacks",
+    "en:breakfast-cereals",
+    "en:cakes",
+    "en:ice-creams"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "LIMPIEZA_HOGAR",
+   "tipo": "BIEN",
+   "nombre": "Productos de limpieza del hogar",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(detergentes?|jabon (en polvo|liquido|para (ropa|lavar))|lavaplatos|cloro|lejia|desinfectantes?|suavizantes?|limpiador\\w*|limpia ?vidrios|ambientador\\w*|esponjas?|bolsas? (de|para) basura|papel (higienico|toilet|absorbente)|servilletas?|toallas? (humedas|de cocina)|mopas?|coletos?|escobas?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "HIGIENE_PERSONAL",
+   "tipo": "BIEN",
+   "nombre": "Higiene y cuidado personal",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(champu|shampoo|acondicionador\\w*|crema dental|pasta dental|cepillos? dental\\w*|enjuague bucal|desodorantes?|jabon\\w*|toallas? sanitarias?|protector(es)? diarios?|tampones?|panal(es)?|afeitadoras?|maquinas? de afeitar|cremas? (hidratante|corporal|facial)|protector solar|bloqueador solar|perfumes?|colonias?|maquillaje|labial\\w*|esmaltes?|talco|hilo dental|gel antibacterial|alcohol isopropilico)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [
+    "en:toothpastes",
+    "en:shampoos",
+    "en:soaps"
+   ],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ROPA_CALZADO",
+   "tipo": "BIEN",
+   "nombre": "Ropa y calzado",
+   "prioridad": 45,
+   "patrones_incluir": [
+    "\\b(camisas?|camisetas?|franelas?|pantalone?s?|jeans?|vestidos?|faldas?|shorts?|medias|calcetines|ropa|pantaletas?|interiores|brasier\\w*|sostene?s?|chaquetas?|sueter(es)?|zapatos?|zapatillas?|sandalias?|cholas|botas|gorras?|sombreros?|uniformes?|pijamas?|trajes? de bano|bluejeans?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(cuero|piel(es)? natural(es)?|peleteria|vison)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PRENDAS_CUERO_PIEL",
+   "tipo": "BIEN",
+   "nombre": "Prendas y accesorios de vestir de cuero o pieles naturales",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\b(chaquetas?|abrigos?|carteras?|bolsos?|cinturone?s?|correas?|zapatos?|botas|guantes|prendas?|vestidos?|faldas?|pantalone?s?|billeteras?|chaquetones?) de (cuero|piel|pieles)( natural\\w*| genuin\\w*)?\\b",
+    "\\b(peleteria|vison|abrigo de piel(es)?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Precio menor a US$ 10.000",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": "<",
+      "valor": 10000
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-j",
+      "LIVA-61"
+     ],
+     "condicion": "Precio mayor o igual a US$ 10.000 (art. 61.1.j)",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": ">=",
+      "valor": 10000
+     }
+    }
+   ]
+  },
+  {
+   "id": "ELECTRONICA_HOGAR",
+   "tipo": "BIEN",
+   "nombre": "Electrónica, electrodomésticos y tecnología",
+   "prioridad": 45,
+   "patrones_incluir": [
+    "\\b(telefonos?|celular(es)?|smartphones?|televisore?s?|tv|laptops?|computador\\w*|tablets?|audifonos?|cornetas?|parlantes?|neveras?|refrigerador\\w*|lavadoras?|secadoras?|cocinas?|microondas|licuadoras?|ventiladore?s?|aires? acondicionados?|planchas?|cafeteras?|tostadoras?|consolas?|videojuegos?|impresoras?|monitore?s?|cargadore?s?|baterias?|pilas|bombillos?|routers?|modems?|iphone|ipad|macbook|playstation|xbox|nintendo)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(para (carro|vehiculo|auto)|de carro|telefonos? publicos?|servicio de)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "FERRETERIA_HOGAR",
+   "tipo": "BIEN",
+   "nombre": "Ferretería, construcción y artículos del hogar",
+   "prioridad": 40,
+   "patrones_incluir": [
+    "\\b(tornillos?|clavos?|herramientas?|pistolas? de (silicon|calor|pintura|clavos)|gatos? hidraulicos?|martillos?|taladros?|pinturas? (de caucho|esmalte|para paredes|en aerosol)|cemento|cabillas?|bloques?|tuberias?|cables?|muebles?|sillas?|mesas?|colchone?s?|sabanas?|toallas?|ollas?|sartene?s?|platos?|vasos?|cubiertos?|lamparas?|cortinas?|alfombras?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(sillas? de ruedas|para carro|de carro|de casino|de poker)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "COMBUSTIBLES",
+   "tipo": "BIEN",
+   "nombre": "Gasolina, diésel y combustibles",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(gasolina|gasoil|diesel|kerosene|queroseno|combustibles?|aditivos? para (gasolina|combustible))\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(transporte de|motor diesel|motor(es)?|bombas?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXONERADO",
+     "base_legal": [
+      "DEC-5207"
+     ],
+     "condicion": "Mientras esté vigente la exoneración del Decreto N° 5.207 (verificar vigencia y alcance, B12)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si la exoneración no aplica o venció",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "VEHICULOS",
+   "tipo": "BIEN",
+   "nombre": "Vehículos automóviles",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(carros?|automovil\\w*|autos?|vehiculos?|camionetas?|sedan|suv|rusticos?|pick ?ups?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(accesorios?|repuestos?|cauchos?|neumaticos?|rin(es)?|aceites?|alfombras?|cargador\\w*|juguetes?|control remoto|lavado|seguros?|alquiler|adaptad[oa]s?|para (carro|vehiculo|auto)|de carro|sonido|cornetas?|forros?|asientos?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "El umbral se refiere al valor en aduana o precio de fábrica; se usa el precio informado",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Precio menor a US$ 40.000",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": "<",
+      "valor": 40000
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-a",
+      "LIVA-61"
+     ],
+     "condicion": "Precio mayor o igual a US$ 40.000 (art. 61.1.a; valor en aduana o precio de fábrica)",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": ">=",
+      "valor": 40000
+     }
+    }
+   ]
+  },
+  {
+   "id": "MOTOCICLETAS",
+   "tipo": "BIEN",
+   "nombre": "Motocicletas",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(motos?|motocicletas?|scooters?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(de agua|accesorios?|repuestos?|cascos?|juguetes?|cauchos?|aceites?|motor|mototaxi)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Precio menor a US$ 20.000",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": "<",
+      "valor": 20000
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-b",
+      "LIVA-61"
+     ],
+     "condicion": "Precio mayor o igual a US$ 20.000 (art. 61.1.b)",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": ">=",
+      "valor": 20000
+     }
+    }
+   ]
+  },
+  {
+   "id": "AERONAVES",
+   "tipo": "BIEN",
+   "nombre": "Aeronaves civiles",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(avione?s?|avionetas?|helicopteros?|aeronaves?|ultraliviano\\w*|planeadore?s?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(juguetes?|a escala|modelos?|drones?|boletos?|pasajes?|papel|alquiler|arrendamiento|charter)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-c",
+      "LIVA-61"
+     ],
+     "condicion": "Para exhibición, publicidad, instrucción, recreación, deporte o uso particular",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Para uso comercial o de transporte",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "EMBARCACIONES",
+   "tipo": "BIEN",
+   "nombre": "Buques y embarcaciones",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(yates?|lanchas?|veleros?|motos? de agua|jet ?skis?|botes?|embarcacion\\w*|catamaran\\w*)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(juguetes?|inflables? de piscina|pasajes?|alquiler|arrendamiento|charter)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-d",
+      "LIVA-61"
+     ],
+     "condicion": "Para actividades recreativas, deportivas o uso particular",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Para pesca o transporte comercial",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MAQUINAS_JUEGO",
+   "tipo": "BIEN",
+   "nombre": "Máquinas y mesas de juegos de envite o azar",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(tragamonedas|maquinas? (de juegos?|tragamonedas|de envite)|ruletas? de casino|mesas? de (casino|poker|ruleta|blackjack))\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-e",
+      "LIVA-61"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "JOYAS_RELOJES",
+   "tipo": "BIEN",
+   "nombre": "Joyas y relojes",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(reloj(es)?|joyas?|joyeria|anillos?|collar(es)?|pulseras?|zarcillos?|aretes?|cadenas? de (oro|plata)|dijes?|brillantes?|diamantes?|esmeraldas?|rubies|smartwatch\\w*)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(bisuteria|fantasia|de juguete|para perros?|collar(es)? para (perros?|gatos?|mascotas?)|antipulgas|correas? de reloj)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Precio menor a US$ 300",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": "<",
+      "valor": 300
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-f",
+      "LIVA-61"
+     ],
+     "condicion": "Precio mayor o igual a US$ 300 (art. 61.1.f)",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": ">=",
+      "valor": 300
+     }
+    }
+   ]
+  },
+  {
+   "id": "BISUTERIA",
+   "tipo": "BIEN",
+   "nombre": "Bisutería",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\b(bisuteria|zarcillos? de fantasia|collar(es)? de fantasia|pulseras? de fantasia)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ARMAS",
+   "tipo": "BIEN",
+   "nombre": "Armas, sus accesorios y proyectiles",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(pistolas?|revolver\\w*|escopetas?|rifles?|carabinas?|fusil(es)?|armas?|municion\\w*|cartuchos?|balas|proyectiles?|miras? telescopicas?|cacerinas?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(de juguete|juguetes?|de agua|de silicon|de pintura|paintball|pistolas? de (calor|silicon|pintura|aire|clavos)|cartuchos? de (tinta|impresora|toner)|armario|armar|para armar|rompecabezas)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-g",
+      "LIVA-61"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ACCESORIOS_VEHICULO",
+   "tipo": "BIEN",
+   "nombre": "Accesorios para vehículos no incorporados en el ensamblaje",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\b(rin(es)?|alerone?s?|reproductore?s? para (carro|vehiculo|auto)|(sonido|cornetas?|equipos? de sonido|(luz|luces) led|forros?|alfombras?|gps|camaras? de retroceso|sensor(es)? de retroceso|portabicicletas|parrillas?) (para|de) (carro|vehiculo|auto|techo)|polarizado|tapiceria de carro)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B14: frontera entre repuesto y accesorio",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Precio menor a US$ 100",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": "<",
+      "valor": 100
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-h",
+      "LIVA-61"
+     ],
+     "condicion": "Precio mayor o igual a US$ 100 (art. 61.1.h; accesorio no incorporado en el ensamblaje)",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": ">=",
+      "valor": 100
+     }
+    }
+   ]
+  },
+  {
+   "id": "REPUESTOS",
+   "tipo": "BIEN",
+   "nombre": "Repuestos y consumibles de vehículos",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(repuestos?|cauchos?|llantas?|neumaticos?|bujias?|pastillas? de freno|filtros? de (aceite|aire|gasolina)|aceites? de motor|aceites? para motor|lubricantes?|baterias? para (carro|vehiculo)|amortiguadore?s?|correas? de tiempo)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Repuesto (no accesorio): frontera con el art. 61.1.h (B14)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ARTE_ANTIGUEDADES",
+   "tipo": "BIEN",
+   "nombre": "Obras de arte y antigüedades",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(obras? de arte|pinturas? (original(es)?|al oleo)|oleos?|esculturas?|antiguedad\\w*|grabados? original(es)?|litografias?)\\b"
+   ],
+   "patrones_excluir": [
+    "\\bpinturas? (de caucho|esmalte|para paredes|en aerosol)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Precio menor a US$ 40.000",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": "<",
+      "valor": 40000
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-i",
+      "LIVA-61"
+     ],
+     "condicion": "Precio mayor o igual a US$ 40.000 (art. 61.1.i)",
+     "condicion_eval": {
+      "campo": "precio_usd",
+      "op": ">=",
+      "valor": 40000
+     }
+    }
+   ]
+  },
+  {
+   "id": "ANIMALES_RECREATIVOS",
+   "tipo": "BIEN",
+   "nombre": "Animales con fines recreativos o deportivos (incluidas mascotas)",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(caballos?( de (paso|carrera|salto))?|perros?|cachorros?|gatos?|gatitos?|mascotas?|peces ornamentales|aves ornamentales|loros?|guacamayas?|hamsters?|conejos? (mascota|enanos?))\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(alimentos?|comida|perrarina|gatarina|collare?s?|correas?|juguetes?|arena|camas?|jaulas?|peluches?|shampoo|champu|vacunas?|consultas?|carne|salchichas?|perros? calientes?|antipulgas|ropa|hidraulic[oa]s?|mecanic[oa]s?|de carro|lagrimas?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B8",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-k",
+      "LIVA-61"
+     ],
+     "condicion": "Animal con fines recreativos o deportivos (si incluye mascotas, B8)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si las mascotas no se consideran 'fines recreativos'",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CAVIAR",
+   "tipo": "BIEN",
+   "nombre": "Caviar y sus sucedáneos",
+   "prioridad": 86,
+   "patrones_incluir": [
+    "\\b(caviar|huevas? de (esturion|salmon|lumpo|pescado)|sucedaneos? de caviar)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-l",
+      "LIVA-61"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TRANSPORTE_PASAJEROS",
+   "tipo": "SERVICIO",
+   "nombre": "Transporte terrestre y acuático nacional de pasajeros",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(pasajes? (de|en) (autobus|bus|buseta|ferry)|boletos? de (autobus|bus|metro|ferry)|transporte (terrestre|urbano|interurbano|acuatico) de pasajeros|servicio de taxi|taxis?|mototaxis?|metro|ferry|por puesto|carrito por puesto)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-1"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TRANSPORTE_AEREO",
+   "tipo": "SERVICIO",
+   "nombre": "Transporte aéreo nacional de pasajeros",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(pasajes? aereos?|boletos? aereos?|vuelos? nacionale?s?|boletos? de avion|pasajes? de avion|transporte aereo)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Vuelos internacionales: fuera del alcance (exportación)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-4",
+      "LIVA-64"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TRANSPORTE_MERCANCIAS",
+   "tipo": "SERVICIO",
+   "nombre": "Transporte de mercancías",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(fletes?|transporte de (carga|mercancias?|mercaderia)|envios? de (paquetes?|encomiendas?|mercancias?)|encomiendas?|mudanzas?|courier|servicio de envio|delivery)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-2"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TRANSPORTE_COMBUSTIBLE",
+   "tipo": "SERVICIO",
+   "nombre": "Transporte de combustibles",
+   "prioridad": 82,
+   "patrones_incluir": [
+    "\\btransporte de (combustibles?|gasolina|gasoil|diesel)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-14"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "EDUCACION",
+   "tipo": "SERVICIO",
+   "nombre": "Servicios educativos",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(mensualidad(es)?|matriculas?|inscripcion(es)?|cuotas?)\\b.*\\b(colegio|escolar\\w*|universi\\w*|liceo|preescolar|escuela|maternal)\\b",
+    "\\b(matriculas?|mensualidad(es)? (escolar\\w*|del colegio|universitari\\w*)|inscripcion(es)? (escolar\\w*|en el colegio|universitari\\w*)|colegiatura|clases? de|cursos?|diplomados?|servicios? educativos?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-3"
+     ],
+     "condicion": "Institución inscrita en el ministerio competente",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Institución no inscrita (academias o cursos libres)",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SALUD",
+   "tipo": "SERVICIO",
+   "nombre": "Servicios médico-asistenciales, odontológicos, cirugía y hospitalización",
+   "prioridad": 70,
+   "patrones_incluir": [
+    "\\b(consultas? medicas?|consultas? (odontologica|con el (medico|doctor|especialista))|odontolog\\w*|cirugias?|hospitalizacion|servicios? medicos?|examen(es)? de laboratorio|laboratorio clinico|rayos x|ecografias?|resonancias?|tomografias?|fisioterapia|terapia fisica|emergencias? medicas?|atencion medica)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-6"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "HOSPEDAJE",
+   "tipo": "SERVICIO",
+   "nombre": "Hospedaje y alojamiento",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(hotel(es)?|hospedaje|posadas?|alojamiento|habitacion de hotel)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Hospedaje en general (hoteles, posadas)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-4"
+     ],
+     "condicion": "En instituciones exclusivas para estudiantes, ancianos, personas con discapacidad o enfermas",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "COMEDORES",
+   "tipo": "SERVICIO",
+   "nombre": "Alimentación en comedores escolares o de empresa",
+   "prioridad": 72,
+   "patrones_incluir": [
+    "\\b(comedore?s? (escolar\\w*|de (la )?empresa|industrial\\w*)|cantinas? (escolar\\w*|de (la )?empresa))\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-8"
+     ],
+     "condicion": "Para alumnos o trabajadores, en sus propias sedes",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "RESTAURANTES",
+   "tipo": "SERVICIO",
+   "nombre": "Restaurantes y comida preparada",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(restaurante\\w*|comida (servida|para llevar|rapida)|almuerzos?|cenas?|desayunos?|menu ejecutivo|servicio de comida|catering)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(comedore?s? (escolar|de empresa)|cantinas?)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ELECTRICIDAD",
+   "tipo": "SERVICIO",
+   "nombre": "Suministro de electricidad",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(electricidad|energia electrica|servicio electrico|corpoelec|luz electrica|factura de (la )?luz)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Indique atributos.uso = 'residencial' para una respuesta única",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-9"
+     ],
+     "condicion": "Uso residencial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "=",
+      "valor": "residencial"
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Uso comercial o industrial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "!=",
+      "valor": "residencial"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AGUA_SERVICIO",
+   "tipo": "SERVICIO",
+   "nombre": "Suministro de agua",
+   "prioridad": 72,
+   "patrones_incluir": [
+    "\\b(servicio de agua|suministro de agua|hidrocapital|hidrologica|factura de(l)? agua)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-11"
+     ],
+     "condicion": "Uso residencial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "=",
+      "valor": "residencial"
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Uso comercial o industrial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "!=",
+      "valor": "residencial"
+     }
+    }
+   ]
+  },
+  {
+   "id": "ASEO_URBANO",
+   "tipo": "SERVICIO",
+   "nombre": "Aseo urbano",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(aseo urbano|recoleccion de basura|servicio de aseo)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-12"
+     ],
+     "condicion": "Uso residencial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "=",
+      "valor": "residencial"
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Uso comercial o industrial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "!=",
+      "valor": "residencial"
+     }
+    }
+   ]
+  },
+  {
+   "id": "GAS_RESIDENCIAL",
+   "tipo": "SERVICIO",
+   "nombre": "Suministro de gas (directo o por bombonas)",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(gas (residencial|domestico|por tuberia|licuado)|bombonas? de gas|cilindros? de gas|glp)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-13"
+     ],
+     "condicion": "Uso residencial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "=",
+      "valor": "residencial"
+     }
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Uso comercial o industrial",
+     "condicion_eval": {
+      "campo": "uso",
+      "op": "!=",
+      "valor": "residencial"
+     }
+    }
+   ]
+  },
+  {
+   "id": "ESPECTACULOS",
+   "tipo": "SERVICIO",
+   "nombre": "Entradas a espectáculos, parques y museos",
+   "prioridad": 65,
+   "patrones_incluir": [
+    "\\b(entradas? (a|al|para) (conciertos?|teatros?|cines?|partidos?|estadios?|espectaculos?|museos?|parques?|zoologicos?)|boletos? (de|para) (conciertos?|cines?|teatros?|partidos?)|tickets? de conciertos?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "El valor de la U.T. vigente está pendiente (B16)",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-7",
+      "LIVA-19-5"
+     ],
+     "condicion": "Valor de hasta 2 U.T. (19.7), o parques, museos y centros culturales sin fines de lucro (19.5)",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Valor mayor a 2 U.T.",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SERVICIOS_PROFESIONALES",
+   "tipo": "SERVICIO",
+   "nombre": "Servicios profesionales",
+   "prioridad": 55,
+   "patrones_incluir": [
+    "\\b(honorarios|asesorias?|consultorias?|servicios? profesional(es)?|servicios? (legales|contables|de ingenieria|de arquitectura)|abogad\\w*|contador\\w*|auditorias?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "Indique atributos.cliente = 'poder_publico' o 'privado'",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Cliente privado",
+     "condicion_eval": {
+      "campo": "cliente",
+      "op": "!=",
+      "valor": "poder_publico"
+     }
+    },
+    {
+     "categoria": "ALICUOTA_REDUCIDA",
+     "base_legal": [
+      "LIVA-64-3",
+      "LIVA-64"
+     ],
+     "condicion": "Prestado al Poder Público; trabajo predominantemente intelectual sin actos de comercio",
+     "condicion_eval": {
+      "campo": "cliente",
+      "op": "=",
+      "valor": "poder_publico"
+     }
+    }
+   ]
+  },
+  {
+   "id": "CLUBES_MEMBRESIA",
+   "tipo": "SERVICIO",
+   "nombre": "Membresías y cuotas de mantenimiento",
+   "prioridad": 80,
+   "patrones_incluir": [
+    "\\b(membresias?|cuotas? de mantenimiento|accion(es)? de club|club (privado|social|nocturno)|cuotas? de club)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-2-a",
+      "LIVA-61"
+     ],
+     "condicion": "De restaurantes, centros nocturnos o bares de acceso restringido",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "De otros clubes (sociales, deportivos, gimnasios)",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ALQUILER_EMBARCACION_AERONAVE",
+   "tipo": "SERVICIO",
+   "nombre": "Alquiler de embarcaciones o aeronaves recreativas",
+   "prioridad": 82,
+   "patrones_incluir": [
+    "\\b(alquiler|arrendamiento|renta|charter)\\w* (de )?(yates?|lanchas?|veleros?|embarcacion\\w*|avionetas?|avion(es)?|helicopteros?|aeronaves?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-2-b",
+      "LIVA-61"
+     ],
+     "condicion": "Recreativo, deportivo o de uso particular",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Uso comercial o de transporte",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "MENSAJERIA_TEXTO",
+   "tipo": "SERVICIO",
+   "nombre": "Servicios por cuenta de terceros vía mensajería de texto",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(mensajes? de texto premium|sms premium|servicios? por sms|suscripcion(es)? por (sms|mensajes? de texto)|contenido por sms)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-2-c",
+      "LIVA-61"
+     ],
+     "condicion": "Prestado por cuenta de terceros",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "BANCOS_SEGUROS",
+   "tipo": "SERVICIO",
+   "nombre": "Operaciones bancarias, préstamos y seguros",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(comision(es)? bancaria\\w*|servicios? bancarios?|interes(es)? (de prestamos?|bancarios?)|prestamos?|polizas?|seguros? (de|para) (vida|salud|vehiculo|carro|hogar)|primas? de seguros?|reaseguros?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "NO_SUJETO",
+     "base_legal": [
+      "LIVA-16-3",
+      "LIVA-16-4",
+      "LIVA-16-5"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TRABAJO_DEPENDENCIA",
+   "tipo": "SERVICIO",
+   "nombre": "Servicios bajo relación de dependencia",
+   "prioridad": 80,
+   "patrones_incluir": [
+    "\\b(salarios?|sueldos?|nominas?|relacion de dependencia)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "NO_SUJETO",
+     "base_legal": [
+      "LIVA-16-6"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TELEFONO_PUBLICO",
+   "tipo": "SERVICIO",
+   "nombre": "Telefonía nacional por teléfonos públicos",
+   "prioridad": 80,
+   "patrones_incluir": [
+    "\\btelefonos? publicos?\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-10"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "TELECOMUNICACIONES",
+   "tipo": "SERVICIO",
+   "nombre": "Telecomunicaciones e internet",
+   "prioridad": 50,
+   "patrones_incluir": [
+    "\\b(internet|telefonia|plan(es)? (de datos|celular\\w*|telefonic\\w*)|recargas?|television por cable|streaming|netflix)\\b"
+   ],
+   "patrones_excluir": [
+    "\\btelefonos? publicos?\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CRIANZA_GANADO",
+   "tipo": "SERVICIO",
+   "nombre": "Servicio de crianza de ganado y especies menores",
+   "prioridad": 76,
+   "patrones_incluir": [
+    "\\b(servicios? de crianza|cria de (ganado|aves|cerdos|chivos)|engorde de ganado)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-19-15"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "COMIDA_PREPARADA",
+   "tipo": "BIEN",
+   "nombre": "Comida preparada (empanadas, arepas, pastelitos, pizzas, perros calientes)",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\b(empanadas?|arepas?|pastelitos?|tequenos?|pizzas?|perros? calientes?|cachapas?|hallacas?|sandwich\\w*|sanduch\\w*|shawarmas?|toston(es)? con)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(harinas?|masa para|para (hacer|preparar)|budares?|arepera|tostiarepa)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "LACTEOS_OTROS",
+   "tipo": "BIEN",
+   "nombre": "Otros lácteos (suero, natilla, crema de leche, nata)",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\b(suero( de leche| costeno| lacteo| llanero)?|natilla|crema de leche|nata|crema agria|crema de batir|crema para batir)\\b"
+   ],
+   "patrones_excluir": [
+    "\\b(fisiologico|oral|antiofidico|intravenoso|glucosado|salino|rehidratacion|facial|capilar)\\b"
+   ],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "No son leche ni queso blanco (arts. 18.1.m y 18.1.n)",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "HUEVOS_OTROS",
+   "tipo": "BIEN",
+   "nombre": "Huevos de otras aves (codorniz, pato, avestruz)",
+   "prioridad": 62,
+   "patrones_incluir": [
+    "\\bhuevos? de (codorniz|pato|avestruz|gansa?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "El art. 18.1.b solo menciona los huevos de gallina",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "CONSERVAS",
+   "tipo": "BIEN",
+   "nombre": "Conservas y enlatados",
+   "prioridad": 40,
+   "patrones_incluir": [
+    "\\b(enlatad[oa]s?|en lata|en conserva|conservas?|encurtid[oa]s?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ARTICULOS_GENERALES",
+   "tipo": "BIEN",
+   "nombre": "Otros artículos de consumo (juguetes, bicicletas, accesorios)",
+   "prioridad": 35,
+   "patrones_incluir": [
+    "\\b(bicicletas?|juguetes?|pelotas?|balones?|peluches?|munecas?|maletas?|morral(es)?|bolsos?|carteras?|lentes?|gafas|paraguas|collar(es)? para (perros?|gatos?|mascotas?)|correas? (de reloj|para (perros?|gatos?|mascotas?))|accesorios para mascotas|arena para gatos)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "SERVICIOS_GENERALES",
+   "tipo": "SERVICIO",
+   "nombre": "Otros servicios (peluquería, reparaciones, lavado, estacionamiento, publicidad)",
+   "prioridad": 46,
+   "patrones_incluir": [
+    "\\b(corte de (cabello|pelo)|peluquerias?|barberias?|manicure|pedicure|lavado de (carros?|vehiculos?|autos?|motos?)|autolavado|reparacion(es)?|mantenimiento|estacionamientos?|servicio tecnico|lavanderias?|tintorerias?|fumigacion|publicidad|vigilancia|seguridad privada|instalacion(es)?|limpieza de|mecanica|latoneria|diseno grafico|fotografia)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": null,
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "ALQUILER_INMUEBLES",
+   "tipo": "SERVICIO",
+   "nombre": "Arrendamiento de inmuebles",
+   "prioridad": 60,
+   "patrones_incluir": [
+    "\\b(alquiler|arrendamiento|renta|canon de arrendamiento)\\w* (de )?(un |una )?(local(es)?|oficinas?|galpone?s?|apartamentos?|casas?|viviendas?|inmuebles?|habitacion(es)?|terrenos?|depositos?)\\b"
+   ],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": false,
+   "nota": "El arrendamiento de inmuebles no aparece entre las exenciones del art. 19; confirmar con el asesor el caso de la vivienda",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": null,
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "QUESO_FRESCO_0406_10",
+   "tipo": "BIEN",
+   "nombre": "Queso fresco sin madurar y requesón (subpartida 0406.10)",
+   "prioridad": 50,
+   "patrones_incluir": [],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "La subpartida arancelaria agrupa el queso blanco con otros quesos frescos",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-n"
+     ],
+     "condicion": "Si es queso blanco",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Si es otro queso fresco (requesón, ricota, crema, etc.)",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "EMBUTIDOS_1601",
+   "tipo": "BIEN",
+   "nombre": "Embutidos y productos similares (partida 16.01)",
+   "prioridad": 50,
+   "patrones_incluir": [],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "La partida arancelaria agrupa la mortadela (exenta) con los demás embutidos",
+   "opciones": [
+    {
+     "categoria": "EXENTO",
+     "base_legal": [
+      "LIVA-18-1-j"
+     ],
+     "condicion": "Si es mortadela",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Otros embutidos (salchichas, chorizos, salami, etc.)",
+     "condicion_eval": null
+    }
+   ]
+  },
+  {
+   "id": "PARTES_VEHICULO_8708",
+   "tipo": "BIEN",
+   "nombre": "Partes y accesorios de vehículos (partida 87.08)",
+   "prioridad": 50,
+   "patrones_incluir": [],
+   "patrones_excluir": [],
+   "patrones_todos": [],
+   "categorias_off": [],
+   "zona_gris": true,
+   "nota": "Zona gris B14: frontera entre repuesto y accesorio",
+   "opciones": [
+    {
+     "categoria": "ALICUOTA_GENERAL",
+     "base_legal": [
+      "LIVA-63"
+     ],
+     "condicion": "Parte o repuesto, o accesorio de precio menor a US$ 100",
+     "condicion_eval": null
+    },
+    {
+     "categoria": "ALICUOTA_GENERAL_MAS_ADICIONAL",
+     "base_legal": [
+      "LIVA-61-1-h",
+      "LIVA-61"
+     ],
+     "condicion": "Accesorio no incorporado en el ensamblaje, de precio mayor o igual a US$ 100",
+     "condicion_eval": null
+    }
+   ]
+  }
+ ],
+ "regla_arancel": [
+  {
+   "prefijo": "0102",
+   "regla_id": "BOVINO_PORCINO_VIVO"
+  },
+  {
+   "prefijo": "0103",
+   "regla_id": "BOVINO_PORCINO_VIVO"
+  },
+  {
+   "prefijo": "0104",
+   "regla_id": "CAPRINO_OVINO_VIVO"
+  },
+  {
+   "prefijo": "0105",
+   "regla_id": "AVES_CRIA"
+  },
+  {
+   "prefijo": "0201",
+   "regla_id": "CARNES_EXENTAS"
+  },
+  {
+   "prefijo": "0202",
+   "regla_id": "CARNES_EXENTAS"
+  },
+  {
+   "prefijo": "0203",
+   "regla_id": "CARNES_EXENTAS"
+  },
+  {
+   "prefijo": "0204",
+   "regla_id": "CARNES_OTRAS"
+  },
+  {
+   "prefijo": "0205",
+   "regla_id": "CARNES_OTRAS"
+  },
+  {
+   "prefijo": "02071",
+   "regla_id": "CARNES_EXENTAS"
+  },
+  {
+   "prefijo": "02072",
+   "regla_id": "CARNES_OTRAS"
+  },
+  {
+   "prefijo": "02074",
+   "regla_id": "CARNES_OTRAS"
+  },
+  {
+   "prefijo": "02075",
+   "regla_id": "CARNES_OTRAS"
+  },
+  {
+   "prefijo": "0208",
+   "regla_id": "CARNES_OTRAS"
+  },
+  {
+   "prefijo": "0210",
+   "regla_id": "CARNES_PROCESADAS"
+  },
+  {
+   "prefijo": "03",
+   "regla_id": "PESCADOS_MARISCOS"
+  },
+  {
+   "prefijo": "0401",
+   "regla_id": "LECHE"
+  },
+  {
+   "prefijo": "0401402",
+   "regla_id": "LACTEOS_OTROS"
+  },
+  {
+   "prefijo": "0401502",
+   "regla_id": "LACTEOS_OTROS"
+  },
+  {
+   "prefijo": "0402",
+   "regla_id": "LECHE"
+  },
+  {
+   "prefijo": "04029",
+   "regla_id": "LECHE_ZONA_GRIS"
+  },
+  {
+   "prefijo": "0403",
+   "regla_id": "YOGUR"
+  },
+  {
+   "prefijo": "04051",
+   "regla_id": "MARGARINA_MANTEQUILLA"
+  },
+  {
+   "prefijo": "0406",
+   "regla_id": "QUESOS_OTROS"
+  },
+  {
+   "prefijo": "040610",
+   "regla_id": "QUESO_FRESCO_0406_10"
+  },
+  {
+   "prefijo": "04061010",
+   "regla_id": "QUESOS_OTROS"
+  },
+  {
+   "prefijo": "0407",
+   "regla_id": "HUEVOS"
+  },
+  {
+   "prefijo": "0701",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0702",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0703",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0704",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0705",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0706",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0707",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0708",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0709",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0710",
+   "regla_id": "VEGETALES_PROCESADOS"
+  },
+  {
+   "prefijo": "0711",
+   "regla_id": "VEGETALES_PROCESADOS"
+  },
+  {
+   "prefijo": "0712",
+   "regla_id": "VEGETALES_PROCESADOS"
+  },
+  {
+   "prefijo": "0713",
+   "regla_id": "LEGUMBRES_SECAS"
+  },
+  {
+   "prefijo": "0714",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0803",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0804",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0805",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0806",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0807",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0808",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0809",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0810",
+   "regla_id": "VEGETALES_FRESCOS"
+  },
+  {
+   "prefijo": "0811",
+   "regla_id": "VEGETALES_PROCESADOS"
+  },
+  {
+   "prefijo": "0812",
+   "regla_id": "VEGETALES_PROCESADOS"
+  },
+  {
+   "prefijo": "0813",
+   "regla_id": "VEGETALES_PROCESADOS"
+  },
+  {
+   "prefijo": "0901",
+   "regla_id": "CAFE"
+  },
+  {
+   "prefijo": "1001",
+   "regla_id": "LEGUMBRES_SECAS"
+  },
+  {
+   "prefijo": "1002",
+   "regla_id": "LEGUMBRES_SECAS"
+  },
+  {
+   "prefijo": "1003",
+   "regla_id": "LEGUMBRES_SECAS"
+  },
+  {
+   "prefijo": "1004",
+   "regla_id": "AVENA"
+  },
+  {
+   "prefijo": "1005",
+   "regla_id": "MAIZ"
+  },
+  {
+   "prefijo": "1006",
+   "regla_id": "ARROZ"
+  },
+  {
+   "prefijo": "1007",
+   "regla_id": "SORGO_SOYA"
+  },
+  {
+   "prefijo": "1101",
+   "regla_id": "HARINA"
+  },
+  {
+   "prefijo": "1102",
+   "regla_id": "HARINA"
+  },
+  {
+   "prefijo": "1103",
+   "regla_id": "HARINA"
+  },
+  {
+   "prefijo": "110412",
+   "regla_id": "AVENA"
+  },
+  {
+   "prefijo": "110422",
+   "regla_id": "AVENA"
+  },
+  {
+   "prefijo": "1201",
+   "regla_id": "SORGO_SOYA"
+  },
+  {
+   "prefijo": "1501",
+   "regla_id": "MANTECAS"
+  },
+  {
+   "prefijo": "1507",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1508",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1509",
+   "regla_id": "ACEITE_OLIVA"
+  },
+  {
+   "prefijo": "1510",
+   "regla_id": "ACEITE_OLIVA"
+  },
+  {
+   "prefijo": "1511",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1512",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1513",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1514",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1515",
+   "regla_id": "ACEITE_COMESTIBLE"
+  },
+  {
+   "prefijo": "1517",
+   "regla_id": "MARGARINA_MANTEQUILLA"
+  },
+  {
+   "prefijo": "1601",
+   "regla_id": "EMBUTIDOS_1601"
+  },
+  {
+   "prefijo": "160413",
+   "regla_id": "SARDINAS"
+  },
+  {
+   "prefijo": "160414",
+   "regla_id": "ATUN"
+  },
+  {
+   "prefijo": "160431",
+   "regla_id": "CAVIAR"
+  },
+  {
+   "prefijo": "160432",
+   "regla_id": "CAVIAR"
+  },
+  {
+   "prefijo": "1701",
+   "regla_id": "AZUCAR_PAPELON"
+  },
+  {
+   "prefijo": "1902",
+   "regla_id": "PASTAS"
+  },
+  {
+   "prefijo": "1905",
+   "regla_id": "PAN_ZONA_GRIS"
+  },
+  {
+   "prefijo": "2201",
+   "regla_id": "BEBIDAS"
+  },
+  {
+   "prefijo": "2202",
+   "regla_id": "BEBIDAS"
+  },
+  {
+   "prefijo": "2203",
+   "regla_id": "BEBIDAS_ALCOHOLICAS"
+  },
+  {
+   "prefijo": "2204",
+   "regla_id": "BEBIDAS_ALCOHOLICAS"
+  },
+  {
+   "prefijo": "2205",
+   "regla_id": "BEBIDAS_ALCOHOLICAS"
+  },
+  {
+   "prefijo": "2206",
+   "regla_id": "BEBIDAS_ALCOHOLICAS"
+  },
+  {
+   "prefijo": "2208",
+   "regla_id": "BEBIDAS_ALCOHOLICAS"
+  },
+  {
+   "prefijo": "230910",
+   "regla_id": "ALIMENTO_MASCOTAS"
+  },
+  {
+   "prefijo": "230990",
+   "regla_id": "ALIMENTO_ANIMAL_EXENTO"
+  },
+  {
+   "prefijo": "24",
+   "regla_id": "TABACO"
+  },
+  {
+   "prefijo": "2501",
+   "regla_id": "SAL"
+  },
+  {
+   "prefijo": "271012",
+   "regla_id": "COMBUSTIBLES"
+  },
+  {
+   "prefijo": "3002",
+   "regla_id": "MEDICAMENTOS"
+  },
+  {
+   "prefijo": "3003",
+   "regla_id": "MEDICAMENTOS"
+  },
+  {
+   "prefijo": "3004",
+   "regla_id": "MEDICAMENTOS"
+  },
+  {
+   "prefijo": "31",
+   "regla_id": "FERTILIZANTES"
+  },
+  {
+   "prefijo": "3808",
+   "regla_id": "AGROQUIMICOS"
+  },
+  {
+   "prefijo": "4203",
+   "regla_id": "PRENDAS_CUERO_PIEL"
+  },
+  {
+   "prefijo": "4303",
+   "regla_id": "PRENDAS_CUERO_PIEL"
+  },
+  {
+   "prefijo": "4901",
+   "regla_id": "LIBROS_REVISTAS"
+  },
+  {
+   "prefijo": "490210",
+   "regla_id": "PRENSA"
+  },
+  {
+   "prefijo": "490290",
+   "regla_id": "LIBROS_REVISTAS"
+  },
+  {
+   "prefijo": "7113",
+   "regla_id": "JOYAS_RELOJES"
+  },
+  {
+   "prefijo": "7116",
+   "regla_id": "JOYAS_RELOJES"
+  },
+  {
+   "prefijo": "7117",
+   "regla_id": "BISUTERIA"
+  },
+  {
+   "prefijo": "8703",
+   "regla_id": "VEHICULOS"
+  },
+  {
+   "prefijo": "8708",
+   "regla_id": "PARTES_VEHICULO_8708"
+  },
+  {
+   "prefijo": "8711",
+   "regla_id": "MOTOCICLETAS"
+  },
+  {
+   "prefijo": "8713",
+   "regla_id": "AYUDAS_DISCAPACIDAD"
+  },
+  {
+   "prefijo": "8802",
+   "regla_id": "AERONAVES"
+  },
+  {
+   "prefijo": "8903",
+   "regla_id": "EMBARCACIONES"
+  },
+  {
+   "prefijo": "90212",
+   "regla_id": "AYUDAS_DISCAPACIDAD"
+  },
+  {
+   "prefijo": "90213",
+   "regla_id": "AYUDAS_DISCAPACIDAD"
+  },
+  {
+   "prefijo": "9021901",
+   "regla_id": "AYUDAS_DISCAPACIDAD"
+  },
+  {
+   "prefijo": "9101",
+   "regla_id": "JOYAS_RELOJES"
+  },
+  {
+   "prefijo": "9102",
+   "regla_id": "JOYAS_RELOJES"
+  },
+  {
+   "prefijo": "9103",
+   "regla_id": "JOYAS_RELOJES"
+  },
+  {
+   "prefijo": "9105",
+   "regla_id": "JOYAS_RELOJES"
+  },
+  {
+   "prefijo": "93",
+   "regla_id": "ARMAS"
+  },
+  {
+   "prefijo": "950430",
+   "regla_id": "MAQUINAS_JUEGO"
+  },
+  {
+   "prefijo": "97",
+   "regla_id": "ARTE_ANTIGUEDADES"
+  }
+ ]
+}

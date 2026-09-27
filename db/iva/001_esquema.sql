@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS iva.catalogo_version (
     version      text NOT NULL UNIQUE,           -- SHA-256 corto del catalogo.json
     cargado_en   timestamptz NOT NULL DEFAULT now(),
     estado       text NOT NULL DEFAULT 'pendiente_validacion_asesor',
-    nota         text
+    nota         text,
+    validaciones jsonb
 );
 
 CREATE TABLE IF NOT EXISTS iva.base_legal (
@@ -41,7 +42,9 @@ CREATE TABLE IF NOT EXISTS iva.base_legal (
     articulo  text NOT NULL,
     numeral   text,
     literal   text,
-    texto     text NOT NULL                      -- texto literal (verificado contra la Gaceta)
+    texto     text NOT NULL,                     -- texto literal
+    fuente_pdf text,                             -- PDF de la Gaceta en fuentes/ (NULL: sin fuente oficial a mano)
+    verificado boolean NOT NULL                  -- true: el cargador comprobó el texto contra el PDF de la Gaceta
 );
 
 CREATE TABLE IF NOT EXISTS iva.regla (
@@ -51,6 +54,7 @@ CREATE TABLE IF NOT EXISTS iva.regla (
     prioridad         smallint NOT NULL CHECK (prioridad BETWEEN 1 AND 100),  -- mayor gana
     patrones_incluir  text[] NOT NULL DEFAULT '{}',   -- regex sobre el texto normalizado (minúsculas, sin acentos)
     patrones_excluir  text[] NOT NULL DEFAULT '{}',
+    patrones_todos    text[] NOT NULL DEFAULT '{}',   -- además, TODOS estos deben coincidir (p. ej. 'tomate' y 'congelado')
     categorias_off    text[] NOT NULL DEFAULT '{}',   -- categorías de Open Food Facts (en:...)
     zona_gris         boolean NOT NULL DEFAULT false,
     nota              text
@@ -62,7 +66,7 @@ CREATE TABLE IF NOT EXISTS iva.opcion_regla (
     categoria       text NOT NULL REFERENCES iva.categoria (codigo),
     base_legal      text[] NOT NULL,             -- ids de iva.base_legal
     condicion       text,                        -- texto para el usuario (NULL: sin condición)
-    condicion_eval  jsonb,                       -- {"campo":"precio_venta_usd","op":">=","valor":300}
+    condicion_eval  jsonb,                       -- {"campo":"precio_usd","op":">=","valor":300}; campos: precio_usd, peso_g, uso, cliente
     PRIMARY KEY (regla_id, orden)
 );
 
@@ -81,6 +85,7 @@ CREATE TABLE IF NOT EXISTS iva.decreto (
     efecto         text NOT NULL CHECK (efecto IN ('SUSPENDE_EXENCION_IMPORTACION')),
     vigente_desde  date NOT NULL,
     vigente_hasta  date,
+    base_legal     text NOT NULL REFERENCES iva.base_legal (id),
     nota           text
 );
 
@@ -126,6 +131,7 @@ CREATE TABLE IF NOT EXISTS iva.consulta_registro (
     estado       text NOT NULL CHECK (estado IN ('condicionado', 'no_determinado')),
     entrada      jsonb NOT NULL,
     reglas       text[] NOT NULL DEFAULT '{}',
+    api_key_id   integer,
     revisada     boolean NOT NULL DEFAULT false
 );
 

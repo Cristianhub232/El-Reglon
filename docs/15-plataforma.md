@@ -71,7 +71,7 @@ Desarrollo local: `npm install`, `npm run dev`, `npm run typecheck`.
 ## 6. Verificación (27/09/2026)
 
 - `npm run build` y `tsc` sin errores.
-- `scripts/prueba-api.ts`: **37/37 verificaciones**, tanto con el servidor local como contra los contenedores. Cubren:
+- `scripts/prueba-api.ts`: **57/57 verificaciones** (37 de la plataforma base y 20 del clasificador de IVA, [16](16-clasificador-iva.md)), tanto con el servidor local como contra los contenedores. Cubren:
   - seguridad: 401, 403 y 429;
   - valores oficiales conocidos del BCV, el Arancel y el Calendario;
   - prórroga del COT art. 10;

@@ -81,3 +81,7 @@ Mientras no se resuelvan, estas dudas se entregan como **respuesta multiopción*
 | B21 | Providencia 000091 art. 3 (informativa trimestral de IVA): ¿qué meses de la tabla del art. 2 corresponden a cada trimestre? | [13](13-modulo-calendario.md) §5 |
 | B22 | COT art. 10 parágrafo único: ¿la prórroga por día bancario no laborable aplica a las fechas fijas de la providencia de especiales? (9 casos en 2026) | [14](14-codigo-organico-tributario.md) §2 |
 | B20 | Arancel: ¿qué código correcto correspondía a la fila "8701.29.00.00" impresa dentro del bloque 98.01? (el Decreto 5.103 la eliminó) | [09](09-semilla-arancel.md) §5 |
+| B23 | Art. 18.10 dice "minerales y alimentos **líquidos** concentrados para animales": ¿el alimento concentrado **sólido** (pellets) para aves, bovinos y porcinos está exento? | Art. 18.10; [16](16-clasificador-iva.md) |
+| B24 | ¿Qué variedades venezolanas cuentan como "queso blanco" (llanero, telita, guayanés, de mano, palmita, de año)? La subpartida 0406.10 agrupa el queso blanco con la mozzarella y el requesón | Art. 18.1.n |
+| B25 | Arrendamiento de inmuebles (vivienda y comercial): no aparece entre las exenciones del art. 19 de la reforma de 2020. ¿Tributa al 16 %? | Arts. 3 y 19 |
+| B26 | Suero, natilla y crema de leche: ¿se consideran "leche" (18.1.m)? El catálogo los trata al 16 % | Art. 18.1.m |

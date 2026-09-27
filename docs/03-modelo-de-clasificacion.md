@@ -165,6 +165,8 @@ iva.observacion_precio (
 
 ## 5. Contrato de API (borrador)
 
+> **Implementado** (ver [16](16-clasificador-iva.md)): las rutas del módulo quedaron bajo `/api/v1/iva/` (`clasificar`, `alicuotas`, `reglas`, `base-legal`, `codigo/{codigo}`), como los demás módulos. La respuesta sigue esta forma, con `montos` dentro de cada opción. Lo demás de esta sección sigue como diseño.
+
 Autenticación: header `X-API-Key: <token>` en todos los endpoints `/api/v1/*`.
 
 | Método | Ruta | Descripción |

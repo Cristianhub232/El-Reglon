@@ -15,7 +15,9 @@
     "apikey": "node scripts/api-key.ts",
     "bcv:ingesta": "node scripts/bcv-ingesta.ts",
     "bcv:programador": "node scripts/bcv-programador.ts",
-    "prueba:api": "node scripts/prueba-api.ts"
+    "prueba:api": "node scripts/prueba-api.ts",
+    "iva:cargar": "node scripts/iva-cargar-catalogo.ts",
+    "iva:casos": "node scripts/iva-casos.ts"
   },
   "dependencies": {
     "next": "16.3.6",

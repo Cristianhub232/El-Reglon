@@ -41,14 +41,20 @@ async function autenticar(req: Request, permiso: Permiso): Promise<{ clave: Clav
   return { clave, cabeceras };
 }
 
-type Manejador<C> = (req: Request, url: URL, contexto: C) => Promise<unknown>;
+export interface Sesion { api_key_id: number | null }
+type Manejador<C> = (req: Request, url: URL, contexto: C, sesion: Sesion) => Promise<unknown>;
 
 export function endpoint<C = unknown>(permiso: Permiso | null, fn: Manejador<C>) {
   return async (req: Request, contexto: C): Promise<Response> => {
     let cabeceras: Record<string, string> = {};
+    const sesion: Sesion = { api_key_id: null };
     try {
-      if (permiso) cabeceras = (await autenticar(req, permiso)).cabeceras;
-      const datos = await fn(req, new URL(req.url), contexto);
+      if (permiso) {
+        const a = await autenticar(req, permiso);
+        cabeceras = a.cabeceras;
+        sesion.api_key_id = a.clave.id;
+      }
+      const datos = await fn(req, new URL(req.url), contexto, sesion);
       return datos instanceof Response ? datos : json(datos, 200, cabeceras);
     } catch (e) {
       if (e instanceof ErrorApi) {
