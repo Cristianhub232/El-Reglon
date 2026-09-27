@@ -36,20 +36,21 @@
 | A39 | ¿Fuente del calendario tributario? | Repositorio calendarioapi (premisa 13), verificado contra la Providencia SNAT/2025/000091 (GO 43.283). Se usa la transcripción oficial ([12](analisis/12-analisis-calendarioapi.md)) | 27/09/2026 |
 | A40 | ¿Calendario de IVA de contribuyentes ordinarios? | Reglamento General Ley IVA **art. 60**: 15 días continuos siguientes al mes; COT art. 10 si es inhábil. La Providencia 00071 es de **facturación**, no de calendario ([13](13-modulo-calendario.md)) | 27/09/2026 |
 | A42 | ¿Alguien usa calendarioapi? | **No.** Se reemplaza por el módulo Calendario ([13](13-modulo-calendario.md)) | 27/09/2026 |
+| A23 | ¿Qué efecto tienen los precios? | Van en todo request con valores opcionales; solo cambian la clasificación donde la ley usa el precio; **se guardan para minería de precios** ([03](03-modelo-de-clasificacion.md) §4.1–4.2) | 27/09/2026 |
+| A24 | ¿En qué moneda llegan? | Bolívares o dólares (`moneda`), con conversión por la tasa BCV aplicable | 27/09/2026 |
 | A35 | ¿Guardar los preliminares del Arancel en la base? | **Sí**: Reglas Generales de Interpretación, Abreviaturas y Símbolos y Tabla de conversión, en tablas propias ([09](09-semilla-arancel.md) §2.1) | 27/09/2026 |
 
 ### Pendientes
 
 | # | Pregunta | Por qué importa |
 |---|---|---|
-| A23 | *(Recomendación entregada en [03](03-modelo-de-clasificacion.md) §4.1; falta confirmación explícita)* ¿"Parámetros no condicionales" significa **opcionales** (la consulta funciona sin ellos) o que **no deben influir** en la clasificación? Propuesta: opcionales, pero si llegan se usan para los umbrales de lujo y para calcular montos | Umbrales del art. 61 |
-| A24 | *(Recomendación: ambas monedas, con `moneda` = `VES` o `USD`; falta confirmación explícita)* ¿Los precios llegan en USD, en Bs o en ambas? | Conversión con la tasa BCV |
 | A36 | 🔴 **Urgente:** ¿se aplica ya en el servicio tasas-bcv en producción (BNPL) la corrección del parser para tasas de 1.000 o más? El EUR está en 976,90 | Si no, el servicio dejará de actualizar EUR y USD ([10](analisis/10-analisis-tasas-bcv.md) §2.1) |
 | A31 | ¿Puede conseguirse el **PDF oficial** (Imprenta Nacional o TSJ) de las Gacetas 6.804, 6.890, 6.918, 6.952, 43.111 y 6.902? Las usadas son copias de terceros (Tradex, aduaneros.net) | Homologación completa (premisa 10); el pipeline se regenera con las oficiales |
 | A32 | Revisión manual del **Decreto 5.122** (subcapítulo V del cap. 98, hidrocarburos): 177 filas extraídas con 5 dudosas | Completar la semilla vigente |
 | A33 | Texto oficial de la **Resolución DM 012/2025** (GO Ext. 6.902): subpartidas 9836.00.00.4 y .41 | Completar la semilla vigente |
 | A27 | *(Valor por defecto aplicado: 60/min, configurable por clave)* ¿Otro límite por defecto para una API key nueva? | Configuración inicial |
 | A41 | Calendario de la **Contribución para la Protección de las Pensiones 2026**: ¿Providencia SNAT/2025/000093 o 000094? Hace falta su Gaceta para verificar sus 120 fechas | Módulo Calendario |
+| A43 | Minería de precios: ¿se agrega la **ubicación** (estado o ciudad) al request, para comparar precios por zona? ¿Quién puede ver los análisis (públicos agregados o solo internos)? Los términos de uso deben avisar que los precios se almacenan | Diseño de RF-23 |
 | A21 | ¿La UI de consulta es pública (con una key interna) o también exige key o inicio de sesión? | Seguridad de la UI |
 
 ## B. Para el asesor tributario (zonas grises de la ley)

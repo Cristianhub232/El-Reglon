@@ -127,14 +127,39 @@ entrada: nombre?, codigo? | codigos[]?, codigo_arancelario?, operacion (OBLIGATO
 
 **Nunca se niega una consulta por reglas de negocio.** Los únicos errores HTTP son 400 (entrada inválida o sin `operacion`), 401 (API key), 429 (límite de peticiones) y 5xx.
 
-## 4.1 Precios (propuesta)
+## 4.1 Precios (decisión del 27/09/2026)
 
 | Campo | Regla |
 |---|---|
-| `precio_compra`, `precio_venta` | **Opcionales.** Son precios **unitarios sin IVA** (base imponible). La consulta funciona igual sin ellos |
-| `moneda` | `VES` o `USD` (ISO 4217; la UI muestra "Bs." y "US$"). **Obligatorio solo si se envía algún precio**, para evitar conversiones erróneas |
-| Efecto en la clasificación | Solo en los supuestos donde **la ley** usa el precio: art. 61 (umbrales en USD) y art. 19.7 (2 U.T.). En los demás casos el precio no cambia la categoría |
-| Efecto en la respuesta | Montos en **Bs. y en USD** (base imponible, IVA de venta e IVA de compra) calculados con la tasa BCV de la fecha valor, e indicación de la tasa usada |
+| `precio_compra`, `precio_venta`, `moneda` | **Forman parte de todo request.** Sus valores son **opcionales**: pueden llegar en `null` y la consulta funciona igual. Son precios **unitarios sin IVA** (base imponible) |
+| `moneda` | `VES` o `USD` (la UI muestra "Bs." y "US$"). **Obligatoria si llega algún precio**, para no confundir bolívares con dólares |
+| Conversión | El precio se convierte a la otra moneda con la **tasa aplicable del BCV** a la fecha de la consulta (art. 25 Ley IVA; función `bcv.tasa_aplicable`). La respuesta indica la tasa y la fecha valor usadas |
+| Efecto en la clasificación | Solo donde **la ley** usa el precio: art. 61 (umbrales en USD) y art. 19.7 (2 U.T.). En los demás casos el precio no cambia la categoría. Sin precio, los umbrales se responden como opciones ("16 % si < US$ 300; 31 % si ≥ US$ 300") |
+| Efecto en la respuesta | Montos en **Bs. y en USD**: base imponible, IVA de la venta (débito) e IVA de la compra (crédito) de cada opción |
+| **Minería de precios** | Cada precio recibido se guarda como **observación de precio** (§4.2), aunque la consulta sea ambigua |
+
+## 4.2 Observaciones de precio (minería de datos)
+
+Objetivo: construir con el tiempo una base de **precios reales de la calle** por producto, en Bs. y en USD, para análisis (evolución, dispersión, precio de referencia por producto).
+
+```
+iva.observacion_precio (
+  id bigserial, observado_en timestamptz,          -- momento de la consulta
+  fecha_operacion date,                            -- fecha informada en el request (o hoy)
+  codigo_barras text NULL, codigo_arancelario varchar(10) NULL, nombre_normalizado text,
+  regla_id NULL,                                   -- producto/regla identificados (si los hubo)
+  precio_compra numeric NULL, precio_venta numeric NULL, moneda char(3),
+  precio_compra_usd numeric NULL, precio_venta_usd numeric NULL,
+  precio_compra_bs numeric NULL, precio_venta_bs numeric NULL,
+  tasa_bcv numeric, tasa_fecha_valor date,         -- trazabilidad de la conversión
+  api_key_id int,                                  -- solo para control de calidad y abuso
+  calidad text                                     -- 'ok' | 'atipico' | 'duplicado' (se marca, no se borra)
+)
+```
+
+- **Sin datos personales:** no se guardan IP, RIF ni datos del cliente final. La API key se usa solo para detectar abuso o datos basura; los análisis publicados se agregan y son anónimos.
+- **Calidad:** los precios atípicos (p. ej. a más de 5 desviaciones de la mediana del producto en los últimos 30 días) y los duplicados (misma clave, producto y precio en menos de 1 minuto) se **marcan**, no se descartan.
+- **Aviso:** los términos de uso de la API deben informar que los precios enviados se almacenan con fines estadísticos (A43).
 
 ## 5. Contrato de API (borrador)
 
@@ -177,9 +202,9 @@ Autenticación: header `X-API-Key: <token>` en todos los endpoints `/api/v1/*`.
   "codigos": ["7591234567890"],
   "operacion": "nacional",
   "tipo": "bien",
-  "precio_compra": 1.10,
+  "precio_compra": 1.10,          // siempre presentes; null si no se conocen
   "precio_venta": 1.60,
-  "moneda": "USD",
+  "moneda": "USD",                // VES o USD; obligatoria si hay algún precio
   "fecha": "2026-09-27"
 }
 ```

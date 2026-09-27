@@ -32,7 +32,7 @@
 | Zonas grises | La respuesta es **multiopción**: "tributa al 16 % si se cumple X; está exento si se cumple Y". El **usuario final decide bajo su responsabilidad y análisis**. El servicio nunca elige por él |
 | Nombre del proyecto | **El Renglón**. Ver §3 |
 | SKU | Por ahora el SKU se busca de forma directa y la respuesta muestra **múltiples coincidencias** (productos candidatos) para que el usuario elija |
-| Precios | Dos parámetros **opcionales**: `precio_compra` y `precio_venta`. Si llegan, se usan para evaluar umbrales y calcular montos (base imponible e IVA). Si no llegan, la clasificación funciona igual |
+| Precios | `precio_compra`, `precio_venta` y `moneda` (`VES` o `USD`) van en **todo request**, con valores opcionales. Se convierten con la tasa BCV. Solo influyen donde la ley usa el precio. **Cada precio recibido se guarda para minería de datos de precios de la calle** (confirmado el 27/09/2026) |
 | API keys | Se generan desde la **UI de administración** |
 | Administración del catálogo | La UI de administración permite **modificar el catálogo legal**: reglas, base legal, alícuotas, decretos y mapeos arancelarios, con auditoría |
 | Tasas BCV | **Módulo propio del ecosistema**, con su propia API (`/api/v1/bcv`). Se porta la lógica del repositorio tasas-bcv (premisa 12), con correcciones ([10](analisis/10-analisis-tasas-bcv.md)). Ver [07](07-ecosistema.md) |

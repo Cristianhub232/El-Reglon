@@ -69,7 +69,7 @@ El servicio **orienta, no bloquea**.
 | RF-05 | **`operacion` obligatorio** (`nacional` o `importacion`). Se aplican la suspensión del Decreto 5.196 y las exoneraciones de los Decretos 5.197 y 5.207 según su vigencia. La respuesta repite la operación y avisa si la otra operación daría otro resultado |
 | RF-06 | **Servicios:** catálogo de servicios con arts. 16, 19, 61.2 y 64.3–4. Las condiciones (residencial, cliente del Poder Público, ≤ 2 U.T., institución inscrita, etc.) se resuelven con la multiopción |
 | RF-07 | **Multiopción:** en zona gris o con condiciones no verificables, la respuesta trae `opciones[]`, cada una con categoría, alícuotas, **condición en lenguaje claro**, base legal y renglón de la Forma 30, ordenadas de la más a la menos probable. Incluye el aviso: *"La selección corresponde al usuario bajo su responsabilidad y análisis"* |
-| RF-08 | **Precios opcionales `precio_compra` y `precio_venta`** (con `moneda` `VES` o `USD`, obligatoria si se envía algún precio). Si llegan: (a) se evalúan los umbrales del art. 61 (USD) y del art. 19.7 (U.T.), convirtiendo con la tasa BCV del día; (b) se calculan los montos de cada opción: base imponible, IVA de la venta (débito fiscal) e IVA de la compra (crédito fiscal). Si no llegan, la clasificación funciona igual y los umbrales se muestran como opciones |
+| RF-08 | **Precios en todo request** (`precio_compra`, `precio_venta`, `moneda` `VES` o `USD`), con valores opcionales (`null`). Se convierten con la tasa BCV aplicable; solo influyen en la clasificación donde la ley usa el precio (art. 61 en USD, art. 19.7 en U.T.); si llegan, se calculan base imponible, débito y crédito fiscal. Ver [03](03-modelo-de-clasificacion.md) §4.1 |
 | RF-09 | **Homologación SENIAT:** códigos de categoría, textos, base legal y `concepto_declaracion` según [06](06-terminologia-seniat.md) |
 | RF-10 | **Alícuotas, U.T. y decretos versionados** por vigencia. Parámetro opcional `fecha` para consultas históricas |
 | RF-11 | **Endpoints de referencia:** alícuotas, base legal, diccionario, servicios, glosario |
@@ -84,6 +84,7 @@ El servicio **orienta, no bloquea**.
 | RF-20 | **Tasas BCV en dólares y euros:** los endpoints del módulo BCV devuelven USD y EUR por fecha valor. Ver [07](07-ecosistema.md) §3 |
 | RF-21 | **Detección de la clasificación arancelaria** de un producto (`/api/v1/arancel/detectar`): a partir de la descripción o el código de barras devuelve códigos candidatos con su ruta jerárquica, confianza y preguntas para afinar. **Fin propio, independiente del clasificador de IVA**. Ver [07](07-ecosistema.md) §4 |
 | RF-22 | **Ecosistema extensible:** cada módulo nuevo (p. ej. un futuro calendario tributario) se agrega con la receta de [07](07-ecosistema.md) §7 |
+| RF-23 | **Minería de precios:** todo precio recibido se guarda como observación (producto, precio en Bs. y USD, tasa usada, fecha), sin datos personales, con marca de calidad (atípico o duplicado). Ver [03](03-modelo-de-clasificacion.md) §4.2 |
 
 ## 6. Requerimientos no funcionales
 
