@@ -67,7 +67,7 @@ Lo que cambia el IVA es **qué operación se hace**, no dónde se fabricó el pr
 |---|---|---|
 | **Venta nacional** de un producto hecho en Venezuela | Exento | 16 % |
 | **Venta nacional** de un producto importado (reventa) | **Exento** | 16 % |
-| **Importación** (nacionalización en aduana) | **16 %** hasta el 31/12/2026: el Decreto 5.196 suspende la exención, salvo certificado COMEX | 16 %, o 90 % exonerado si su código arancelario está en el Decreto 5.197 |
+| **Importación** (nacionalización en aduana) | **16 %**: el Decreto 5.196 suspende la exención sin fecha de término, salvo certificado COMEX (exoneración hasta el 31/12/2026) | 16 %, o 90 % exonerado si su código arancelario está en el Decreto 5.197 |
 
 **Decisión confirmada:** el parámetro `operacion` es **obligatorio** en toda consulta, con valores `nacional` o `importacion`. La respuesta siempre repite la operación evaluada. Cuando el resultado cambiaría con la otra operación (p. ej. un bien del art. 18 durante la suspensión del Decreto 5.196), se añade una nota que lo advierte.
 

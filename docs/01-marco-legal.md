@@ -11,7 +11,7 @@
 | Norma | Qué regula | Relevancia para el servicio |
 |---|---|---|
 | **Ley de IVA** (GO Ext. 6.507, 29/01/2020) | Alícuotas, exenciones, no sujeción, bienes suntuarios | Núcleo de las reglas |
-| **Decreto N° 5.196** (GO Ext. 6.952, 31/12/2025) | Suspende **hasta el 31/12/2026** la exención de IVA en la **importación** de los bienes del art. 18 (art. 17, num. 1). Exonera, con certificado del COMEX, los bienes del Apéndice I (por código arancelario) | Solo si se clasifican importaciones. **Las ventas nacionales siguen exentas** |
+| **Decreto N° 5.196** (GO Ext. 6.952, 31/12/2025) | Según su texto oficial: el art. 1 **suspende, sin fecha de término**, la exención de IVA a la importación de los bienes del art. 18 (art. 17, num. 1); el art. 16 limita **solo las exoneraciones** del art. 2 (importaciones con certificado COMEX) hasta el **31/12/2026**; deroga el Decreto 5.145 (GO Ext. 6.918); vigente desde su publicación | Solo si se clasifican importaciones. **Las ventas nacionales siguen exentas** |
 | **Decreto N° 5.197** (GO Ext. 6.952, 31/12/2025) | Exoneraciones aduaneras generales hasta el 31/12/2026: 90 % del impuesto de importación y 90 % del IVA de importación para 1.351 códigos arancelarios | Solo para importaciones |
 | **Decreto N° 5.207** (GO 43.292, 09/01/2026)¹ | Exonera del IVA la importación y la venta nacional de combustibles derivados de hidrocarburos y de aditivos para gasolina, por un año | Solo si se venden combustibles o aditivos |
 | **Providencia SNAT/2011/00071** (GO 39.795, 08/11/2011) | Normas generales de facturación. Exige la marca **"(E)"** en los ítems exentos, exonerados o no sujetos | Formato de salida del servicio |
@@ -179,7 +179,7 @@ Cualquier otro servicio prestado o aprovechado en el país paga la **alícuota g
 
 ## 7. Importaciones (si entran en el alcance)
 
-- El art. 17, num. 1, exime la importación de los bienes del art. 18, **pero el Decreto 5.196 suspende esa exención hasta el 31/12/2026**. El bien se vende exento, pero su importación paga IVA, salvo que tenga un certificado de exoneración del COMEX.
+- El art. 17, num. 1, exime la importación de los bienes del art. 18, **pero el Decreto 5.196 suspende esa exención sin fecha de término** (solo las exoneraciones con certificado COMEX de su art. 2 vencen el 31/12/2026). El bien se vende exento, pero su importación paga IVA, salvo que tenga un certificado de exoneración del COMEX.
 - El Decreto 5.197 exonera el 90 % del IVA de importación para 1.351 códigos arancelarios. Es una **exoneración parcial**, así que el modelo debe admitir porcentajes y no solo "sí/no".
 - Para cruzar un producto con estos decretos hace falta su **código arancelario** (Arancel de Aduanas, basado en NANDINA y el Sistema Armonizado).
 

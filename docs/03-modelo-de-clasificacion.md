@@ -152,6 +152,7 @@ iva.observacion_precio (
   precio_compra_usd numeric NULL, precio_venta_usd numeric NULL,
   precio_compra_bs numeric NULL, precio_venta_bs numeric NULL,
   tasa_bcv numeric, tasa_fecha_valor date,         -- trazabilidad de la conversión
+  ubicacion text NULL,                             -- estado o ciudad, si se envía
   api_key_id int,                                  -- solo para control de calidad y abuso
   calidad text                                     -- 'ok' | 'atipico' | 'duplicado' (se marca, no se borra)
 )
@@ -159,7 +160,8 @@ iva.observacion_precio (
 
 - **Sin datos personales:** no se guardan IP, RIF ni datos del cliente final. La API key se usa solo para detectar abuso o datos basura; los análisis publicados se agregan y son anónimos.
 - **Calidad:** los precios atípicos (p. ej. a más de 5 desviaciones de la mediana del producto en los últimos 30 días) y los duplicados (misma clave, producto y precio en menos de 1 minuto) se **marcan**, no se descartan.
-- **Aviso:** los términos de uso de la API deben informar que los precios enviados se almacenan con fines estadísticos (A43).
+- **Ubicación:** campo opcional `ubicacion` (estado o ciudad), para comparar precios por zona cuando se envíe.
+- **Análisis internos**, no publicados. Los términos de uso de la API se definirán más adelante.
 
 ## 5. Contrato de API (borrador)
 

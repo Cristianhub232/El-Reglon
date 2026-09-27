@@ -102,7 +102,7 @@ El servicio **orienta, no bloquea**.
 ## 7. Casos de uso
 
 1. `nombre="Arroz Mary 1kg"`, `operacion=nacional` → **EXENTO**, art. 18.1.c, "Ventas internas no gravadas".
-2. Mismo arroz con `operacion=importacion` → **ALICUOTA_GENERAL** en la importación (Decreto 5.196 hasta el 31/12/2026), con nota de que la venta nacional es exenta y de la posible exoneración con certificado COMEX.
+2. Mismo arroz con `operacion=importacion` → **ALICUOTA_GENERAL** en la importación (Decreto 5.196, suspensión sin fecha de término), con nota de que la venta nacional es exenta y de la posible exoneración con certificado COMEX.
 3. `codigo=9780307474728` → se detecta un **ISBN** (libro) → **EXENTO**, art. 18.6.
 4. `codigo=4011` → se detecta un **PLU** de fruta o verdura (banana) → **EXENTO**, art. 18.1.a.
 5. `nombre="atún en aceite 140g"` → **condicionado**. Opción 1: ALICUOTA_GENERAL si "presentación natural" no incluye el aceite. Opción 2: EXENTO (18.1.k) si se considera presentación natural. El usuario decide.
