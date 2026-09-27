@@ -1,5 +1,7 @@
-# El Renglón · entorno de desarrollo (solo base de datos por ahora)
-# Uso: cp .env.example .env  (y cambiar la contraseña)  →  docker compose up -d db
+# El Renglón
+#   Solo base de datos (desarrollo):      docker compose up -d db
+#   Todo (base, API/UI y programador BCV): docker compose --profile app up -d --build
+# Configuración: cp .env.example .env (y cambiar la contraseña)
 services:
   db:
     image: postgres:16.14-alpine          # versión fija: builds reproducibles
@@ -19,6 +21,36 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+
+  app:
+    profiles: ["app"]
+    build: .
+    image: elrenglon-app:0.1.0
+    container_name: elrenglon-app
+    environment: &entorno_app
+      POSTGRES_HOST: db
+      POSTGRES_PUERTO: "5432"
+      POSTGRES_DB: ${POSTGRES_DB:-elrenglon}
+      POSTGRES_USER: ${POSTGRES_USER:-elrenglon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD en .env}
+      TZ: America/Caracas
+    ports:
+      - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS
+    depends_on:
+      db: { condition: service_healthy }
+    restart: unless-stopped
+
+  bcv-programador:
+    profiles: ["app"]
+    image: elrenglon-app:0.1.0
+    container_name: elrenglon-bcv-programador
+    command: ["node", "scripts/bcv-programador.ts"]
+    environment:
+      <<: *entorno_app
+      BCV_HORAS: ${BCV_HORAS:-8,14,20}
+    depends_on:
+      app: { condition: service_started }
+    restart: unless-stopped
 
 volumes:
   elrenglon-pgdata:

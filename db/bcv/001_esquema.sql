@@ -26,24 +26,30 @@ CREATE TABLE IF NOT EXISTS bcv.moneda (
 -- Una publicación por FECHA VALOR (el día en que rige la tasa)
 CREATE TABLE IF NOT EXISTS bcv.publicacion (
     fecha_valor      date PRIMARY KEY,
-    fecha_operacion  date NOT NULL,
+    fecha_operacion  date,                        -- NULL si la fuente es la portada (no la informa)
     publicado_en     timestamptz,                 -- hora de publicación indicada en la hoja
     fuente_id        integer NOT NULL REFERENCES bcv.fuente (id),
     hoja             text,
-    CHECK (fecha_valor > fecha_operacion AND fecha_valor <= fecha_operacion + 6)
+    CHECK (fecha_operacion IS NULL OR (fecha_valor > fecha_operacion AND fecha_valor <= fecha_operacion + 6))
 );
 
 CREATE TABLE IF NOT EXISTS bcv.tasa (
     fecha_valor        date         NOT NULL REFERENCES bcv.publicacion (fecha_valor),
     moneda             char(3)      NOT NULL REFERENCES bcv.moneda (codigo),
-    compra_bs          numeric(20,8) NOT NULL CHECK (compra_bs > 0),
+    compra_bs          numeric(20,8) CHECK (compra_bs > 0),         -- NULL si la fuente es la portada
     venta_bs           numeric(20,8) NOT NULL CHECK (venta_bs > 0),     -- TASA OFICIAL
-    cotizacion_compra  numeric(20,8) NOT NULL CHECK (cotizacion_compra > 0),  -- M.E./US$ (EUR: US$/EUR)
-    cotizacion_venta   numeric(20,8) NOT NULL CHECK (cotizacion_venta > 0),
+    cotizacion_compra  numeric(20,8) CHECK (cotizacion_compra > 0),  -- M.E./US$ (EUR: US$/EUR)
+    cotizacion_venta   numeric(20,8) CHECK (cotizacion_venta > 0),
     PRIMARY KEY (fecha_valor, moneda),
     CHECK (compra_bs <= venta_bs AND cotizacion_compra <= cotizacion_venta)
 );
 COMMENT ON COLUMN bcv.tasa.venta_bs IS 'Tasa oficial del BCV en Bs. por unidad de moneda (Venta ASK); es la publicada en la portada';
+
+-- Idempotente en bases creadas antes de admitir datos de la portada
+ALTER TABLE bcv.publicacion ALTER COLUMN fecha_operacion DROP NOT NULL;
+ALTER TABLE bcv.tasa ALTER COLUMN compra_bs DROP NOT NULL,
+                     ALTER COLUMN cotizacion_compra DROP NOT NULL,
+                     ALTER COLUMN cotizacion_venta DROP NOT NULL;
 
 -- Días hábiles (lunes a viernes) sin fecha valor: feriados bancarios observados en las publicaciones
 CREATE TABLE IF NOT EXISTS bcv.dia_sin_publicacion (

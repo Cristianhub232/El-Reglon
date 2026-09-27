@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Crea todos los esquemas y carga todas las semillas en la base del docker-compose (servicio "db").
+# Uso: herramientas/instalar_bd.sh      (requiere: docker compose up -d db)
+# Si cualquier carga falla, se detiene y muestra el error (cada módulo carga en una sola transacción).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+set -a; [ -f .env ] && . ./.env; set +a
+docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/core/001_esquema.sql
+cargar() {
+  local nombre="$1" script="$2" salida
+  if ! salida="$("$script" 2>&1)"; then
+    echo "✘ $nombre: la carga falló"; echo "$salida" | grep -E "ERROR|CONTEXT" || echo "$salida" | tail -20; exit 1
+  fi
+  echo "✔ $nombre: $(echo "$salida" | grep -o 'Validaciones [^ ]* superadas' | tail -1)"
+}
+cargar "Arancel" herramientas/arancel/cargar_arancel.sh
+cargar "BCV" herramientas/bcv/cargar_bcv.sh
+cargar "Calendario y RIF" herramientas/calendario/cargar_calendario.sh

@@ -41,8 +41,9 @@ BEGIN
     SELECT string_agg(s.fecha_valor || ' ' || s.moneda || ': cargada ' || t.venta_bs || ', nueva ' || s.venta_bs, '; ')
       INTO conflictos
       FROM s_tasa s JOIN bcv.tasa t ON t.fecha_valor = s.fecha_valor AND t.moneda = s.moneda
-     WHERE (t.compra_bs, t.venta_bs, t.cotizacion_compra, t.cotizacion_venta)
-           IS DISTINCT FROM (s.compra_bs, s.venta_bs, s.cotizacion_compra, s.cotizacion_venta);
+     WHERE t.venta_bs <> s.venta_bs
+        OR (t.compra_bs IS NOT NULL AND (t.compra_bs, t.cotizacion_compra, t.cotizacion_venta)
+                                        IS DISTINCT FROM (s.compra_bs, s.cotizacion_compra, s.cotizacion_venta));
     IF conflictos IS NOT NULL THEN RAISE EXCEPTION 'V2: tasas en conflicto con las ya cargadas: %', conflictos; END IF;
     SELECT string_agg(s.fecha_valor::text, ', ') INTO conflictos
       FROM s_publicacion s JOIN bcv.publicacion p ON p.fecha_valor = s.fecha_valor
@@ -82,6 +83,13 @@ ON CONFLICT (fecha_valor) DO NOTHING;
 
 INSERT INTO bcv.tasa SELECT fecha_valor, moneda, compra_bs, venta_bs, cotizacion_compra, cotizacion_venta FROM s_tasa
 ON CONFLICT (fecha_valor, moneda) DO NOTHING;
+
+-- Filas capturadas de la portada (solo venta): el archivo oficial las completa y pasa a ser su fuente
+UPDATE bcv.tasa t SET compra_bs = s.compra_bs, cotizacion_compra = s.cotizacion_compra, cotizacion_venta = s.cotizacion_venta
+FROM s_tasa s WHERE t.fecha_valor = s.fecha_valor AND t.moneda = s.moneda AND t.compra_bs IS NULL;
+UPDATE bcv.publicacion p SET fecha_operacion = s.fecha_operacion, publicado_en = s.publicado_en, hoja = s.hoja, fuente_id = f.id
+FROM s_publicacion s JOIN bcv.fuente f ON f.archivo = s.fuente_archivo
+WHERE p.fecha_valor = s.fecha_valor AND p.fecha_operacion IS NULL;
 
 INSERT INTO bcv.dia_sin_publicacion (fecha)
 SELECT fecha_valor FROM s_observacion WHERE tipo = 'dia_habil_sin_fecha_valor'
