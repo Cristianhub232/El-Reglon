@@ -39,7 +39,7 @@ export const especificacion = {
   tags: [
     { name: "IVA", description: "Clasificación de bienes y servicios según la Ley de IVA (GO Ext. 6.507) y el Decreto 5.196: exento, 8 %, 16 % o 16 % + 15 %, con multiopción en zonas grises" },
     { name: "BCV", description: "Tipo de Cambio de Referencia del BCV (histórico desde 2025, tasa aplicable según art. 25 Ley IVA)" },
-    { name: "Arancel", description: "Arancel de Aduanas vigente: Decreto 4.944 con reformas 5.103, 5.147 y 5.198" },
+    { name: "Arancel", description: "Arancel de Aduanas vigente: Decreto 4.944 con reformas 5.103, 5.147 y 5.198. Consulta, búsqueda y detección del código de un producto" },
     { name: "Calendario", description: "Calendario tributario 2026: especiales (Providencia SNAT/2025/000091) y ordinarios (Reglamento IVA art. 60); COT art. 10" },
     { name: "RIF", description: "Validación del RIF con dígito verificador" },
     { name: "Servicio", description: "Estado del servicio" },
@@ -152,6 +152,44 @@ export const especificacion = {
       [path("codigo", "Código, p. ej. 1006.30.11.10, 100630 o 10")]),
     "/api/v1/arancel/buscar": op("Arancel", "Buscar en la nomenclatura", "Todas las palabras deben aparecer en la ruta jerárquica (sin distinguir acentos). Ordena por similitud.",
       [qr("q", "Texto a buscar, p. ej. 'arroz blanqueado'"), q("solo_declarables", "true (por defecto) o false"), q("limite", "1 a 100 (por defecto 20)")]),
+    "/api/v1/arancel/detectar": {
+      get: {
+        tags: ["Arancel"], summary: "Detectar el código arancelario de un producto (por texto)",
+        description: "Versión rápida de `POST /api/v1/arancel/detectar`: `q` es la descripción del producto.",
+        parameters: [qr("q", "Qué es el producto, p. ej. 'pollo entero congelado'"), q("limite", "1 a 20 (por defecto 5)")],
+        security: [{ ApiKey: [] }], responses: { "200": { description: "Candidatos" }, ...errores },
+      },
+      post: {
+        tags: ["Arancel"], summary: "Detectar el código arancelario de un producto",
+        description: [
+          "\"Tengo este producto, ¿qué código le corresponde?\". Fin propio, independiente del IVA.",
+          "",
+          "1. Si llega un código de barras, se identifica el producto (Open Food Facts).",
+          "2. Un **diccionario de nombres comerciales** lleva a la partida (\"celular\" → 8517.13; \"caraotas\" → 0713.33).",
+          "3. Dentro de la partida, la descripción afina la subpartida con búsqueda de texto en español sobre la ruta oficial (con equivalencias como \"blanco\" → \"blanqueado\").",
+          "4. Si el diccionario no reconoce el producto, se busca por texto en todo el arancel (respaldo, con advertencia).",
+          "",
+          "`estado`: `determinado`, `condicionado` (varios candidatos: `preguntas_para_afinar` y `diferencia` de cada uno) o `no_determinado`. **Orientativo:** la clasificación oficial la determina la autoridad aduanera.",
+        ].join("\n"),
+        security: [{ ApiKey: [] }],
+        requestBody: { required: true, content: { "application/json": {
+          schema: { type: "object", properties: {
+            descripcion: { type: "string", maxLength: 300, description: "Qué es el producto y de qué está hecho, sin marcas" },
+            codigo: { type: "string", description: "Código de barras (EAN/UPC/GTIN)" },
+            limite: { type: "integer", minimum: 1, maximum: 20, default: 5 } } },
+          examples: {
+            diccionario: { summary: "Reconocido por el diccionario", value: { descripcion: "Pollo entero congelado" } },
+            condicionado: { summary: "Varias subpartidas posibles", value: { descripcion: "Arroz blanco" } },
+          } } } },
+        responses: { "200": { description: "Candidatos", content: { "application/json": { example: {
+          estado: "determinado",
+          candidatos: [{ codigo: "0207120000", codigo_formateado: "0207.12.00.00", descripcion: "Sin trocear, congelados",
+            ruta: "CARNE Y DESPOJOS COMESTIBLES, DE AVES DE LA PARTIDA 01.05… > De aves de la especie Gallus domesticus: > Sin trocear, congelados",
+            aec: "10.00", unidad: "kg", confianza: 0.8, motivo: "nombre comercial \"pollo entero\" → pollo (02071); la descripción coincide con esta subpartida" }],
+          preguntas_para_afinar: [], responsabilidad: "Resultado orientativo…", version_diccionario: "36f96fb5f85a" } } } },
+          ...errores, "413": { $ref: "#/components/responses/Error" }, "415": { $ref: "#/components/responses/Error" } },
+      },
+    },
     "/api/v1/arancel/secciones": op("Arancel", "Secciones y capítulos", "Las 22 secciones del Sistema Armonizado con sus capítulos."),
     "/api/v1/arancel/catalogos/{nombre}": op("Arancel", "Catálogos del arancel",
       "`reglas` (Reglas Generales de Interpretación), `abreviaturas`, `conversiones` (tabla de conversión de unidades), `regimenes` (art. 21), `unidades`.",

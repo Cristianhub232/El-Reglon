@@ -171,6 +171,11 @@ BEGIN
     RAISE NOTICE 'Validaciones V0..V11 superadas';
 END $$;
 
+-- Si ya existe el índice de la detección arancelaria (003_deteccion.sql), se actualiza con el arancel recién cargado
+DO $$ BEGIN
+    IF to_regclass('arancel.indice_busqueda') IS NOT NULL THEN REFRESH MATERIALIZED VIEW arancel.indice_busqueda; END IF;
+END $$;
+
 SELECT 'secciones' AS tabla, count(*) FROM arancel.seccion
 UNION ALL SELECT 'capitulos', count(*) FROM arancel.capitulo
 UNION ALL SELECT 'partidas', count(*) FROM arancel.partida

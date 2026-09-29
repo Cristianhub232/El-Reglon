@@ -1,0 +1,297 @@
+{
+ "_nota": "Casos de referencia de la detección arancelaria. Los ejecuta scripts/arancel-cargar-sinonimos.ts dentro de la transacción de carga: 'grupo' es el grupo del diccionario que debe reconocerse (null = sin diccionario, respaldo por texto), 'prefijo' el inicio del código del primer candidato y 'estado' el estado esperado.",
+ "casos": [
+  {
+   "descripcion": "Arroz blanco tipo I 1 kg",
+   "esperado": {
+    "grupo": "arroz",
+    "prefijo": "1006",
+    "estado": "condicionado"
+   }
+  },
+  {
+   "descripcion": "Harina PAN blanca 1kg",
+   "esperado": {
+    "grupo": "harina de maíz",
+    "prefijo": "110220",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Harina de trigo leudante",
+   "esperado": {
+    "grupo": "harina de trigo",
+    "prefijo": "1101"
+   }
+  },
+  {
+   "descripcion": "Teléfono celular Samsung 128 GB",
+   "esperado": {
+    "grupo": "teléfono celular",
+    "prefijo": "851713",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Smartphone Xiaomi",
+   "esperado": {
+    "grupo": "teléfono celular",
+    "prefijo": "851713",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Aceite de oliva extra virgen 500 ml",
+   "esperado": {
+    "grupo": "aceite de oliva",
+    "prefijo": "1509"
+   }
+  },
+  {
+   "descripcion": "Aceite vegetal 1 L",
+   "esperado": {
+    "grupo": "aceite comestible",
+    "estado": "condicionado"
+   }
+  },
+  {
+   "descripcion": "Aceite de motor 20W50",
+   "esperado": {
+    "grupo": "aceite de motor",
+    "prefijo": "271019"
+   }
+  },
+  {
+   "descripcion": "Leche completa en polvo 900 g",
+   "esperado": {
+    "grupo": "leche en polvo",
+    "prefijo": "0402"
+   }
+  },
+  {
+   "descripcion": "Leche condensada 395 g",
+   "esperado": {
+    "grupo": "leche condensada",
+    "prefijo": "040299"
+   }
+  },
+  {
+   "descripcion": "Queso blanco duro",
+   "esperado": {
+    "grupo": "queso fresco o blanco",
+    "prefijo": "04061090",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Queso mozzarella rallado",
+   "esperado": {
+    "grupo": "queso rallado",
+    "prefijo": "040620"
+   }
+  },
+  {
+   "descripcion": "Queso mozzarella",
+   "esperado": {
+    "grupo": "mozzarella",
+    "prefijo": "04061010",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Mantequilla con sal",
+   "esperado": {
+    "grupo": "mantequilla",
+    "prefijo": "040510",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Caraotas negras 1 kg",
+   "esperado": {
+    "grupo": "caraotas y frijoles",
+    "prefijo": "071333"
+   }
+  },
+  {
+   "descripcion": "Galletas María",
+   "esperado": {
+    "grupo": "galletas dulces",
+    "prefijo": "190531",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Pasta dental",
+   "esperado": {
+    "grupo": "crema dental",
+    "prefijo": "330610",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Espaguetis 1 kg",
+   "esperado": {
+    "grupo": "pastas",
+    "prefijo": "1902"
+   }
+  },
+  {
+   "descripcion": "Cauchos 205/55 R16",
+   "esperado": {
+    "grupo": "cauchos de automóvil",
+    "prefijo": "401110"
+   }
+  },
+  {
+   "descripcion": "Cauchos para moto",
+   "esperado": {
+    "grupo": "cauchos de moto",
+    "prefijo": "401140"
+   }
+  },
+  {
+   "descripcion": "Nevera Mabe 14 pies",
+   "esperado": {
+    "grupo": "nevera",
+    "prefijo": "841821",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Televisor Smart TV 55 pulgadas",
+   "esperado": {
+    "grupo": "televisor",
+    "prefijo": "852872",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Zapatos deportivos",
+   "esperado": {
+    "grupo": "calzado",
+    "estado": "condicionado"
+   }
+  },
+  {
+   "descripcion": "Papel higiénico 4 rollos",
+   "esperado": {
+    "grupo": "papel higiénico",
+    "prefijo": "481810",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Pañales etapa 3",
+   "esperado": {
+    "grupo": "pañales y toallas sanitarias",
+    "prefijo": "961900",
+    "estado": "condicionado"
+   }
+  },
+  {
+   "descripcion": "Cemento gris saco 42.5 kg",
+   "esperado": {
+    "grupo": "cemento",
+    "prefijo": "252329"
+   }
+  },
+  {
+   "descripcion": "Reloj de pulsera Casio",
+   "esperado": {
+    "grupo": "relojes de pulsera",
+    "estado": "condicionado"
+   }
+  },
+  {
+   "descripcion": "Ron añejo 750 ml",
+   "esperado": {
+    "grupo": "ron",
+    "prefijo": "220840",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Cerveza lata 355 ml",
+   "esperado": {
+    "grupo": "cerveza",
+    "prefijo": "2203",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Detergente en polvo 1 kg",
+   "esperado": {
+    "grupo": "detergente",
+    "prefijo": "3402"
+   }
+  },
+  {
+   "descripcion": "Alimento para perros adultos 4 kg",
+   "esperado": {
+    "grupo": "alimento para mascotas",
+    "prefijo": "230910",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Paraguas plegable",
+   "esperado": {
+    "prefijo": "6601"
+   }
+  },
+  {
+   "descripcion": "Cepillo de dientes",
+   "esperado": {
+    "prefijo": "960321"
+   }
+  },
+  {
+   "descripcion": "Máquina de coser",
+   "esperado": {
+    "grupo": "máquina de coser",
+    "prefijo": "8452"
+   }
+  },
+  {
+   "descripcion": "xyzzy qwerty",
+   "esperado": {
+    "estado": "no_determinado"
+   }
+  },
+  {
+   "descripcion": "Sartén antiadherente 24 cm",
+   "esperado": {
+    "grupo": "ollas y sartenes",
+    "estado": "condicionado"
+   }
+  },
+  {
+   "descripcion": "Guantes de látex",
+   "esperado": {
+    "prefijo": "6216"
+   }
+  },
+  {
+   "descripcion": "Bolso de mano de cuero",
+   "esperado": {
+    "prefijo": "4202"
+   }
+  },
+  {
+   "descripcion": "Pollo entero congelado",
+   "esperado": {
+    "grupo": "pollo",
+    "prefijo": "020712",
+    "estado": "determinado"
+   }
+  },
+  {
+   "descripcion": "Arroz integral",
+   "esperado": {
+    "grupo": "arroz",
+    "prefijo": "100620"
+   }
+  }
+ ]
+}

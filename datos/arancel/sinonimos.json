@@ -1,0 +1,3108 @@
+{
+ "_nota": "Diccionario de nombres comerciales → prefijos del Arancel de Aduanas (Decreto 4.944 y reformas), para la detección arancelaria. Los términos se escriben normalizados (minúsculas, sin acentos; la ñ como n) y admiten el plural simple. Orientativo: la clasificación oficial la determina la autoridad aduanera.",
+ "grupos": [
+  {
+   "grupo": "arroz",
+   "terminos": [
+    "arroz"
+   ],
+   "excluir": [
+    "con leche",
+    "inflado",
+    "galleta",
+    "galletas",
+    "tortitas",
+    "harina de arroz",
+    "crema de arroz",
+    "vinagre",
+    "cereal"
+   ],
+   "prefijos": [
+    "1006"
+   ],
+   "categorias_off": [
+    "en:rices"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "harina de maíz",
+   "terminos": [
+    "harina de maiz",
+    "harina precocida",
+    "harina pan"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "110220"
+   ],
+   "categorias_off": [
+    "en:corn-flours",
+    "en:maize-flours"
+   ],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "harina de trigo",
+   "terminos": [
+    "harina de trigo",
+    "harina leudante"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "1101"
+   ],
+   "categorias_off": [
+    "en:wheat-flours"
+   ],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "harina de arroz",
+   "terminos": [
+    "harina de arroz",
+    "crema de arroz"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "110290"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "pastas",
+   "terminos": [
+    "pasta",
+    "espagueti",
+    "espaguetis",
+    "spaghetti",
+    "fideo",
+    "macarrones",
+    "tallarines",
+    "coditos",
+    "plumitas",
+    "vermicelli",
+    "lasana"
+   ],
+   "excluir": [
+    "pasta dental",
+    "pasta de tomate",
+    "pasta de mani",
+    "rellena",
+    "ravioles",
+    "pasta para pizza"
+   ],
+   "prefijos": [
+    "190211",
+    "190219"
+   ],
+   "categorias_off": [
+    "en:pastas"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "pastas rellenas",
+   "terminos": [
+    "pasta rellena",
+    "ravioles",
+    "raviolis",
+    "tortellini"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "190220"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "pan",
+   "terminos": [
+    "pan",
+    "pan de molde",
+    "pan de sandwich",
+    "canilla",
+    "pan campesino",
+    "pan arabe"
+   ],
+   "excluir": [
+    "pan rallado",
+    "pan de jamon",
+    "panela"
+   ],
+   "prefijos": [
+    "190590"
+   ],
+   "categorias_off": [
+    "en:breads"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "galletas dulces",
+   "terminos": [
+    "galleta dulce",
+    "galletas dulces",
+    "galletas de chocolate",
+    "galletas rellenas",
+    "galleta maria",
+    "galletas maria"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "190531"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "galletas saladas",
+   "terminos": [
+    "galleta",
+    "galletas de soda",
+    "galleta salada",
+    "crackers"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "190590"
+   ],
+   "categorias_off": [
+    "en:crackers"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "azúcar",
+   "terminos": [
+    "azucar",
+    "azucar refinada",
+    "azucar blanca"
+   ],
+   "excluir": [
+    "sin azucar",
+    "glas"
+   ],
+   "prefijos": [
+    "1701"
+   ],
+   "categorias_off": [
+    "en:sugars"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "papelón o panela",
+   "terminos": [
+    "papelon",
+    "panela"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "170113"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "café tostado o molido",
+   "terminos": [
+    "cafe",
+    "cafe molido",
+    "cafe en grano",
+    "cafe tostado"
+   ],
+   "excluir": [
+    "instantaneo",
+    "soluble",
+    "capuchino",
+    "cafetera",
+    "con leche"
+   ],
+   "prefijos": [
+    "0901"
+   ],
+   "categorias_off": [
+    "en:ground-coffees",
+    "en:coffee-beans"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "café instantáneo",
+   "terminos": [
+    "cafe instantaneo",
+    "cafe soluble"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "210111"
+   ],
+   "categorias_off": [
+    "en:instant-coffees"
+   ],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "cacao en polvo",
+   "terminos": [
+    "cacao en polvo",
+    "cocoa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "1805"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "chocolate",
+   "terminos": [
+    "chocolate",
+    "chocolates",
+    "chocolatina",
+    "bombones"
+   ],
+   "excluir": [
+    "leche chocolatada",
+    "galletas de chocolate"
+   ],
+   "prefijos": [
+    "1806"
+   ],
+   "categorias_off": [
+    "en:chocolates"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "sal",
+   "terminos": [
+    "sal",
+    "sal de mesa",
+    "sal refinada"
+   ],
+   "excluir": [
+    "con sal",
+    "sin sal",
+    "sal de frutas",
+    "sales"
+   ],
+   "prefijos": [
+    "2501"
+   ],
+   "categorias_off": [
+    "en:salts"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "leche líquida",
+   "terminos": [
+    "leche",
+    "leche completa",
+    "leche descremada",
+    "leche pasteurizada",
+    "leche uht"
+   ],
+   "excluir": [
+    "en polvo",
+    "condensada",
+    "evaporada",
+    "de coco",
+    "de soya",
+    "de almendras",
+    "dulce de leche",
+    "chocolate",
+    "crema de leche"
+   ],
+   "prefijos": [
+    "0401"
+   ],
+   "categorias_off": [
+    "en:milks"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "leche en polvo",
+   "terminos": [
+    "leche en polvo",
+    "leche ... en polvo"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "040210",
+    "040221",
+    "040229"
+   ],
+   "categorias_off": [
+    "en:powdered-milks"
+   ],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "leche condensada",
+   "terminos": [
+    "leche condensada",
+    "leche ... condensada"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "040299"
+   ],
+   "categorias_off": [],
+   "prioridad": 65,
+   "nota": null
+  },
+  {
+   "grupo": "leche evaporada",
+   "terminos": [
+    "leche evaporada",
+    "leche ... evaporada"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "040291"
+   ],
+   "categorias_off": [],
+   "prioridad": 65,
+   "nota": null
+  },
+  {
+   "grupo": "crema de leche o nata",
+   "terminos": [
+    "crema de leche",
+    "nata"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "040140",
+    "040150"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "yogur",
+   "terminos": [
+    "yogur",
+    "yogurt",
+    "kefir"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "0403"
+   ],
+   "categorias_off": [
+    "en:yogurts"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "mantequilla",
+   "terminos": [
+    "mantequilla"
+   ],
+   "excluir": [
+    "de mani",
+    "de cacao"
+   ],
+   "prefijos": [
+    "040510"
+   ],
+   "categorias_off": [
+    "en:butters"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "margarina",
+   "terminos": [
+    "margarina"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "151710"
+   ],
+   "categorias_off": [
+    "en:margarines"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "queso fresco o blanco",
+   "terminos": [
+    "queso blanco",
+    "queso llanero",
+    "queso telita",
+    "queso de mano",
+    "queso guayanes",
+    "queso fresco",
+    "requeson",
+    "ricota"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "04061090"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "mozzarella",
+   "terminos": [
+    "mozzarella",
+    "mozarella",
+    "queso mozzarella"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "04061010"
+   ],
+   "categorias_off": [],
+   "prioridad": 65,
+   "nota": null
+  },
+  {
+   "grupo": "queso rallado",
+   "terminos": [
+    "queso rallado",
+    "queso ... rallado",
+    "parmesano rallado"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "040620"
+   ],
+   "categorias_off": [],
+   "prioridad": 66,
+   "nota": null
+  },
+  {
+   "grupo": "queso amarillo y otros",
+   "terminos": [
+    "queso",
+    "queso amarillo",
+    "queso gouda",
+    "queso cheddar",
+    "queso de ano",
+    "queso parmesano"
+   ],
+   "excluir": [
+    "cochino",
+    "crema",
+    "rallado"
+   ],
+   "prefijos": [
+    "040690"
+   ],
+   "categorias_off": [
+    "en:cheeses"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "huevos de gallina",
+   "terminos": [
+    "huevo",
+    "huevos",
+    "huevos de gallina"
+   ],
+   "excluir": [
+    "chocolate",
+    "codorniz",
+    "pascua",
+    "fertiles"
+   ],
+   "prefijos": [
+    "040721"
+   ],
+   "categorias_off": [
+    "en:eggs"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "pollo",
+   "terminos": [
+    "pollo",
+    "pechuga",
+    "muslos de pollo",
+    "alas de pollo",
+    "pollo entero"
+   ],
+   "excluir": [
+    "nuggets",
+    "empanizado",
+    "alimento para",
+    "caldo",
+    "sabor"
+   ],
+   "prefijos": [
+    "02071"
+   ],
+   "categorias_off": [
+    "en:chicken-meats"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "carne de res",
+   "terminos": [
+    "carne de res",
+    "carne molida",
+    "bistec",
+    "lomito",
+    "solomo",
+    "punta trasera",
+    "costilla de res",
+    "carne para mechar",
+    "res"
+   ],
+   "excluir": [
+    "hamburguesa",
+    "salchicha"
+   ],
+   "prefijos": [
+    "0201",
+    "0202"
+   ],
+   "categorias_off": [
+    "en:beef"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "carne de cerdo",
+   "terminos": [
+    "carne de cerdo",
+    "cerdo",
+    "cochino",
+    "pernil",
+    "chuleta de cerdo",
+    "lomo de cerdo"
+   ],
+   "excluir": [
+    "ahumad",
+    "tocineta",
+    "jamon",
+    "chicharron"
+   ],
+   "prefijos": [
+    "0203"
+   ],
+   "categorias_off": [
+    "en:pork"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "carne ahumada o salada",
+   "terminos": [
+    "chuleta ahumada",
+    "tocineta",
+    "tocino",
+    "costilla ahumada"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "02101"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "jamón",
+   "terminos": [
+    "jamon",
+    "jamon de pierna",
+    "jamon cocido"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "160241"
+   ],
+   "categorias_off": [
+    "en:hams"
+   ],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "embutidos",
+   "terminos": [
+    "salchicha",
+    "salchichas",
+    "mortadela",
+    "chorizo",
+    "salami",
+    "peperoni",
+    "pepperoni"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "1601"
+   ],
+   "categorias_off": [
+    "en:sausages"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "atún enlatado",
+   "terminos": [
+    "atun",
+    "atun enlatado",
+    "atun en aceite",
+    "atun al natural"
+   ],
+   "excluir": [
+    "fresco",
+    "filete de atun"
+   ],
+   "prefijos": [
+    "160414"
+   ],
+   "categorias_off": [
+    "en:canned-tunas"
+   ],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "sardinas enlatadas",
+   "terminos": [
+    "sardina",
+    "sardinas",
+    "sardinas enlatadas"
+   ],
+   "excluir": [
+    "frescas"
+   ],
+   "prefijos": [
+    "160413"
+   ],
+   "categorias_off": [
+    "en:canned-sardines"
+   ],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "pescado fresco",
+   "terminos": [
+    "pescado fresco",
+    "pargo",
+    "mero",
+    "curvina",
+    "carite",
+    "robalo",
+    "tilapia fresca"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "0302"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "pescado congelado o filetes",
+   "terminos": [
+    "filete de pescado",
+    "filetes de pescado",
+    "filete de merluza",
+    "merluza",
+    "filete de salmon",
+    "salmon"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "0304",
+    "0303"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "camarones",
+   "terminos": [
+    "camaron",
+    "camarones",
+    "langostinos"
+   ],
+   "excluir": [
+    "sabor"
+   ],
+   "prefijos": [
+    "030616",
+    "030617",
+    "030636"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "caraotas y frijoles",
+   "terminos": [
+    "caraota",
+    "caraotas",
+    "frijol",
+    "frijoles",
+    "porotos"
+   ],
+   "excluir": [
+    "enlatad"
+   ],
+   "prefijos": [
+    "071333"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "lentejas",
+   "terminos": [
+    "lenteja",
+    "lentejas"
+   ],
+   "excluir": [
+    "enlatad"
+   ],
+   "prefijos": [
+    "071340"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "arvejas",
+   "terminos": [
+    "arveja",
+    "arvejas",
+    "guisantes"
+   ],
+   "excluir": [
+    "enlatad",
+    "congelad"
+   ],
+   "prefijos": [
+    "071310"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "garbanzos",
+   "terminos": [
+    "garbanzo",
+    "garbanzos"
+   ],
+   "excluir": [
+    "enlatad"
+   ],
+   "prefijos": [
+    "071320"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "papa",
+   "terminos": [
+    "papa",
+    "papas"
+   ],
+   "excluir": [
+    "papas fritas",
+    "papitas",
+    "pure"
+   ],
+   "prefijos": [
+    "070190"
+   ],
+   "categorias_off": [],
+   "prioridad": 45,
+   "nota": null
+  },
+  {
+   "grupo": "tomate",
+   "terminos": [
+    "tomate",
+    "tomates"
+   ],
+   "excluir": [
+    "salsa",
+    "pasta de tomate",
+    "ketchup",
+    "enlatad",
+    "jugo"
+   ],
+   "prefijos": [
+    "0702"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "cebolla",
+   "terminos": [
+    "cebolla",
+    "cebollas",
+    "cebollin"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "070310"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "ajo",
+   "terminos": [
+    "ajo",
+    "ajos"
+   ],
+   "excluir": [
+    "sal de ajo",
+    "en polvo"
+   ],
+   "prefijos": [
+    "070320"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "zanahoria",
+   "terminos": [
+    "zanahoria",
+    "zanahorias"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "070610"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "lechuga",
+   "terminos": [
+    "lechuga",
+    "lechugas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "07051"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "pimentón y ají",
+   "terminos": [
+    "pimenton",
+    "pimentones",
+    "aji dulce",
+    "ajies"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "070960"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "plátano",
+   "terminos": [
+    "platano",
+    "platanos"
+   ],
+   "excluir": [
+    "platanitos",
+    "tostones",
+    "chips"
+   ],
+   "prefijos": [
+    "080310"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "cambur o banana",
+   "terminos": [
+    "cambur",
+    "cambures",
+    "banana",
+    "bananas",
+    "banano"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "080390"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "aguacate",
+   "terminos": [
+    "aguacate",
+    "aguacates"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "080440"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "mango y guayaba",
+   "terminos": [
+    "mango",
+    "mangos",
+    "guayaba",
+    "guayabas"
+   ],
+   "excluir": [
+    "jugo",
+    "nectar",
+    "mermelada",
+    "dulce de"
+   ],
+   "prefijos": [
+    "080450"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "piña",
+   "terminos": [
+    "pina",
+    "pinas"
+   ],
+   "excluir": [
+    "jugo",
+    "enlatad"
+   ],
+   "prefijos": [
+    "080430"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "naranja",
+   "terminos": [
+    "naranja",
+    "naranjas",
+    "mandarina",
+    "mandarinas"
+   ],
+   "excluir": [
+    "jugo",
+    "sabor"
+   ],
+   "prefijos": [
+    "08051",
+    "08052"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "limón",
+   "terminos": [
+    "limon",
+    "limones"
+   ],
+   "excluir": [
+    "jugo",
+    "sabor",
+    "te"
+   ],
+   "prefijos": [
+    "080550"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "manzana y pera",
+   "terminos": [
+    "manzana",
+    "manzanas",
+    "pera",
+    "peras"
+   ],
+   "excluir": [
+    "jugo",
+    "compota",
+    "sabor",
+    "vinagre"
+   ],
+   "prefijos": [
+    "080810",
+    "080830"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "uvas",
+   "terminos": [
+    "uva",
+    "uvas"
+   ],
+   "excluir": [
+    "pasas",
+    "jugo",
+    "vino"
+   ],
+   "prefijos": [
+    "080610"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "patilla o sandía",
+   "terminos": [
+    "patilla",
+    "sandia"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "080711"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "melón",
+   "terminos": [
+    "melon",
+    "melones"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "080719"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "lechosa o papaya",
+   "terminos": [
+    "lechosa",
+    "papaya"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "080720"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "yuca",
+   "terminos": [
+    "yuca"
+   ],
+   "excluir": [
+    "casabe",
+    "harina"
+   ],
+   "prefijos": [
+    "071410"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "batata",
+   "terminos": [
+    "batata",
+    "batatas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "071420"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "aceite de oliva",
+   "terminos": [
+    "aceite de oliva"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "1509",
+    "1510"
+   ],
+   "categorias_off": [
+    "en:olive-oils"
+   ],
+   "prioridad": 65,
+   "nota": null
+  },
+  {
+   "grupo": "aceite de soya",
+   "terminos": [
+    "aceite de soya",
+    "aceite de soja"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "150790"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "aceite de girasol",
+   "terminos": [
+    "aceite de girasol"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "151219"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "aceite de maíz",
+   "terminos": [
+    "aceite de maiz"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "151529"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "aceite de palma",
+   "terminos": [
+    "aceite de palma"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "151190"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "aceite comestible",
+   "terminos": [
+    "aceite",
+    "aceite vegetal",
+    "aceite comestible"
+   ],
+   "excluir": [
+    "motor",
+    "lubricante",
+    "oliva",
+    "bebe",
+    "corporal",
+    "esencial",
+    "atun",
+    "sardina"
+   ],
+   "prefijos": [
+    "150790",
+    "151219",
+    "151529",
+    "151190"
+   ],
+   "categorias_off": [
+    "en:vegetable-oils"
+   ],
+   "prioridad": 45,
+   "nota": "Sin el tipo de aceite no se puede elegir la partida: indique si es de soya, girasol, maíz o palma"
+  },
+  {
+   "grupo": "mayonesa",
+   "terminos": [
+    "mayonesa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "210390"
+   ],
+   "categorias_off": [
+    "en:mayonnaises"
+   ],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "salsa de tomate",
+   "terminos": [
+    "salsa de tomate",
+    "ketchup",
+    "catsup"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "210320"
+   ],
+   "categorias_off": [
+    "en:ketchup"
+   ],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "mostaza",
+   "terminos": [
+    "mostaza"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "210330"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "salsa de soya",
+   "terminos": [
+    "salsa de soya",
+    "salsa de soja"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "210310"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "vinagre",
+   "terminos": [
+    "vinagre"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "2209"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "refrescos",
+   "terminos": [
+    "refresco",
+    "refrescos",
+    "gaseosa",
+    "gaseosas",
+    "bebida gaseosa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "220210"
+   ],
+   "categorias_off": [
+    "en:sodas"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "malta",
+   "terminos": [
+    "malta",
+    "maltin"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "220299"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "agua embotellada",
+   "terminos": [
+    "agua mineral",
+    "agua potable",
+    "agua embotellada"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "2201"
+   ],
+   "categorias_off": [
+    "en:waters"
+   ],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "jugos de frutas",
+   "terminos": [
+    "jugo",
+    "jugos",
+    "nectar",
+    "zumo"
+   ],
+   "excluir": [
+    "limon para",
+    "gastrico"
+   ],
+   "prefijos": [
+    "2009"
+   ],
+   "categorias_off": [
+    "en:juices"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "cerveza",
+   "terminos": [
+    "cerveza",
+    "cervezas"
+   ],
+   "excluir": [
+    "sin alcohol"
+   ],
+   "prefijos": [
+    "2203"
+   ],
+   "categorias_off": [
+    "en:beers"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "vino",
+   "terminos": [
+    "vino",
+    "vinos"
+   ],
+   "excluir": [
+    "vinagre"
+   ],
+   "prefijos": [
+    "2204"
+   ],
+   "categorias_off": [
+    "en:wines"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "ron",
+   "terminos": [
+    "ron",
+    "rones"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "220840"
+   ],
+   "categorias_off": [
+    "en:rums"
+   ],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "whisky",
+   "terminos": [
+    "whisky",
+    "whiskey"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "220830"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "vodka",
+   "terminos": [
+    "vodka"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "220860"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cigarrillos",
+   "terminos": [
+    "cigarrillo",
+    "cigarrillos"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "240220"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "avena",
+   "terminos": [
+    "avena",
+    "avena en hojuelas"
+   ],
+   "excluir": [
+    "galletas",
+    "bebida",
+    "leche de avena",
+    "jabon"
+   ],
+   "prefijos": [
+    "110412"
+   ],
+   "categorias_off": [
+    "en:rolled-oats"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "cereal de desayuno",
+   "terminos": [
+    "cereal",
+    "cereales",
+    "corn flakes",
+    "hojuelas de maiz",
+    "granola"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "190410",
+    "190420"
+   ],
+   "categorias_off": [
+    "en:breakfast-cereals"
+   ],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "mermelada",
+   "terminos": [
+    "mermelada",
+    "mermeladas",
+    "jalea"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "2007"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "helados",
+   "terminos": [
+    "helado",
+    "helados",
+    "barquilla"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "2105"
+   ],
+   "categorias_off": [
+    "en:ice-creams"
+   ],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "caramelos y golosinas",
+   "terminos": [
+    "caramelo",
+    "caramelos",
+    "chupeta",
+    "chupetas",
+    "gomitas",
+    "golosinas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "170490"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "chicle",
+   "terminos": [
+    "chicle",
+    "chicles",
+    "goma de mascar"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "170410"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "papitas fritas",
+   "terminos": [
+    "papas fritas",
+    "papitas",
+    "chips de papa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "200520"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "alimento para mascotas",
+   "terminos": [
+    "alimento para perros",
+    "alimento para gatos",
+    "perrarina",
+    "gatarina",
+    "comida para perros",
+    "comida para gatos"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "230910"
+   ],
+   "categorias_off": [
+    "en:dog-foods",
+    "en:cat-foods"
+   ],
+   "prioridad": 65,
+   "nota": null
+  },
+  {
+   "grupo": "maíz en grano",
+   "terminos": [
+    "maiz en grano",
+    "maiz amarillo",
+    "maiz blanco",
+    "maiz para cotufas",
+    "maiz cotufa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "1005"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "teléfono celular",
+   "terminos": [
+    "celular",
+    "celulares",
+    "telefono celular",
+    "smartphone",
+    "telefono inteligente",
+    "iphone"
+   ],
+   "excluir": [
+    "cargador",
+    "forro",
+    "funda",
+    "protector",
+    "audifonos",
+    "bateria"
+   ],
+   "prefijos": [
+    "851713"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "computadora portátil o tableta",
+   "terminos": [
+    "laptop",
+    "laptops",
+    "computadora portatil",
+    "notebook",
+    "tablet",
+    "tableta",
+    "ipad",
+    "macbook"
+   ],
+   "excluir": [
+    "cargador",
+    "funda",
+    "bolso"
+   ],
+   "prefijos": [
+    "847130"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "computadora de escritorio",
+   "terminos": [
+    "computadora de escritorio",
+    "pc de escritorio",
+    "cpu"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "84714"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "impresora",
+   "terminos": [
+    "impresora",
+    "impresoras"
+   ],
+   "excluir": [
+    "cartucho",
+    "tinta",
+    "toner"
+   ],
+   "prefijos": [
+    "844332"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "televisor",
+   "terminos": [
+    "televisor",
+    "televisores",
+    "tv",
+    "smart tv",
+    "television"
+   ],
+   "excluir": [
+    "soporte",
+    "control remoto",
+    "cable",
+    "por cable"
+   ],
+   "prefijos": [
+    "852872"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "monitor",
+   "terminos": [
+    "monitor",
+    "monitores"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "85285"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "nevera",
+   "terminos": [
+    "nevera",
+    "neveras",
+    "refrigerador",
+    "refrigeradora"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "841821"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "congelador",
+   "terminos": [
+    "congelador",
+    "freezer"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "841830",
+    "841840"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "lavadora",
+   "terminos": [
+    "lavadora",
+    "lavadoras"
+   ],
+   "excluir": [
+    "lavadora de platos",
+    "lavavajillas"
+   ],
+   "prefijos": [
+    "84501"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "secadora",
+   "terminos": [
+    "secadora",
+    "secadora de ropa"
+   ],
+   "excluir": [
+    "de cabello",
+    "de pelo"
+   ],
+   "prefijos": [
+    "845121"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "aire acondicionado",
+   "terminos": [
+    "aire acondicionado",
+    "aires acondicionados",
+    "split"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "8415"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "microondas",
+   "terminos": [
+    "microondas",
+    "horno microondas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "851650"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "licuadora",
+   "terminos": [
+    "licuadora",
+    "licuadoras"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "850940"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "cocina a gas",
+   "terminos": [
+    "cocina a gas",
+    "cocina de gas",
+    "cocina"
+   ],
+   "excluir": [
+    "cocina electrica",
+    "utensilios",
+    "de cocina",
+    "papel"
+   ],
+   "prefijos": [
+    "732111"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "ventilador",
+   "terminos": [
+    "ventilador",
+    "ventiladores"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "841451"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "plancha de ropa",
+   "terminos": [
+    "plancha",
+    "plancha de ropa"
+   ],
+   "excluir": [
+    "de cabello",
+    "de pelo",
+    "de zinc",
+    "para el pelo"
+   ],
+   "prefijos": [
+    "851640"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cafetera eléctrica",
+   "terminos": [
+    "cafetera",
+    "cafetera electrica"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "851671"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "tostadora",
+   "terminos": [
+    "tostadora",
+    "sandwichera"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "851672"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "bombillo LED",
+   "terminos": [
+    "bombillo",
+    "bombillos",
+    "bombilla",
+    "lampara led",
+    "foco led"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "853952"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cargador",
+   "terminos": [
+    "cargador",
+    "cargadores"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "850440"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "batería de vehículo",
+   "terminos": [
+    "bateria de carro",
+    "bateria para carro",
+    "bateria de vehiculo",
+    "acumulador"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "850710"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "pilas",
+   "terminos": [
+    "pila",
+    "pilas",
+    "baterias aa",
+    "baterias aaa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "8506"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "audífonos",
+   "terminos": [
+    "audifono",
+    "audifonos",
+    "auriculares",
+    "cascos de musica"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "851830"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "corneta o parlante",
+   "terminos": [
+    "corneta",
+    "cornetas",
+    "parlante",
+    "parlantes",
+    "altavoz"
+   ],
+   "excluir": [
+    "de carro",
+    "para carro"
+   ],
+   "prefijos": [
+    "85182"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cauchos de automóvil",
+   "terminos": [
+    "caucho",
+    "cauchos",
+    "neumatico",
+    "neumaticos",
+    "llanta",
+    "llantas"
+   ],
+   "excluir": [
+    "de moto",
+    "para moto",
+    "bicicleta",
+    "de camion"
+   ],
+   "prefijos": [
+    "401110"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "cauchos de moto",
+   "terminos": [
+    "caucho de moto",
+    "cauchos de moto",
+    "cauchos para moto",
+    "llanta de moto"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "401140"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "aceite de motor",
+   "terminos": [
+    "aceite de motor",
+    "aceite para motor",
+    "lubricante",
+    "aceite 20w50",
+    "aceite sintetico"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "271019"
+   ],
+   "categorias_off": [],
+   "prioridad": 66,
+   "nota": null
+  },
+  {
+   "grupo": "gasolina",
+   "terminos": [
+    "gasolina"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "271012"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "gasoil o diésel",
+   "terminos": [
+    "gasoil",
+    "diesel",
+    "gasoleo"
+   ],
+   "excluir": [
+    "motor diesel"
+   ],
+   "prefijos": [
+    "271019"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "automóvil",
+   "terminos": [
+    "carro",
+    "carros",
+    "automovil",
+    "automoviles",
+    "camioneta",
+    "vehiculo",
+    "sedan"
+   ],
+   "excluir": [
+    "repuesto",
+    "caucho",
+    "bateria",
+    "aceite",
+    "juguete",
+    "de carro",
+    "para carro",
+    "alfombra",
+    "forro"
+   ],
+   "prefijos": [
+    "8703"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "moto",
+   "terminos": [
+    "moto",
+    "motos",
+    "motocicleta",
+    "motocicletas"
+   ],
+   "excluir": [
+    "repuesto",
+    "caucho",
+    "casco",
+    "aceite",
+    "juguete"
+   ],
+   "prefijos": [
+    "8711"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "bicicleta",
+   "terminos": [
+    "bicicleta",
+    "bicicletas"
+   ],
+   "excluir": [
+    "repuesto",
+    "caucho"
+   ],
+   "prefijos": [
+    "8712"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "pastillas de freno",
+   "terminos": [
+    "pastillas de freno",
+    "bandas de freno",
+    "discos de freno"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "870830"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "amortiguadores",
+   "terminos": [
+    "amortiguador",
+    "amortiguadores"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "870880"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "filtro de aceite",
+   "terminos": [
+    "filtro de aceite",
+    "filtro de gasolina",
+    "filtro de combustible"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "842123"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "bujías",
+   "terminos": [
+    "bujia",
+    "bujias"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "851110"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "calzado",
+   "terminos": [
+    "zapato",
+    "zapatos",
+    "zapatillas",
+    "calzado",
+    "botas",
+    "sandalias",
+    "cholas",
+    "tenis",
+    "gomas"
+   ],
+   "excluir": [
+    "de mascar"
+   ],
+   "prefijos": [
+    "6402",
+    "6403",
+    "6404"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": "La partida depende del material de la suela y la parte superior (caucho o plástico, cuero, textil)"
+  },
+  {
+   "grupo": "franelas y camisetas",
+   "terminos": [
+    "franela",
+    "franelas",
+    "camiseta",
+    "camisetas",
+    "t shirt"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "6109"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "camisas",
+   "terminos": [
+    "camisa",
+    "camisas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "6205",
+    "6105"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "pantalones y jeans",
+   "terminos": [
+    "pantalon",
+    "pantalones",
+    "jean",
+    "jeans",
+    "bluejean"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "620342",
+    "620462"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "vestidos",
+   "terminos": [
+    "vestido",
+    "vestidos"
+   ],
+   "excluir": [
+    "de bano"
+   ],
+   "prefijos": [
+    "62044",
+    "61044"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "medias",
+   "terminos": [
+    "medias",
+    "calcetines"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "6115"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cemento",
+   "terminos": [
+    "cemento",
+    "cemento gris"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "252329"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "cabillas",
+   "terminos": [
+    "cabilla",
+    "cabillas",
+    "varilla corrugada"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "721420"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "bloques",
+   "terminos": [
+    "bloque",
+    "bloques de concreto",
+    "bloques"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "681011"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "pintura",
+   "terminos": [
+    "pintura",
+    "pinturas",
+    "pintura de caucho",
+    "esmalte"
+   ],
+   "excluir": [
+    "de unas",
+    "labial",
+    "artistica",
+    "oleo"
+   ],
+   "prefijos": [
+    "3209",
+    "3208"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "tubería de PVC",
+   "terminos": [
+    "tubo pvc",
+    "tuberia pvc",
+    "tubos de pvc",
+    "tuberia"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "391723"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cable eléctrico",
+   "terminos": [
+    "cable electrico",
+    "cable de cobre",
+    "cable thw"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "854449"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "tornillos",
+   "terminos": [
+    "tornillo",
+    "tornillos"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "731815"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "clavos",
+   "terminos": [
+    "clavo",
+    "clavos"
+   ],
+   "excluir": [
+    "de olor"
+   ],
+   "prefijos": [
+    "731700"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "papel higiénico",
+   "terminos": [
+    "papel higienico",
+    "papel toilet"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "481810"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "servilletas",
+   "terminos": [
+    "servilleta",
+    "servilletas",
+    "papel absorbente"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "481830"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "pañales y toallas sanitarias",
+   "terminos": [
+    "panal",
+    "panales",
+    "toalla sanitaria",
+    "toallas sanitarias",
+    "protectores diarios"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "961900"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "jabón de tocador",
+   "terminos": [
+    "jabon",
+    "jabon de tocador",
+    "jabon de bano"
+   ],
+   "excluir": [
+    "en polvo",
+    "liquido para ropa",
+    "para lavar",
+    "detergente",
+    "lavaplatos"
+   ],
+   "prefijos": [
+    "340111"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "detergente",
+   "terminos": [
+    "detergente",
+    "jabon en polvo",
+    "lavaplatos",
+    "jabon liquido para ropa"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "340250",
+    "3402903"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "cloro",
+   "terminos": [
+    "cloro",
+    "lejia"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "282890"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "champú",
+   "terminos": [
+    "champu",
+    "shampoo"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "330510"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "crema dental",
+   "terminos": [
+    "crema dental",
+    "pasta dental",
+    "dentifrico"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "330610"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "desodorante",
+   "terminos": [
+    "desodorante",
+    "desodorantes",
+    "antitranspirante"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "330720"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "perfume",
+   "terminos": [
+    "perfume",
+    "perfumes",
+    "colonia",
+    "eau de toilette"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "3303"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "medicamentos",
+   "terminos": [
+    "medicamento",
+    "medicamentos",
+    "acetaminofen",
+    "paracetamol",
+    "ibuprofeno",
+    "amoxicilina",
+    "losartan",
+    "omeprazol",
+    "tabletas",
+    "jarabe"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "3004"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": "Medicamentos dosificados o acondicionados para la venta al por menor"
+  },
+  {
+   "grupo": "vacunas",
+   "terminos": [
+    "vacuna",
+    "vacunas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "300241",
+    "300242"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "urea",
+   "terminos": [
+    "urea"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "310210"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "fertilizante NPK",
+   "terminos": [
+    "triple 15",
+    "npk",
+    "fertilizante compuesto"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "310520"
+   ],
+   "categorias_off": [],
+   "prioridad": 62,
+   "nota": null
+  },
+  {
+   "grupo": "libros",
+   "terminos": [
+    "libro",
+    "libros"
+   ],
+   "excluir": [
+    "libreta",
+    "libro de actas",
+    "contable"
+   ],
+   "prefijos": [
+    "490199"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "cuadernos",
+   "terminos": [
+    "cuaderno",
+    "cuadernos",
+    "libreta",
+    "libretas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "482020"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "lápices",
+   "terminos": [
+    "lapiz",
+    "lapices",
+    "creyones",
+    "colores"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "9609"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "bolígrafos",
+   "terminos": [
+    "boligrafo",
+    "boligrafos",
+    "lapicero"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "960810"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "juguetes",
+   "terminos": [
+    "juguete",
+    "juguetes",
+    "muneca",
+    "munecas",
+    "carrito de juguete",
+    "peluche",
+    "peluches"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "9503"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "sillas",
+   "terminos": [
+    "silla",
+    "sillas"
+   ],
+   "excluir": [
+    "de ruedas"
+   ],
+   "prefijos": [
+    "9401"
+   ],
+   "categorias_off": [],
+   "prioridad": 52,
+   "nota": null
+  },
+  {
+   "grupo": "mesas y muebles",
+   "terminos": [
+    "mesa",
+    "mesas",
+    "escritorio",
+    "mueble",
+    "muebles",
+    "closet",
+    "armario"
+   ],
+   "excluir": [
+    "mesa de noche de"
+   ],
+   "prefijos": [
+    "9403"
+   ],
+   "categorias_off": [],
+   "prioridad": 50,
+   "nota": null
+  },
+  {
+   "grupo": "colchón",
+   "terminos": [
+    "colchon",
+    "colchones"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "940421",
+    "940429"
+   ],
+   "categorias_off": [],
+   "prioridad": 58,
+   "nota": null
+  },
+  {
+   "grupo": "relojes de pulsera",
+   "terminos": [
+    "reloj",
+    "relojes",
+    "reloj de pulsera",
+    "smartwatch"
+   ],
+   "excluir": [
+    "de pared",
+    "despertador",
+    "correa de reloj"
+   ],
+   "prefijos": [
+    "9101",
+    "9102"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "joyas",
+   "terminos": [
+    "anillo",
+    "anillos",
+    "cadena de oro",
+    "cadena de plata",
+    "zarcillos de oro",
+    "joya",
+    "joyas"
+   ],
+   "excluir": [
+    "fantasia",
+    "bisuteria"
+   ],
+   "prefijos": [
+    "7113"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": null
+  },
+  {
+   "grupo": "máquina de coser",
+   "terminos": [
+    "maquina de coser",
+    "maquinas de coser"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "8452"
+   ],
+   "categorias_off": [],
+   "prioridad": 60,
+   "nota": null
+  },
+  {
+   "grupo": "ollas y sartenes",
+   "terminos": [
+    "olla",
+    "ollas",
+    "sarten",
+    "sartenes",
+    "caldero",
+    "calderos",
+    "olla de presion"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "732393",
+    "732394",
+    "761510"
+   ],
+   "categorias_off": [],
+   "prioridad": 55,
+   "nota": "La subpartida depende del material: acero inoxidable, hierro o acero esmaltado, o aluminio"
+  },
+  {
+   "grupo": "sillas de ruedas",
+   "terminos": [
+    "silla de ruedas",
+    "sillas de ruedas"
+   ],
+   "excluir": [],
+   "prefijos": [
+    "8713"
+   ],
+   "categorias_off": [],
+   "prioridad": 66,
+   "nota": null
+  }
+ ],
+ "vocabulario": [
+  {
+   "comercial": "blanco",
+   "oficial": "blanqueado"
+  },
+  {
+   "comercial": "blanca",
+   "oficial": "blanqueado"
+  },
+  {
+   "comercial": "entero",
+   "oficial": "sin trocear"
+  },
+  {
+   "comercial": "entera",
+   "oficial": "sin trocear"
+  },
+  {
+   "comercial": "presas",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "piezas",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "picado",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "pechuga",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "pechugas",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "muslos",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "alas",
+   "oficial": "trozos"
+  },
+  {
+   "comercial": "integral",
+   "oficial": "descascarillado"
+  },
+  {
+   "comercial": "congelada",
+   "oficial": "congelados"
+  },
+  {
+   "comercial": "congelado",
+   "oficial": "congelados"
+  },
+  {
+   "comercial": "fresca",
+   "oficial": "refrigerados"
+  },
+  {
+   "comercial": "fresco",
+   "oficial": "refrigerados"
+  },
+  {
+   "comercial": "molida",
+   "oficial": "picada"
+  },
+  {
+   "comercial": "molido",
+   "oficial": "tostado"
+  },
+  {
+   "comercial": "grano",
+   "oficial": "tostado"
+  },
+  {
+   "comercial": "extra virgen",
+   "oficial": "virgen extra"
+  },
+  {
+   "comercial": "tostado",
+   "oficial": "tostado sin descafeinar"
+  },
+  {
+   "comercial": "descafeinado",
+   "oficial": "descafeinado"
+  },
+  {
+   "comercial": "completa",
+   "oficial": "superior 1.5"
+  },
+  {
+   "comercial": "descremada",
+   "oficial": "inferior 1.5"
+  },
+  {
+   "comercial": "usado",
+   "oficial": "usados"
+  },
+  {
+   "comercial": "usados",
+   "oficial": "usados"
+  },
+  {
+   "comercial": "nuevo",
+   "oficial": "nuevos"
+  }
+ ]
+}

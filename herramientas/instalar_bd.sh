@@ -14,6 +14,8 @@ cargar() {
   echo "✔ $nombre: $(echo "$salida" | grep -o 'Validaciones [^ ]* superadas' | tail -1)"
 }
 cargar "Arancel" herramientas/arancel/cargar_arancel.sh
+# Detección arancelaria (Node): diccionario de nombres comerciales e índice de búsqueda; va después del arancel
+cargar "Detección arancelaria" node scripts/arancel-cargar-sinonimos.ts
 cargar "BCV" herramientas/bcv/cargar_bcv.sh
 cargar "Calendario y RIF" herramientas/calendario/cargar_calendario.sh
 # IVA: el cargador (Node) valida el catálogo, comprueba los textos legales contra las Gacetas (pdftotext)

@@ -131,6 +131,8 @@ La clasificación de IVA **por código arancelario** vive en el módulo IVA: `PO
 
 ### Detección de la clasificación arancelaria (fin propio, independiente del IVA)
 
+> **Implementado** (ver [17](17-deteccion-arancelaria.md)): diccionario de nombres comerciales, búsqueda de texto en español para afinar dentro de la partida, respaldo por texto y casos de referencia. Lo que sigue es el diseño original.
+
 **Qué resuelve:** "Tengo este producto, ¿qué código arancelario le corresponde?". Es útil para importadores, agentes de aduanas y exportadores, aunque no les interese el IVA.
 
 **Entrada:**

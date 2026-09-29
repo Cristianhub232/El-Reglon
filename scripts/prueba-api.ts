@@ -103,6 +103,27 @@ async function main() {
   r = await get("/api/v1/arancel/secciones", K);
   verificar("22 secciones", r.cuerpo?.secciones?.length === 22);
 
+  console.log("Detección arancelaria");
+  const detectar = (c: Record<string, unknown>) => post("/api/v1/arancel/detectar", c, K);
+  r = await get("/api/v1/arancel/detectar?q=" + encodeURIComponent("Teléfono celular Samsung 128 GB"), K);
+  verificar("'teléfono celular' → determinado 8517.13.00.00 (diccionario)", r.cuerpo?.estado === "determinado"
+    && r.cuerpo?.candidatos?.[0]?.codigo === "8517130000" && !!r.cuerpo?.responsabilidad, r.cuerpo);
+  r = await detectar({ descripcion: "Pollo entero congelado" });
+  verificar("'pollo entero congelado' → 0207.12 (sin trocear, congelados)", r.cuerpo?.estado === "determinado" && r.cuerpo?.candidatos?.[0]?.codigo === "0207120000", r.cuerpo);
+  r = await detectar({ descripcion: "Arroz blanco", limite: 8 });
+  verificar("'arroz blanco' → condicionado dentro de 1006.30, con pregunta para afinar", r.cuerpo?.estado === "condicionado"
+    && r.cuerpo?.candidatos?.every((c: any) => c.codigo.startsWith("100630")) && r.cuerpo?.preguntas_para_afinar?.length > 0, r.cuerpo);
+  r = await detectar({ descripcion: "Paraguas plegable" });
+  verificar("fuera del diccionario → respaldo por texto (6601) con advertencia", r.cuerpo?.candidatos?.[0]?.codigo?.startsWith("6601") && r.cuerpo?.advertencias?.length > 0, r.cuerpo);
+  r = await get("/api/v1/arancel/detectar?q=xyzzy%20qwerty", K);
+  verificar("sin coincidencias → 200 no_determinado", r.estado === 200 && r.cuerpo?.estado === "no_determinado", r.cuerpo);
+  r = await detectar({ limite: 3 });
+  verificar("sin descripción ni código → 400", r.estado === 400 && r.cuerpo?.error?.codigo === "entrada_insuficiente", r.cuerpo);
+  r = await get("/api/v1/arancel/detectar?q=arroz&limite=50", K);
+  verificar("límite fuera de rango → 400", r.estado === 400, r.cuerpo);
+  r = await post("/api/v1/arancel/detectar", { descripcion: "arroz" }, soloRif);
+  verificar("sin permiso arancel → 403", r.estado === 403);
+
   console.log("Calendario y RIF");
   r = await get("/api/v1/calendario/proximos?rif=J-07013380-5&tipo=ESPECIAL&desde=2026-09-27", K);
   verificar("especial terminal 5 → primer deber 08/10/2026", r.cuerpo?.deberes?.[0]?.fecha === "2026-10-08", r.cuerpo?.deberes?.[0]);
@@ -182,6 +203,7 @@ main()
     const ids = `SELECT id FROM core.api_key WHERE prefijo = ANY ($1)`;
     await consulta(`DELETE FROM iva.observacion_precio WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
     await consulta(`DELETE FROM iva.consulta_registro WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
+    await consulta(`DELETE FROM arancel.deteccion WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
     await consulta("DELETE FROM core.api_key WHERE prefijo = ANY ($1)", [prefijos]).catch(() => {});
     await pool().end();
     console.log(`\n${total - fallos}/${total} verificaciones correctas`);
