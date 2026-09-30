@@ -1,0 +1,14 @@
+.grafico { padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; }
+.graficoCabeza { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; }
+.barras { height: 200px; display: flex; align-items: flex-end; gap: 4px; border-bottom: 1px solid var(--linea);
+  background-image: repeating-linear-gradient(to top, transparent 0, transparent 49px, var(--linea-suave) 49px, var(--linea-suave) 50px); }
+.barra { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; min-width: 2px; }
+.barra > div { border-radius: 3px 3px 0 0; min-height: 1px; }
+.ejes { display: flex; justify-content: space-between; font: 500 12px var(--mono); color: var(--texto-4); }
+.reparto { padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; }
+.modulo { display: flex; flex-direction: column; gap: 6px; }
+.modulo > div:first-child { display: flex; justify-content: space-between; font-size: 14px; }
+.modulo > div:first-child span:first-child { font-weight: 600; color: var(--tinta); }
+.modulo > div:first-child span:last-child { color: var(--texto-2); }
+.pista { height: 8px; border-radius: 4px; background: var(--linea-suave); overflow: hidden; }
+.pista > div { height: 100%; }

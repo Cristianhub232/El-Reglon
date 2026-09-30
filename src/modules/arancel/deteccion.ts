@@ -25,6 +25,7 @@ interface Candidato { codigo: string; confianza: number; motivos: string[] }
 
 // ---------------------------------------------------------------- diccionario en memoria
 let cache: { sinonimos: Sinonimos; version: string; leido: number } | null = null;
+export function invalidarSinonimos() { cache = null; }
 
 export async function cargarSinonimos(q: Consultor = consulta): Promise<{ sinonimos: Sinonimos; version: string }> {
   if (cache && Date.now() - cache.leido < 60_000) return cache;

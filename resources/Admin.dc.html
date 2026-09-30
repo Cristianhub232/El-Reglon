@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F6F3EA;font-family:'Public Sans',sans-serif;color:#1C2330;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}a{color:#1F4E8C;text-decoration:none}a:hover{color:#0E2440;text-decoration:underline}input:focus,textarea:focus{outline:2px solid #1F4E8C;outline-offset:2px}button:focus-visible,a:focus-visible{outline:2px solid #1F4E8C;outline-offset:2px}</style>
+<style>@media (max-width:1180px){[data-buscar]{display:none !important}}</style>
+</helmet>
+<div style="min-height:100vh;display:flex">
+  <aside style="width:252px;flex:none;background:#FFFFFF;color:#1C2330;border-right:1px solid #DDD7C8;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;box-sizing:border-box">
+    <a href="Landing v2.dc.html" style="display:flex;align-items:center;gap:10px;padding:22px 20px;text-decoration:none;border-bottom:1px solid #EEE9DD">
+      <span style="display:flex;flex-direction:column;gap:6px"><dc-import name="Logo" tipo="horizontal" variante="claro" fondo="#FFFFFF" style="width:160px;height:50px" hint-size="160px,50px"></dc-import><span style="font-size:12px;font-weight:500;color:#5A6170">Administración</span></span>
+    </a>
+    <nav style="flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 12px;display:flex;flex-direction:column;gap:18px">
+      <sc-for list="{{ grupos }}" as="g" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span style="font:600 13px 'Public Sans',sans-serif;color:#5A6170;padding:0 10px 6px">{{ g.titulo }}</span>
+          <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+            <button onClick="{{ it.pick }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;font-size:14.5px;font-weight:500;white-space:nowrap;background:{{ it.bg }};color:{{ it.fg }};transition:background-color 150ms ease-out,border-color 150ms ease-out,color 150ms ease-out" style-hover="background:#F6F3EA">
+              {{ it.label }}
+            </button>
+          </sc-for>
+        </div>
+      </sc-for>
+    </nav>
+    <div style="padding:16px 20px;border-top:1px solid #EEE9DD;display:flex;align-items:center;gap:12px">
+      <span style="width:36px;height:36px;border-radius:50%;background:#F2B632;color:#0E2440;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none">{{ usuario.ini }}</span>
+      <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:600">{{ usuario.nombre }}</span><span style="font-size:12px;color:#5A6170">{{ usuario.rol }}</span></span>
+    </div>
+  </aside>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="height:64px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 32px;border-bottom:1px solid #DDD7C8;background:#FFFFFF;position:relative;z-index:4">
+      <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:#5A6170;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden"><span>Administración</span><span>/</span><strong style="color:#0E2440">{{ tituloSeccion }}</strong></div>
+      <div style="display:flex;align-items:center;gap:12px;flex:1 1 auto;min-width:0;justify-content:flex-end;container-type:inline-size">
+        <div data-buscar="1" style="display:flex;align-items:center;gap:8px;border:1px solid #DDD7C8;border-radius:8px;padding:8px 12px;flex:1;min-width:180px;max-width:360px;color:#676D79;font-size:14px;background:#FAF8F2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          <svg width="14" height="14" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="#676D79" stroke-width="1.6"></circle><path d="M11 11l3.5 3.5" stroke="#676D79" stroke-width="1.6" stroke-linecap="round"></path></svg>Buscar regla, RIF, prefijo…
+        </div>
+        <span style="display:flex;align-items:baseline;gap:8px;white-space:nowrap;flex:none;font-size:13px;color:#5A6170;border-left:1px solid #DDD7C8;padding-left:12px">BCV <span style="font:500 14px 'IBM Plex Mono',monospace;color:#0E2440">USD 186,4213</span>28/09</span>
+        <div style="position:relative;flex:none">
+          <button onClick="{{ toggleNotif }}" aria-label="Notificaciones" style="all:unset;cursor:pointer;position:relative;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #DDD7C8;background:{{ notifBg }};transition:background-color 150ms ease-out" style-hover="background:#F6F3EA">
+            <svg width="18" height="18" viewBox="0 0 20 20"><path d="M10 2.5a5 5 0 0 0-5 5v3.2L3.5 14h13L15 10.7V7.5a5 5 0 0 0-5-5z" fill="none" stroke="#0E2440" stroke-width="1.6" stroke-linejoin="round"></path><path d="M8 16.5a2 2 0 0 0 4 0" fill="none" stroke="#0E2440" stroke-width="1.6" stroke-linecap="round"></path></svg>
+            <span style="position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:#D9453A;color:#FFFFFF;font:700 11px 'Public Sans',sans-serif;display:flex;align-items:center;justify-content:center;border:2px solid #FFFFFF">3</span>
+          </button>
+          <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;right:0;top:50px;width:360px;background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;box-shadow:0 1px 2px rgba(14,36,64,.05),0 8px 16px -4px rgba(14,36,64,.10),0 24px 40px -8px rgba(14,36,64,.14);display:flex;flex-direction:column;overflow:hidden">
+              <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #EEE9DD"><strong style="font:600 16px 'Source Serif 4',serif;color:#0E2440">Notificaciones</strong><a href="#" style="font-size:13px;font-weight:600">Marcar como leídas</a></div>
+              <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+                <div style="padding:12px 16px;display:grid;grid-template-columns:10px minmax(0,1fr);gap:12px;border-bottom:1px solid #EEE9DD">
+                  <span style="width:8px;height:8px;border-radius:50%;margin-top:6px;background:{{ n.color }}"></span>
+                  <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:14px;line-height:1.4;color:#1C2330;text-wrap:pretty">{{ n.txt }}</span><span style="font-size:12px;color:#5A6170">{{ n.cuando }}</span></span>
+                </div>
+              </sc-for>
+              <button onClick="{{ irAuditoria }}" style="all:unset;cursor:pointer;padding:12px 16px;text-align:center;font-size:14px;font-weight:600;color:#1F4E8C" style-hover="background:#F6F3EA">Ver todo en auditoría</button>
+            </div>
+          </sc-if>
+        </div>
+        <a href="Login.dc.html" style="flex:none;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#0E2440;border:1px solid #C9C2B0;border-radius:8px;padding:9px 14px;white-space:nowrap;text-decoration:none;transition:border-color 150ms ease-out" style-hover="border-color:#0E2440;text-decoration:none;color:#0E2440"><svg width="15" height="15" viewBox="0 0 16 16"><path d="M6 2.5H3.5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1H6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path><path d="M10 5l3 3-3 3M13 8H6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>Cerrar sesión</a>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:32px;display:flex;flex-direction:column;gap:24px;width:100%;box-sizing:border-box">
+      <sc-if value="{{ soloLectura }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:14px;color:#1C2330;background:#FFFFFF;border:1px solid #DDD7C8;padding:10px 14px;border-radius:8px">Modo solo lectura: puedes consultar todo, pero no crear, editar ni revocar.</div>
+      </sc-if>
+
+      <!-- RESUMEN -->
+      <sc-if value="{{ is.resumen }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">Resumen</h1><span style="font-size:15px;color:#5A6170">Lunes 28/09/2026 · hora de Caracas</span></div>
+            <div style="display:flex;gap:6px;background:#FFFFFF;border:1px solid #DDD7C8;border-radius:8px;padding:4px;font-size:13px;font-weight:600;white-space:nowrap;flex:none"><span style="padding:6px 10px;border-radius:5px;background:#0E2440;color:#F6F3EA">14 días</span><span style="padding:6px 10px;color:#3A4250">30 días</span><span style="padding:6px 10px;color:#3A4250">Trimestre</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:#EEE9DD;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="background:#FFFFFF;padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:13px;color:#5A6170">{{ k.label }}</span>
+                <span style="font:600 28px 'IBM Plex Mono',monospace;color:#0E2440">{{ k.valor }}</span>
+                <span style="font-size:13px;font-weight:600;color:{{ k.color }}">{{ k.nota }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px">
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:18px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440;white-space:nowrap">Consultas por día</strong><span style="font-size:13px;color:#5A6170">Total 14 días: 158.320</span></div>
+              <div style="height:200px;display:flex;align-items:flex-end;gap:8px;border-bottom:1px solid #DDD7C8;background-image:repeating-linear-gradient(to top,transparent 0,transparent 49px,#EEE9DD 49px,#EEE9DD 50px)">
+                <sc-for list="{{ barras }}" as="b" hint-placeholder-count="14">
+                  <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%">
+                    <div style="height:{{ b.h }};background:{{ b.color }};border-radius:3px 3px 0 0"></div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;justify-content:space-between;font:500 12px 'IBM Plex Mono',monospace;color:#676D79"><span>15/09</span><span>21/09</span><span>28/09</span></div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+              <strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Por módulo</strong>
+              <sc-for list="{{ reparto }}" as="r" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:600;color:#0E2440">{{ r.m }}</span><span style="font-family:'IBM Plex Mono',monospace;color:#3A4250">{{ r.p }}</span></div>
+                  <div style="height:8px;border-radius:4px;background:#EEE9DD;overflow:hidden"><div style="height:100%;width:{{ r.p }};background:{{ r.c }}"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px">
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Estado de los módulos</strong></div>
+              <sc-for list="{{ estados }}" as="e" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:100px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <strong style="color:#0E2440">{{ e.m }}</strong>
+                  <span style="color:#5A6170">{{ e.d }}</span>
+                  <span style="display:inline-flex;align-items:center;gap:7px;font:500 13px 'Public Sans',sans-serif;color:{{ e.fg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ e.fg }}"></span>{{ e.s }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD;display:flex;justify-content:space-between"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Actividad reciente</strong><button onClick="{{ irAuditoria }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:#1F4E8C">Ver auditoría</button></div>
+              <sc-for list="{{ auditoriaCorta }}" as="a" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;padding:12px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <span style="font:500 13px 'IBM Plex Mono',monospace;color:#676D79">{{ a.hora }}</span>
+                  <span style="color:#1C2330"><strong>{{ a.actor }}</strong> · {{ a.detalle }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- API KEYS -->
+      <sc-if value="{{ is.apikeys }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">API keys</h1><span style="font-size:15px;color:#5A6170">Solo se guarda el SHA-256. El token se muestra una única vez.</span></div>
+            <sc-if value="{{ puedeEditar }}" hint-placeholder-val="{{ true }}"><button style="all:unset;cursor:pointer;font-size:15px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:11px 16px;border-radius:8px">Nueva API key</button></sc-if>
+          </div>
+          <sc-if value="{{ puedeEditar }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+              <strong style="font-size:15px;color:#0E2440">API key creada: «Tienda en línea Mercado Llanero». Cópiala ahora: no se volverá a mostrar.</strong>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <span style="flex:1;min-width:280px;font:500 15px 'IBM Plex Mono',monospace;color:#0E2440;background:#F6F3EA;border:1px solid #DDD7C8;border-radius:8px;padding:10px 12px;word-break:break-all">rgl_7f3e91ac_Qm4xT8vLr2WnB6cZpK9hYd3s</span>
+                <button style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:10px 16px;border-radius:8px">Copiar</button>
+              </div>
+            </div>
+          </sc-if>
+          <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:auto">
+            <div style="min-width:860px">
+              <div style="display:grid;grid-template-columns:minmax(0,1.6fr) 120px minmax(0,1.6fr) 80px 130px 90px 80px;gap:12px;padding:12px 20px;border-bottom:1px solid #DDD7C8;font:600 13px 'Public Sans',sans-serif;color:#5A6170"><span>Nombre</span><span>Prefijo</span><span>Permisos</span><span>Límite/min</span><span>Último uso</span><span>Estado</span><span></span></div>
+              <sc-for list="{{ keys }}" as="k" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:minmax(0,1.6fr) 120px minmax(0,1.6fr) 80px 130px 90px 80px;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <span style="display:flex;flex-direction:column;gap:2px"><strong style="color:#0E2440">{{ k.nombre }}</strong><span style="font-size:12px;color:#676D79">{{ k.owner }}</span></span>
+                  <span style="font:500 13px 'IBM Plex Mono',monospace;color:#3A4250">{{ k.prefijo }}</span>
+                  <span style="font:500 13px 'IBM Plex Mono',monospace;color:#3A4250">{{ k.permisosTxt }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;color:#3A4250">{{ k.limite }}</span>
+                  <span style="font-size:13px;color:#5A6170">{{ k.uso }}</span>
+                  <span style="display:inline-flex;align-items:center;gap:7px;font:500 13px 'Public Sans',sans-serif;justify-self:start;color:{{ k.fg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ k.fg }}"></span>{{ k.estado }}</span>
+                  <sc-if value="{{ k.revocable }}" hint-placeholder-val="{{ false }}"><button style="all:unset;cursor:pointer;font-size:13px;font-weight:600;color:#B8352B">Revocar</button></sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- USUARIOS -->
+      <sc-if value="{{ is.usuarios }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">Usuarios y roles</h1><span style="font-size:15px;color:#5A6170">6 usuarios · verificación en dos pasos obligatoria para administradores</span></div>
+            <button style="all:unset;cursor:pointer;font-size:15px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:11px 16px;border-radius:8px">Invitar usuario</button>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:auto">
+            <div style="min-width:760px">
+              <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.6fr) 190px 70px 130px;gap:12px;padding:12px 20px;border-bottom:1px solid #DDD7C8;font:600 13px 'Public Sans',sans-serif;color:#5A6170"><span>Nombre</span><span>Correo</span><span>Rol</span><span>2FA</span><span>Último acceso</span></div>
+              <sc-for list="{{ usuarios }}" as="u" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.6fr) 190px 70px 130px;gap:12px;align-items:center;padding:13px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <span style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:#EEE9DD;color:#0E2440;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">{{ u.ini }}</span><strong style="color:#0E2440">{{ u.nombre }}</strong></span>
+                  <span style="color:#3A4250;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ u.correo }}</span>
+                  <span style="justify-self:start;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#0E2440"><span style="width:8px;height:8px;border-radius:2px;background:{{ u.c }}"></span>{{ u.rol }}</span>
+                  <span style="font:500 12px 'IBM Plex Mono',monospace;color:{{ u.fa2c }}">{{ u.fa2 }}</span>
+                  <span style="font-size:13px;color:#5A6170">{{ u.acceso }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:auto">
+            <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Matriz de permisos</strong></div>
+            <div style="min-width:760px">
+              <div style="display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:12px;padding:12px 20px;border-bottom:1px solid #DDD7C8;font-size:13px;font-weight:700;color:#0E2440"><span></span><span>Superadministrador</span><span>Curador</span><span>Desarrollador</span><span>Solo lectura</span></div>
+              <sc-for list="{{ matriz }}" as="f" hint-placeholder-count="7">
+                <div style="display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:12px;align-items:center;padding:11px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <span style="color:#1C2330">{{ f.p }}</span>
+                  <sc-for list="{{ f.v }}" as="c" hint-placeholder-count="4"><span style="display:inline-flex;align-items:center;gap:7px;justify-self:start;font:500 13px 'Public Sans',sans-serif;color:{{ c.fg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ c.fg }}"></span>{{ c.t }}</span></sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- CATÁLOGO IVA -->
+      <sc-if value="{{ is.catalogo }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">Catálogo legal de IVA</h1><span style="font-size:15px;color:#5A6170">115 reglas · 116 casos de referencia · versión 2026.09.27-3</span></div>
+            <span style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#6E4F05"><span style="width:7px;height:7px;border-radius:50%;background:#C8921A"></span>Pendiente de validación por el asesor</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start">
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+              <div style="padding:6px 16px 0;border-bottom:1px solid #EEE9DD;display:flex;gap:18px;flex-wrap:wrap">
+                <sc-for list="{{ filtrosArt }}" as="fa" hint-placeholder-count="6"><span style="font-size:13px;font-weight:600;padding:6px 0 10px;border-bottom:2px solid {{ fa.bd }};color:{{ fa.fg }}">{{ fa.t }}</span></sc-for>
+              </div>
+              <sc-for list="{{ reglas }}" as="r" hint-placeholder-count="7">
+                <button onClick="{{ r.pick }}" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:13px 16px;border-bottom:1px solid #EEE9DD;border-left:3px solid {{ r.bl }};background:{{ r.bg }}">
+                  <span style="font:600 13px 'Public Sans',sans-serif;color:#5A6170">{{ r.id }}</span>
+                  <span style="display:inline-flex;align-items:center;gap:7px;grid-row:span 2;align-self:center;font:600 12px 'IBM Plex Mono',monospace;color:{{ r.tfg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ r.tfg }}"></span>{{ r.tasa }}</span>
+                  <span style="font-size:14.5px;font-weight:600;color:#0E2440">{{ r.nombre }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;display:flex;flex-direction:column">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD;display:flex;justify-content:space-between;align-items:center;gap:12px">
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font:600 13px 'Public Sans',sans-serif;color:#5A6170">{{ regla.id }} · v{{ regla.v }}</span><strong style="font:600 20px 'Source Serif 4',serif;color:#0E2440">{{ regla.nombre }}</strong></div>
+                <span style="display:inline-flex;align-items:center;gap:7px;font:600 12px 'IBM Plex Mono',monospace;color:{{ regla.tfg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ regla.tfg }}"></span>{{ regla.tasa }}</span>
+              </div>
+              <div style="padding:20px;display:flex;flex-direction:column;gap:16px">
+                <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600;color:#0E2440">Regex de inclusión</span><span style="font:500 14px 'IBM Plex Mono',monospace;padding:10px 12px;border:1px solid #C9C2B0;border-radius:8px;background:#FAF8F2;color:#1C2330">{{ regla.inc }}</span></label>
+                <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600;color:#0E2440">Regex de exclusión</span><span style="font:500 14px 'IBM Plex Mono',monospace;padding:10px 12px;border:1px solid #C9C2B0;border-radius:8px;background:#FAF8F2;color:#1C2330">{{ regla.exc }}</span></label>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600;color:#0E2440">Base legal</span><span style="font-size:14px;padding:10px 12px;border:1px solid #C9C2B0;border-radius:8px;color:#1C2330">{{ regla.base }}</span></label>
+                  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600;color:#0E2440">Renglón Forma 30</span><span style="font-size:14px;padding:10px 12px;border:1px solid #C9C2B0;border-radius:8px;color:#1C2330">{{ regla.f30 }}</span></label>
+                </div>
+                <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600;color:#0E2440">Gaceta Oficial <span style="color:#B8352B">*</span></span><input placeholder="Número y fecha de la Gaceta que respalda el cambio" style="font:14px 'Public Sans',sans-serif;padding:10px 12px;border:1px solid #C9C2B0;border-radius:8px"></label>
+                <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600;color:#0E2440">Motivo del cambio <span style="color:#B8352B">*</span></span><textarea rows="2" placeholder="Queda registrado en la auditoría" style="font:14px 'Public Sans',sans-serif;padding:10px 12px;border:1px solid #C9C2B0;border-radius:8px;resize:vertical"></textarea></label>
+                <sc-if value="{{ puedeEditar }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;gap:10px;justify-content:flex-end"><button style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:#3A4250;padding:10px 14px">Descartar</button><button style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:10px 16px;border-radius:8px">Guardar como v{{ regla.vNext }}</button></div>
+                </sc-if>
+              </div>
+              <div style="border-top:1px solid #EEE9DD;padding:16px 20px;display:flex;flex-direction:column;gap:10px">
+                <span style="font:600 13px 'Public Sans',sans-serif;color:#5A6170">Historial de versiones</span>
+                <sc-for list="{{ versiones }}" as="v" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:36px 90px minmax(0,1fr);gap:10px;font-size:13px;align-items:baseline"><span style="font:600 13px 'IBM Plex Mono',monospace;color:#0E2440">v{{ v.n }}</span><span style="font-family:'IBM Plex Mono',monospace;color:#676D79">{{ v.f }}</span><span style="color:#3A4250"><strong>{{ v.a }}</strong> · {{ v.m }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ARANCEL -->
+      <sc-if value="{{ is.arancel }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">Arancel de Aduanas</h1><span style="font-size:15px;color:#5A6170">Decreto 4.944 con reformas 2025 · semilla propia extraída de la Gaceta Oficial</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:#EEE9DD;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+            <sc-for list="{{ versionesArancel }}" as="va" hint-placeholder-count="4">
+              <div style="background:#FFFFFF;padding:16px 20px;display:flex;flex-direction:column;gap:6px">
+                <strong style="font:600 17px 'Source Serif 4',serif;color:#0E2440">{{ va.t }}</strong>
+                <span style="font-size:13px;color:#5A6170">{{ va.d }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start">
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD;display:flex;justify-content:space-between;align-items:center"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Sinónimos comerciales</strong><sc-if value="{{ puedeEditar }}" hint-placeholder-val="{{ true }}"><button style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:#1F4E8C">Agregar sinónimo</button></sc-if></div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1.4fr) 70px;gap:12px;padding:10px 20px;border-bottom:1px solid #DDD7C8;font:600 13px 'Public Sans',sans-serif;color:#5A6170"><span>Término</span><span>Prefijo</span><span>Partida</span><span>Prior.</span></div>
+              <sc-for list="{{ sinonimos }}" as="s" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1.4fr) 70px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <strong style="color:#0E2440">{{ s.t }}</strong><span style="font:500 13px 'IBM Plex Mono',monospace;color:#1F4E8C">{{ s.p }}</span><span style="color:#3A4250">{{ s.d }}</span><span style="font-family:'IBM Plex Mono',monospace;color:#5A6170">{{ s.pr }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Observaciones de la fuente</strong></div>
+              <sc-for list="{{ observaciones }}" as="o" hint-placeholder-count="3">
+                <div style="padding:14px 20px;border-bottom:1px solid #EEE9DD;display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;gap:8px"><span style="font:500 13px 'IBM Plex Mono',monospace;color:#0E2440">{{ o.cod }}</span><span style="font-size:13px;font-weight:600;color:#6E4F05">Por revisar</span></div>
+                  <span style="font-size:14px;line-height:1.45;color:#3A4250">{{ o.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- CALENDARIO -->
+      <sc-if value="{{ is.calendario }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">Calendario tributario 2026</h1><span style="font-size:15px;color:#5A6170">Días inhábiles y obligaciones por tipo de contribuyente</span></div>
+            <sc-if value="{{ puedeEditar }}" hint-placeholder-val="{{ true }}"><button style="all:unset;cursor:pointer;font-size:15px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:11px 16px;border-radius:8px">Agregar día inhábil</button></sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start">
+            <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Octubre 2026</strong><span style="display:flex;gap:6px;font-size:18px;color:#5A6170"><span>‹</span><span>›</span></span></div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font:500 12px 'IBM Plex Mono',monospace;color:#676D79;text-align:center"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+                <sc-for list="{{ mes }}" as="d" hint-placeholder-count="35">
+                  <span style="height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;font:500 14px 'IBM Plex Mono',monospace;background:{{ d.bg }};color:{{ d.fg }}">{{ d.n }}</span>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:16px;font-size:12px;color:#5A6170;flex-wrap:wrap"><span style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:#F2B632"></span>Nacional</span><span style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:#C3D3EC"></span>Bancario</span><span style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:#EEE9DD"></span>Fin de semana</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+                <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Obligaciones de IVA</strong></div>
+                <div style="display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:14px 20px;border-bottom:1px solid #EEE9DD;font-size:14px"><strong style="color:#0E2440">Especiales</strong><span style="color:#3A4250">Según el último dígito del RIF · Providencia SNAT/2025/000091 (GO 43.283)</span></div>
+                <div style="display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:14px 20px;font-size:14px"><strong style="color:#0E2440">Ordinarios</strong><span style="color:#3A4250">Período mensual · Reglamento de la Ley de IVA, art. 60</span></div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+                <div style="padding:16px 20px;border-bottom:1px solid #EEE9DD"><strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440">Días inhábiles del trimestre</strong></div>
+                <sc-for list="{{ inhabiles }}" as="i" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:92px minmax(0,1fr) 90px;gap:12px;align-items:center;padding:11px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                    <span style="font:500 13px 'IBM Plex Mono',monospace;color:#0E2440">{{ i.f }}</span><span style="color:#1C2330">{{ i.n }}</span><span style="font-size:13px;color:#5A6170">{{ i.t }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- AUDITORÍA -->
+      <sc-if value="{{ is.auditoria }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:700 32px 'Source Serif 4',serif;color:#0E2440">Auditoría</h1><span style="font-size:15px;color:#5A6170">core.auditoria · quién, cuándo, antes, después y motivo</span></div>
+            <button style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:#0E2440;border:1px solid #C9C2B0;background:#FFFFFF;padding:10px 14px;border-radius:8px">Exportar CSV</button>
+          </div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid #DDD7C8">
+            <sc-for list="{{ filtrosAud }}" as="fa" hint-placeholder-count="6"><span style="font-size:13px;font-weight:600;padding:6px 0 10px;border-bottom:2px solid {{ fa.bd }};color:{{ fa.fg }}">{{ fa.t }}</span></sc-for>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:auto">
+            <div style="min-width:820px">
+              <div style="display:grid;grid-template-columns:150px 150px 210px minmax(0,1fr);gap:12px;padding:12px 20px;border-bottom:1px solid #DDD7C8;font:600 13px 'Public Sans',sans-serif;color:#5A6170"><span>Fecha</span><span>Actor</span><span>Acción</span><span>Detalle</span></div>
+              <sc-for list="{{ auditoria }}" as="a" hint-placeholder-count="10">
+                <div style="display:grid;grid-template-columns:150px 150px 210px minmax(0,1fr);gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #EEE9DD;font-size:14px">
+                  <span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">{{ a.fecha }}</span>
+                  <span style="color:#0E2440;font-weight:600">{{ a.actor }}</span>
+                  <span style="display:inline-flex;align-items:center;gap:7px;justify-self:start;font:500 13px 'Public Sans',sans-serif;color:{{ a.fg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ a.fg }}"></span>{{ a.accion }}</span>
+                  <span style="color:#3A4250">{{ a.detalle }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;rol&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;super&quot;,&quot;curador&quot;,&quot;dev&quot;,&quot;lectura&quot;],&quot;default&quot;:&quot;super&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;seccion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;resumen&quot;,&quot;apikeys&quot;,&quot;usuarios&quot;,&quot;catalogo&quot;,&quot;arancel&quot;,&quot;calendario&quot;,&quot;auditoria&quot;],&quot;default&quot;:&quot;resumen&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const SECC = {
+  resumen: 'Resumen', apikeys: 'API keys', usuarios: 'Usuarios y roles',
+  catalogo: 'Catálogo legal IVA', arancel: 'Arancel', calendario: 'Calendario', auditoria: 'Auditoría',
+};
+const GRUPOS = [
+  ['General', ['resumen']], ['Acceso', ['apikeys', 'usuarios']],
+  ['Catálogos', ['catalogo', 'arancel', 'calendario']], ['Control', ['auditoria']],
+];
+const ROLES = {
+  super: { rol: 'Superadministrador', nombre: 'María Rodríguez', ini: 'MR', ver: Object.keys(SECC) },
+  curador: { rol: 'Curador / asesor tributario', nombre: 'Luis Carrasquel', ini: 'LC', ver: ['resumen', 'catalogo', 'arancel', 'calendario', 'auditoria'] },
+  dev: { rol: 'Desarrolladora', nombre: 'Andrea Pérez', ini: 'AP', ver: ['resumen', 'apikeys'] },
+  lectura: { rol: 'Solo lectura', nombre: 'José Méndez', ini: 'JM', ver: ['resumen', 'apikeys', 'catalogo', 'arancel', 'calendario', 'auditoria'] },
+};
+const TASA = {
+  EX: { tasa: 'Exento', tbg: '#E3F0E9', tfg: '#1F5E43' }, NS: { tasa: 'No sujeto', tbg: '#E3F0E9', tfg: '#1F5E43' },
+  R8: { tasa: '8 %', tbg: '#E2EAF6', tfg: '#1F4E8C' }, G16: { tasa: '16 %', tbg: '#E4E6EC', tfg: '#0E2440' },
+  A31: { tasa: '31 %', tbg: '#F6E1DE', tfg: '#8E2820' },
+};
+const REGLAS = [
+  { id: 'IVA-18-1-C', nombre: 'Arroz', t: 'EX', v: 3, inc: '\\barroz\\b', exc: '\\b(galleta|snack|torta)\\b', base: 'Ley IVA art. 18, num. 1, lit. c', f30: 'Ventas internas no gravadas' },
+  { id: 'IVA-18-1-K', nombre: 'Pescado en presentación natural', t: 'EX', v: 2, inc: '\\b(atun|sardina|pescado)\\b', exc: '\\b(ahumado|empanizado)\\b', base: 'Ley IVA art. 18, num. 1, lit. k', f30: 'Ventas internas no gravadas' },
+  { id: 'IVA-18-6', nombre: 'Libros, revistas y folletos', t: 'EX', v: 1, inc: '\\b(libro|revista|folleto)\\b', exc: '\\b(agenda|cuaderno)\\b', base: 'Ley IVA art. 18, num. 6', f30: 'Ventas internas no gravadas' },
+  { id: 'IVA-19-9', nombre: 'Electricidad de uso residencial', t: 'EX', v: 2, inc: '\\b(electricidad|energia electrica)\\b', exc: '—', base: 'Ley IVA art. 19, num. 9', f30: 'Ventas internas no gravadas' },
+  { id: 'IVA-16-4', nombre: 'Operaciones bancarias', t: 'NS', v: 1, inc: '\\b(comision bancaria|intereses)\\b', exc: '—', base: 'Ley IVA art. 16, num. 4', f30: 'Operaciones no sujetas' },
+  { id: 'IVA-64-3', nombre: 'Servicios a entes del Poder Público', t: 'R8', v: 2, inc: '\\b(asesoria|consultoria)\\b', exc: '—', base: 'Ley IVA art. 64, num. 3', f30: 'Ventas internas gravadas por alícuota reducida' },
+  { id: 'IVA-61-1-F', nombre: 'Relojes de US$ 300 o más', t: 'A31', v: 4, inc: '\\breloj(es)?\\b', exc: '\\b(pared|despertador)\\b', base: 'Ley IVA art. 61, num. 1, lit. f', f30: 'Ventas internas gravadas por alícuota general más adicional' },
+];
+const KEYS = [
+  ['POS Comercial Andina', 'Andrea Pérez', 'rgl_1a2b3c4d', ['iva', 'bcv'], 120, 'hace 2 min', 'activa'],
+  ['ERP Distribuidora Oriente', 'Carlos Guevara', 'rgl_5e6f7a8b', ['iva', 'bcv', 'arancel'], 300, 'hace 14 min', 'activa'],
+  ['Tienda en línea Mercado Llanero', 'Andrea Pérez', 'rgl_7f3e91ac', ['iva', 'bcv', 'rif'], 60, 'nunca', 'activa'],
+  ['Agencia aduanal Puerto Cabello', 'Rosa Villalobos', 'rgl_9c0d1e2f', ['arancel', 'bcv'], 60, 'ayer 16:40', 'activa'],
+  ['Estudio contable Maracaibo', 'Pedro Urdaneta', 'rgl_3a4b5c6d', ['calendario', 'rif', 'bcv'], 60, 'hace 3 h', 'activa'],
+  ['Pruebas QA', 'María Rodríguez', 'rgl_0f1e2d3c', ['iva', 'bcv', 'arancel', 'calendario', 'rif'], 600, '21/09/2026', 'revocada'],
+];
+const AUD = [
+  ['28/09/2026 14:02', 'bcv-programador', 'bcv.lectura', 'Portada BCV: sin_cambios para fecha valor 28/09/2026', 'bcv'],
+  ['28/09/2026 13:47', 'María Rodríguez', 'api_key.crear', 'rgl_7f3e91ac · Tienda en línea Mercado Llanero · iva, bcv, rif', 'acceso'],
+  ['28/09/2026 11:20', 'Luis Carrasquel', 'iva.regla.editar', 'IVA-61-1-F v3 → v4 · añade exclusión «despertador»', 'iva'],
+  ['28/09/2026 10:05', 'Luis Carrasquel', 'arancel.sinonimo.crear', '«cambur» → 0803.90 · prioridad 10', 'arancel'],
+  ['27/09/2026 20:01', 'bcv-programador', 'bcv.discrepancia_portada', 'EUR difiere del registro; no se sobrescribe, queda para revisión', 'bcv'],
+  ['27/09/2026 17:32', 'María Rodríguez', 'usuario.rol', 'Andrea Pérez: Solo lectura → Desarrolladora', 'acceso'],
+  ['27/09/2026 15:10', 'Luis Carrasquel', 'iva.regla.editar', 'IVA-18-1-C v2 → v3 · añade exclusión «snack»', 'iva'],
+  ['27/09/2026 09:44', 'María Rodríguez', 'calendario.inhabil.crear', '26/10/2026 San José Gregorio Hernández · BANCARIO', 'calendario'],
+  ['26/09/2026 18:22', 'María Rodríguez', 'api_key.revocar', 'rgl_0f1e2d3c · Pruebas QA', 'acceso'],
+  ['26/09/2026 08:00', 'cli', 'arancel.reforma.aplicar', 'Decreto 5.198 aplicado sobre la semilla vigente', 'arancel'],
+];
+const ACC_COL = { bcv: ['#FBEFCF', '#6E4F05'], acceso: ['#E4E6EC', '#0E2440'], iva: ['#E3F0E9', '#1F5E43'], arancel: ['#E2EAF6', '#1F4E8C'], calendario: ['#F6E1DE', '#8E2820'] };
+const BARRAS = [8.9, 10.2, 11.4, 11.1, 12.0, 6.1, 4.8, 10.8, 11.9, 12.6, 13.1, 13.4, 7.0, 12.48];
+const INH = [['12/10/2026', 'Día de la Resistencia Indígena', 'NACIONAL'], ['26/10/2026', 'San José Gregorio Hernández', 'BANCARIO'], ['23/11/2026', 'Virgen del Rosario de Chiquinquirá', 'BANCARIO'], ['14/12/2026', 'Inmaculada Concepción', 'BANCARIO'], ['24/12/2026', 'Nochebuena', 'NACIONAL'], ['25/12/2026', 'Navidad', 'NACIONAL'], ['31/12/2026', 'Fin de año', 'NACIONAL']];
+const chip = (on) => ({ fg: on ? '#0E2440' : '#5A6170', bd: on ? '#0E2440' : 'transparent' });
+
+class Component extends DCLogic {
+  state = { sec: null, regla: 'IVA-18-1-C', notif: false };
+  renderVals() {
+    const rolKey = this.props.rol ?? 'super';
+    const R = ROLES[rolKey] || ROLES.super;
+    let sec = this.state.sec ?? this.props.seccion ?? 'resumen';
+    if (!R.ver.includes(sec)) sec = R.ver[0];
+    const is = Object.fromEntries(Object.keys(SECC).map(k => [k, k === sec]));
+    const puedeEditar = rolKey !== 'lectura';
+    const go = k => () => this.setState({ sec: k });
+    const grupos = GRUPOS.map(([titulo, ks]) => ({ titulo, items: ks.filter(k => R.ver.includes(k)).map(k => ({
+      label: SECC[k], pick: go(k), bg: k === sec ? '#F2EEE3' : 'transparent', fg: k === sec ? '#0E2440' : '#3A4250', bar: k === sec ? '#F2B632' : 'transparent' })) })).filter(g => g.items.length);
+    const rg = REGLAS.find(r => r.id === this.state.regla) || REGLAS[0];
+    const max = Math.max(...BARRAS);
+    const keys = KEYS.filter(k => rolKey !== 'dev' || k[1] === R.nombre).map(([nombre, owner, prefijo, permisos, limite, uso, estado]) => ({
+      nombre, owner, prefijo, permisosTxt: permisos.join(', '), limite, uso, estado, revocable: estado === 'activa' && puedeEditar,
+      bg: estado === 'activa' ? '#E3F0E9' : '#F6E1DE', fg: estado === 'activa' ? '#1F5E43' : '#8E2820' }));
+    const cell = t => ({ t, ...(t === 'Sí' ? { bg: '#E3F0E9', fg: '#1F5E43' } : t === '—' ? { bg: 'transparent', fg: '#676D79' } : { bg: '#FBEFCF', fg: '#6E4F05' }) });
+    const aud = AUD.map(([fecha, actor, accion, detalle, m]) => ({ fecha, actor, accion, detalle, hora: fecha.slice(11), bg: ACC_COL[m][0], fg: ACC_COL[m][1] }));
+    const mes = [];
+    for (let i = 0; i < 3; i++) mes.push({ n: '', bg: 'transparent', fg: '#676D79' });
+    for (let d = 1; d <= 31; d++) {
+      const dow = (d + 2) % 7; // 0 = lunes
+      const nac = false, ban = d === 12 || d === 26;
+      mes.push({ n: String(d), bg: d === 12 ? '#F2B632' : d === 26 ? '#C3D3EC' : dow >= 5 ? '#EEE9DD' : '#FFFFFF', fg: '#0E2440' });
+    }
+    return {
+      notifOpen: this.state.notif, notifBg: this.state.notif ? '#F6F3EA' : '#FFFFFF', toggleNotif: () => this.setState(s => ({ notif: !s.notif })),
+      notifs: [
+        { txt: 'BCV publicó la tasa del 29/09. Pendiente de verificación contra la fuente.', cuando: 'Hace 12 min', color: '#F2B632' },
+        { txt: 'Gaceta Oficial 6.912: posible reforma de alícuota en arancel, capítulo 22.', cuando: 'Hace 2 h', color: '#D9453A' },
+        { txt: 'Una API key llegó al 90 % de su límite diario.', cuando: 'Ayer, 17:40', color: '#6B9BE0' },
+      ],
+      grupos, is, puedeEditar, soloLectura: !puedeEditar, tituloSeccion: SECC[sec],
+      usuario: R, irAuditoria: go('auditoria'),
+      kpis: rolKey === 'dev'
+        ? [{ label: 'Consultas hoy (tus keys)', valor: '1.842', nota: '+5,1 % vs. ayer', color: '#2E7D5B' }, { label: 'Tus API keys activas', valor: '2', nota: 'de 2', color: '#5A6170' }, { label: 'Errores 429 hoy', valor: '3', nota: 'límite por minuto', color: '#B8352B' }, { label: 'Tasa BCV USD', valor: '186,4213', nota: 'fecha valor 28/09', color: '#5A6170' }]
+        : [{ label: 'Consultas hoy', valor: '12.480', nota: '+8,2 % vs. ayer', color: '#2E7D5B' }, { label: 'API keys activas', valor: '38', nota: '3 nuevas esta semana', color: '#5A6170' }, { label: 'Consultas no determinadas', valor: '57', nota: 'para curaduría', color: '#B8352B' }, { label: 'Tasa BCV USD', valor: '186,4213', nota: 'fecha valor 28/09', color: '#5A6170' }],
+      barras: BARRAS.map((v, i) => ({ h: (v / max * 100).toFixed(1) + '%', color: i === BARRAS.length - 1 ? '#F2B632' : '#1F4E8C' })),
+      reparto: [['IVA', '46%', '#2E7D5B'], ['BCV', '28%', '#C8921A'], ['Arancel', '14%', '#1F4E8C'], ['Calendario', '8%', '#B8352B'], ['RIF', '4%', '#0E2440']].map(([m, p, c]) => ({ m, p, c })),
+      estados: [['IVA', 'Clasificador · 115 reglas', 'validación', '#FBEFCF', '#6E4F05'], ['BCV', 'Última lectura 14:02 · sin_cambios', 'en servicio', '#E3F0E9', '#1F5E43'], ['Arancel', 'Decreto 4.944 + 5.103, 5.147, 5.198', 'en servicio', '#E3F0E9', '#1F5E43'], ['Calendario', 'Especiales y ordinarios 2026', 'en servicio', '#E3F0E9', '#1F5E43'], ['RIF', 'Dígito verificador', 'en servicio', '#E3F0E9', '#1F5E43']].map(([m, d, s, bg, fg]) => ({ m, d, s, bg, fg })),
+      auditoriaCorta: aud.slice(0, 5), auditoria: aud,
+      keys,
+      usuarios: [['María Rodríguez', 'm.rodriguez@elrenglon.com.ve', 'Superadministrador', '#F2B632', 'Sí', 'ahora'], ['Luis Carrasquel', 'l.carrasquel@elrenglon.com.ve', 'Curador / asesor', '#6B9BE0', 'Sí', 'hace 1 h'], ['Rosa Villalobos', 'rvillalobos@aduanapc.com.ve', 'Desarrolladora', '#D9453A', 'Sí', 'ayer'], ['Andrea Pérez', 'andrea@comercialandina.com.ve', 'Desarrolladora', '#D9453A', 'No', 'hace 20 min'], ['Pedro Urdaneta', 'purdaneta@contamcbo.com.ve', 'Desarrollador', '#D9453A', 'No', '25/09/2026'], ['José Méndez', 'j.mendez@elrenglon.com.ve', 'Solo lectura', '#B7C2D3', 'Sí', '24/09/2026']]
+        .map(([nombre, correo, rol, c, fa2, acceso]) => ({ nombre, correo, rol, c, fa2, acceso, fa2c: fa2 === 'Sí' ? '#2E7D5B' : '#B8352B', ini: nombre.split(' ').map(s => s[0]).join('') })),
+      matriz: [['Ver resumen y métricas', ['Sí', 'Sí', 'Propias', 'Sí']], ['Crear y revocar API keys', ['Sí', '—', 'Propias', '—']], ['Gestionar usuarios y roles', ['Sí', '—', '—', '—']], ['Editar catálogo legal IVA', ['Sí', 'Sí', '—', 'Lectura']], ['Editar arancel y sinónimos', ['Sí', 'Sí', '—', 'Lectura']], ['Editar calendario', ['Sí', 'Sí', '—', 'Lectura']], ['Ver auditoría', ['Sí', 'Sí', '—', 'Sí']]].map(([p, v]) => ({ p, v: v.map(cell) })),
+      filtrosArt: ['Todas · 115', 'art. 16', 'art. 18', 'art. 19', 'art. 61', 'art. 64'].map((t, i) => ({ t, ...chip(i === 0) })),
+      reglas: REGLAS.map(r => ({ ...r, ...TASA[r.t], pick: () => this.setState({ regla: r.id }), bg: r.id === rg.id ? '#FAF8F2' : '#FFFFFF', bl: r.id === rg.id ? '#F2B632' : 'transparent' })),
+      regla: { ...rg, ...TASA[rg.t], vNext: rg.v + 1 },
+      versiones: Array.from({ length: Math.min(rg.v, 3) }, (_, i) => rg.v - i).map((n, i) => ({ n, f: ['27/09/2026', '20/09/2026', '12/09/2026'][i], a: i === 2 ? 'cli' : 'Luis Carrasquel', m: i === 0 ? 'Ajuste de exclusiones' : i === 1 ? 'Texto legal verificado contra la Gaceta' : 'Carga inicial del catálogo' })),
+      versionesArancel: [['Decreto 4.944', 'Arancel base · nomenclatura completa', '#0E2440'], ['Reforma 5.103', 'Aplicada · 2025', '#1F4E8C'], ['Reforma 5.147', 'Aplicada · 2025', '#1F4E8C'], ['Reforma 5.198', 'Aplicada · vigente', '#F2B632']].map(([t, d, c]) => ({ t, d, c })),
+      sinonimos: [['celular', '8517.13', 'Teléfonos inteligentes', 10], ['smartphone', '8517.13', 'Teléfonos inteligentes', 10], ['caraota', '0713.33', 'Frijoles comunes', 10], ['cambur', '0803.90', 'Bananas frescas o secas', 10], ['harina de maíz precocida', '1102.20', 'Harina de maíz', 8], ['caucho', '4011', 'Neumáticos nuevos de caucho', 6]].map(([t, p, d, pr]) => ({ t, p, d, pr })),
+      observaciones: [['2008.99', 'Descripción truncada en la Gaceta; se completó con la reforma anterior.'], ['8703.80', 'Unidad física distinta entre base 2024 y reforma 5.147.'], ['3004.90', 'Régimen legal citado sin número de resolución.']].map(([cod, t]) => ({ cod, t })),
+      mes,
+      inhabiles: INH.map(([f, n, t]) => ({ f, n, t: t === 'NACIONAL' ? 'Nacional' : 'Bancario', bg: t === 'NACIONAL' ? '#F2B632' : '#C3D3EC' })),
+      filtrosAud: ['Todo', 'Acceso', 'IVA', 'BCV', 'Arancel', 'Calendario'].map((t, i) => ({ t, ...chip(i === 0) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

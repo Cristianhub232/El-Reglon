@@ -10,11 +10,14 @@ export interface Alicuota { codigo: string; porcentaje: string; vigente_desde: s
 
 export interface CatalogoIva {
   version: string; estado: string; cargado_en: string;
-  reglas: ReglaCatalogo[]; motor: MotorCompilado;
+  reglas: ReglaCatalogo[]; motor: MotorCompilado; regla_arancel: { prefijo: string; regla_id: string }[];
   base_legal: Map<string, BaseLegal>; categorias: Map<string, Categoria>; alicuotas: Alicuota[]; decretos: DecretoCatalogo[];
 }
 
 let cache: { catalogo: CatalogoIva; leido: number } | null = null;
+
+// Tras una edición en el panel: la próxima consulta relee el catálogo
+export function invalidarCatalogo() { cache = null; }
 
 async function versionActual(): Promise<{ version: string; estado: string; cargado_en: string } | undefined> {
   const [v] = await consulta<{ version: string; estado: string; cargado_en: string }>(
@@ -42,7 +45,7 @@ export async function catalogo(): Promise<CatalogoIva> {
     consulta<DecretoCatalogo>("SELECT codigo, efecto, vigente_desde, vigente_hasta, base_legal FROM iva.decreto"),
   ]);
   const c: CatalogoIva = {
-    version: v.version, estado: v.estado, cargado_en: v.cargado_en, reglas,
+    version: v.version, estado: v.estado, cargado_en: v.cargado_en, reglas, regla_arancel: prefijos,
     motor: compilar({ reglas, regla_arancel: prefijos }),
     base_legal: new Map(bases.map((b) => [b.id, b])), categorias: new Map(categorias.map((x) => [x.codigo, x])), alicuotas, decretos,
   };

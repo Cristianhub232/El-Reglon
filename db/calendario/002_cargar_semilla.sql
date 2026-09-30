@@ -4,7 +4,9 @@
 -- =============================================================================
 \set ON_ERROR_STOP on
 
-TRUNCATE calendario.vencimiento, calendario.obligacion, calendario.condicion, calendario.instrumento, calendario.dia_inhabil;
+TRUNCATE calendario.vencimiento, calendario.obligacion, calendario.condicion, calendario.instrumento;
+-- Los días agregados desde el panel se conservan; los de la semilla se reemplazan
+DELETE FROM calendario.dia_inhabil WHERE origen = 'semilla';
 
 INSERT INTO calendario.condicion (codigo, descripcion) VALUES
  ('MINERIA_HIDROCARBUROS', 'Actividades mineras o de hidrocarburos y conexas, no perceptor de regalías (Providencia 000091, arts. 2 y 5)'),
@@ -29,7 +31,11 @@ INSERT INTO calendario.instrumento SELECT codigo, nombre, gaceta, fecha_publicac
 INSERT INTO calendario.obligacion SELECT codigo, instrumento, tipo_contribuyente, base_legal, nombre, aplica_a,
     NULLIF(requiere, ''), NULLIF(excluye, ''), NULLIF(nota, '') FROM s_obligacion;
 INSERT INTO calendario.vencimiento SELECT * FROM s_vencimiento;
-INSERT INTO calendario.dia_inhabil SELECT * FROM s_dia_inhabil;
+INSERT INTO calendario.dia_inhabil (fecha, descripcion, tipo, base_legal, origen) SELECT fecha, descripcion, tipo, base_legal, 'semilla' FROM s_dia_inhabil
+    ON CONFLICT (fecha) DO UPDATE SET descripcion = EXCLUDED.descripcion, tipo = EXCLUDED.tipo, base_legal = EXCLUDED.base_legal, origen = 'semilla';
+
+-- Prórrogas con todos los días inhábiles, incluidos los agregados desde el panel
+SELECT calendario.recalcular_prorrogas() AS vencimientos_recalculados;
 
 SELECT set_config('renglon.esp_obl', :'esperado_obligaciones', true), set_config('renglon.esp_ven', :'esperado_vencimientos', true);
 
@@ -43,7 +49,7 @@ BEGIN
     END IF;
     -- V2. Ninguna fecha de la norma en sábado, domingo ni feriado nacional (un día bancario sí puede ocurrir: se prorroga)
     SELECT string_agg(DISTINCT v.obligacion || ' ' || v.fecha, ', ') INTO x FROM calendario.vencimiento v
-     WHERE extract(isodow FROM v.fecha) >= 6 OR v.fecha IN (SELECT fecha FROM calendario.dia_inhabil WHERE tipo = 'NACIONAL');
+     WHERE extract(isodow FROM v.fecha) >= 6 OR v.fecha IN (SELECT fecha FROM calendario.dia_inhabil WHERE tipo = 'NACIONAL' AND origen = 'semilla');
     IF x IS NOT NULL THEN RAISE EXCEPTION 'V2: vencimientos en día inhábil: %', x; END IF;
     -- V8. Prórroga (COT art. 10): existe si y solo si la fecha es inhábil, y es el primer día hábil siguiente
     SELECT string_agg(DISTINCT v.obligacion || ' ' || v.fecha, ', ') INTO x FROM calendario.vencimiento v

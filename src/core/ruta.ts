@@ -1,6 +1,7 @@
 // Envoltorio de los endpoints: autenticación por API key (cabecera X-API-Key), permiso por módulo,
 // límite de peticiones por minuto y conversión de errores a JSON.
 import { consulta } from "./db.ts";
+import { registrarUso } from "./uso.ts";
 import { ErrorApi, json, respuestaError } from "./http.ts";
 import { hashIguales, prefijoDe, sha256, type Permiso } from "./api-key.ts";
 
@@ -32,7 +33,7 @@ async function autenticar(req: Request, permiso: Permiso): Promise<{ clave: Clav
     "x-ratelimit-reset": String(reinicio) };
   if (v.usadas > clave.limite_por_minuto) {
     throw Object.assign(new ErrorApi(429, "limite_excedido", `Límite de ${clave.limite_por_minuto} consultas por minuto excedido`),
-      { cabeceras: { ...cabeceras, "retry-after": String(reinicio) } });
+      { cabeceras: { ...cabeceras, "retry-after": String(reinicio) }, api_key_id: clave.id });
   }
   if (ahora - (ultimoUsoRegistrado.get(clave.id) ?? 0) > 60_000) {   // como mucho una escritura por minuto
     ultimoUsoRegistrado.set(clave.id, ahora);
@@ -44,10 +45,22 @@ async function autenticar(req: Request, permiso: Permiso): Promise<{ clave: Clav
 export interface Sesion { api_key_id: number | null }
 type Manejador<C> = (req: Request, url: URL, contexto: C, sesion: Sesion) => Promise<unknown>;
 
+// Cuenta cada consulta de la API (con API key) y de las herramientas públicas (/api/publico/<módulo>/…)
 export function endpoint<C = unknown>(permiso: Permiso | null, fn: Manejador<C>) {
+  const ejecutar = ejecutor(permiso, fn);
   return async (req: Request, contexto: C): Promise<Response> => {
-    let cabeceras: Record<string, string> = {};
     const sesion: Sesion = { api_key_id: null };
+    const res = await ejecutar(req, contexto, sesion);
+    const ruta = new URL(req.url).pathname;
+    const modulo = permiso ?? (ruta.startsWith("/api/publico/") ? ruta.split("/")[3] : null);
+    if (modulo) registrarUso(sesion.api_key_id, modulo, res.status);
+    return res;
+  };
+}
+
+function ejecutor<C>(permiso: Permiso | null, fn: Manejador<C>) {
+  return async (req: Request, contexto: C, sesion: Sesion): Promise<Response> => {
+    let cabeceras: Record<string, string> = {};
     try {
       if (permiso) {
         const a = await autenticar(req, permiso);
@@ -58,6 +71,8 @@ export function endpoint<C = unknown>(permiso: Permiso | null, fn: Manejador<C>)
       return datos instanceof Response ? datos : json(datos, 200, cabeceras);
     } catch (e) {
       if (e instanceof ErrorApi) {
+        const id = (e as ErrorApi & { api_key_id?: number }).api_key_id;
+        if (id) sesion.api_key_id = id;
         return respuestaError(e, { ...cabeceras, ...((e as ErrorApi & { cabeceras?: Record<string, string> }).cabeceras ?? {}) });
       }
       const pgErr = e as { code?: string; message?: string };

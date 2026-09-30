@@ -80,3 +80,14 @@ LANGUAGE sql STABLE AS $$
      ORDER BY 2 DESC, 3 DESC, 4 DESC, 5 DESC, 6 DESC, i.codigo
      LIMIT p_limite
 $$;
+
+-- Grupos agregados desde el panel: sobreviven a la recarga del archivo (el archivo gana si trae el mismo grupo)
+ALTER TABLE arancel.sinonimo ADD COLUMN IF NOT EXISTS origen text NOT NULL DEFAULT 'archivo' CHECK (origen IN ('archivo', 'panel'));
+ALTER TABLE arancel.sinonimo ADD COLUMN IF NOT EXISTS creado_por text;
+ALTER TABLE arancel.sinonimo ADD COLUMN IF NOT EXISTS creado_en timestamptz;
+
+-- Casos de referencia de la detección, para validar en el panel los grupos nuevos antes de guardarlos
+CREATE TABLE IF NOT EXISTS arancel.caso_deteccion (
+    orden  integer PRIMARY KEY,
+    caso   jsonb NOT NULL
+);

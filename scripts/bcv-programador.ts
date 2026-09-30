@@ -20,7 +20,7 @@ function proxima(desde = Date.now()): number {
 
 async function ejecutar(intento = 1): Promise<void> {
   try {
-    console.log(JSON.stringify({ momento: new Date().toISOString(), ...(await ingestar(hoyCaracas())) }));
+    console.log(JSON.stringify({ momento: new Date().toISOString(), ...(await ingestar(hoyCaracas(), "bcv-programador")) }));
   } catch (e) {
     console.error(`[bcv-programador] intento ${intento}: ${(e as Error).message}`);
     if (intento < 4) { await new Promise((r) => setTimeout(r, 15 * 60_000)); return ejecutar(intento + 1); }

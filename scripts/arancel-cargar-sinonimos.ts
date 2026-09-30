@@ -75,14 +75,21 @@ async function main() {
     validar("V4 prefijos con subpartidas declarables en el arancel vigente", faltan.map((f) => `${f.grupo}: ${f.prefijo} no tiene subpartidas declarables`),
       `${new Set(grupos.flatMap((g) => g.prefijos)).size} prefijos`);
 
-    await c.query("DELETE FROM arancel.sinonimo; DELETE FROM arancel.vocabulario");
+    // Los grupos del panel se conservan (salvo que el archivo traiga uno con el mismo nombre)
+    await c.query("DELETE FROM arancel.sinonimo WHERE origen = 'archivo'; DELETE FROM arancel.vocabulario");
     await c.query("INSERT INTO arancel.vocabulario SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(comercial text, oficial text)", [JSON.stringify(vocabulario)]);
-    await c.query(`INSERT INTO arancel.sinonimo (grupo, terminos, excluir, prefijos, categorias_off, prioridad, nota)
-                   SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(grupo text, terminos text[], excluir text[], prefijos text[],
-                     categorias_off text[], prioridad smallint, nota text)`, [JSON.stringify(grupos)]);
+    await c.query(`INSERT INTO arancel.sinonimo (grupo, terminos, excluir, prefijos, categorias_off, prioridad, nota, origen)
+                   SELECT *, 'archivo' FROM jsonb_to_recordset($1::jsonb) AS x(grupo text, terminos text[], excluir text[], prefijos text[],
+                     categorias_off text[], prioridad smallint, nota text)
+                   ON CONFLICT (grupo) DO UPDATE SET terminos = EXCLUDED.terminos, excluir = EXCLUDED.excluir, prefijos = EXCLUDED.prefijos,
+                     categorias_off = EXCLUDED.categorias_off, prioridad = EXCLUDED.prioridad, nota = EXCLUDED.nota, origen = 'archivo'`, [JSON.stringify(grupos)]);
+    await c.query("DELETE FROM arancel.caso_deteccion");
+    await c.query("INSERT INTO arancel.caso_deteccion (orden, caso) SELECT (x.o)::int, x.c FROM jsonb_array_elements($1::jsonb) WITH ORDINALITY AS x(c, o)", [JSON.stringify(casos)]);
 
     // Detección completa (diccionario + búsqueda por texto) con los datos de esta misma transacción
-    const sin = compilarSinonimos(grupos, vocabulario);
+    // Con todos los grupos vigentes: los del archivo y los agregados en el panel
+    const todos = await q<GrupoSinonimo & Record<string, unknown>>("SELECT grupo, terminos, excluir, prefijos, categorias_off, prioridad, nota FROM arancel.sinonimo ORDER BY id");
+    const sin = compilarSinonimos(todos, vocabulario);
     const e: string[] = [];
     for (const caso of casos) {
       const r = await ejecutarDeteccion(q, sin, { descripcion: caso.descripcion, codigo: null, limite: 5 }, null);
@@ -94,7 +101,7 @@ async function main() {
     }
     validar("V5 casos de referencia: detección completa", e, `${casos.length} casos correctos`);
     const [n] = await q<{ n: string; indice: string }>(
-      "SELECT (SELECT count(*) FROM arancel.sinonimo) AS n, (SELECT count(*) FROM arancel.indice_busqueda) AS indice");
+      "SELECT (SELECT count(*) FROM arancel.sinonimo WHERE origen = 'archivo') AS n, (SELECT count(*) FROM arancel.indice_busqueda) AS indice");
     validar("V6 conteos cargados", Number(n.n) === grupos.length ? [] : [`${n.n} grupos cargados, ${grupos.length} en el archivo`],
       `${n.n} grupos; índice de búsqueda con ${n.indice} códigos`);
 

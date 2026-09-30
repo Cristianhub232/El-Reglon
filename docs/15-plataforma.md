@@ -71,7 +71,7 @@ Desarrollo local: `npm install`, `npm run dev`, `npm run typecheck`.
 ## 6. Verificación (27/09/2026)
 
 - `npm run build` y `tsc` sin errores.
-- `scripts/prueba-api.ts`: **65/65 verificaciones** (37 de la plataforma base, 20 del clasificador de IVA y 8 de la detección arancelaria), tanto con el servidor local como contra los contenedores. Cubren:
+- `scripts/prueba-api.ts`: **79/79 verificaciones** (37 de la plataforma base, 20 del clasificador de IVA, 8 de la detección arancelaria y 14 del sitio, la PWA y las sesiones), tanto con el servidor local como contra los contenedores. Cubren:
   - seguridad: 401, 403 y 429;
   - valores oficiales conocidos del BCV, el Arancel y el Calendario;
   - prórroga del COT art. 10;
@@ -80,6 +80,6 @@ Desarrollo local: `npm install`, `npm run dev`, `npm run typecheck`.
 
 ## 7. Pendiente en la plataforma
 
-- UI de administración (API keys y catálogo legal), UI de consulta (A21) y auditoría de las consultas.
+- ~~UI de administración, UI de consulta (A21) y auditoría~~: implementadas ([18](18-interfaz-pwa-panel.md)). A21 quedó resuelta así: la consulta es pública y sin cuenta, con límite por IP.
 - Límite de consultas compartido si se despliegan varias instancias.
 - ~~Módulos IVA y detección arancelaria~~: implementados ([16](16-clasificador-iva.md), [17](17-deteccion-arancelaria.md)).

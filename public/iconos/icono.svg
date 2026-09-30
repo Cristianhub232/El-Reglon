@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -47 200 200"><rect x="-10" y="-47" width="200" height="200" rx="40" fill="#0E2440"/><g transform="translate(0.0 0.0) scale(1.0)"><path d="M-2 90 C 8 104, 48 104, 76 84 C 50 98, 12 100, -2 90 Z" fill="#F2B632"/>
+<path d="M74 70 C 96 58, 108 42, 132 30" fill="none" stroke="#F2B632" stroke-width="10"/>
+<path d="M76 78 C 98 66, 110 50, 134 37" fill="none" stroke="#4A7FD0" stroke-width="7"/>
+<path d="M78 86 C 100 74, 112 58, 136 44" fill="none" stroke="#D9453A" stroke-width="7"/>
+<g transform="translate(135 37) rotate(-40)"><rect x="0" y="-11" width="12" height="22" rx="2" fill="#D9A93F"/><rect x="3.5" y="-11" width="2" height="22" fill="#0E2440"/><path d="M12 -10 C 26 -17, 38 -24, 50 -34 C 47 -12, 32 7, 12 10 Z" fill="#D9A93F"/></g>
+<path fill-rule="evenodd" fill="#D9A93F" d="M6 20 H66 C92 20 104 34 104 50 C104 67 91 78 66 78 H40 V99 H52 V106 H6 V99 H18 V27 H6 Z M40 29 V69 H63 C77 69 84 62 84 50 C84 38 78 29 63 29 Z M60 74 H82 L108 99 H116 V106 H86 L58 78 Z"/>
+<path d="M18 31h10M18 35h6M18 39h6M18 43h6M18 47h10M18 51h6M18 55h6M18 59h6M18 63h10M18 67h6M18 71h6M18 75h6M18 79h10M18 83h6M18 87h6M18 91h6M18 95h10" stroke="#0E2440" stroke-width="1.4"/></g></svg>

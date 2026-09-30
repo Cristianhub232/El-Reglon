@@ -1,0 +1,102 @@
+/* El Renglón · tokens de la guía de marca (resources/Marca El Renglón.dc.html). Solo modo claro, como define la marca. */
+:root {
+  color-scheme: light;
+  /* Paleta */
+  --tinta: #0E2440;          /* Tinta Caracas: primario, navegación, títulos */
+  --azul: #1F4E8C;           /* Azul Renglón: acciones, enlaces, foco */
+  --amarillo: #F2B632;       /* Amarillo Araguaney: acento; nunca como texto sobre papel */
+  --rojo: #B8352B;           /* Rojo Sello: alertas, revocaciones, alícuota adicional */
+  --papel: #F6F3EA;          /* fondo general */
+  --linea: #DDD7C8;          /* bordes y reglas de tabla */
+  --linea-suave: #EEE9DD;
+  --linea-fuerte: #CFC8B6;
+  --renglon: #E7E2D5;        /* rayado de libro contable */
+  --papel-oscuro: #E9E5DA;
+  --papel-claro: #FAF8F2;
+  --blanco: #FFFFFF;
+  --borde-campo: #C9C2B0;
+  --texto: #1C2330;
+  --texto-2: #3A4250;
+  --texto-3: #5A6170;
+  --texto-4: #676D79;
+  --oro: #D9A93F;
+  --azul-claro: #6B9BE0;
+  --rojo-claro: #D9453A;
+  /* Código de alícuotas */
+  --exento: #2E7D5B;   --exento-texto: #1F5E43;   --exento-fondo: #E3F0E9;
+  --reducida: #1F4E8C; --reducida-texto: #1F4E8C; --reducida-fondo: #E2EAF6;
+  --general: #0E2440;  --general-texto: #0E2440;  --general-fondo: #E4E6EC;
+  --adicional: #B8352B; --adicional-texto: #8E2820; --adicional-fondo: #F6E1DE;
+  --condicionado: #C8921A; --condicionado-texto: #6E4F05; --condicionado-fondo: #FBEFCF;
+  /* Tipografía (next/font define --font-serif, --font-sans y --font-mono en <html>) */
+  --serif: var(--font-serif), "Source Serif 4", Georgia, serif;
+  --sans: var(--font-sans), "Public Sans", system-ui, sans-serif;
+  --mono: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+  /* Espaciado lateral de página */
+  --margen: clamp(24px, 4vw, 72px);
+  --sombra: 0 1px 2px rgba(14, 36, 64, .05), 0 6px 12px -4px rgba(14, 36, 64, .10), 0 18px 32px -8px rgba(14, 36, 64, .12);
+  --transicion: 150ms ease-out;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--papel); color: var(--texto);
+  font-family: var(--sans); font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased; line-height: 1.5;
+}
+a { color: var(--azul); text-decoration: none; }
+a:hover { color: var(--tinta); text-decoration: underline; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--azul); outline-offset: 2px; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+button { font: inherit; }
+img { max-width: 100%; }
+h1, h2, h3 { font-family: var(--serif); color: var(--tinta); margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+.mono { font-family: var(--mono); }
+.solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Botones */
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 600 16px var(--sans); padding: 14px 20px; border-radius: 8px; border: 1px solid transparent;
+  cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: background-color var(--transicion), border-color var(--transicion), color var(--transicion);
+}
+.boton:hover { text-decoration: none; }
+.boton-primario { color: var(--papel); background: var(--tinta); }
+.boton-primario:hover { color: var(--papel); background: var(--azul); }
+.boton-secundario { color: var(--tinta); background: var(--blanco); border-color: var(--borde-campo); padding: 13px 20px; }
+.boton-secundario:hover { color: var(--tinta); border-color: var(--tinta); }
+.boton-acento { color: var(--tinta); background: var(--amarillo); }
+.boton-acento:hover { color: var(--tinta); background: var(--oro); }
+.boton-peligro { color: var(--rojo); background: transparent; padding: 0; border: 0; font-size: 13px; }
+.boton-chico { font-size: 14px; padding: 10px 16px; }
+.boton:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Campos */
+.campo {
+  font: 16px var(--sans); padding: 13px 14px; border: 1px solid var(--borde-campo); border-radius: 8px;
+  background: var(--blanco); color: var(--texto); width: 100%;
+}
+.campo-mono { font-family: var(--mono); }
+.etiqueta { display: flex; flex-direction: column; gap: 8px; }
+.etiqueta > span:first-child { font-size: 14px; font-weight: 600; color: var(--tinta); }
+
+/* Punto de color + texto (estados y alícuotas) */
+.punto { display: inline-flex; align-items: center; gap: 7px; font: 500 13px var(--sans); white-space: nowrap; }
+.punto::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; background: currentColor; }
+.punto-mono { font-family: var(--mono); font-weight: 600; }
+.t-exento { color: var(--exento-texto); } .t-reducida { color: var(--reducida-texto); }
+.t-general { color: var(--general-texto); } .t-adicional { color: var(--adicional-texto); }
+.t-condicionado { color: var(--condicionado-texto); } .t-apagado { color: var(--texto-4); }
+
+/* Tarjeta */
+.tarjeta { background: var(--blanco); border: 1px solid var(--linea); border-radius: 12px; }
+.sobretitulo { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--azul); }
+.sobretitulo::before { content: ""; width: 28px; height: 2px; background: var(--amarillo); }
+.aviso-legal { font-size: 12px; line-height: 1.45; color: var(--texto-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
+}

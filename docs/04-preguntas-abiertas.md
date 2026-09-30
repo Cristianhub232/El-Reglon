@@ -39,6 +39,7 @@
 | A23 | ¿Qué efecto tienen los precios? | Van en todo request con valores opcionales; solo cambian la clasificación donde la ley usa el precio; **se guardan para minería de precios** ([03](03-modelo-de-clasificacion.md) §4.1–4.2) | 27/09/2026 |
 | A24 | ¿En qué moneda llegan? | Bolívares o dólares (`moneda`), con conversión por la tasa BCV aplicable | 27/09/2026 |
 | A43 | Minería de precios: ¿ubicación y visibilidad? | Campo `ubicacion` **opcional** (estado o ciudad). Los análisis son **internos**. Los términos de uso de la API se definirán más adelante | 27/09/2026 |
+| A21 | ¿La UI de consulta es pública o exige API key o inicio de sesión? | **Pública y sin cuenta**, como en el diseño («Consulta sin registrarte»): endpoint `/api/publico/…` con límite por IP. El panel exige inicio de sesión ([18](18-interfaz-pwa-panel.md)) | 30/09/2026 |
 | A35 | ¿Guardar los preliminares del Arancel en la base? | **Sí**: Reglas Generales de Interpretación, Abreviaturas y Símbolos y Tabla de conversión, en tablas propias ([09](09-semilla-arancel.md) §2.1) | 27/09/2026 |
 
 ### Pendientes
@@ -51,7 +52,6 @@
 | A33 | Texto oficial de la **Resolución DM 012/2025** (GO Ext. 6.902): subpartidas 9836.00.00.4 y .41 | Completar la semilla vigente |
 | A27 | *(Valor por defecto aplicado: 60/min, configurable por clave)* ¿Otro límite por defecto para una API key nueva? | Configuración inicial |
 | A41 | Calendario de la **Contribución para la Protección de las Pensiones 2026**: ¿Providencia SNAT/2025/000093 o 000094? Hace falta su Gaceta para verificar sus 120 fechas | Módulo Calendario |
-| A21 | ¿La UI de consulta es pública (con una key interna) o también exige key o inicio de sesión? | Seguridad de la UI |
 
 ## B. Para el asesor tributario (zonas grises de la ley)
 

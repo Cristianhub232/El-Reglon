@@ -6,6 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 set -a; [ -f .env ] && . ./.env; set +a
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/core/001_esquema.sql
+docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/core/002_usuarios.sql
 cargar() {
   local nombre="$1" salida
   if ! salida="$("${@:2}" 2>&1)"; then

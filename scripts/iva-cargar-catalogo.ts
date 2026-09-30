@@ -11,6 +11,8 @@ import { pool } from "../src/core/db.ts";
 import { hoyCaracas } from "../src/core/validacion.ts";
 import { ejecutarCasos, type Caso } from "../src/modules/iva/casos.ts";
 import { CAMPOS, OPERADORES, type ReglaCatalogo } from "../src/modules/iva/motor.ts";
+import { contenidoRegla, mismoContenido, type ContenidoRegla } from "../src/modules/iva/historial.ts";
+import { problemasPatron } from "../src/modules/iva/validar.ts";
 
 interface BaseLegal { id: string; norma: string; gaceta: string; fuente: string | null; articulo: string | null; numeral: string | null; literal: string | null; texto: string }
 interface Catalogo {
@@ -23,6 +25,7 @@ interface Catalogo {
 
 const args = process.argv.slice(2);
 const sinPdf = args.includes("--sin-pdf");
+const forzar = args.includes("--forzar");   // descarta ediciones del panel que no se exportaron al archivo
 const ruta = args.find((a) => !a.startsWith("--")) ?? "datos/iva/catalogo.json";
 const bruto = readFileSync(ruta);
 const cat = JSON.parse(bruto.toString("utf8")) as Catalogo;
@@ -49,9 +52,7 @@ validar("V1 identificadores únicos", [
   for (const r of cat.reglas) {
     for (const p of [...r.patrones_incluir, ...r.patrones_excluir, ...r.patrones_todos]) {
       n++;
-      try { new RegExp(p); } catch (err) { e.push(`${r.id}: /${p}/ no compila (${(err as Error).message})`); }
-      // Se aplican sobre texto normalizado: sin mayúsculas ni acentos (los escapes como \b o \W se permiten)
-      if (/[^\x20-\x7e]/.test(p) || /[A-Z]/.test(p.replace(/\\[A-Za-z]/g, ""))) e.push(`${r.id}: /${p}/ tiene mayúsculas o caracteres no normalizados`);
+      for (const problema of problemasPatron(p)) e.push(`${r.id}: /${p}/ ${problema}`);
     }
   }
   validar("V2 patrones válidos y normalizados", e, `${n} expresiones regulares`);
@@ -159,8 +160,8 @@ if (sinPdf) {
   validar("V7 textos legales contra las Gacetas", e, `${ok} textos idénticos a la Gaceta; sin fuente oficial a mano: ${sinFuente.join(", ") || "ninguno"}`);
 }
 
+const { casos } = JSON.parse(readFileSync("datos/iva/casos_prueba.json", "utf8")) as { casos: Caso[] };
 {
-  const { casos } = JSON.parse(readFileSync("datos/iva/casos_prueba.json", "utf8")) as { casos: Caso[] };
   if (resultados.some((r) => !r.ok)) validar("V8 casos de referencia", ["no se ejecutaron: corrija primero las validaciones anteriores"]);
   else {
     const fallos = ejecutarCasos(cat, casos, hoyCaracas());
@@ -174,12 +175,24 @@ async function main() {
   try {
     await c.query("BEGIN");
     await c.query(readFileSync("db/iva/001_esquema.sql", "utf8"));
+    await c.query(readFileSync("db/iva/002_historial.sql", "utf8"));
     const { rows: faltan } = await c.query<{ prefijo: string }>(
       `SELECT p.prefijo FROM unnest($1::text[]) p(prefijo)
         WHERE NOT EXISTS (SELECT 1 FROM arancel.capitulo WHERE codigo = p.prefijo)
           AND NOT EXISTS (SELECT 1 FROM arancel.partida WHERE codigo = p.prefijo)
           AND NOT EXISTS (SELECT 1 FROM arancel.subpartida WHERE codigo LIKE p.prefijo || '%')`, [cat.regla_arancel.map((x) => x.prefijo)]);
     validar("V9 prefijos en el arancel vigente", faltan.map((f) => `${f.prefijo} no existe en el arancel`), `${cat.regla_arancel.length} prefijos existen`);
+
+    // V11: reglas cuya última versión viene del panel y que el archivo no recoge (no se exportaron): no se pisan
+    const { rows: editadas } = await c.query<{ regla_id: string; despues: ContenidoRegla; actor: string; ocurrido_en: string }>(
+      `SELECT DISTINCT ON (regla_id) regla_id, despues, actor, to_char(ocurrido_en AT TIME ZONE 'America/Caracas', 'DD/MM/YYYY HH24:MI') AS ocurrido_en, origen FROM iva.regla_historial
+        ORDER BY regla_id, version DESC`);
+    const porId = new Map(cat.reglas.map((r) => [r.id, r]));
+    const pisadas = editadas.filter((h) => (h as unknown as { origen: string }).origen === "panel")
+      .filter((h) => { const r = porId.get(h.regla_id); return !r || !mismoContenido(h.despues, contenidoRegla(r)); });
+    validar("V11 ediciones del panel incluidas en el archivo", forzar ? [] : pisadas.map((h) =>
+      `${h.regla_id}: editada en el panel por ${h.actor} (${h.ocurrido_en.slice(0, 16)}) y no exportada. Exporte con node scripts/iva-exportar-catalogo.ts o use --forzar para descartarla`),
+      forzar && pisadas.length ? `--forzar: se descartan ${pisadas.length} ediciones del panel` : "sin ediciones pendientes de exportar");
 
     const fallidas = resultados.filter((r) => !r.ok);
     for (const r of resultados) console.log(`${r.ok ? "✔" : "✘"} ${r.nombre}${r.detalle ? `\n      ${r.detalle}` : ""}`);
@@ -206,6 +219,18 @@ async function main() {
                SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(regla_id text, orden smallint, categoria text, base_legal text[], condicion text, condicion_eval jsonb)`,
       cat.reglas.flatMap((r) => r.opciones.map((o, i) => ({ regla_id: r.id, orden: i + 1, ...o }))));
     await ins(`INSERT INTO iva.regla_arancel (prefijo, regla_id, nota) SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(prefijo text, regla_id text, nota text)`, cat.regla_arancel);
+    // Historial: una versión nueva por regla solo si su contenido cambió respecto de la última registrada
+    const ultimas = new Map(editadas.map((h) => [h.regla_id, h]));
+    const { rows: [maxV] } = await c.query<{ m: Record<string, number> | null }>(
+      "SELECT jsonb_object_agg(regla_id, v) AS m FROM (SELECT regla_id, max(version) AS v FROM iva.regla_historial GROUP BY regla_id) x");
+    const nuevas = cat.reglas.filter((r) => !mismoContenido(ultimas.get(r.id)?.despues, contenidoRegla(r))).map((r) => ({
+      regla_id: r.id, version: (maxV.m?.[r.id] ?? 0) + 1, actor: "cli", origen: "carga", motivo: `Carga del catálogo ${version}`,
+      antes: ultimas.get(r.id)?.despues ?? null, despues: contenidoRegla(r), catalogo_version: version }));
+    await ins(`INSERT INTO iva.regla_historial (regla_id, version, actor, origen, motivo, antes, despues, catalogo_version)
+               SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(regla_id text, version int, actor text, origen text, motivo text, antes jsonb, despues jsonb, catalogo_version text)`, nuevas);
+    await c.query("DELETE FROM iva.caso_prueba");
+    await ins("INSERT INTO iva.caso_prueba (orden, caso) SELECT (x.o)::int, x.c FROM jsonb_array_elements($1::jsonb) WITH ORDINALITY AS x(c, o)", casos);
+    console.log(`  historial: ${nuevas.length} reglas con versión nueva · ${casos.length} casos de referencia guardados`);
     await c.query(`INSERT INTO iva.catalogo_version (version, estado, nota, validaciones) VALUES ($1, $2, $3, $4)
                    ON CONFLICT (version) DO UPDATE SET cargado_en = now(), validaciones = EXCLUDED.validaciones`,
       [version, cat.estado, ruta, JSON.stringify(resultados)]);

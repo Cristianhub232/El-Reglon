@@ -98,3 +98,40 @@ BEGIN
     ORDER BY coalesce(ve.fecha_prorrogada, ve.fecha), o.codigo
     LIMIT p_limite;
 END $$;
+
+-- ---------------------------------------------------------------------------
+-- Días inhábiles agregados desde el panel (p. ej. un día no laborable decretado): sobreviven a la recarga de la
+-- semilla, y las prórrogas se recalculan con ellos.
+ALTER TABLE calendario.dia_inhabil ADD COLUMN IF NOT EXISTS origen text NOT NULL DEFAULT 'semilla' CHECK (origen IN ('semilla', 'panel'));
+ALTER TABLE calendario.dia_inhabil ADD COLUMN IF NOT EXISTS agregado_por text;
+ALTER TABLE calendario.dia_inhabil ADD COLUMN IF NOT EXISTS agregado_en timestamptz;
+
+CREATE OR REPLACE FUNCTION calendario.es_habil(p date) RETURNS boolean LANGUAGE sql STABLE AS $$
+    SELECT extract(isodow FROM p) < 6 AND NOT EXISTS (SELECT 1 FROM calendario.dia_inhabil WHERE fecha = p)
+$$;
+
+-- Primer día hábil a partir de p (incluido)
+CREATE OR REPLACE FUNCTION calendario.habil_desde(p date) RETURNS date LANGUAGE sql STABLE AS $$
+    SELECT min(d)::date FROM generate_series(p, p + 30, interval '1 day') d WHERE calendario.es_habil(d::date)
+$$;
+
+-- COT art. 10. Especiales: la fecha de la norma se conserva y, si es inhábil, se agrega la prorrogada.
+-- Ordinarios (Reglamento IVA art. 60): el vencimiento es el primer día hábil desde el día 15 del mes siguiente al período.
+-- Devuelve cuántos vencimientos cambiaron.
+CREATE OR REPLACE FUNCTION calendario.recalcular_prorrogas() RETURNS integer LANGUAGE plpgsql AS $$
+DECLARE n1 integer; n2 integer;
+BEGIN
+    UPDATE calendario.vencimiento v
+       SET fecha_prorrogada = CASE WHEN calendario.es_habil(v.fecha) THEN NULL ELSE calendario.habil_desde(v.fecha + 1) END
+      FROM calendario.obligacion o
+     WHERE o.codigo = v.obligacion AND o.tipo_contribuyente = 'ESPECIAL'
+       AND v.fecha_prorrogada IS DISTINCT FROM (CASE WHEN calendario.es_habil(v.fecha) THEN NULL ELSE calendario.habil_desde(v.fecha + 1) END);
+    GET DIAGNOSTICS n1 = ROW_COUNT;
+    UPDATE calendario.vencimiento v
+       SET fecha = calendario.habil_desde((date_trunc('month', v.periodo_hasta) + interval '1 month' + interval '14 days')::date)
+      FROM calendario.obligacion o
+     WHERE o.codigo = v.obligacion AND o.tipo_contribuyente = 'ORDINARIO' AND v.periodo_hasta IS NOT NULL
+       AND v.fecha <> calendario.habil_desde((date_trunc('month', v.periodo_hasta) + interval '1 month' + interval '14 days')::date);
+    GET DIAGNOSTICS n2 = ROW_COUNT;
+    RETURN n1 + n2;
+END $$;

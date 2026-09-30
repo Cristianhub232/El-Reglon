@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Public+Sans:wght@500;600&display=swap" rel="stylesheet">
+</helmet>
+<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ esHorizontal }}" hint-placeholder-val="{{ true }}">
+  <svg viewBox="{{ vbH }}" style="width:100%;height:100%;display:block" preserveAspectRatio="xMidYMid meet">
+    <sc-if value="{{ pincel }}" hint-placeholder-val="{{ true }}">
+      <g>
+        <path d="M-2 90 C 8 104, 48 104, 76 84 C 50 98, 12 100, -2 90 Z" fill="{{ c.y }}" opacity="{{ c.yo }}"></path>
+        <path d="M74 70 C 110 50, 140 12, 196 14 C 246 16, 266 30, 318 12" fill="none" stroke="{{ c.y }}" stroke-width="10" opacity="{{ c.yo }}"></path>
+        <path d="M150 22 C 172 6, 204 2, 236 7" fill="none" stroke="{{ c.y }}" stroke-width="2" stroke-linecap="round" opacity="{{ c.yo }}"></path>
+        <path d="M76 78 C 112 58, 142 20, 198 22 C 248 24, 268 38, 320 18" fill="none" stroke="{{ c.b }}" stroke-width="7" opacity="{{ c.bo }}"></path>
+        <path d="M78 86 C 114 66, 144 28, 200 30 C 250 32, 270 46, 322 24" fill="none" stroke="{{ c.r }}" stroke-width="7" opacity="{{ c.ro }}"></path>
+                <g transform="translate(322 18) rotate(-34)">
+          <rect x="0" y="-11" width="14" height="22" rx="2" fill="{{ c.ink }}"></rect>
+          <rect x="4" y="-11" width="2" height="22" fill="{{ c.knock }}"></rect>
+          <path d="M14 -10 C 30 -18, 46 -26, 60 -38 C 56 -14, 38 8, 14 10 Z" fill="{{ c.ink }}"></path>
+        </g>
+      </g>
+    </sc-if>
+    <sc-if value="{{ lineas }}" hint-placeholder-val="{{ false }}">
+      <g>
+        <rect x="130" y="114" width="334" height="4" rx="2" fill="{{ c.y }}" opacity="{{ c.yo }}"></rect>
+        <rect x="130" y="121" width="260" height="4" rx="2" fill="{{ c.b }}" opacity="{{ c.bo }}"></rect>
+        <rect x="130" y="128" width="178" height="4" rx="2" fill="{{ c.r }}" opacity="{{ c.ro }}"></rect>
+      </g>
+    </sc-if>
+    <path fill-rule="evenodd" fill="{{ c.ink }}" d="M6 20 H66 C92 20 104 34 104 50 C104 67 91 78 66 78 H40 V99 H52 V106 H6 V99 H18 V27 H6 Z M40 29 V69 H63 C77 69 84 62 84 50 C84 38 78 29 63 29 Z M60 74 H82 L108 99 H116 V106 H86 L58 78 Z"></path>
+    <path d="M18 31h10M18 35h6M18 39h6M18 43h6M18 47h10M18 51h6M18 55h6M18 59h6M18 63h10M18 67h6M18 71h6M18 75h6M18 79h10M18 83h6M18 87h6M18 91h6M18 95h10" stroke="{{ c.knock }}" stroke-width="1.4"></path>
+    <text x="130" y="106" textLength="334" lengthAdjust="spacing" font-family="'Source Serif 4', serif" font-weight="700" font-size="70" fill="{{ c.ink }}">El Renglón</text>
+    <sc-if value="{{ slogan }}" hint-placeholder-val="{{ false }}">
+      <text x="130" y="{{ sloganY }}" textLength="334" lengthAdjust="spacing" font-family="'Public Sans', sans-serif" font-weight="600" font-size="11" fill="{{ c.sub }}">ECOSISTEMA ABIERTO DE INFORMACIÓN FISCAL VENEZOLANA</text>
+    </sc-if>
+  </svg>
+</sc-if>
+
+<sc-if value="{{ esSimbolo }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="-10 -47 200 200" style="width:100%;height:100%;display:block" preserveAspectRatio="xMidYMid meet">
+    <sc-if value="{{ badge }}" hint-placeholder-val="{{ false }}"><rect x="-10" y="-47" width="200" height="200" rx="{{ radio }}" fill="{{ c.knock }}"></rect></sc-if>
+    <g>
+      <path d="M-2 90 C 8 104, 48 104, 76 84 C 50 98, 12 100, -2 90 Z" fill="{{ c.y }}" opacity="{{ c.yo }}"></path>
+      <sc-if value="{{ pincel }}" hint-placeholder-val="{{ true }}">
+        <g>
+          <path d="M74 70 C 96 58, 108 42, 132 30" fill="none" stroke="{{ c.y }}" stroke-width="10" opacity="{{ c.yo }}"></path>
+          <path d="M76 78 C 98 66, 110 50, 134 37" fill="none" stroke="{{ c.b }}" stroke-width="7" opacity="{{ c.bo }}"></path>
+          <path d="M78 86 C 100 74, 112 58, 136 44" fill="none" stroke="{{ c.r }}" stroke-width="7" opacity="{{ c.ro }}"></path>
+          <g transform="translate(135 37) rotate(-40)">
+            <rect x="0" y="-11" width="12" height="22" rx="2" fill="{{ c.ink }}"></rect>
+            <rect x="3.5" y="-11" width="2" height="22" fill="{{ c.knock }}"></rect>
+            <path d="M12 -10 C 26 -17, 38 -24, 50 -34 C 47 -12, 32 7, 12 10 Z" fill="{{ c.ink }}"></path>
+          </g>
+        </g>
+      </sc-if>
+      <sc-if value="{{ lineas }}" hint-placeholder-val="{{ false }}">
+        <g>
+          <rect x="112" y="78" width="66" height="7" rx="3.5" fill="{{ c.y }}" opacity="{{ c.yo }}"></rect>
+          <rect x="112" y="89" width="50" height="7" rx="3.5" fill="{{ c.b }}" opacity="{{ c.bo }}"></rect>
+          <rect x="112" y="100" width="34" height="6" rx="3" fill="{{ c.r }}" opacity="{{ c.ro }}"></rect>
+        </g>
+      </sc-if>
+      <path fill-rule="evenodd" fill="{{ c.ink }}" d="M6 20 H66 C92 20 104 34 104 50 C104 67 91 78 66 78 H40 V99 H52 V106 H6 V99 H18 V27 H6 Z M40 29 V69 H63 C77 69 84 62 84 50 C84 38 78 29 63 29 Z M60 74 H82 L108 99 H116 V106 H86 L58 78 Z"></path>
+      <path d="M18 31h10M18 35h6M18 39h6M18 43h6M18 47h10M18 51h6M18 55h6M18 59h6M18 63h10M18 67h6M18 71h6M18 75h6M18 79h10M18 83h6M18 87h6M18 91h6M18 95h10" stroke="{{ c.knock }}" stroke-width="1.4"></path>
+    </g>
+  </svg>
+</sc-if>
+
+<sc-if value="{{ esVertical }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 400 262" style="width:100%;height:100%;display:block" preserveAspectRatio="xMidYMid meet">
+    <g transform="translate(112 26)">
+      <path d="M-2 90 C 8 104, 48 104, 76 84 C 50 98, 12 100, -2 90 Z" fill="{{ c.y }}" opacity="{{ c.yo }}"></path>
+      <path d="M74 70 C 96 58, 108 42, 132 30" fill="none" stroke="{{ c.y }}" stroke-width="10" opacity="{{ c.yo }}"></path>
+      <path d="M76 78 C 98 66, 110 50, 134 37" fill="none" stroke="{{ c.b }}" stroke-width="7" opacity="{{ c.bo }}"></path>
+      <path d="M78 86 C 100 74, 112 58, 136 44" fill="none" stroke="{{ c.r }}" stroke-width="7" opacity="{{ c.ro }}"></path>
+      <g transform="translate(135 37) rotate(-40)">
+        <rect x="0" y="-11" width="12" height="22" rx="2" fill="{{ c.ink }}"></rect>
+        <rect x="3.5" y="-11" width="2" height="22" fill="{{ c.knock }}"></rect>
+        <path d="M12 -10 C 26 -17, 38 -24, 50 -34 C 47 -12, 32 7, 12 10 Z" fill="{{ c.ink }}"></path>
+      </g>
+      <path fill-rule="evenodd" fill="{{ c.ink }}" d="M6 20 H66 C92 20 104 34 104 50 C104 67 91 78 66 78 H40 V99 H52 V106 H6 V99 H18 V27 H6 Z M40 29 V69 H63 C77 69 84 62 84 50 C84 38 78 29 63 29 Z M60 74 H82 L108 99 H116 V106 H86 L58 78 Z"></path>
+      <path d="M18 31h10M18 35h6M18 39h6M18 43h6M18 47h10M18 51h6M18 55h6M18 59h6M18 63h10M18 67h6M18 71h6M18 75h6M18 79h10M18 83h6M18 87h6M18 91h6M18 95h10" stroke="{{ c.knock }}" stroke-width="1.4"></path>
+    </g>
+    <text x="200" y="204" text-anchor="middle" font-family="'Source Serif 4', serif" font-weight="700" font-size="56" fill="{{ c.ink }}">El Renglón</text>
+    <sc-if value="{{ slogan }}" hint-placeholder-val="{{ true }}">
+      <text x="200" y="238" text-anchor="middle" textLength="330" lengthAdjust="spacing" font-family="'Public Sans', sans-serif" font-weight="600" font-size="11" fill="{{ c.sub }}">ECOSISTEMA ABIERTO DE INFORMACIÓN FISCAL VENEZOLANA</text>
+    </sc-if>
+  </svg>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:520,&quot;height&quot;:200},&quot;tipo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;horizontal&quot;,&quot;simbolo&quot;,&quot;vertical&quot;],&quot;default&quot;:&quot;horizontal&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;variante&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claro&quot;,&quot;oscuro&quot;,&quot;tinta&quot;,&quot;mono&quot;],&quot;default&quot;:&quot;claro&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pincel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;slogan&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;badge&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;radio&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:40,&quot;tsType&quot;:&quot;number&quot;},&quot;fondo&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const V = {
+  claro:  { ink: '#3D3F45', y: '#F2B632', b: '#1F4E8C', r: '#B8352B', knock: '#F6F3EA', sub: '#3D3F45', yo: 1, bo: 1, ro: 1 },
+  oscuro: { ink: '#D9A93F', y: '#F2B632', b: '#4A7FD0', r: '#D9453A', knock: '#0E2440', sub: '#C9D2DF', yo: 1, bo: 1, ro: 1 },
+  tinta:  { ink: '#0E2440', y: '#F2B632', b: '#1F4E8C', r: '#B8352B', knock: '#FFFFFF', sub: '#3A4250', yo: 1, bo: 1, ro: 1 },
+  mono:   { ink: '#0E2440', y: '#0E2440', b: '#0E2440', r: '#0E2440', knock: '#FFFFFF', sub: '#0E2440', yo: 1, bo: 0.6, ro: 0.32 },
+};
+class Component extends DCLogic {
+  renderVals() {
+    const tipo = this.props.tipo ?? 'horizontal';
+    const c = { ...(V[this.props.variante] || V.claro) };
+    if (this.props.fondo) c.knock = this.props.fondo;
+    const pincel = this.props.pincel ?? true;
+    const slogan = this.props.slogan ?? false;
+    return {
+      c, pincel, lineas: !pincel, slogan, badge: this.props.badge ?? false, radio: this.props.radio ?? 40,
+      esHorizontal: tipo === 'horizontal', esSimbolo: tipo === 'simbolo', esVertical: tipo === 'vertical',
+      vbH: slogan ? (pincel ? '-4 -52 474 208' : '-4 12 474 150') : (pincel ? '-4 -52 474 166' : '-4 12 474 124'),
+      sloganY: pincel ? 142 : 154,
+    };
+  }
+}
+</script>
+</body>
+</html>

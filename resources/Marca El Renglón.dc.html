@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;family=Public+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#E9E5DA;font-family:'Public Sans',sans-serif;color:#1C2330}a{color:#1F4E8C}a:hover{color:#0E2440}</style>
+</helmet>
+<section id="turno-2" style="width:1440px;padding:64px 64px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:32px">
+  <header style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font:500 13px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#5A6170">Logo definitivo · v2 · 28/09/2026</span>
+      <h1 style="margin:0;font:700 48px/1.05 'Source Serif 4',serif;color:#0E2440">La R métrica y el trazo tricolor</h1>
+      <p style="margin:0;max-width:720px;font-size:17px;line-height:1.55;color:#3A4250;text-wrap:pretty">Recreado en vector a partir de tu referencia: la R editorial con una regla en el asta y un trazo de pincel en amarillo, azul y rojo que sale de la pierna. El eslogan es el del proyecto: «Ecosistema abierto de información fiscal venezolana».</p>
+    </div>
+    <span style="font-size:14px;line-height:1.5;color:#5A6170;max-width:360px">Oficial: <a href="#2a">2a</a> en toda la aplicación (solo modo claro). <a href="#2e">2e</a> solo para impresión a una tinta. <a href="#2b">2b</a> queda reservado.</span>
+  </header>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px">
+    <div id="2a" style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EEE9DD"><span style="font:600 13px 'IBM Plex Mono',monospace;background:#0E2440;color:#F6F3EA;padding:3px 8px;border-radius:4px">2a</span><span style="font-size:13px;color:#5A6170">Principal · fondo claro</span></div>
+      <div style="background:#F6F3EA;height:300px;display:flex;align-items:center;justify-content:center;padding:32px;box-sizing:border-box">
+        <dc-import name="Logo" tipo="horizontal" variante="claro" slogan="{{ true }}" style="width:520px;height:230px" hint-size="520px,230px"></dc-import>
+      </div>
+      <p style="margin:0;padding:18px 20px;font-size:14px;line-height:1.55;color:#3A4250">Grafito sobre papel, tal como la referencia. Uso principal en web, documentos y presentaciones.</p>
+    </div>
+    <div id="2b" style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EEE9DD"><span style="font:600 13px 'IBM Plex Mono',monospace;background:#0E2440;color:#F6F3EA;padding:3px 8px;border-radius:4px">2b</span><span style="font-size:13px;color:#5A6170">Principal · fondo oscuro</span></div>
+      <div style="background:#0E2440;height:300px;display:flex;align-items:center;justify-content:center;padding:32px;box-sizing:border-box">
+        <dc-import name="Logo" tipo="horizontal" variante="oscuro" slogan="{{ true }}" style="width:520px;height:230px" hint-size="520px,230px"></dc-import>
+      </div>
+      <p style="margin:0;padding:18px 20px;font-size:14px;line-height:1.55;color:#3A4250">Oro sobre Tinta Caracas. El azul del trazo se aclara para mantener el contraste. Uso en el panel de administración, login y cabeceras oscuras.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <h2 style="margin:0;font:600 26px 'Source Serif 4',serif;color:#0E2440">Alternativas parecidas</h2>
+    <span style="font-size:15px;color:#5A6170">Misma R métrica, distintos usos.</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+    <div id="2c" style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EEE9DD"><span style="font:600 13px 'IBM Plex Mono',monospace;background:#0E2440;color:#F6F3EA;padding:3px 8px;border-radius:4px">2c</span><span style="font-size:13px;color:#5A6170">Apilado</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr">
+        <div style="background:#F6F3EA;height:240px;display:flex;align-items:center;justify-content:center"><dc-import name="Logo" tipo="vertical" variante="claro" style="width:200px;height:140px" hint-size="200px,140px"></dc-import></div>
+        <div style="background:#0E2440;height:240px;display:flex;align-items:center;justify-content:center"><dc-import name="Logo" tipo="vertical" variante="oscuro" style="width:200px;height:140px" hint-size="200px,140px"></dc-import></div>
+      </div>
+      <p style="margin:0;padding:18px 20px;font-size:14px;line-height:1.55;color:#3A4250">Símbolo arriba, nombre y eslogan centrados. Para portadas, redes sociales y material impreso.</p>
+    </div>
+    <div id="2d" style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EEE9DD"><span style="font:600 13px 'IBM Plex Mono',monospace;background:#0E2440;color:#F6F3EA;padding:3px 8px;border-radius:4px">2d</span><span style="font-size:13px;color:#5A6170">Regla y renglón</span></div>
+      <div style="background:#F6F3EA;height:240px;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box"><dc-import name="Logo" tipo="horizontal" variante="tinta" pincel="{{ false }}" slogan="{{ true }}" fondo="#F6F3EA" style="width:360px;height:120px" hint-size="360px,120px"></dc-import></div>
+      <p style="margin:0;padding:18px 20px;font-size:14px;line-height:1.55;color:#3A4250">Sin pincel: el nombre se apoya sobre tres renglones tricolor. Más sobrio y legible en tamaños pequeños.</p>
+    </div>
+    <div id="2e" style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EEE9DD"><span style="font:600 13px 'IBM Plex Mono',monospace;background:#0E2440;color:#F6F3EA;padding:3px 8px;border-radius:4px">2e</span><span style="font-size:13px;color:#5A6170">Monocromo</span></div>
+      <div style="background:#FFFFFF;height:240px;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box"><dc-import name="Logo" tipo="horizontal" variante="mono" slogan="{{ true }}" style="width:360px;height:160px" hint-size="360px,160px"></dc-import></div>
+      <p style="margin:0;padding:18px 20px;font-size:14px;line-height:1.55;color:#3A4250">Una sola tinta con tres intensidades. Para sellos, facturas, fotocopias y fondos donde el color no está disponible.</p>
+    </div>
+  </div>
+
+  <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;padding:24px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+    <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#5A6170">SÍMBOLO</span>
+    <div style="display:flex;align-items:flex-end;gap:20px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="Logo" tipo="simbolo" variante="oscuro" badge="{{ true }}" style="width:16px;height:16px" hint-size="16px,16px"></dc-import><span style="font-size:11px;color:#5A6170">16</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="Logo" tipo="simbolo" variante="oscuro" badge="{{ true }}" style="width:24px;height:24px" hint-size="24px,24px"></dc-import><span style="font-size:11px;color:#5A6170">24</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="Logo" tipo="simbolo" variante="oscuro" badge="{{ true }}" style="width:48px;height:48px" hint-size="48px,48px"></dc-import><span style="font-size:11px;color:#5A6170">48</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="Logo" tipo="simbolo" variante="oscuro" badge="{{ true }}" style="width:96px;height:96px" hint-size="96px,96px"></dc-import><span style="font-size:11px;color:#5A6170">App 96</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="Logo" tipo="simbolo" variante="claro" badge="{{ true }}" style="width:96px;height:96px;border:1px solid #DDD7C8;border-radius:20px" hint-size="96px,96px"></dc-import><span style="font-size:11px;color:#5A6170">App claro</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="Logo" tipo="simbolo" variante="oscuro" badge="{{ true }}" radio="{{ 100 }}" style="width:96px;height:96px" hint-size="96px,96px"></dc-import><span style="font-size:11px;color:#5A6170">Avatar</span></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
+      <span style="width:40px;height:24px;border-radius:5px;background:#D9A93F"></span><span style="font:13px 'IBM Plex Mono',monospace;color:#3A4250">Oro Araguaney #D9A93F</span>
+      <span style="width:40px;height:24px;border-radius:5px;background:#3D3F45;margin-left:12px"></span><span style="font:13px 'IBM Plex Mono',monospace;color:#3A4250">Grafito #3D3F45</span>
+    </div>
+  </div>
+</section>
+<section id="turno-1" style="width:1440px;padding:64px;box-sizing:border-box;display:flex;flex-direction:column;gap:48px">
+  <header style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font:500 13px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#5A6170">Identidad de marca · v1 · 28/09/2026</span>
+      
+      <p style="margin:0;max-width:680px;font-size:18px;line-height:1.5;color:#3A4250;text-wrap:pretty">Un renglón es cada producto que se vende y cada línea de la declaración de IVA ante el SENIAT. La marca parte de esa doble lectura: la línea del libro contable y los colores de la bandera, tratados con sobriedad institucional.</p>
+    </div>
+    <span style="font-size:14px;color:#5A6170">Tres propuestas de logo. Las pantallas usan <a href="#1a">1a</a>.</span>
+  </header>
+
+  
+
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <h2 style="margin:0;font:600 28px 'Source Serif 4',serif;color:#0E2440">Paleta</h2>
+    <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:120px;border-radius:10px;background:#0E2440"></div><strong style="font-size:15px">Tinta Caracas</strong><span style="font:13px 'IBM Plex Mono',monospace;color:#5A6170">#0E2440</span><span style="font-size:13px;color:#3A4250">Primario. Navegación, títulos, fondos oscuros.</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:120px;border-radius:10px;background:#1F4E8C"></div><strong style="font-size:15px">Azul Renglón</strong><span style="font:13px 'IBM Plex Mono',monospace;color:#5A6170">#1F4E8C</span><span style="font-size:13px;color:#3A4250">Acciones, enlaces, foco.</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:120px;border-radius:10px;background:#F2B632"></div><strong style="font-size:15px">Amarillo Araguaney</strong><span style="font:13px 'IBM Plex Mono',monospace;color:#5A6170">#F2B632</span><span style="font-size:13px;color:#3A4250">Acento. Resaltar el renglón activo. Nunca como texto sobre papel.</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:120px;border-radius:10px;background:#B8352B"></div><strong style="font-size:15px">Rojo Sello</strong><span style="font:13px 'IBM Plex Mono',monospace;color:#5A6170">#B8352B</span><span style="font-size:13px;color:#3A4250">Alertas, revocaciones, alícuota adicional.</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:120px;border-radius:10px;background:#F6F3EA;border:1px solid #DDD7C8;box-sizing:border-box"></div><strong style="font-size:15px">Papel</strong><span style="font:13px 'IBM Plex Mono',monospace;color:#5A6170">#F6F3EA</span><span style="font-size:13px;color:#3A4250">Fondo general.</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:120px;border-radius:10px;background:#DDD7C8"></div><strong style="font-size:15px">Línea</strong><span style="font:13px 'IBM Plex Mono',monospace;color:#5A6170">#DDD7C8</span><span style="font-size:13px;color:#3A4250">Bordes y reglas de tabla.</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+      <span style="font:500 13px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#5A6170">Código de alícuotas</span>
+      <div style="display:flex;gap:28px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:8px;color:#1F5E43;font-weight:600;font-size:14px"><span style="width:8px;height:8px;border-radius:50%;background:#2E7D5B"></span>Exento · no sujeto</span>
+        <span style="display:flex;align-items:center;gap:8px;color:#1F4E8C;font-weight:600;font-size:14px"><span style="width:8px;height:8px;border-radius:50%;background:#1F4E8C"></span>Reducida 8 %</span>
+        <span style="display:flex;align-items:center;gap:8px;color:#0E2440;font-weight:600;font-size:14px"><span style="width:8px;height:8px;border-radius:50%;background:#0E2440"></span>General 16 %</span>
+        <span style="display:flex;align-items:center;gap:8px;color:#8E2820;font-weight:600;font-size:14px"><span style="width:8px;height:8px;border-radius:50%;background:#B8352B"></span>General + adicional 31 %</span>
+        <span style="display:flex;align-items:center;gap:8px;color:#6E4F05;font-weight:600;font-size:14px"><span style="width:8px;height:8px;border-radius:50%;background:#C8921A"></span>Condicionado · multiopción</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px">
+    <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:24px">
+      <h2 style="margin:0;font:600 28px 'Source Serif 4',serif;color:#0E2440">Tipografía</h2>
+      <div style="display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #EEE9DD;padding-bottom:20px">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;color:#5A6170">SOURCE SERIF 4 · TÍTULOS</span>
+        <span style="font:700 44px/1.1 'Source Serif 4',serif;color:#0E2440">Cómo tributa cada renglón</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #EEE9DD;padding-bottom:20px">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;color:#5A6170">PUBLIC SANS · INTERFAZ Y TEXTO</span>
+        <span style="font-size:17px;line-height:1.55;color:#1C2330">Arroz blanco de mesa, venta nacional: operación exenta según la Ley de IVA, art. 18, numeral 1, literal c.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;color:#5A6170">IBM PLEX MONO · CÓDIGOS, TASAS, RIF</span>
+        <span style="font:500 17px 'IBM Plex Mono',monospace;color:#1C2330">J-40123456-7 · 1006.30.10.00 · rgl_1a2b3c4d</span>
+      </div>
+    </div>
+    <div style="background:#0E2440;color:#F6F3EA;border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font:600 28px 'Source Serif 4',serif">Voz</h2>
+      <div style="display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.5">
+        <div style="display:flex;gap:12px"><span style="width:4px;background:#F2B632;border-radius:2px;flex:none"></span><span>Términos del SENIAT tal como aparecen en la ley: «alícuota general», «operación exenta», «contribuyente especial».</span></div>
+        <div style="display:flex;gap:12px"><span style="width:4px;background:#F2B632;border-radius:2px;flex:none"></span><span>Toda respuesta cita su base legal y la Gaceta Oficial.</span></div>
+        <div style="display:flex;gap:12px"><span style="width:4px;background:#F2B632;border-radius:2px;flex:none"></span><span>Formato local: Bs. 1.234,56 · DD/MM/AAAA · hora de Caracas.</span></div>
+        <div style="display:flex;gap:12px"><span style="width:4px;background:#F2B632;border-radius:2px;flex:none"></span><span>Orienta, no decide: en zonas grises se muestran las opciones y la elección es del usuario.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

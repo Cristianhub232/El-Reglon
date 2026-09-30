@@ -1,0 +1,18 @@
+.mes { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.mesCabeza { display: flex; justify-content: space-between; align-items: center; }
+.flechas { display: flex; gap: 6px; }
+.flechas a { font-size: 20px; line-height: 1; color: var(--texto-3); padding: 4px 10px; border-radius: 6px; }
+.flechas a:hover { background: var(--papel); color: var(--tinta); text-decoration: none; }
+.semana, .dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.semana { font: 500 12px var(--mono); color: var(--texto-4); text-align: center; }
+.dia { height: 40px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font: 500 14px var(--mono); color: var(--tinta); position: relative; }
+.habil { background: var(--blanco); border: 1px solid var(--linea-suave); }
+.finde { background: var(--linea-suave); }
+.nacional { background: var(--amarillo); }
+.bancario { background: #C3D3EC; }
+.hoy { outline: 2px solid var(--azul); outline-offset: -2px; }
+.marca { position: absolute; bottom: 5px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--rojo); }
+.leyenda { display: flex; gap: 16px; font-size: 12px; color: var(--texto-3); flex-wrap: wrap; }
+.leyenda span { display: flex; gap: 6px; align-items: center; }
+.leyenda i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.marcaLeyenda { width: 4px !important; height: 4px !important; border-radius: 50% !important; background: var(--rojo); }

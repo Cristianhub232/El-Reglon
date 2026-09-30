@@ -1,0 +1,25 @@
+/* Cabecera y pie del sitio público (resources/Landing v2.dc.html) */
+.cabecera { position: sticky; top: 0; z-index: 20; background: var(--papel); border-bottom: 1px solid var(--linea); }
+.cabeceraInterior { padding: 14px var(--margen); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.marca { display: flex; width: 150px; height: 46px; flex: none; }
+.nav { display: flex; gap: clamp(14px, 2vw, 28px); font-size: 15px; font-weight: 500; white-space: nowrap; min-width: 0; overflow: hidden; }
+.nav a { color: var(--texto); }
+.acciones { display: flex; gap: 10px; align-items: center; flex: none; }
+.ingresar { font-size: 15px; font-weight: 600; color: var(--tinta); padding: 9px 14px; white-space: nowrap; }
+.obtener { font-size: 15px; padding: 10px 16px; }
+@media (max-width: 1100px) { .navOpcional { display: none; } }
+@media (max-width: 860px) { .navOpcional2 { display: none; } }
+@media (max-width: 720px) { .nav { display: none; } }
+@media (max-width: 460px) {
+  .cabeceraInterior { gap: 8px; padding-left: 16px; padding-right: 16px; }
+  .marca { width: 112px; height: 36px; }
+  .ingresar { padding: 8px 4px; font-size: 14px; }
+  .obtener { font-size: 14px; padding: 9px 12px; }
+  .obtenerLargo { display: none; }
+}
+
+.pie { border-top: 1px solid var(--linea); margin-top: auto; }
+.pieInterior { padding: 32px var(--margen); display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-size: 13px; color: var(--texto-3); }
+.pieMarca { display: flex; align-items: center; gap: 10px; }
+.pieSimbolo { width: 28px; height: 28px; flex: none; }
+.pieEnlaces { display: flex; gap: 20px; flex-wrap: wrap; }

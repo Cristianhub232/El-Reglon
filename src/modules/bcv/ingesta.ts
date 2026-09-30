@@ -118,6 +118,16 @@ export async function registrar(p: Portada, hoy: string): Promise<ResultadoInges
   }
 }
 
-export async function ingestar(hoy: string): Promise<ResultadoIngesta> {
-  return registrar(parsearPortada(await descargar()), hoy);
+// Cada lectura queda en la auditoría (el panel muestra la última y la portada su hora)
+export async function ingestar(hoy: string, actor = "bcv-ingesta"): Promise<ResultadoIngesta> {
+  const auditar = (accion: string, detalle: unknown) =>
+    pool().query("INSERT INTO core.auditoria (actor, accion, detalle) VALUES ($1, $2, $3)", [actor, accion, detalle]).catch(() => {});
+  try {
+    const r = await registrar(parsearPortada(await descargar()), hoy);
+    await auditar(`bcv.${r.estado}`, r);
+    return r;
+  } catch (e) {
+    await auditar("bcv.lectura_fallida", { error: (e as Error).message });
+    throw e;
+  }
 }

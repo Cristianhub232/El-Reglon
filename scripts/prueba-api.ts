@@ -197,7 +197,62 @@ async function main() {
   verificar("EAN con dígito verificador errado → detectado y no consultable", r.cuerpo?.tipo === "EAN-13" && r.cuerpo?.digito_verificador === false, r.cuerpo);
 }
 
+// Sitio público, PWA, protección del panel y lógica de sesiones (contraseña, TOTP, bloqueo y cierre)
+async function sitioYSesiones() {
+  console.log("Sitio, PWA y sesiones");
+  const pagina = async (ruta: string) => { const r = await fetch(BASE + ruta, { redirect: "manual" }); return { estado: r.status, texto: await r.text(), r }; };
+  let p = await pagina("/");
+  verificar("portada 200 con el titular y datos del BCV", p.estado === 200 && p.texto.includes("Cómo tributa cada renglón") && p.texto.includes("Tasa oficial BCV"));
+  p = await pagina("/manifest.webmanifest");
+  const m = JSON.parse(p.texto || "{}");
+  verificar("manifiesto PWA: standalone, íconos 192/512 y maskable", m.display === "standalone" && m.icons?.some((i: any) => i.purpose === "maskable") && m.icons?.some((i: any) => i.sizes === "512x512"), m);
+  p = await pagina("/sw.js");
+  verificar("service worker sin caché y sin tocar /api ni /admin", p.estado === 200 && /no-cache/.test(p.r.headers.get("cache-control") ?? "") && p.texto.includes("/^\\/admin"), p.r.headers.get("cache-control"));
+  p = await pagina("/sin-conexion");
+  verificar("página sin conexión", p.estado === 200);
+  p = await pagina("/admin/usuarios");
+  verificar("panel sin sesión → redirige a /ingresar con 'siguiente'", p.estado === 307 && (p.r.headers.get("location") ?? "").includes("/ingresar?siguiente=%2Fadmin%2Fusuarios"), p.r.headers.get("location"));
+  p = await pagina("/admin/auditoria/csv");
+  verificar("CSV de auditoría sin sesión → no disponible", p.estado === 307 || p.estado === 403, p.estado);
+  const r = await post("/api/publico/iva/clasificar", { nombre: "Arroz Mary 1kg", operacion: "nacional" });
+  verificar("clasificador público sin API key → arroz EXENTO", r.estado === 200 && r.cuerpo?.opciones?.[0]?.categoria === "EXENTO", r.cuerpo);
+
+  // Sesiones (módulo del servidor) con un usuario temporal
+  const { hashClave } = await import("../src/core/auth/claves.ts");
+  const { ingresar, usuarioDeSesion, cerrarSesion } = await import("../src/core/auth/sesiones.ts");
+  const correo = `prueba-${Date.now()}@ejemplo.ve`;
+  const [u] = await consulta<{ id: number }>("INSERT INTO core.usuario (nombre, correo, rol, clave_hash, debe_cambiar_clave) VALUES ('Prueba', $1, 'lectura', $2, false) RETURNING id",
+    [correo, await hashClave("clave de prueba segura")]);
+  try {
+    let s = await ingresar(correo, "incorrecta", "", false, null);
+    verificar("contraseña incorrecta → error genérico", !s.ok && s.error === "Correo o contraseña incorrectos");
+    s = await ingresar("nadie@ejemplo.ve", "x", "", false, null);
+    verificar("correo inexistente → el mismo error (no revela cuentas)", !s.ok && s.error === "Correo o contraseña incorrectos");
+    s = await ingresar(correo, "clave de prueba segura", "", true, "prueba");
+    const token = s.ok ? s.token : "";
+    verificar("ingreso correcto → token y sesión de 30 días", s.ok && s.segundos === 30 * 24 * 3600 && (await usuarioDeSesion(token))?.correo === correo);
+    await cerrarSesion(token, correo);
+    verificar("cierre de sesión invalida el token", (await usuarioDeSesion(token)) === null);
+    if ((process.env.APP_SECRETO ?? "").length >= 32) {
+      const { cifrarSecreto, codigoTotp, nuevoSecreto } = await import("../src/core/auth/totp.ts");
+      const sec = nuevoSecreto();
+      await consulta("UPDATE core.usuario SET totp_secreto = $2, totp_activo = true WHERE id = $1", [u.id, cifrarSecreto(sec)]);
+      s = await ingresar(correo, "clave de prueba segura", "", false, null);
+      verificar("con 2FA activa y sin código → pide el código", !s.ok && s.pideCodigo === true);
+      s = await ingresar(correo, "clave de prueba segura", codigoTotp(sec), false, null);
+      verificar("con el código TOTP vigente → ingresa", s.ok);
+    }
+    for (let i = 0; i < 5; i++) await ingresar(correo, "incorrecta", "", false, null);
+    s = await ingresar(correo, "clave de prueba segura", "", false, null);
+    verificar("5 intentos fallidos → cuenta bloqueada aunque la clave sea correcta", !s.ok && s.error.includes("bloqueada"), s);
+  } finally {
+    await consulta("DELETE FROM core.usuario WHERE id = $1", [u.id]);
+    await consulta("DELETE FROM core.auditoria WHERE actor = $1", [correo]);
+  }
+}
+
 main()
+  .then(sitioYSesiones)
   .catch((e) => { fallos++; console.error("Error en las pruebas:", e); })
   .finally(async () => {
     const ids = `SELECT id FROM core.api_key WHERE prefijo = ANY ($1)`;

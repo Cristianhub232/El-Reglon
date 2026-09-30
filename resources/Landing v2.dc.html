@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F6F3EA;font-family:'Public Sans',sans-serif;color:#1C2330;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}a{color:#1F4E8C;text-decoration:none}a:hover{color:#0E2440;text-decoration:underline}input:focus,textarea:focus{outline:2px solid #1F4E8C;outline-offset:2px}button:focus-visible,a:focus-visible{outline:2px solid #1F4E8C;outline-offset:2px}</style>
+<script src="./image-slot.js"></script>
+<style>@keyframes rgDibujar{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes rgArea{from{opacity:0}to{opacity:1}}@keyframes rgPunto{0%{opacity:0;transform:scale(0)}70%{opacity:1;transform:scale(1.4)}100%{opacity:1;transform:scale(1)}}@media (prefers-reduced-motion:reduce){.rg-anim{animation:none !important;stroke-dashoffset:0 !important;opacity:1 !important}}</style>
+<style>@media (max-width:1100px){[data-nav-opc]{display:none !important}}@media (max-width:860px){[data-nav-opc2]{display:none !important}}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="position:sticky;top:0;z-index:5;background:#F6F3EA;border-bottom:1px solid #DDD7C8">
+    <div style="max-width:none;margin:0 auto;padding:14px clamp(24px,4vw,72px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap">
+      <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+        <dc-import name="Logo" tipo="horizontal" variante="claro" fondo="#F6F3EA" style="width:150px;height:46px" hint-size="150px,46px"></dc-import>
+      </a>
+      <nav style="display:flex;gap:clamp(14px,2vw,28px);font-size:15px;font-weight:500;flex-wrap:nowrap;white-space:nowrap;min-width:0;overflow:hidden">
+        <a href="#herramientas" style="color:#1C2330">Herramientas</a><a href="#noticias" style="color:#1C2330">Noticias</a>
+        <a href="#modulos" style="color:#1C2330">Módulos</a>
+        <a href="#api" data-nav-opc2="1" style="color:#1C2330">API</a>
+        <a href="#" data-nav-opc="1" style="color:#1C2330">Documentación</a>
+      </nav>
+      <div style="display:flex;gap:10px;align-items:center;flex:none;white-space:nowrap">
+        <a href="Login.dc.html" style="font-size:15px;font-weight:600;color:#0E2440;padding:9px 14px">Iniciar sesión</a>
+        <a href="#api" style="font-size:15px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:10px 16px;border-radius:8px;text-decoration:none;transition:background-color 150ms ease-out,border-color 150ms ease-out,color 150ms ease-out" style-hover="background:#1F4E8C">Obtener API key</a>
+      </div>
+    </div>
+  </header>
+
+  <div style="background:#FFFFFF;border-bottom:1px solid #DDD7C8">
+    <div style="max-width:none;margin:0 auto;padding:10px clamp(24px,4vw,72px);display:flex;gap:28px;flex-wrap:nowrap;overflow:hidden;align-items:center;font-size:13px;color:#5A6170">
+      <span style="display:flex;gap:8px;align-items:baseline;white-space:nowrap">BCV USD <strong style="font:500 14px 'IBM Plex Mono',monospace;color:#0E2440">{{ usdTxt }}</strong><span style="color:#2E7D5B">+0,42 %</span></span>
+      <span style="display:flex;gap:8px;align-items:baseline;white-space:nowrap">EUR <strong style="font:500 14px 'IBM Plex Mono',monospace;color:#0E2440">{{ eurTxt }}</strong><span style="color:#B8352B">−0,18 %</span></span>
+      <span style="white-space:nowrap">Fecha valor 28/09/2026 · muestra</span>
+      <span style="white-space:nowrap">Próximo día inhábil: <strong style="color:#0E2440;font-weight:600">12/10 · Día de la Resistencia Indígena</strong></span>
+      
+    </div>
+  </div>
+
+  <section style="padding:0">
+    <div style="border-bottom:1px solid #CFC8B6;overflow:hidden;background:#FFFFFF;display:flex;flex-direction:column">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr))">
+        <div style="padding:64px clamp(24px,4vw,72px);display:flex;flex-direction:column;justify-content:space-between;gap:40px;background-color:#F6F3EA;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,#E7E2D5 43px,#E7E2D5 44px)">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <span style="font-size:15px;font-weight:600;color:#1F4E8C">Gratis · abierto · homologado al SENIAT</span>
+            <h1 style="margin:0;font:700 clamp(48px,6vw,80px)/.98 'Source Serif 4',serif;color:#0E2440;text-wrap:balance">Cómo tributa cada renglón.</h1>
+            <p style="margin:0;font-size:19px;line-height:1.55;color:#3A4250;max-width:480px;text-wrap:pretty">Clasificación de IVA con su base legal, tasas oficiales del BCV, arancel de aduanas, calendario tributario y validación del RIF. En un solo lugar, para toda Venezuela.</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <a href="#herramientas" style="font-size:16px;font-weight:600;color:#F6F3EA;background:#0E2440;padding:14px 20px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:background-color 150ms ease-out" style-hover="background:#1F4E8C">Consultar gratis</a>
+              <a href="#api" style="font-size:16px;font-weight:600;color:#0E2440;background:#FFFFFF;border:1px solid #C9C2B0;padding:13px 20px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:border-color 150ms ease-out" style-hover="border-color:#0E2440">Obtener API key</a>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#5A6170">Fuentes oficiales</span>
+            <div style="display:flex;gap:8px 24px;flex-wrap:wrap;font:600 15px 'Source Serif 4',serif;color:#0E2440;white-space:nowrap">
+              <span>SENIAT</span><span>BCV</span><span>SUDEBAN</span><span>Gaceta Oficial</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;border-left:1px solid #CFC8B6">
+          <div style="border-bottom:1px solid #CFC8B6;padding:24px clamp(24px,4vw,72px) 8px 32px;display:flex;flex-direction:column;background:#FFFFFF">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;padding-bottom:4px">
+              <strong style="font:700 22px 'Source Serif 4',serif;color:#0E2440">Tasa oficial BCV de hoy</strong>
+              <span style="font-size:13px;color:#5A6170">Fecha valor lunes 28/09/2026 · valores de muestra</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));column-gap:32px">
+              <div style="padding:22px 0;display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-size:14px;font-weight:600;color:#0E2440">USD · Dólar</span><span style="font-size:14px;font-weight:600;color:#2E7D5B;white-space:nowrap">▲ 0,42 %</span></div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+                <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap"><span style="font-size:18px;font-weight:600;color:#5A6170">Bs.</span><span style="font:600 clamp(40px,4.4vw,60px)/1 'IBM Plex Mono',monospace;color:#0E2440;letter-spacing:-.02em">{{ usdTxt }}</span></span>
+                <span style="display:flex;width:140px;height:44px;flex:none">{{ graficaUsd }}</span>
+              </div>
+              <span style="font-size:13px;color:#5A6170">por 1 USD · últimos 7 días</span>
+            </div>
+              <div style="padding:22px 0;display:flex;flex-direction:column;gap:6px;border-top:1px solid #EEE9DD">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-size:14px;font-weight:600;color:#0E2440">EUR · Euro</span><span style="font-size:14px;font-weight:600;color:#B8352B;white-space:nowrap">▼ 0,18 %</span></div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+                <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap"><span style="font-size:18px;font-weight:600;color:#5A6170">Bs.</span><span style="font:600 clamp(40px,4.4vw,60px)/1 'IBM Plex Mono',monospace;color:#0E2440;letter-spacing:-.02em">{{ eurTxt }}</span></span>
+                <span style="display:flex;width:140px;height:44px;flex:none">{{ graficaEur }}</span>
+              </div>
+              <span style="font-size:13px;color:#5A6170">por 1 EUR · últimos 7 días</span>
+            </div>
+            </div>
+            <span style="font-size:12px;color:#5A6170;padding:10px 0 14px;border-top:1px solid #EEE9DD">Fuente: Banco Central de Venezuela · tasa aplicable según art. 25 de la Ley de IVA · leída a las 14:02, hora de Caracas</span>
+          </div>
+          <div style="position:relative;flex:1;min-height:500px;background:#E9E5DA">
+            <div style="position:absolute;inset:0"><image-slot id="hero-foto" shape="rect" placeholder="Foto real: comerciante venezolano en su bodega o abasto, con el punto de venta a la vista"></image-slot></div>
+            <div style="position:absolute;right:clamp(24px,4vw,72px);bottom:28px;width:320px;max-width:calc(100% - 40px);background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;box-shadow:0 1px 2px rgba(14,36,64,.05),0 6px 12px -4px rgba(14,36,64,.10),0 18px 32px -8px rgba(14,36,64,.12);display:flex;flex-direction:column">
+              <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #EEE9DD"><strong style="font-size:14px;color:#0E2440">Conversor BCV</strong><span style="font-size:12px;color:#5A6170;white-space:nowrap">fecha valor 28/09</span></div>
+              <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;gap:8px">
+                  <input type="number" value="{{ monto }}" onChange="{{ onMonto }}" style="flex:1;min-width:0;font:500 17px 'IBM Plex Mono',monospace;padding:9px 10px;border:1px solid #C9C2B0;border-radius:8px;background:#FFFFFF;color:#1C2330">
+                  <div style="display:flex;border:1px solid #C9C2B0;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                    <sc-for list="{{ monedas }}" as="m" hint-placeholder-count="2">
+                      <button onClick="{{ m.pick }}" style="border:0;cursor:pointer;padding:0 12px;font:600 13px 'IBM Plex Mono',monospace;background:{{ m.bg }};color:{{ m.fg }}">{{ m.code }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:13px;color:#5A6170">Equivale a</span><span style="font:600 22px 'IBM Plex Mono',monospace;color:#0E2440;white-space:nowrap">Bs. {{ convertido }}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #CFC8B6;padding:20px clamp(24px,4vw,72px);display:flex;flex-direction:column;gap:14px;background:#FFFFFF">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+          <strong style="font:600 18px 'Source Serif 4',serif;color:#0E2440;white-space:nowrap">Prueba el clasificador de IVA</strong>
+          <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+            <sc-for list="{{ ejemplos }}" as="e" hint-placeholder-count="5">
+              <button onClick="{{ e.pick }}" style="cursor:pointer;font:500 14px 'Public Sans',sans-serif;padding:4px 0;border:0;border-bottom:2px solid {{ e.bd }};background:transparent;color:{{ e.fg }};transition:color 150ms ease-out,border-color 150ms ease-out">{{ e.corto }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:stretch">
+          <div style="flex:2;min-width:240px;display:flex;align-items:center;gap:10px;border:1px solid #C9C2B0;border-radius:8px;padding:0 14px;background:#FFFFFF">
+            <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="#5A6170" stroke-width="1.6"></circle><path d="M11 11l3.5 3.5" stroke="#5A6170" stroke-width="1.6" stroke-linecap="round"></path></svg>
+            <span style="flex:1;padding:13px 0;font-size:17px;color:#1C2330">{{ ej.nombre }}</span>
+          </div>
+          <div style="display:flex;border:1px solid #C9C2B0;border-radius:8px;overflow:hidden">
+            <sc-for list="{{ operaciones }}" as="o" hint-placeholder-count="2">
+              <button onClick="{{ o.pick }}" style="border:0;cursor:pointer;padding:0 16px;font:600 14px 'Public Sans',sans-serif;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+          <div style="flex:3;min-width:280px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 16px;border-radius:8px;background:#F6F3EA;border:1px solid #EEE9DD">
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:8px;height:8px;border-radius:50%;flex:none;background:{{ primera.fg }}"></span><strong style="font:600 15px 'IBM Plex Mono',monospace;color:{{ primera.fg }};white-space:nowrap">{{ primera.tasa }}</strong><span style="font-size:15px;font-weight:600;color:#0E2440;white-space:nowrap">{{ primera.categoria }}</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#1F4E8C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ primera.base }}</span></span>
+            <a href="#herramientas" style="font-size:14px;font-weight:600;white-space:nowrap">{{ masOpciones }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));border-bottom:1px solid #DDD7C8;background:#FFFFFF;padding:0 clamp(24px,4vw,72px)">
+    
+            <div style="padding:24px 24px 24px 0;display:flex;flex-direction:column;gap:4px"><span style="font:600 32px 'Source Serif 4',serif;color:#0E2440">115</span><span style="font-size:13px;line-height:1.4;color:#3A4250">reglas de la Ley de IVA verificadas contra la Gaceta</span></div>
+            <div style="padding:24px 24px 24px 0;display:flex;flex-direction:column;gap:4px;border-left:1px solid #EEE9DD;padding-left:24px"><span style="font:600 32px 'Source Serif 4',serif;color:#0E2440">417</span><span style="font-size:13px;line-height:1.4;color:#3A4250">publicaciones oficiales del BCV desde 2025</span></div>
+            <div style="padding:24px 24px 24px 0;display:flex;flex-direction:column;gap:4px;border-left:1px solid #EEE9DD;padding-left:24px"><span style="font:600 32px 'Source Serif 4',serif;color:#0E2440">5</span><span style="font-size:13px;line-height:1.4;color:#3A4250">módulos con una sola API key gratuita</span></div>
+          
+  </div>
+  <section id="noticias" style="padding:64px clamp(24px,4vw,72px) 16px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:#1F4E8C"><span style="width:28px;height:2px;background:#F2B632"></span>Martes 29 de septiembre de 2026</span>
+        <h2 style="margin:0;font:700 36px/1.1 'Source Serif 4',serif;color:#0E2440">Noticias fiscales del día</h2>
+      </div>
+      <span style="font-size:13px;color:#5A6170">Titulares e imágenes de ejemplo</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:32px 48px">
+      <a href="#" style="display:flex;flex-direction:column;gap:16px;text-decoration:none" style-hover="text-decoration:none">
+        <div style="aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#E9E5DA"><image-slot id="noticia-principal" shape="rect" placeholder="Foto: fachada del Banco Central de Venezuela en Caracas"></image-slot></div>
+        <span style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:13px"><span style="font-weight:700;color:#1F4E8C;white-space:nowrap">Tasas BCV</span><span style="color:#5A6170;white-space:nowrap">Banco Central de Venezuela · 09:15</span></span>
+        <span style="font:700 clamp(26px,2.4vw,34px)/1.15 'Source Serif 4',serif;color:#0E2440;text-wrap:balance">El BCV publica la tasa oficial con fecha valor martes 29 de septiembre</span>
+        <span style="font-size:16px;line-height:1.55;color:#3A4250;max-width:620px;text-wrap:pretty">La tasa aplica a las operaciones en divisas facturadas hoy, según el artículo 25 de la Ley de IVA. El Renglón la verifica contra la publicación oficial antes de servirla por la API.</span>
+      </a>
+      <div style="display:flex;flex-direction:column">
+        <a href="#" style="display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr);gap:18px;align-items:start;padding:18px 0;border-top:1px solid #DDD7C8;text-decoration:none" style-hover="text-decoration:none">
+          <div style="aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#E9E5DA"><image-slot id="noticia-2" shape="rect" placeholder="Foto: oficina del SENIAT"></image-slot></div>
+          <span style="display:flex;flex-direction:column;gap:8px"><span style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:13px"><span style="font-weight:700;color:#1F4E8C;white-space:nowrap">Calendario</span><span style="color:#5A6170;white-space:nowrap">SENIAT · 08:40</span></span><span style="font:600 18px/1.3 'Source Serif 4',serif;color:#0E2440;text-wrap:pretty">Contribuyentes especiales: fechas de declaración de IVA para la primera quincena de octubre</span></span>
+        </a>
+        <a href="#" style="display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr);gap:18px;align-items:start;padding:18px 0;border-top:1px solid #DDD7C8;text-decoration:none" style-hover="text-decoration:none">
+          <div style="aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#E9E5DA"><image-slot id="noticia-3" shape="rect" placeholder="Foto: contenedores en el puerto de La Guaira"></image-slot></div>
+          <span style="display:flex;flex-direction:column;gap:8px"><span style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:13px"><span style="font-weight:700;color:#1F4E8C;white-space:nowrap">Arancel</span><span style="color:#5A6170;white-space:nowrap">Gaceta Oficial · Ayer</span></span><span style="font:600 18px/1.3 'Source Serif 4',serif;color:#0E2440;text-wrap:pretty">Gaceta Oficial publica un ajuste de alícuotas en el capítulo 22 del Arancel de Aduanas</span></span>
+        </a>
+        <a href="#" style="display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr);gap:18px;align-items:start;padding:18px 0;border-top:1px solid #DDD7C8;text-decoration:none" style-hover="text-decoration:none">
+          <div style="aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#E9E5DA"><image-slot id="noticia-4" shape="rect" placeholder="Foto: calendario o fachada de institución pública"></image-slot></div>
+          <span style="display:flex;flex-direction:column;gap:8px"><span style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:13px"><span style="font-weight:700;color:#1F4E8C;white-space:nowrap">Días inhábiles</span><span style="color:#5A6170;white-space:nowrap">SENIAT · Ayer</span></span><span style="font:600 18px/1.3 'Source Serif 4',serif;color:#0E2440;text-wrap:pretty">El 12 de octubre, Día de la Resistencia Indígena, será día inhábil para trámites tributarios</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:none;width:100%;margin:0 auto;padding:64px clamp(24px,4vw,72px) 72px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px">
+    <h2 style="margin:0;font:700 36px/1.1 'Source Serif 4',serif;color:#0E2440">Hecho para quien factura, declara e integra</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#E9E5DA"><image-slot id="para-comerciantes" shape="rect" placeholder="Foto real: comerciante atendiendo en su negocio"></image-slot></div>
+        <strong style="font:600 21px 'Source Serif 4',serif;color:#0E2440">Comerciantes</strong>
+        <span style="font-size:15px;line-height:1.5;color:#3A4250">Sabe si cada producto va exento, al 8 %, al 16 % o al 31 % antes de facturar, y convierte a bolívares con la tasa oficial.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#E9E5DA"><image-slot id="para-contadores" shape="rect" placeholder="Foto real: contadora revisando declaraciones en su escritorio"></image-slot></div>
+        <strong style="font:600 21px 'Source Serif 4',serif;color:#0E2440">Contadores y asesores</strong>
+        <span style="font-size:15px;line-height:1.5;color:#3A4250">Base legal con su Gaceta, renglón de la Forma 30 y próximos deberes por RIF para especiales y ordinarios.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#E9E5DA"><image-slot id="para-desarrolladores" shape="rect" placeholder="Foto real: equipo de desarrollo integrando un sistema de punto de venta"></image-slot></div>
+        <strong style="font:600 21px 'Source Serif 4',serif;color:#0E2440">Desarrolladores</strong>
+        <span style="font-size:15px;line-height:1.5;color:#3A4250">Una API key gratuita para POS, ERP y tiendas en línea, con Swagger y respuestas en texto decimal exacto.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="herramientas" style="max-width:none;width:100%;margin:0 auto;padding:80px clamp(24px,4vw,72px);box-sizing:border-box;display:flex;flex-direction:column;gap:36px">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:720px">
+      <span style="font:600 13px 'Public Sans',sans-serif;color:#1F4E8C">Herramientas gratis</span>
+      <h2 style="margin:0;font:700 40px/1.1 'Source Serif 4',serif;color:#0E2440;text-wrap:balance">Consulta sin registrarte</h2>
+      <p style="margin:0;font-size:17px;line-height:1.55;color:#3A4250">Las mismas respuestas que entrega la API, listas para comerciantes, contadores y desarrolladores.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:24px;align-items:start">
+      <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+        <div style="padding:22px 24px;border-bottom:1px solid #EEE9DD;display:flex;flex-direction:column;gap:4px">
+          <strong style="font:600 22px 'Source Serif 4',serif;color:#0E2440">Clasificador de IVA</strong>
+          <span style="font-size:14px;color:#5A6170">Escribe un bien o servicio y la operación. Recibe la categoría, la alícuota y la base legal.</span>
+        </div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:220px;display:flex;align-items:center;gap:10px;border:1px solid #C9C2B0;border-radius:8px;padding:0 12px;background:#FFFFFF">
+              <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="#5A6170" stroke-width="1.6"></circle><path d="M11 11l3.5 3.5" stroke="#5A6170" stroke-width="1.6" stroke-linecap="round"></path></svg>
+              <span style="flex:1;padding:12px 0;font-size:16px;color:#1C2330">{{ ej.nombre }}</span>
+            </div>
+            <div style="display:flex;border:1px solid #C9C2B0;border-radius:8px;overflow:hidden">
+              <sc-for list="{{ operaciones }}" as="o" hint-placeholder-count="2">
+                <button onClick="{{ o.pick }}" style="border:0;cursor:pointer;padding:0 14px;font:600 14px 'Public Sans',sans-serif;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+            <span style="font-size:13px;color:#5A6170">Ejemplos:</span>
+            <sc-for list="{{ ejemplos }}" as="e" hint-placeholder-count="5">
+              <button onClick="{{ e.pick }}" style="cursor:pointer;font:500 14px 'Public Sans',sans-serif;padding:4px 0;border:0;border-bottom:2px solid {{ e.bd }};background:transparent;color:{{ e.fg }};transition:color 150ms ease-out,border-color 150ms ease-out">{{ e.corto }}</button>
+            </sc-for>
+          </div>
+          <div style="border:1px solid #EEE9DD;border-radius:10px;background:#FAF8F2;display:flex;flex-direction:column">
+            <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #EEE9DD;flex-wrap:wrap">
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">estado: <strong style="color:#0E2440">{{ res.estado }}</strong></span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">operación: {{ opLabel }}</span>
+            </div>
+            <sc-for list="{{ res.opciones }}" as="op" hint-placeholder-count="1">
+              <div style="padding:16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;border-bottom:1px solid #EEE9DD">
+                <span style="display:inline-flex;align-items:center;gap:7px;grid-row:span 3;align-self:start;font:600 13px 'IBM Plex Mono',monospace;color:{{ op.fg }};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ op.fg }}"></span>{{ op.tasa }}</span>
+                <strong style="font-size:16px;color:#0E2440">{{ op.categoria }}</strong>
+                <span style="font-size:14px;line-height:1.45;color:#3A4250">{{ op.condicion }}</span>
+                <span style="font:500 13px 'IBM Plex Mono',monospace;color:#1F4E8C">{{ op.base }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ res.nota }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:12px 16px;font-size:13px;line-height:1.45;color:#6E4F05">{{ res.nota }}</div>
+            </sc-if>
+          </div>
+          <span style="font-size:12px;line-height:1.45;color:#5A6170">Resultado orientativo. Cuando hay varias opciones, la selección corresponde al usuario bajo su responsabilidad y análisis.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div style="background:#FFFFFF;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden">
+          <div style="padding:22px 24px;border-bottom:1px solid #EEE9DD;display:flex;flex-direction:column;gap:4px">
+            <strong style="font:600 22px 'Source Serif 4',serif;color:#0E2440">Alícuotas vigentes</strong>
+            <span style="font-size:14px;color:#5A6170">Ley que establece el Impuesto al Valor Agregado</span>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div style="display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 24px;border-bottom:1px solid #EEE9DD"><span style="font:600 14px 'IBM Plex Mono',monospace;color:#1F5E43">—</span><span style="font-size:15px;color:#1C2330">Exenta, exonerada o no sujeta</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">arts. 16–19, 66</span></div>
+            <div style="display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 24px;border-bottom:1px solid #EEE9DD"><span style="font:600 14px 'IBM Plex Mono',monospace;color:#1F4E8C">8 %</span><span style="font-size:15px;color:#1C2330">Alícuota reducida</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">art. 64</span></div>
+            <div style="display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 24px;border-bottom:1px solid #EEE9DD"><span style="font:600 14px 'IBM Plex Mono',monospace;color:#0E2440">16 %</span><span style="font-size:15px;color:#1C2330">Alícuota general</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">art. 63</span></div>
+            <div style="display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 24px"><span style="font:600 14px 'IBM Plex Mono',monospace;color:#8E2820">31 %</span><span style="font-size:15px;color:#1C2330">General más adicional (consumo suntuario)</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#5A6170">arts. 27, 61</span></div>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;color:#1C2330;border:1px solid #DDD7C8;border-radius:12px;padding:22px 24px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+            <strong style="font:600 22px/1.2 'Source Serif 4',serif;color:#0E2440">Próximos días inhábiles</strong>
+            <span style="font-size:13px;color:#5A6170">COT art. 10</span>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ inhabiles }}" as="d" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 0;border-top:1px solid #EEE9DD">
+                <span style="font:600 15px 'IBM Plex Mono',monospace;color:#0E2440">{{ d.fecha }}</span>
+                <span style="font-size:15px">{{ d.nombre }}<span style="color:#5A6170"> · {{ d.dia }}</span></span>
+                <span style="font-size:13px;color:#5A6170">{{ d.tipo }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size:12px;line-height:1.45;color:#5A6170">Los días bancarios no laborables también son inhábiles para declarar y pagar tributos.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modulos" style="background:#F6F3EA">
+    <div style="max-width:none;margin:0 auto;padding:80px clamp(24px,4vw,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:48px">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:380px">
+        <span style="font:600 13px 'Public Sans',sans-serif;color:#1F4E8C">Módulos</span>
+        <h2 style="margin:0;font:700 40px/1.1 'Source Serif 4',serif;color:#0E2440;text-wrap:balance">Un ecosistema, una sola API key</h2>
+        <p style="margin:0;font-size:17px;line-height:1.55;color:#3A4250">Cada módulo tiene su fin propio y se puede consumir por separado. Los permisos se asignan por módulo.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;border-top:2px solid #0E2440">
+        <sc-for list="{{ modulos }}" as="m" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:4px 16px;padding:20px 0;border-bottom:1px solid #DDD7C8">
+            <span style="grid-row:span 3;font:500 14px 'IBM Plex Mono',monospace;color:#5A6170;padding-top:4px">{{ m.n }}</span>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><strong style="font:600 22px 'Source Serif 4',serif;color:#0E2440">{{ m.nombre }}</strong><span style="display:inline-flex;align-items:center;gap:7px;font:500 13px 'Public Sans',sans-serif;color:{{ m.fg }}"><span style="width:7px;height:7px;border-radius:50%;flex:none;background:{{ m.fg }}"></span>{{ m.estado }}</span></div>
+            <span style="font-size:15px;line-height:1.5;color:#3A4250">{{ m.texto }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;color:#1F4E8C">{{ m.ruta }}</span>
+          </div>
+        </sc-for>
+        <div style="padding:16px 0;font-size:14px;color:#5A6170">Próximamente: Unidad Tributaria e IGTF.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="api" style="background:#FFFFFF;color:#1C2330;border-top:1px solid #DDD7C8;border-bottom:1px solid #DDD7C8">
+    <div style="max-width:none;margin:0 auto;padding:80px clamp(24px,4vw,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <span style="font:600 13px 'Public Sans',sans-serif;color:#1F4E8C">Para desarrolladores</span>
+        <h2 style="margin:0;font:700 40px/1.1 'Source Serif 4',serif;color:#0E2440;text-wrap:balance">Integra la clasificación en tu POS, ERP o tienda en línea</h2>
+        <p style="margin:0;font-size:17px;line-height:1.55;color:#3A4250">Documentación Swagger en <span style="font-family:'IBM Plex Mono',monospace;color:#0E2440">/docs</span>, errores claros y montos como texto decimal exacto. La API key es gratuita y tiene un límite de consultas por minuto.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:15px">
+          <div style="display:flex;gap:10px;align-items:center"><span style="width:6px;height:6px;border-radius:50%;background:#1F4E8C"></span>Nombre, EAN, UPC, ISBN, PLU, SKU o código arancelario</div>
+          <div style="display:flex;gap:10px;align-items:center"><span style="width:6px;height:6px;border-radius:50%;background:#1F4E8C"></span>Operación nacional o importación</div>
+          <div style="display:flex;gap:10px;align-items:center"><span style="width:6px;height:6px;border-radius:50%;background:#1F4E8C"></span>Renglón de la Forma 30 en cada respuesta</div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="Login.dc.html" style="font-size:16px;font-weight:600;color:#0E2440;background:#F2B632;padding:14px 20px;border-radius:8px;text-decoration:none">Solicitar API key gratis</a>
+          <a href="#" style="font-size:16px;font-weight:600;color:#0E2440;background:#FFFFFF;border:1px solid #C9C2B0;padding:13px 20px;border-radius:8px;text-decoration:none">Abrir Swagger</a>
+        </div>
+      </div>
+      <div style="background:#FAF8F2;border:1px solid #DDD7C8;border-radius:12px;overflow:hidden;font:400 13.5px/1.65 'IBM Plex Mono',monospace">
+        <div style="display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid #EEE9DD;color:#5A6170;font-size:12px"><span style="color:#1F4E8C;font-weight:600">POST</span><span>/api/v1/iva/clasificar</span></div>
+        <pre style="margin:0;padding:16px;color:#3A4250;white-space:pre-wrap;word-break:break-word">curl -X POST https://api.elrenglon.com.ve/api/v1/iva/clasificar \
+  -H "X-API-Key: rgl_1a2b3c4d_••••••••" \
+  -d '{ "nombre": "Arroz Mary 1kg", "operacion": "nacional" }'</pre>
+        <pre style="margin:0;padding:16px;border-top:1px solid #EEE9DD;color:#3A4250;white-space:pre-wrap;word-break:break-word">{
+  "estado": <span style="color:#6E4F05">"determinado"</span>,
+  "categoria": <span style="color:#1F5E43">"EXENTO"</span>,
+  "base_legal": "Ley IVA art. 18, num. 1, lit. c",
+  "concepto_declaracion": "Ventas internas no gravadas",
+  "operacion": "nacional"
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:none;width:100%;margin:0 auto;padding:72px clamp(24px,4vw,72px);box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px">
+    <div style="display:flex;flex-direction:column;gap:8px;border-top:3px solid #F2B632;padding-top:16px"><strong style="font:600 19px 'Source Serif 4',serif;color:#0E2440">Orienta, no bloquea</strong><span style="font-size:15px;line-height:1.5;color:#3A4250">Solo consulta y entrega la categorización. No deniega operaciones.</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;border-top:3px solid #1F4E8C;padding-top:16px"><strong style="font:600 19px 'Source Serif 4',serif;color:#0E2440">Base legal verificada</strong><span style="font-size:15px;line-height:1.5;color:#3A4250">Textos legales contrastados contra la Gaceta Oficial.</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;border-top:3px solid #B8352B;padding-top:16px"><strong style="font:600 19px 'Source Serif 4',serif;color:#0E2440">Multiopción en zonas grises</strong><span style="font-size:15px;line-height:1.5;color:#3A4250">Cada opción con su condición en lenguaje claro. Tú decides.</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;border-top:3px solid #0E2440;padding-top:16px"><strong style="font:600 19px 'Source Serif 4',serif;color:#0E2440">Fuentes oficiales</strong><span style="font-size:15px;line-height:1.5;color:#3A4250">SENIAT, BCV, SUDEBAN y Gaceta Oficial. Solo contexto venezolano.</span></div>
+  </section>
+
+  <footer style="border-top:1px solid #DDD7C8;margin-top:auto">
+    <div style="max-width:none;margin:0 auto;padding:32px clamp(24px,4vw,72px);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;color:#5A6170">
+      <div style="display:flex;align-items:center;gap:10px">
+        <dc-import name="Logo" tipo="simbolo" variante="claro" fondo="#F6F3EA" style="width:28px;height:28px" hint-size="24px,24px"></dc-import>
+        <span>Resultados orientativos: no constituyen asesoría tributaria ni aduanera.</span>
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <span>Datos de productos: Open Food Facts (ODbL)</span>
+        <a href="#">Estado del servicio</a>
+        <a href="#">Swagger</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ejemploInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;arroz&quot;,&quot;libro&quot;,&quot;atun&quot;,&quot;reloj&quot;,&quot;asesoria&quot;],&quot;default&quot;:&quot;arroz&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;montoInicial&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:100,&quot;min&quot;:1,&quot;max&quot;:100000,&quot;tsType&quot;:&quot;number&quot;}}">
+const USD = 186.4213, EUR = 218.9012;
+const fmt = (n, d = 2) => new Intl.NumberFormat('es-VE', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+const T = {
+  ex: { tasa: 'Exento', bg: '#E3F0E9', fg: '#1F5E43' },
+  r8: { tasa: '8 %', bg: '#E2EAF6', fg: '#1F4E8C' },
+  g16: { tasa: '16 %', bg: '#E4E6EC', fg: '#0E2440' },
+  a31: { tasa: '31 %', bg: '#F6E1DE', fg: '#8E2820' },
+};
+const EJ = {
+  arroz: { corto: 'Arroz', nombre: 'Arroz Mary 1kg',
+    nacional: { estado: 'determinado', opciones: [{ ...T.ex, categoria: 'Operación exenta', condicion: 'Venta interna de arroz. Renglón de la Forma 30: ventas internas no gravadas.', base: 'Ley IVA art. 18, num. 1, lit. c' }], nota: 'En la importación el resultado cambia: alícuota general por el Decreto 5.196.' },
+    importacion: { estado: 'determinado', opciones: [{ ...T.g16, categoria: 'Alícuota general', condicion: 'Importación de arroz con la exención suspendida, sin fecha de término.', base: 'Decreto 5.196 · Ley IVA art. 63' }], nota: 'La venta nacional es exenta. Puede aplicar exoneración con certificado COMEX.' } },
+  libro: { corto: 'ISBN 9780307474728', nombre: '9780307474728',
+    nacional: { estado: 'determinado', opciones: [{ ...T.ex, categoria: 'Operación exenta', condicion: 'Código detectado: ISBN (libro).', base: 'Ley IVA art. 18, num. 6' }] } },
+  atun: { corto: 'Atún en aceite', nombre: 'Atún en aceite 140g',
+    nacional: { estado: 'condicionado', opciones: [
+      { ...T.g16, categoria: 'Alícuota general', condicion: 'Si la «presentación natural» no incluye el aceite.', base: 'Ley IVA art. 63' },
+      { ...T.ex, categoria: 'Operación exenta', condicion: 'Si se considera presentación natural.', base: 'Ley IVA art. 18, num. 1, lit. k' }] } },
+  reloj: { corto: 'Reloj Casio', nombre: 'Reloj Casio',
+    nacional: { estado: 'condicionado', opciones: [
+      { ...T.g16, categoria: 'Alícuota general', condicion: 'Si el precio es menor a US$ 300.', base: 'Ley IVA art. 63' },
+      { ...T.a31, categoria: 'General más adicional', condicion: 'Si el precio es de US$ 300 o más (consumo suntuario).', base: 'Ley IVA art. 61, num. 1, lit. f' }] } },
+  asesoria: { corto: 'Asesoría legal', nombre: 'Asesoría legal',
+    nacional: { estado: 'condicionado', opciones: [
+      { ...T.r8, categoria: 'Alícuota reducida', condicion: 'Si el cliente es un ente del Poder Público.', base: 'Ley IVA art. 64, num. 3' },
+      { ...T.g16, categoria: 'Alícuota general', condicion: 'En los demás casos.', base: 'Ley IVA art. 63' }] } },
+};
+const INH = [
+  ['12/10', 'Día de la Resistencia Indígena', 'lunes', 'NACIONAL'],
+  ['26/10', 'San José Gregorio Hernández', 'lunes', 'BANCARIO'],
+  ['23/11', 'Virgen del Rosario de Chiquinquirá', 'lunes', 'BANCARIO'],
+  ['14/12', 'Inmaculada Concepción', 'lunes', 'BANCARIO'],
+  ['24/12', 'Nochebuena', 'jueves', 'NACIONAL'],
+  ['25/12', 'Navidad', 'viernes', 'NACIONAL'],
+];
+const MOD = [
+  ['IVA', 'Clasificación de bienes y servicios según la Ley de IVA: exento, 8 %, 16 % o 16 % + 15 %, con su base legal.', '/api/v1/iva', 'En validación'],
+  ['BCV', 'Tasa oficial del BCV en dólares y euros por fecha valor, histórico desde 2025, tasa aplicable y conversión.', '/api/v1/bcv', 'En servicio'],
+  ['Arancel', 'Arancel de Aduanas vigente (Decreto 4.944 con las reformas de 2025): códigos, búsqueda, régimen legal e historial.', '/api/v1/arancel', 'En servicio'],
+  ['Calendario', 'Próximos deberes tributarios 2026 por RIF, para contribuyentes especiales y ordinarios, con prórrogas del COT art. 10.', '/api/v1/calendario', 'En servicio'],
+  ['RIF', 'Validación del RIF con dígito verificador.', '/api/v1/rif', 'En servicio'],
+];
+const grafica = (v, color, id, delay) => {
+  const h = React.createElement, W = 140, H = 44, mn = Math.min(...v), mx = Math.max(...v);
+  const pts = v.map((y, i) => [4 + i * (W - 10) / (v.length - 1), 6 + (1 - (y - mn) / (mx - mn || 1)) * (H - 14)]);
+  const line = pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const last = pts[pts.length - 1];
+  const area = 'M' + pts[0][0] + ',' + H + ' L' + line.split(' ').join(' L') + ' L' + last[0] + ',' + H + ' Z';
+  return h('svg', { viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, style: { overflow: 'visible' } },
+    h('defs', null, h('linearGradient', { id, x1: 0, y1: 0, x2: 0, y2: 1 }, h('stop', { offset: '0', stopColor: color, stopOpacity: 0.18 }), h('stop', { offset: '1', stopColor: color, stopOpacity: 0 }))),
+    h('path', { className: 'rg-anim', d: area, fill: 'url(#' + id + ')', style: { opacity: 0, animation: 'rgArea 700ms ease-out ' + (delay + 900) + 'ms forwards' } }),
+    h('polyline', { className: 'rg-anim', points: line, pathLength: 1, fill: 'none', stroke: color, strokeWidth: 2.2, strokeLinejoin: 'round', strokeLinecap: 'round', style: { strokeDasharray: 1, strokeDashoffset: 1, animation: 'rgDibujar 1100ms cubic-bezier(.3,.7,.2,1) ' + delay + 'ms forwards' } }),
+    h('circle', { className: 'rg-anim', cx: last[0], cy: last[1], r: 3.5, fill: color, stroke: '#FFFFFF', strokeWidth: 1.5, style: { opacity: 0, transformBox: 'fill-box', transformOrigin: 'center', animation: 'rgPunto 400ms ease-out ' + (delay + 1000) + 'ms forwards' } }));
+};
+const spark = v => { const mn = Math.min(...v), mx = Math.max(...v); return v.map((y, i) => (i * 20).toFixed(1) + ',' + (32 - (y - mn) / (mx - mn || 1) * 28).toFixed(1)).join(' '); };
+class Component extends DCLogic {
+  state = { monto: this.props.montoInicial ?? 100, moneda: 'USD', ej: this.props.ejemploInicial ?? 'arroz', op: 'nacional' };
+  renderVals() {
+    const { monto, moneda, ej, op } = this.state;
+    const e = EJ[ej];
+    const res = e[op] || e.nacional;
+    const rate = moneda === 'USD' ? USD : EUR;
+    return {
+      graficaUsd: this._gU || (this._gU = grafica([183.91, 184.52, 184.87, 185.20, 185.61, 185.64, USD], "#2E7D5B", "rgGU", 250)), graficaEur: this._gE || (this._gE = grafica([219.84, 219.52, 219.61, 219.30, 219.08, 219.30, EUR], "#B8352B", "rgGE", 450)), usdTxt: fmt(USD, 4), eurTxt: fmt(EUR, 4), monto,
+      onMonto: ev => this.setState({ monto: ev.target.value }),
+      convertido: fmt((parseFloat(monto) || 0) * rate),
+      monedas: ['USD', 'EUR'].map(code => ({ code, bg: code === moneda ? '#0E2440' : '#FFFFFF', fg: code === moneda ? '#F6F3EA' : '#0E2440', pick: () => this.setState({ moneda: code }) })),
+      ej: e, res: { ...res, nota: res.nota || '' }, primera: res.opciones[0], masOpciones: res.opciones.length > 1 ? `+${res.opciones.length - 1} opción · ver detalle` : 'Ver detalle',
+      opLabel: op === 'nacional' ? 'nacional' : 'importación',
+      operaciones: [['nacional', 'Nacional'], ['importacion', 'Importación']].map(([k, label]) => ({ label, bg: k === op ? '#0E2440' : '#FFFFFF', fg: k === op ? '#F6F3EA' : '#0E2440', pick: () => this.setState({ op: k }) })),
+      ejemplos: Object.entries(EJ).map(([k, v]) => ({ corto: v.corto, fg: k === ej ? '#0E2440' : '#5A6170', bd: k === ej ? '#0E2440' : 'transparent', pick: () => this.setState({ ej: k }) })),
+      inhabiles: INH.map(([fecha, nombre, dia, tipo]) => ({ fecha, nombre, dia, tipo: tipo === 'NACIONAL' ? 'Nacional' : 'Bancario', bg: tipo === 'NACIONAL' ? '#F2B632' : '#5A6170' })),
+      modulos: MOD.map(([nombre, texto, ruta, estado], i) => ({ n: String(i + 1).padStart(2, '0'), nombre, texto, ruta, estado, bg: estado === 'En servicio' ? '#E3F0E9' : '#FBEFCF', fg: estado === 'En servicio' ? '#1F5E43' : '#6E4F05' })),
+    };
+  }
+}
+</script>
+</body>
+</html>
