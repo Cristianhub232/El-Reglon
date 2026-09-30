@@ -26,7 +26,8 @@ metabase.elrenglonve.org {
 	reverse_proxy 127.0.0.1:3001
 }
 
-www.elrenglonve.org {
+# www (http y https) va directo a la versión canónica, en un solo salto
+www.elrenglonve.org, http://www.elrenglonve.org {
 	redir https://elrenglonve.org{uri} permanent
 }
 

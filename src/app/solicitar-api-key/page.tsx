@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Cabecera, PiePagina } from "../../ui/sitio/Cabecera.tsx";
 import { FormularioSolicitud } from "./Formulario.tsx";
 
-export const metadata = { title: "Solicitar API key", description: "API key gratuita para integrar la clasificación de IVA, las tasas BCV, el arancel, el calendario tributario y la validación del RIF." };
+export const metadata = { title: "Solicitar API key", description: "API key gratuita para integrar la clasificación de IVA, las tasas BCV, el arancel, el calendario tributario y la validación del RIF.", alternates: { canonical: "/solicitar-api-key" } };
 
 export default function SolicitarApiKey() {
   return (

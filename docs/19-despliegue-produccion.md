@@ -107,3 +107,23 @@ docker compose up -d --build
 - [ ] En Spaceship, subir el TTL del registro `@` de 5 a 30 minutos, igual que `www` y `metabase`. El TTL bajo solo hacía falta durante el cambio.
 - [ ] Mantener activa la **renovación automática del dominio** (vence al año de la compra, en septiembre de 2027). Si el dominio vence, se caen el sitio, la API y Metabase.
 - [ ] Opcional: borrar la "Sample Database" de Metabase (Administración → Bases de datos).
+
+## 9. Indexación en Google (SEO)
+
+| Pieza | Implementación |
+|---|---|
+| `/robots.txt` | `src/app/robots.ts`: permite todo el sitio, bloquea `/admin` y `/api/` y anuncia el sitemap |
+| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, `/solicitar-api-key` y `/docs` con su URL canónica |
+| Canonical | En cada página pública (`alternates.canonical`). No va en el layout raíz: todas las páginas lo heredarían y dirían ser la portada |
+| `noindex` | `/admin` (y sus páginas), `/ingresar` y `/sin-conexion` |
+| URL base | `src/core/sitio.ts` (`SITIO_URL`, por defecto `https://elrenglonve.org`): `metadataBase`, Open Graph (`es_VE`), robots y sitemap |
+| Versión canónica | `https://elrenglonve.org/`: `http://`, `www` y el IP redirigen a ella con 301/308 en un solo salto |
+
+`scripts/prueba-api.ts` verifica robots, sitemap, canonical y `noindex` (83 verificaciones en total).
+
+**Google Search Console** (lo hace el responsable con su cuenta de Google):
+1. Agregar una propiedad de tipo **Dominio** para `elrenglonve.org`.
+2. Copiar el registro **TXT** que entrega Google y crearlo en Spaceship (Host `@`, Tipo `TXT`). Después, pulsar **Verificar**.
+3. En **Sitemaps**, enviar `sitemap.xml`.
+4. En **Inspección de URL**, probar `https://elrenglonve.org/` y pulsar **Solicitar indexación**.
+5. Revisar **Indexación → Páginas** unos días después.

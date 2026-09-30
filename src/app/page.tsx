@@ -14,6 +14,7 @@ import { diaSemana, entero, fecha, fechaCorta, fechaLarga, hora, numero } from "
 import s from "../ui/sitio/portada.module.css";
 
 export const dynamic = "force-dynamic";
+export const metadata = { alternates: { canonical: "/" } };
 
 const MODULOS = [
   ["IVA", "Clasificación de bienes y servicios según la Ley de IVA: exento, 8 %, 16 % o 16 % + 15 %, con su base legal.", "/api/v1/iva"],
