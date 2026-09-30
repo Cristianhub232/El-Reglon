@@ -7,7 +7,7 @@ import { hora } from "../../ui/formato.ts";
 import s from "../../ui/sitio/portada.module.css";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Noticias", description: "Titulares de los principales medios venezolanos, actualizados cada hora." };
+export const metadata = { title: "Noticias", description: "Titulares de los principales medios venezolanos, actualizados cada hora.", alternates: { canonical: "/noticias" } };
 
 const POR_PAGINA = 30;
 

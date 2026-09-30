@@ -1,7 +1,7 @@
 // Página que el service worker muestra cuando no hay conexión y la página pedida no está guardada
 import { Cabecera, PiePagina } from "../../ui/sitio/Cabecera.tsx";
 
-export const metadata = { title: "Sin conexión" };
+export const metadata = { title: "Sin conexión", robots: { index: false } };
 
 export default function SinConexion() {
   return (

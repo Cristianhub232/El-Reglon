@@ -8,7 +8,7 @@ import { Logo } from "../../ui/Logo.tsx";
 import { FormularioIngreso } from "./FormularioIngreso.tsx";
 import s from "./ingreso.module.css";
 
-export const metadata = { title: "Iniciar sesión" };
+export const metadata = { title: "Iniciar sesión", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
 // Operativo si la base responde y la última lectura del BCV (si la hubo) no falló

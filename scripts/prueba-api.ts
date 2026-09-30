@@ -227,6 +227,15 @@ async function sitioYSesiones() {
   verificar("service worker sin caché y sin tocar /api ni /admin", p.estado === 200 && /no-cache/.test(p.r.headers.get("cache-control") ?? "") && p.texto.includes("/^\\/admin"), p.r.headers.get("cache-control"));
   p = await pagina("/sin-conexion");
   verificar("página sin conexión", p.estado === 200);
+  // Indexación: robots.txt, sitemap.xml, canonical en las páginas públicas y noindex en las privadas
+  p = await pagina("/robots.txt");
+  verificar("robots.txt: permite el sitio, bloquea /admin y /api/ y anuncia el sitemap", p.estado === 200 && /Allow: \/\n/.test(p.texto) && p.texto.includes("Disallow: /admin") && p.texto.includes("Disallow: /api/") && /Sitemap: https:\/\/.+\/sitemap\.xml/.test(p.texto), p.texto);
+  p = await pagina("/sitemap.xml");
+  verificar("sitemap.xml con la portada y sin el panel", p.estado === 200 && /<loc>https:\/\/[^<]+\/<\/loc>/.test(p.texto) && !p.texto.includes("/admin"), p.texto.slice(0, 300));
+  p = await pagina("/");
+  verificar("portada: canonical y sin noindex", /<link rel="canonical" href="https:\/\/[^"]+\/?"/.test(p.texto) && !/noindex/.test(p.texto));
+  p = await pagina("/ingresar");
+  verificar("inicio de sesión con noindex", /<meta name="robots" content="noindex/.test(p.texto));
   p = await pagina("/admin/usuarios");
   verificar("panel sin sesión → redirige a /ingresar con 'siguiente'", p.estado === 307 && (p.r.headers.get("location") ?? "").includes("/ingresar?siguiente=%2Fadmin%2Fusuarios"), p.r.headers.get("location"));
   p = await pagina("/admin/auditoria/csv");
