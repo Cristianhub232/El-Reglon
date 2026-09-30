@@ -14,6 +14,30 @@
 
 Solo Caddy (puertos 80 y 443) y SSH quedan expuestos. Todos los contenedores tienen `restart: unless-stopped` y Docker y Caddy arrancan con el sistema.
 
+### Direcciones en servicio
+
+| Qué | Dirección |
+|---|---|
+| Sitio y herramientas públicas | https://elrenglonve.org |
+| Panel de administración | https://elrenglonve.org/ingresar |
+| API (Swagger) | https://elrenglonve.org/docs |
+| Metabase | https://metabase.elrenglonve.org |
+
+### Redirecciones
+
+| Desde | Hacia |
+|---|---|
+| `http://…` | `https://…` (Caddy, automático) |
+| `www.elrenglonve.org` | `https://elrenglonve.org` (301) |
+| El IP `40.160.143.39` a secas | `https://elrenglonve.org` (301) |
+| `40-160-143-39.sslip.io` y `metabase.40-160-143-39.sslip.io` (direcciones provisionales, §7) | el dominio equivalente (301), para que los enlaces ya compartidos sigan funcionando. Solo en el Caddyfile del servidor, no en `despliegue/Caddyfile` |
+
+### TLS
+
+- Certificados de **Let's Encrypt** para `elrenglonve.org`, `www` y `metabase`, emitidos el 30/09/2026 y vigentes hasta el **29/12/2026**. Caddy los **renueva solo** unos 30 días antes; no hay que hacer nada.
+- Cabecera **HSTS** (`max-age` de un año): los navegadores entran siempre por HTTPS.
+- Metabase usa `METABASE_URL=https://metabase.elrenglonve.org` como dirección oficial, así que sus enlaces y correos apuntan al dominio.
+
 ## 2. Servidor
 
 ```bash
@@ -67,3 +91,19 @@ git pull && npm ci
 herramientas/instalar_bd.sh                 # si cambiaron esquemas o semillas (idempotente)
 docker compose up -d --build
 ```
+
+## 7. Historial de la puesta en marcha (30/09/2026)
+
+1. Aplicación y Metabase publicados provisionalmente en `https://40-160-143-39.sslip.io` y `https://metabase.40-160-143-39.sslip.io` mientras se verificaba la compra del dominio.
+2. Dominio **elrenglonve.org** comprado en Spaceship (registro por 1 año, renovación automática y privacidad incluidas). Ojo: es `.org`, no `.com`.
+3. En Spaceship → Registros DNS se reemplazaron los registros de estacionamiento (`34.216.117.25` y `54.149.79.189`) por tres registros **A** hacia `40.160.143.39`: `@`, `www` y `metabase`. La propagación fue inmediata.
+4. Caddy emitió los certificados, las direcciones provisionales pasaron a redirigir al dominio y Metabase adoptó su dirección definitiva.
+5. `scripts/prueba-api.ts` contra `https://elrenglonve.org`: **79/79**.
+6. El Caddyfile con las direcciones provisionales quedó respaldado en el servidor como `/etc/caddy/Caddyfile.bak-sslip`.
+
+## 8. Tareas del responsable
+
+- [ ] **Cambiar las contraseñas temporales** del panel de El Renglón y de Metabase. El panel lo exige al primer ingreso y pide activar la **verificación en dos pasos**.
+- [ ] En Spaceship, subir el TTL del registro `@` de 5 a 30 minutos, igual que `www` y `metabase`. El TTL bajo solo hacía falta durante el cambio.
+- [ ] Mantener activa la **renovación automática del dominio** (vence al año de la compra, en septiembre de 2027). Si el dominio vence, se caen el sitio, la API y Metabase.
+- [ ] Opcional: borrar la "Sample Database" de Metabase (Administración → Bases de datos).
