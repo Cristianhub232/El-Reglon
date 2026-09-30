@@ -1,6 +1,7 @@
 // POST /api/v1/iva/clasificar: valida la entrada, obtiene las señales (códigos, Open Food Facts, arancel, nombre),
 // convierte los precios con la tasa BCV, ejecuta el motor y arma la respuesta con alícuotas, base legal y montos.
 // Nunca niega una consulta por reglas de negocio: lo que no se resuelve se responde como opciones o 'no_determinado'.
+import { isIP } from "node:net";
 import { consulta } from "../../core/db.ts";
 import { ErrorApi } from "../../core/http.ts";
 import { fecha as validarFecha, hoyCaracas } from "../../core/validacion.ts";
@@ -153,7 +154,10 @@ function detallarBase(c: CatalogoIva, ids: string[]) {
   });
 }
 
-export async function clasificarSolicitud(cuerpo: unknown, apiKeyId: number | null) {
+// Desde dónde llega la consulta: la API (con API key) o la herramienta pública del sitio
+export interface Origen { canal: "api" | "web"; ip?: string | null; agente?: string | null }
+
+export async function clasificarSolicitud(cuerpo: unknown, apiKeyId: number | null, origen: Origen = { canal: "api" }) {
   const e = validarEntrada(cuerpo);
   const c = await catalogo();
   const advertencias: string[] = [];
@@ -254,14 +258,14 @@ export async function clasificarSolicitud(cuerpo: unknown, apiKeyId: number | nu
   };
 
   // 7. Minería de precios y registro de consultas no resueltas (no deben tumbar la respuesta)
-  await registrar(e, precios, r.reglas[0]?.id ?? null, codigos, apiKeyId, r.estado, r.reglas.map((x) => x.id)).catch((err) => {
+  await registrar(e, precios, r.reglas[0]?.id ?? null, codigos, apiKeyId, r.estado, r.reglas.map((x) => x.id), origen, producto?.nombre ?? null).catch((err) => {
     console.error("[el-renglon] no se pudo registrar la observación:", err);
   });
   return respuesta;
 }
 
 async function registrar(e: Entrada, p: Precios | null, reglaId: string | null, codigos: CodigoDetectado[], apiKeyId: number | null,
-  estado: string, reglas: string[]) {
+  estado: string, reglas: string[], origen: Origen, productoOff: string | null) {
   const nombre = e.nombre ? normalizar(e.nombre) : null;
   if (p) {
     await consulta(
@@ -275,7 +279,16 @@ async function registrar(e: Entrada, p: Precios | null, reglaId: string | null, 
       [e.fecha, codigos[0]?.codigo ?? null, e.codigo_arancelario, nombre, reglaId, e.precio_compra, e.precio_venta, p.moneda,
         txt(p.compra?.bs, 4), txt(p.venta?.bs, 4), txt(p.compra?.usd, 6), txt(p.venta?.usd, 6), p.tasa_bcv_bs, p.tasa_fecha_valor, e.ubicacion, apiKeyId]);
   }
-  if (estado !== "determinado") {
+  if (estado === "no_determinado") {
+    // Artículo no encontrado: qué se consultó y desde dónde, para completar el catálogo
+    await consulta(
+      `INSERT INTO iva.articulo_no_encontrado (texto, texto_normalizado, codigos, tipos_codigo, codigo_arancelario, producto_off, operacion, tipo,
+         fecha_operacion, canal, api_key_id, ip, ubicacion, agente)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+      [e.nombre, nombre, codigos.map((c) => c.codigo), codigos.map((c) => c.tipo), e.codigo_arancelario, productoOff, e.operacion,
+        e.tipo?.toLowerCase() ?? null, e.fecha, origen.canal, apiKeyId, origen.ip && isIP(origen.ip) ? origen.ip : null, e.ubicacion,
+        origen.agente?.slice(0, 300) ?? null]);
+  } else if (estado === "condicionado") {
     const { precio_compra: _c, precio_venta: _v, ubicacion: _u, ...entrada } = e;
     await consulta("INSERT INTO iva.consulta_registro (estado, entrada, reglas, api_key_id) VALUES ($1, $2, $3, $4)", [estado, entrada, reglas, apiKeyId]);
   }

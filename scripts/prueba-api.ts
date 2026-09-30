@@ -175,6 +175,10 @@ async function main() {
   verificar("electricidad residencial → EXENTO (19.9)", r.cuerpo?.estado === "determinado" && cats(r.cuerpo) === "EXENTO", r.cuerpo);
   r = await clasificar({ nombre: "zzqx producto desconocido" });
   verificar("sin coincidencias → 200 no_determinado (nunca se niega)", r.estado === 200 && r.cuerpo?.estado === "no_determinado", r.cuerpo);
+  await new Promise((ok) => setTimeout(ok, 300));
+  const [ne] = await consulta<{ canal: string; api_key_id: number | null; operacion: string; texto_normalizado: string }>(
+    "SELECT canal, api_key_id, operacion, texto_normalizado FROM iva.articulo_no_encontrado WHERE texto = 'zzqx producto desconocido' ORDER BY id DESC LIMIT 1");
+  verificar("artículo no encontrado registrado con su origen (canal api y API key)", ne?.canal === "api" && ne.api_key_id !== null && ne.texto_normalizado === "zzqx producto desconocido", ne);
   r = await post("/api/v1/iva/clasificar", { nombre: "arroz", ...sinPrecios }, K);
   verificar("sin operacion → 400 operacion_requerida", r.estado === 400 && r.cuerpo?.error?.codigo === "operacion_requerida", r.cuerpo);
   r = await post("/api/v1/iva/clasificar", { nombre: "arroz", operacion: "nacional" }, K);
@@ -216,6 +220,13 @@ async function sitioYSesiones() {
   verificar("CSV de auditoría sin sesión → no disponible", p.estado === 307 || p.estado === 403, p.estado);
   const r = await post("/api/publico/iva/clasificar", { nombre: "Arroz Mary 1kg", operacion: "nacional" });
   verificar("clasificador público sin API key → arroz EXENTO", r.estado === 200 && r.cuerpo?.opciones?.[0]?.categoria === "EXENTO", r.cuerpo);
+  const marca = `zzqx articulo web ${Date.now()}`;
+  await post("/api/publico/iva/clasificar", { nombre: marca, operacion: "importacion" });
+  await new Promise((ok) => setTimeout(ok, 300));
+  const [web] = await consulta<{ canal: string; api_key_id: number | null; operacion: string }>(
+    "SELECT canal, api_key_id, operacion FROM iva.articulo_no_encontrado WHERE texto = $1", [marca]);
+  verificar("no encontrado desde la herramienta pública → canal web, sin API key", web?.canal === "web" && web.api_key_id === null && web.operacion === "importacion", web);
+  await consulta("DELETE FROM iva.articulo_no_encontrado WHERE texto = $1", [marca]);
 
   // Sesiones (módulo del servidor) con un usuario temporal
   const { hashClave } = await import("../src/core/auth/claves.ts");
@@ -258,6 +269,7 @@ main()
     const ids = `SELECT id FROM core.api_key WHERE prefijo = ANY ($1)`;
     await consulta(`DELETE FROM iva.observacion_precio WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
     await consulta(`DELETE FROM iva.consulta_registro WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
+    await consulta(`DELETE FROM iva.articulo_no_encontrado WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
     await consulta(`DELETE FROM arancel.deteccion WHERE api_key_id IN (${ids})`, [prefijos]).catch(() => {});
     await consulta("DELETE FROM core.api_key WHERE prefijo = ANY ($1)", [prefijos]).catch(() => {});
     await pool().end();

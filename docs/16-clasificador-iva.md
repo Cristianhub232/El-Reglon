@@ -44,6 +44,18 @@
 - Montos por opción, en Bs. y USD, **como en la factura**: base redondeada a céntimos, IVA sobre esa base y total igual a la base más el IVA. Aritmética decimal exacta con BigInt.
 - Cada precio se guarda en `iva.observacion_precio` sin datos personales. Los duplicados (misma clave, producto y precios en menos de 1 minuto) se marcan, no se borran.
 
+## 2.1 Artículos no encontrados
+
+Cuando el clasificador no identifica el bien o servicio (estado `no_determinado`), la consulta queda en **`iva.articulo_no_encontrado`** (`db/iva/003_no_encontrados.sql`) con:
+
+| Grupo | Campos |
+|---|---|
+| Qué se consultó | `texto` (tal como se escribió), `texto_normalizado` (para agrupar), `codigos` y `tipos_codigo`, `codigo_arancelario`, `producto_off` (si Open Food Facts identificó el código), `operacion`, `tipo`, `fecha_operacion` |
+| Desde dónde | `canal` (`api` o `web`, la herramienta pública), `api_key_id`, `ip` (solo detrás del proxy, `TRUST_PROXY=1`), `ubicacion` (la declarada en la consulta), `agente` (navegador o cliente HTTP), `consultado_en` |
+| Curaduría | `revisado`, `revisado_por`, `revisado_en`, `regla_asignada`, `nota` |
+
+En el panel, **Catálogo legal IVA → Artículos no encontrados** los agrupa por texto (cuántas veces y desde qué canal), muestra el origen de las últimas consultas y permite marcarlos como revisados, con la regla que les corresponde. El resumen los cuenta como "consultas no determinadas, para curaduría". Las consultas `condicionado` siguen en `iva.consulta_registro`.
+
 ## 3. Validaciones del cargador
 
 | # | Qué comprueba |

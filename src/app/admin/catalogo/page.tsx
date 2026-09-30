@@ -33,9 +33,10 @@ export default async function Catalogo({ searchParams }: { searchParams: Promise
   const { regla: rid, art, q } = await searchParams;
   invalidarCatalogo();
   const cat = await catalogo();
-  const [[casos], [ediciones]] = await Promise.all([
+  const [[casos], [ediciones], [noEncontrados]] = await Promise.all([
     consulta<{ n: string }>("SELECT count(*) AS n FROM iva.caso_prueba"),
     consulta<{ n: string }>(`SELECT count(*) AS n FROM (SELECT DISTINCT ON (regla_id) origen FROM iva.regla_historial ORDER BY regla_id, version DESC) x WHERE origen = 'panel'`),
+    consulta<{ n: string }>("SELECT count(DISTINCT coalesce(texto_normalizado, array_to_string(codigos, ','))) AS n FROM iva.articulo_no_encontrado WHERE NOT revisado"),
   ]);
   const nq = q ? normalizar(q) : "";
   const lista = cat.reglas.filter((r) => (!art || articulos(r).has(art)) && (!nq || normalizar(`${r.id} ${r.nombre}`).includes(nq)));
@@ -52,6 +53,7 @@ export default async function Catalogo({ searchParams }: { searchParams: Promise
       <div className={s.encabezado}>
         <div><h1>Catálogo legal de IVA</h1>
           <span className={s.subtitulo}>{cat.reglas.length} reglas · {casos.n} casos de referencia · versión {cat.version}</span></div>
+        <Link href="/admin/catalogo/no-encontrados" className="boton boton-secundario boton-chico">Artículos no encontrados · {noEncontrados.n}</Link>
         {cat.estado === "validado" ? <span className="punto t-exento" style={{ fontSize: 14, fontWeight: 600 }}>Validado por el asesor</span>
           : <span className="punto t-condicionado" style={{ fontSize: 14, fontWeight: 600 }}>Pendiente de validación por el asesor</span>}
       </div>

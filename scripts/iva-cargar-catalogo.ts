@@ -176,6 +176,7 @@ async function main() {
     await c.query("BEGIN");
     await c.query(readFileSync("db/iva/001_esquema.sql", "utf8"));
     await c.query(readFileSync("db/iva/002_historial.sql", "utf8"));
+    await c.query(readFileSync("db/iva/003_no_encontrados.sql", "utf8"));
     const { rows: faltan } = await c.query<{ prefijo: string }>(
       `SELECT p.prefijo FROM unnest($1::text[]) p(prefijo)
         WHERE NOT EXISTS (SELECT 1 FROM arancel.capitulo WHERE codigo = p.prefijo)

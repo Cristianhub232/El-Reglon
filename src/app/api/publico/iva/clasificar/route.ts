@@ -2,7 +2,7 @@
 // Mismo motor y misma respuesta que /api/v1/iva/clasificar, con un límite por IP.
 import { endpoint } from "../../../../../core/ruta.ts";
 import { ErrorApi } from "../../../../../core/http.ts";
-import { limitarPorIp } from "../../../../../core/limite-ip.ts";
+import { ipCliente, limitarPorIp } from "../../../../../core/limite-ip.ts";
 import { clasificarSolicitud } from "../../../../../modules/iva/clasificador.ts";
 
 export const dynamic = "force-dynamic";
@@ -15,5 +15,5 @@ export const POST = endpoint(null, async (req) => {
   if (!b || typeof b !== "object") throw new ErrorApi(400, "cuerpo_invalido", "El cuerpo debe ser un objeto JSON");
   // Solo lo que usa la herramienta pública; los precios van en null (la minería de precios es para la API)
   return clasificarSolicitud({ nombre: b.nombre ?? null, codigo: b.codigo ?? null, operacion: b.operacion, tipo: b.tipo ?? null,
-    precio_compra: null, precio_venta: null, moneda: null }, null);
+    precio_compra: null, precio_venta: null, moneda: null }, null, { canal: "web", ip: ipCliente(req.headers), agente: req.headers.get("user-agent") });
 });

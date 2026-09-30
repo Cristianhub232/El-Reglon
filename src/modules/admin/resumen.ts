@@ -28,7 +28,8 @@ export async function datosResumen(u: Usuario, periodo: Periodo) {
       `SELECT count(*) FILTER (WHERE activa) AS activas, count(*) AS total, count(*) FILTER (WHERE activa AND creada_en > now() - interval '7 days') AS nuevas
          FROM core.api_key WHERE ${propias ? "usuario_id = $1" : "$1::int IS NOT NULL"}`, [u.id]),
     consulta<{ n: string }>(
-      `SELECT (SELECT count(*) FROM iva.consulta_registro WHERE estado = 'no_determinado' AND NOT revisada)
+      `SELECT (SELECT count(*) FROM iva.articulo_no_encontrado WHERE NOT revisado)
+            + (SELECT count(*) FROM iva.consulta_registro WHERE estado = 'no_determinado' AND NOT revisada)
             + (SELECT count(*) FROM arancel.deteccion WHERE estado = 'no_determinado' AND NOT revisada) AS n`),
     consulta<{ venta_bs: string; fecha_valor: string }>("SELECT venta_bs, fecha_valor FROM bcv.tasa WHERE moneda = 'USD' ORDER BY fecha_valor DESC LIMIT 1"),
     consulta<{ ocurrido_en: string; accion: string }>("SELECT ocurrido_en::text, accion FROM core.auditoria WHERE accion LIKE 'bcv.%' ORDER BY ocurrido_en DESC LIMIT 1"),
