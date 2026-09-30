@@ -31,8 +31,22 @@ export async function accionCambiarClave(_p: EstadoAccion, form: FormData): Prom
   // Cierra las demás sesiones abiertas con la contraseña anterior
   await consulta("DELETE FROM core.sesion WHERE usuario_id = $1 AND token_hash <> $2", [u.id, sha256(token)]);
   await auditar(u, "usuario.clave", { temporal: u.debe_cambiar_clave });
+  // El marco del panel (menú, búsqueda, notificaciones) se generó con la clave temporal: hay que volver a generarlo
+  revalidatePath("/admin", "layout");
   if (u.debe_cambiar_clave) redirect("/admin");
   return { ok: "Contraseña actualizada. Se cerraron tus otras sesiones." };
+}
+
+export async function accionEditarPerfil(_p: EstadoAccion, form: FormData): Promise<EstadoAccion> {
+  const u = await usuarioActual();
+  if (!u) return { error: "La sesión venció. Vuelve a iniciar sesión." };
+  const nombre = String(form.get("nombre") ?? "").trim();
+  if (nombre.length < 2 || nombre.length > 120) return { error: "El nombre debe tener entre 2 y 120 caracteres" };
+  if (nombre === u.nombre) return { ok: "Sin cambios" };
+  await consulta("UPDATE core.usuario SET nombre = $2 WHERE id = $1", [u.id, nombre]);
+  await auditar(u, "usuario.editar", { correo: u.correo, cambios: { nombre: [u.nombre, nombre] } });
+  revalidatePath("/admin", "layout");
+  return { ok: "Nombre actualizado" };
 }
 
 export async function accionIniciarTotp(): Promise<void> {

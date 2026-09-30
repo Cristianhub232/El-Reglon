@@ -27,7 +27,13 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "solicitud_api_key.rechazar": return `${t("nombre")}${d.motivo ? ` · ${t("motivo")}` : ""}`;
     case "usuario.crear": case "usuario.invitar": return `${t("correo")} · ${t("rol")}`;
     case "usuario.rol": return `${t("correo")}: ${t("antes")} → ${t("despues")}`;
-    case "usuario.desactivar": case "usuario.activar": case "usuario.restablecer": case "usuario.2fa.reiniciar": return t("correo");
+    case "usuario.desactivar": case "usuario.activar": case "usuario.restablecer": case "usuario.2fa.reiniciar": case "usuario.desbloquear": return t("correo");
+    case "usuario.editar": {
+      const c = (d.cambios ?? {}) as Record<string, [string, string]>;
+      return `${t("correo")}: ${Object.entries(c).map(([k, [a, b]]) => `${k} ${a} → ${b}`).join(" · ")}`;
+    }
+    case "usuario.sesiones.cerrar": return `${t("correo")} · ${t("sesiones")} ${d.sesiones === 1 ? "sesión cerrada" : "sesiones cerradas"}`;
+    case "usuario.eliminar": return `${t("correo")} (${t("nombre")})`;
     case "usuario.clave": return d.temporal ? "Cambió la contraseña temporal" : "Cambió su contraseña";
     case "usuario.2fa.activar": return "Activó la verificación en dos pasos";
     case "usuario.2fa.desactivar": return "Desactivó la verificación en dos pasos";

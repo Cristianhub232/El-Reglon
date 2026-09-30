@@ -5,7 +5,7 @@ import { requerirUsuario } from "../../../core/auth/dal.ts";
 import { ROLES } from "../../../core/auth/roles.ts";
 import { descifrarSecreto, uriOtpauth } from "../../../core/auth/totp.ts";
 import { FormAccion } from "../../../ui/admin/FormAccion.tsx";
-import { accionCambiarClave, accionConfirmarTotp, accionDesactivarTotp, accionIniciarTotp } from "./acciones.ts";
+import { accionCambiarClave, accionConfirmarTotp, accionDesactivarTotp, accionEditarPerfil, accionIniciarTotp } from "./acciones.ts";
 import s from "../../../ui/admin/admin.module.css";
 
 export const metadata = { title: "Mi cuenta" };
@@ -34,6 +34,18 @@ export default async function Cuenta() {
         <div className={s.soloLectura}>La verificación en dos pasos es obligatoria para los superadministradores. Actívala abajo.</div>
       )}
       <div className={s.rejilla2}>
+        {!u.debe_cambiar_clave && (
+          <div className={s.panel}>
+            <div className={s.panelCabeza}><strong>Mis datos</strong></div>
+            <div className={s.panelCuerpo}>
+              <FormAccion accion={accionEditarPerfil} boton="Guardar" limpiar={false}>
+                <label className={s.etiquetaChica}><span>Nombre</span><input className={s.campoChico} name="nombre" defaultValue={u.nombre} required maxLength={120} /></label>
+                <label className={s.etiquetaChica}><span>Correo</span><input className={s.campoChico} value={u.correo} readOnly disabled /></label>
+                <span className={s.apagado}>El correo y el rol solo los cambia un superadministrador en «Usuarios y roles».</span>
+              </FormAccion>
+            </div>
+          </div>
+        )}
         <div className={s.panel}>
           <div className={s.panelCabeza}><strong>Contraseña</strong></div>
           <div className={s.panelCuerpo}>
