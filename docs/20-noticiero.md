@@ -6,13 +6,15 @@ La sección «Noticias del día» de la portada, la página pública `/noticias`
 
 | Medio | Método | Nota |
 |---|---|---|
-| Efecto Cocuyo, El Pitazo, Runrun.es, TalCual, Crónica Uno, Caraota Digital, Monitoreamos, El Estímulo | RSS (`/feed/`) | Gratis y sin límite |
+| Efecto Cocuyo, El Pitazo, Runrun.es, Crónica Uno, Caraota Digital, Monitoreamos, El Estímulo, Alertas24 | RSS (`/feed/`) | Gratis y sin límite |
 | La Iguana TV | API REST de WordPress (`/wp-json/wp/v2/posts`) | No publica RSS. La imagen viene en `jetpack_featured_media_url` |
-| Alertas24 | WorldNewsAPI (`search-news` con `news-sources`) | Su sitio responde con una página antibots que exige JavaScript y no publica RSS |
+| TalCual | WorldNewsAPI (`search-news` con `news-sources`) | Su Cloudflare responde **403** («Attention Required!») a las IP de centros de datos, como la del servidor de producción, sin importar el User-Agent |
+
+> **El resultado depende de la IP.** Desde una conexión residencial en Venezuela, Alertas24 muestra una página antibots y TalCual entrega su RSS. Desde el servidor (30/09/2026) pasa lo contrario: Alertas24 entrega su RSS (WordPress, `/feed/`) y TalCual se bloquea. La tabla describe **producción**. WorldNewsAPI no tiene artículos de Alertas24 (0 en 30 días) y sí de TalCual (unos 100 por semana). Si un medio empieza a fallar, el panel lo muestra en «Fuentes con error».
 
 Se usa un método mixto por la cuota de WorldNewsAPI:
 - El plan gratuito da **50 puntos al día**, y cada consulta cuesta alrededor de 1 punto más 0,01 por resultado.
-- Consultar los 10 medios cada hora por la API superaría la cuota. Además, esa API solo indexaba uno de los diez medios (TalCual).
+- Consultar los 10 medios cada hora por la API superaría la cuota. Además, esa API solo indexa uno de los diez medios (TalCual).
 - Por eso la API se usa solo para las fuentes sin otra vía, en **una consulta por hora** (unos 25 puntos al día). La cuota restante se guarda en cada lectura y se muestra en el panel.
 
 Las fuentes están en `db/noticias/001_esquema.sql`. Para agregar un medio, se añade su fila (RSS, WordPress o WorldNewsAPI) y se vuelve a aplicar el archivo. Una consulta a WorldNewsAPI admite como máximo 10 medios.
@@ -76,7 +78,7 @@ Las acciones del panel quedan en la auditoría, en la categoría «Noticiero». 
 
 | Variable | Uso |
 |---|---|
-| `WORLDNEWS_API_KEY` | Clave de worldnewsapi.com, solo en `.env` y nunca en el repositorio. Sin ella, Alertas24 queda con error y los demás medios funcionan |
+| `WORLDNEWS_API_KEY` | Clave de worldnewsapi.com, solo en `.env` y nunca en el repositorio. Sin ella, TalCual queda con error y los demás medios funcionan |
 | `NOTICIAS_MINUTO` | Minuto de cada hora en que se lee (por defecto 5) |
 
 En producción, después de `git pull`:

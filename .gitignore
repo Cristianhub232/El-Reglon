@@ -12,3 +12,7 @@ next-env.d.ts
 *.tsbuildinfo
 # Salidas intermedias de extracción (se regeneran)
 datos/**/extraccion/
+# Copias temporales de editores (vim guarda ahí el contenido de .env mientras se edita)
+*.swp
+*.swo
+*~
