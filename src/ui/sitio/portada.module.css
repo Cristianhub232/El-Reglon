@@ -50,8 +50,8 @@
 .foto { position: relative; flex: 1; min-height: 500px; background: var(--papel-oscuro); }
 .foto img { object-fit: cover; }
 @media (max-width: 640px) { .foto { min-height: 460px; } }
-@media (max-width: 640px) { .fotoPulso { min-height: 560px; } }
-.fotoPulso .conversor { z-index: 3; }
+@media (max-width: 640px) { .fotoCifras { min-height: 580px; } }
+.fotoCifras .conversor { z-index: 3; }
 
 /* Gráfica */
 .grafica { overflow: visible; flex: none; }

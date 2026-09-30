@@ -43,8 +43,6 @@ services:
       SOPORTE_WHATSAPP: ${SOPORTE_WHATSAPP:-}
       SOPORTE_CORREO: ${SOPORTE_CORREO:-}
       WORLDNEWS_API_KEY: ${WORLDNEWS_API_KEY:-}   # noticiero: fuentes que no se leen por RSS (TalCual); ver docs/20
-      INSTAGRAM_USUARIO_ID: ${INSTAGRAM_USUARIO_ID:-}   # Pulso oficial: API de Instagram de Meta; ver docs/21
-      INSTAGRAM_TOKEN: ${INSTAGRAM_TOKEN:-}
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS
     depends_on:
@@ -63,7 +61,7 @@ services:
       app: { condition: service_started }
     restart: unless-stopped
 
-  # Noticiero y Pulso oficial: titulares de medios y publicaciones de los entes, cada hora. Ver docs/20 y 21.
+  # Noticiero: lee los titulares de los medios cada hora (RSS, WordPress y WorldNewsAPI). Ver docs/20.
   noticias-programador:
     profiles: ["app"]
     image: elrenglon-app:0.1.0

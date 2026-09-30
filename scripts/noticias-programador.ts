@@ -1,9 +1,8 @@
-// Proceso permanente: lee el noticiero y el Pulso oficial (docs/20 y 21) cada hora, en el minuto NOTICIAS_MINUTO (por defecto 5). Al arrancar lee
+// Proceso permanente: lee el noticiero (docs/20) cada hora, en el minuto NOTICIAS_MINUTO (por defecto 5). Al arrancar lee
 // enseguida si la última lectura tiene más de una hora. Con --una-vez hace una sola lectura y termina.
 import "./entorno.ts";
 import { consulta, pool } from "../src/core/db.ts";
 import { recolectar } from "../src/modules/noticias/recolector.ts";
-import { recolectarPulso } from "../src/modules/pulso/recolector.ts";
 
 const minuto = Number(process.env.NOTICIAS_MINUTO ?? 5);
 if (!Number.isInteger(minuto) || minuto < 0 || minuto > 59) throw new Error("NOTICIAS_MINUTO debe estar entre 0 y 59");
@@ -19,16 +18,6 @@ async function ejecutar(origen: string) {
   }
 }
 
-async function ejecutarPulso() {
-  try {
-    const r = await recolectarPulso();
-    console.log(JSON.stringify({ momento: new Date().toISOString(), pulso: true, nuevas: r.nuevas,
-      errores: Object.entries(r.cuentas).filter(([, c]) => c.error).map(([id, c]) => `${id}: ${c.error}`) }));
-  } catch (e) {
-    console.error(`[noticias-programador] pulso: ${(e as Error).message}`);
-  }
-}
-const leerTodo = async (origen: string) => { await ejecutar(origen); await ejecutarPulso(); };
 
 function proxima(desde = Date.now()): number {
   const t = new Date(desde); t.setUTCMinutes(minuto, 0, 0);
@@ -37,18 +26,17 @@ function proxima(desde = Date.now()): number {
 
 async function ciclo(): Promise<never> {
   const [u] = await consulta<{ vieja: boolean }>("SELECT coalesce(max(terminada) < now() - interval '1 hour', true) AS vieja FROM noticias.lectura");
-  if (u.vieja) await leerTodo("programador");
+  if (u.vieja) await ejecutar("programador");
   for (;;) {
     const t = proxima();
     console.log(`[noticias-programador] próxima lectura: ${new Date(t).toISOString()}`);
     await new Promise((r) => setTimeout(r, t - Date.now()));
-    await leerTodo("programador");
+    await ejecutar("programador");
   }
 }
 
 if (process.argv.includes("--una-vez")) {
-  if (!process.argv.includes("--solo-pulso")) await ejecutar("consola");
-  if (!process.argv.some((a) => a.startsWith("--fuente="))) await ejecutarPulso();
+  await ejecutar("consola");
   await pool().end();
 } else {
   process.on("SIGTERM", () => process.exit(0));

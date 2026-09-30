@@ -9,7 +9,7 @@ import { BarraClasificador, ClasificadorProvider, PanelClasificador, type Result
 import { EJEMPLOS } from "../ui/sitio/ejemplos.ts";
 import { TitularItem, TitularPrincipal } from "../ui/sitio/Titulares.tsx";
 import { CasosDeUso } from "../ui/sitio/Casos.tsx";
-import { PulsoOficial } from "../ui/sitio/PulsoOficial.tsx";
+import { DiaEnCifras } from "../ui/sitio/DiaEnCifras.tsx";
 import { datosCasos } from "../modules/web/casos.ts";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
 import { Grafica } from "../ui/sitio/Grafica.tsx";
@@ -108,8 +108,8 @@ export default async function Portada() {
                   {d.bcv?.leida ? ` · leída a las ${hora(d.bcv.leida)}, hora de Caracas` : ""}
                 </span>
               </div>
-              <div className={`${s.foto} ${d.pulso.length ? s.fotoPulso : ""}`}>
-                {d.pulso.length ? <PulsoOficial publicaciones={d.pulso} /> : (
+              <div className={`${s.foto} ${d.enCifras.length ? s.fotoCifras : ""}`}>
+                {d.enCifras.length ? <DiaEnCifras tarjetas={d.enCifras} /> : (
                   <Image src="/imagenes/bodega.webp" alt="Comerciante venezolano en su bodega, con el punto de venta a la vista" fill priority
                     sizes="(max-width: 1040px) 100vw, 50vw" />
                 )}
