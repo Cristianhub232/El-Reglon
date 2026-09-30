@@ -52,19 +52,20 @@ CREATE TABLE IF NOT EXISTS noticias.lectura (
 );
 CREATE INDEX IF NOT EXISTS lectura_reciente ON noticias.lectura (iniciada DESC);
 
--- Fuentes (docs/20). WorldNewsAPI solo para Alertas24: su sitio exige JavaScript (protección antibots) y no
--- publica RSS; así la cuota gratuita (50 puntos/día) alcanza para una consulta por hora.
+-- Fuentes (docs/20). WorldNewsAPI solo para TalCual: su Cloudflare responde 403 a las IP de centros de datos
+-- (el servidor de producción). Alertas24 sí entrega su RSS desde ahí. La cuota gratuita (50 puntos/día) alcanza
+-- para una consulta por hora.
 INSERT INTO noticias.fuente (id, nombre, sitio, metodo, url_lectura, orden) VALUES
     ('efectococuyo',  'Efecto Cocuyo',    'https://efectococuyo.com',      'rss',       'https://efectococuyo.com/feed/', 1),
     ('elpitazo',      'El Pitazo',        'https://elpitazo.net',          'rss',       'https://elpitazo.net/feed/', 2),
     ('runrunes',      'Runrun.es',        'https://runrun.es',             'rss',       'https://runrun.es/feed/', 3),
-    ('talcual',       'TalCual',          'https://talcualdigital.com',    'rss',       'https://talcualdigital.com/feed/', 4),
+    ('talcual',       'TalCual',          'https://talcualdigital.com',    'worldnews', NULL, 4),
     ('cronicauno',    'Crónica Uno',      'https://cronica.uno',           'rss',       'https://cronica.uno/feed/', 5),
     ('caraotadigital','Caraota Digital',  'https://www.caraotadigital.net','rss',       'https://www.caraotadigital.net/feed/', 6),
     ('monitoreamos',  'Monitoreamos',     'https://monitoreamos.com',      'rss',       'https://monitoreamos.com/feed/', 7),
     ('elestimulo',    'El Estímulo',      'https://elestimulo.com',        'rss',       'https://elestimulo.com/feed/', 8),
     ('laiguana',      'La Iguana TV',     'https://www.laiguana.tv',       'wordpress', 'https://www.laiguana.tv/wp-json/wp/v2/posts', 9),
-    ('alertas24',     'Alertas24',        'https://alertas24.com',         'worldnews', NULL, 10)
+    ('alertas24',     'Alertas24',        'https://alertas24.com',         'rss',       'https://alertas24.com/feed/', 10)
 ON CONFLICT (id) DO UPDATE SET nombre = EXCLUDED.nombre, sitio = EXCLUDED.sitio, metodo = EXCLUDED.metodo,
     url_lectura = EXCLUDED.url_lectura, orden = EXCLUDED.orden;
 
