@@ -113,7 +113,7 @@ docker compose up -d --build
 | Pieza | Implementación |
 |---|---|
 | `/robots.txt` | `src/app/robots.ts`: permite todo el sitio, bloquea `/admin` y `/api/` y anuncia el sitemap |
-| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, `/solicitar-api-key` y `/docs` con su URL canónica |
+| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, `/noticias`, `/solicitar-api-key` y `/docs` con su URL canónica |
 | Canonical | En cada página pública (`alternates.canonical`). No va en el layout raíz: todas las páginas lo heredarían y dirían ser la portada |
 | `noindex` | `/admin` (y sus páginas), `/ingresar` y `/sin-conexion` |
 | URL base | `src/core/sitio.ts` (`SITIO_URL`, por defecto `https://elrenglonve.org`): `metadataBase`, Open Graph (`es_VE`), robots y sitemap |
