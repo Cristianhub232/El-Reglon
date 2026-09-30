@@ -45,7 +45,7 @@ function rifConTerminal(t: number): string {                         // RIF J v�
 }
 
 async function main() {
-  const K = await clave("completa", ["bcv", "arancel", "calendario", "rif", "iva"]);
+  const K = await clave("completa", ["bcv", "arancel", "calendario", "rif", "iva"]);   // sin "noticias": se prueba el 403
   const soloRif = await clave("solo rif", ["rif"]);
   const limitada = await clave("limitada", ["rif"], 3);
 
@@ -144,6 +144,19 @@ async function main() {
   verificar("24 días inhábiles en 2026 (10 bancarios + 14 nacionales)", r.cuerpo?.dias?.length === 24, r.cuerpo?.dias?.length);
   r = await get("/api/v1/rif/validar?rif=G-20000303-0", K);
   verificar("RIF G-20000303-0 válido", r.cuerpo?.valido === true && r.cuerpo?.terminal === 0, r.cuerpo);
+
+  console.log("Noticias");
+  const N = await clave("noticias", ["noticias"]);
+  verificar("sin permiso 'noticias' → 403", (await get("/api/v1/noticias", K)).estado === 403);
+  r = await get("/api/v1/noticias/fuentes", N);
+  verificar("10 fuentes del noticiero", r.estado === 200 && r.cuerpo?.fuentes?.length === 10 && r.cuerpo.fuentes.some((f: any) => f.id === "elpitazo"), r.cuerpo);
+  r = await get("/api/v1/noticias?limite=5", N);
+  const lista: any[] = r.cuerpo?.noticias ?? [];
+  verificar("titulares: estructura, orden y como mucho 5", r.estado === 200 && typeof r.cuerpo?.total === "number" && lista.length <= 5
+    && lista.every((n, i) => i === 0 || n.publicado_en <= lista[i - 1].publicado_en), r.cuerpo);
+  verificar("titulares en texto plano con enlace http(s)", lista.every((n) => /^https?:\/\//.test(n.url) && !/[<>]/.test(n.titulo) && !/[<>]/.test(n.resumen ?? "")), lista[0]);
+  verificar("limite=0 → 400", (await get("/api/v1/noticias?limite=0", N)).estado === 400);
+  verificar("fuente con caracteres inválidos → 400", (await get("/api/v1/noticias?fuente=%27%3B--", N)).estado === 400);
 
   console.log("IVA");
   const sinPrecios = { precio_compra: null, precio_venta: null, moneda: null };

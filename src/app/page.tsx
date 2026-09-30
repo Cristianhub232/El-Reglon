@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { clasificarSolicitud } from "../modules/iva/clasificador.ts";
-import { datosPortada, type Noticia } from "../modules/web/portada.ts";
+import { datosPortada } from "../modules/web/portada.ts";
 import { Cabecera, PiePagina } from "../ui/sitio/Cabecera.tsx";
 import { BarraClasificador, ClasificadorProvider, PanelClasificador, type Resultado } from "../ui/sitio/Clasificador.tsx";
 import { EJEMPLOS } from "../ui/sitio/ejemplos.ts";
+import { TitularItem, TitularPrincipal } from "../ui/sitio/Titulares.tsx";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
 import { Grafica } from "../ui/sitio/Grafica.tsx";
 import { diaSemana, entero, fecha, fechaCorta, fechaLarga, hora, numero } from "../ui/formato.ts";
@@ -20,21 +21,13 @@ const MODULOS = [
   ["Arancel", "Arancel de Aduanas vigente (Decreto 4.944 con las reformas de 2025): códigos, búsqueda, régimen legal y detección del código de un producto.", "/api/v1/arancel"],
   ["Calendario", "Próximos deberes tributarios 2026 por RIF, para contribuyentes especiales y ordinarios, con prórrogas del COT art. 10.", "/api/v1/calendario"],
   ["RIF", "Validación del RIF con dígito verificador.", "/api/v1/rif"],
+  ["Noticias", "Titulares de diez medios venezolanos, actualizados cada hora, con enlace al artículo original.", "/api/v1/noticias"],
 ] as const;
 
 function Variacion({ v, corta }: { v: number | null; corta?: boolean }) {
   if (v === null) return null;
   const txt = `${numero(Math.abs(v), 2)} %`;
   return <span className={v >= 0 ? s.sube : s.baja}>{corta ? `${v >= 0 ? "+" : "−"}${txt}` : `${v >= 0 ? "▲" : "▼"} ${txt}`}</span>;
-}
-
-function Lamina({ n, chica }: { n: Noticia; chica?: boolean }) {
-  return (
-    <div className={`${s.lamina} ${chica ? s.laminaChica : ""}`} style={{ ["--acento" as string]: n.color }} aria-hidden="true">
-      <span className={s.laminaCifra}>{n.cifra}</span>
-      <span className={s.laminaNota}>{n.cifraNota}</span>
-    </div>
-  );
 }
 
 export default async function Portada() {
@@ -123,7 +116,7 @@ export default async function Portada() {
         <div className={s.cifras}>
           <div className={s.cifra}><strong>{d.cifras.reglas}</strong><span>reglas del catálogo de IVA, con su texto legal verificado contra la Gaceta</span></div>
           <div className={s.cifra}><strong>{entero(d.cifras.publicaciones)}</strong><span>publicaciones oficiales del BCV desde {d.cifras.desde ?? "2025"}</span></div>
-          <div className={s.cifra}><strong>5</strong><span>módulos con una sola API key gratuita</span></div>
+          <div className={s.cifra}><strong>{MODULOS.length}</strong><span>módulos con una sola API key gratuita</span></div>
         </div>
 
         {principal && (
@@ -131,27 +124,14 @@ export default async function Portada() {
             <div className={s.noticiasCabeza}>
               <div>
                 <span className="sobretitulo">{fechaLarga(d.hoy)}</span>
-                <h2 className={s.seccionTituloChico}>Noticias fiscales del día</h2>
+                <h2 className={s.seccionTituloChico}>Noticias del día</h2>
               </div>
-              <span>Generadas a partir de las publicaciones oficiales</span>
+              <span>Titulares de medios venezolanos{d.noticiasLeidas ? ` · actualizado a las ${hora(d.noticiasLeidas)}` : ""} · <Link href="/noticias" className={s.masNoticias}>Ver todas</Link></span>
             </div>
             <div className={s.noticiasRejilla}>
-              <div className={s.principal}>
-                <Lamina n={principal} />
-                <span className={s.meta}><span className={s.metaCategoria}>{principal.categoria}</span><span className={s.metaFuente}>{principal.fuente}{d.bcv?.leida ? ` · ${hora(d.bcv.leida)}` : ""}</span></span>
-                <h3 className={s.tituloPrincipal}>{principal.titulo}</h3>
-                {principal.texto && <p className={s.textoPrincipal}>{principal.texto}</p>}
-              </div>
+              <TitularPrincipal t={principal} />
               <div className={s.lista}>
-                {resto.map((n) => (
-                  <div key={n.categoria} className={s.item}>
-                    <Lamina n={n} chica />
-                    <span className={s.itemTexto}>
-                      <span className={s.meta}><span className={s.metaCategoria}>{n.categoria}</span><span className={s.metaFuente}>{n.fuente}</span></span>
-                      <span className={s.tituloItem}>{n.titulo}</span>
-                    </span>
-                  </div>
-                ))}
+                {resto.map((t) => <TitularItem key={t.id} t={t} />)}
               </div>
             </div>
           </section>

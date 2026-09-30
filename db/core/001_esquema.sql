@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS core.api_key (
     nombre             text        NOT NULL,
     prefijo            char(8)     NOT NULL UNIQUE,        -- identifica la clave sin revelarla
     hash_sha256        char(64)    NOT NULL UNIQUE,
-    permisos           text[]      NOT NULL CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','admin']
+    permisos           text[]      NOT NULL CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias','admin']
                                                    AND cardinality(permisos) > 0),
     limite_por_minuto  integer     NOT NULL DEFAULT 60 CHECK (limite_por_minuto BETWEEN 1 AND 10000),
     activa             boolean     NOT NULL DEFAULT true,

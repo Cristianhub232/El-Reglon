@@ -42,6 +42,7 @@ services:
       COOKIE_SEGURA: ${COOKIE_SEGURA:-1}
       SOPORTE_WHATSAPP: ${SOPORTE_WHATSAPP:-}
       SOPORTE_CORREO: ${SOPORTE_CORREO:-}
+      WORLDNEWS_API_KEY: ${WORLDNEWS_API_KEY:-}   # noticiero: fuentes sin RSS (Alertas24); ver docs/20
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS
     depends_on:
@@ -56,6 +57,19 @@ services:
     environment:
       <<: *entorno_app
       BCV_HORAS: ${BCV_HORAS:-8,14,20}
+    depends_on:
+      app: { condition: service_started }
+    restart: unless-stopped
+
+  # Noticiero: lee los titulares de los medios cada hora (RSS, WordPress y WorldNewsAPI). Ver docs/20.
+  noticias-programador:
+    profiles: ["app"]
+    image: elrenglon-app:0.1.0
+    container_name: elrenglon-noticias-programador
+    command: ["node", "scripts/noticias-programador.ts"]
+    environment:
+      <<: *entorno_app
+      NOTICIAS_MINUTO: ${NOTICIAS_MINUTO:-5}
     depends_on:
       app: { condition: service_started }
     restart: unless-stopped

@@ -140,7 +140,15 @@
 .tituloPrincipal { font: 700 clamp(26px, 2.4vw, 34px)/1.15 var(--serif); color: var(--tinta); text-wrap: balance; }
 .textoPrincipal { font-size: 16px; line-height: 1.55; color: var(--texto-2); max-width: 620px; }
 .tituloItem { font: 600 18px/1.3 var(--serif); color: var(--tinta); text-wrap: pretty; }
-/* Las noticias se generan de datos oficiales: en lugar de fotos, una lámina tipográfica con la cifra clave */
+/* Titulares de medios: foto del medio o, si no hay, una lámina tipográfica con su nombre */
+.enlaceNoticia { color: inherit; text-decoration: none; }
+.enlaceNoticia:hover .tituloPrincipal, .enlaceNoticia:hover .tituloItem { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.enlaceNoticia:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 4px; border-radius: 8px; }
+.fotoNoticia { width: 100%; min-height: 0; flex: none; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; background: var(--papel-oscuro); display: block; }
+.fotoNoticiaChica { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--papel-oscuro); display: block; }
+.laminaMedio { font: 700 clamp(26px, 3.4vw, 44px)/1.05 var(--serif); letter-spacing: -.01em; }
+.laminaChica .laminaMedio { font-size: 15px; line-height: 1.15; }
+.masNoticias { font-size: 14px; font-weight: 600; color: var(--azul); }
 .lamina {
   aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
   padding: clamp(16px, 3vw, 32px); background-color: var(--tinta); color: var(--papel);
@@ -237,3 +245,14 @@
   .tasaValor span { font-size: 16px; }
   .grafica { width: 104px; height: 33px; }
 }
+
+/* Página /noticias */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--linea); font-size: 14px; font-weight: 600; color: var(--texto-2); text-decoration: none; background: var(--blanco, #fff); }
+.chip:hover { border-color: var(--tinta); color: var(--tinta); }
+.chip[aria-current="page"] { background: var(--tinta); border-color: var(--tinta); color: var(--papel); }
+.buscadorNoticias { display: flex; gap: 8px; max-width: 560px; }
+.buscadorNoticias input { flex: 1; min-width: 0; height: 40px; padding: 0 14px; border: 1px solid var(--linea); border-radius: 8px; font: inherit; font-size: 15px; background: var(--blanco, #fff); color: var(--tinta); }
+.rejillaNoticias { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr)); column-gap: 48px; }
+.paginacion { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; color: var(--texto-3); padding-top: 8px; }
+.paginacion a { font-weight: 600; color: var(--azul); }

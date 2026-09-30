@@ -1,5 +1,5 @@
 // Descripción legible de los eventos de core.auditoria y su categoría (colores del diseño: Admin.dc.html, ACC_COL)
-export type Categoria = "acceso" | "iva" | "bcv" | "arancel" | "calendario";
+export type Categoria = "acceso" | "iva" | "bcv" | "arancel" | "calendario" | "noticias";
 
 export const CATEGORIAS: Record<Categoria, { titulo: string; clase: string }> = {
   acceso: { titulo: "Acceso", clase: "t-general" },
@@ -7,11 +7,12 @@ export const CATEGORIAS: Record<Categoria, { titulo: string; clase: string }> = 
   bcv: { titulo: "BCV", clase: "t-condicionado" },
   arancel: { titulo: "Arancel", clase: "t-reducida" },
   calendario: { titulo: "Calendario", clase: "t-adicional" },
+  noticias: { titulo: "Noticiero", clase: "t-apagado" },
 };
 
 export function categoria(accion: string): Categoria {
   const m = accion.split(".")[0];
-  if (m === "bcv" || m === "iva" || m === "arancel" || m === "calendario") return m;
+  if (m === "bcv" || m === "iva" || m === "arancel" || m === "calendario" || m === "noticias") return m;
   return "acceso";
 }
 
@@ -52,6 +53,11 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "arancel.sinonimo.eliminar": return `Grupo «${t("grupo")}»`;
     case "calendario.inhabil.crear": return `${t("fecha")} ${t("descripcion")} · ${t("tipo")}`;
     case "calendario.inhabil.eliminar": return `${t("fecha")} ${t("descripcion")}`;
+    case "noticias.leer": return `Lectura manual (${t("fuente")}): ${t("nuevos")} nuevos, ${t("actualizados")} actualizados${Number(d.errores) ? ` · ${t("errores")} con error` : ""}`;
+    case "noticias.fuente.pausar": return `Pausó ${t("nombre")}`;
+    case "noticias.fuente.activar": return `Reactivó ${t("nombre")}`;
+    case "noticias.titular.ocultar": return `Ocultó «${t("titulo")}» (${t("fuente")})`;
+    case "noticias.titular.mostrar": return `Volvió a mostrar «${t("titulo")}» (${t("fuente")})`;
     default: return Object.entries(d).slice(0, 4).map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`).join(" · ");
   }
 }

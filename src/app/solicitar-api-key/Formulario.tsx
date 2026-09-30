@@ -2,7 +2,7 @@
 import { useActionState } from "react";
 import { accionSolicitar, type EstadoSolicitud } from "./acciones.ts";
 
-const MODULOS: [string, string][] = [["iva", "IVA"], ["bcv", "BCV"], ["arancel", "Arancel"], ["calendario", "Calendario"], ["rif", "RIF"]];
+const MODULOS: [string, string][] = [["iva", "IVA"], ["bcv", "BCV"], ["arancel", "Arancel"], ["calendario", "Calendario"], ["rif", "RIF"], ["noticias", "Noticias"]];
 
 export function FormularioSolicitud() {
   const [estado, accion, enviando] = useActionState<EstadoSolicitud, FormData>(accionSolicitar, {});

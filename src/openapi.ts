@@ -42,6 +42,7 @@ export const especificacion = {
     { name: "Arancel", description: "Arancel de Aduanas vigente: Decreto 4.944 con reformas 5.103, 5.147 y 5.198. Consulta, búsqueda y detección del código de un producto" },
     { name: "Calendario", description: "Calendario tributario 2026: especiales (Providencia SNAT/2025/000091) y ordinarios (Reglamento IVA art. 60); COT art. 10" },
     { name: "RIF", description: "Validación del RIF con dígito verificador" },
+    { name: "Noticias", description: "Titulares de medios venezolanos (Efecto Cocuyo, El Pitazo, Runrun.es, TalCual, Crónica Uno, Caraota Digital, Monitoreamos, El Estímulo, La Iguana TV y Alertas24), leídos cada hora" },
     { name: "Servicio", description: "Estado del servicio" },
   ],
   components: {
@@ -204,5 +205,13 @@ export const especificacion = {
     "/api/v1/calendario/dias-inhabiles": op("Calendario", "Días inhábiles (feriados y días bancarios)", "", [q("anio", "Año (por defecto 2026)")]),
     "/api/v1/rif/validar": op("RIF", "Validar un RIF", "Formato, tipo de persona, terminal y dígito verificador (módulo 11).", [qr("rif", "RIF con o sin guiones")],
       { entrada: "J-00002961-0", valido: true, rif: "J000029610", rif_formateado: "J-00002961-0", prefijo: "J", tipo_persona: "Persona jurídica", terminal: 0, digito_verificado: true, mensaje: "RIF válido" }),
+    "/api/v1/noticias": op("Noticias", "Titulares recientes",
+      "Más recientes primero. El enlace lleva al artículo en el medio original; `resumen` es texto plano (sin HTML). `actualizado` es la hora de la última lectura. Se conservan 90 días.",
+      [q("limite", "1 a 100 (por defecto 20)"), q("pagina", "Página (por defecto 1)"), q("fuente", "Identificador del medio (ver /api/v1/noticias/fuentes), p. ej. elpitazo"),
+        q("q", "Texto a buscar en el titular o el resumen"), fecha("desde", "Solo titulares publicados desde esta fecha (ISO 8601)")],
+      { actualizado: "2026-09-30 15:25:36.861-04", total: 118, pagina: 1, limite: 1, noticias: [{ id: 1, fuente: "efectococuyo", fuente_nombre: "Efecto Cocuyo",
+        url: "https://efectococuyo.com/la-humanidad/foro-penal-mas-de-900-personas-han-sido-acusadas/", titulo: "Foro Penal: Más de 900 personas han sido acusadas de incitar al odio desde 2017",
+        resumen: "Gonzalo Himiob, dijo a EFE que…", imagen: "https://…/AN1-20-1024x768.jpg", autor: "Efecto Cocuyo", categoria: "La Humanidad", publicado_en: "2026-09-30 15:17:25-04" }] }),
+    "/api/v1/noticias/fuentes": op("Noticias", "Medios del noticiero", "Identificador, nombre, sitio, si está activo, última lectura correcta y titulares de las últimas 24 horas."),
   },
 };
