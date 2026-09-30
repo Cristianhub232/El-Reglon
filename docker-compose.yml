@@ -1,6 +1,7 @@
 # El Renglón
 #   Solo base de datos (desarrollo):      docker compose up -d db
 #   Todo (base, API/UI y programador BCV): docker compose --profile app up -d --build
+#   Metabase (opcional, análisis):         herramientas/instalar_metabase.sh && docker compose --profile metabase up -d
 # Configuración: cp .env.example .env (y cambiar la contraseña)
 services:
   db:
@@ -21,6 +22,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+    restart: unless-stopped               # sin esto, tras reiniciar el servidor la app vuelve pero la base no
 
   app:
     profiles: ["app"]
@@ -56,6 +58,33 @@ services:
       BCV_HORAS: ${BCV_HORAS:-8,14,20}
     depends_on:
       app: { condition: service_started }
+    restart: unless-stopped
+
+  # Metabase: análisis sobre los datos de El Renglón con el rol metabase_lectura (solo lectura, sin
+  # core.usuario, core.sesion ni core.api_key). Su configuración vive en la base "metabase" del mismo
+  # PostgreSQL. Roles y base: herramientas/instalar_metabase.sh. Ver docs/19.
+  metabase:
+    profiles: ["metabase"]
+    image: metabase/metabase:v0.63.18.5   # versión fija
+    container_name: elrenglon-metabase
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_HOST: db
+      MB_DB_PORT: "5432"
+      MB_DB_DBNAME: metabase
+      MB_DB_USER: metabase
+      MB_DB_PASS: ${METABASE_DB_PASSWORD:-}
+      MB_ENCRYPTION_SECRET_KEY: ${MB_ENCRYPTION_SECRET_KEY:-}   # cifra en su base las credenciales de conexión
+      MB_SITE_URL: ${METABASE_URL:-}
+      MB_ANON_TRACKING_ENABLED: "false"
+      MB_CHECK_FOR_UPDATES: "false"
+      JAVA_TIMEZONE: America/Caracas
+      TZ: America/Caracas
+      JAVA_OPTS: ${METABASE_JAVA_OPTS:--Xmx1g}
+    ports:
+      - "127.0.0.1:${METABASE_PUERTO:-3001}:3000"   # publicar detrás del proxy inverso con TLS
+    depends_on:
+      db: { condition: service_healthy }
     restart: unless-stopped
 
 volumes:
