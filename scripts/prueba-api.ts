@@ -158,6 +158,15 @@ async function main() {
   verificar("limite=0 → 400", (await get("/api/v1/noticias?limite=0", N)).estado === 400);
   verificar("fuente con caracteres inválidos → 400", (await get("/api/v1/noticias?fuente=%27%3B--", N)).estado === 400);
 
+  console.log("Pulso oficial");
+  verificar("imagen inexistente → 404", (await fetch(`${BASE}/api/publico/pulso/imagen/0`)).status === 404);
+  const [conImagen] = await consulta<{ id: string }>(
+    "SELECT p.id FROM noticias.pulso_publicacion p JOIN noticias.pulso_cuenta c ON c.id = p.cuenta_id WHERE p.imagen IS NOT NULL AND p.visible AND c.activa LIMIT 1").catch(() => []);
+  if (conImagen) {
+    const img = await fetch(`${BASE}/api/publico/pulso/imagen/${conImagen.id}`);
+    verificar("imagen guardada → 200 image/* con caché", img.status === 200 && /^image\//.test(img.headers.get("content-type") ?? "") && /max-age/.test(img.headers.get("cache-control") ?? ""));
+  }
+
   console.log("IVA");
   const sinPrecios = { precio_compra: null, precio_venta: null, moneda: null };
   const clasificar = (c: Record<string, unknown>) => post("/api/v1/iva/clasificar", { operacion: "nacional", ...sinPrecios, ...c }, K);

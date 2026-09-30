@@ -8,6 +8,9 @@ import { Cabecera, PiePagina } from "../ui/sitio/Cabecera.tsx";
 import { BarraClasificador, ClasificadorProvider, PanelClasificador, type Resultado } from "../ui/sitio/Clasificador.tsx";
 import { EJEMPLOS } from "../ui/sitio/ejemplos.ts";
 import { TitularItem, TitularPrincipal } from "../ui/sitio/Titulares.tsx";
+import { CasosDeUso } from "../ui/sitio/Casos.tsx";
+import { PulsoOficial } from "../ui/sitio/PulsoOficial.tsx";
+import { datosCasos } from "../modules/web/casos.ts";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
 import { Grafica } from "../ui/sitio/Grafica.tsx";
 import { diaSemana, entero, fecha, fechaCorta, fechaLarga, hora, numero } from "../ui/formato.ts";
@@ -38,6 +41,7 @@ export default async function Portada() {
   const inicial = await clasificarSolicitud({ nombre: EJEMPLOS[0].texto, operacion: "nacional", precio_compra: null, precio_venta: null, moneda: null }, null)
     .catch(() => null) as Resultado | null;
   const usd = d.bcv?.monedas.find((m) => m.codigo === "USD");
+  const casos = await datosCasos(d.hoy, usd?.tasa ?? null);
   const eur = d.bcv?.monedas.find((m) => m.codigo === "EUR");
   const proximo = d.inhabiles[0];
   const [principal, ...resto] = d.noticias;
@@ -104,9 +108,11 @@ export default async function Portada() {
                   {d.bcv?.leida ? ` · leída a las ${hora(d.bcv.leida)}, hora de Caracas` : ""}
                 </span>
               </div>
-              <div className={s.foto}>
-                <Image src="/imagenes/bodega.webp" alt="Comerciante venezolano en su bodega, con el punto de venta a la vista" fill priority
-                  sizes="(max-width: 1040px) 100vw, 50vw" />
+              <div className={`${s.foto} ${d.pulso.length ? s.fotoPulso : ""}`}>
+                {d.pulso.length ? <PulsoOficial publicaciones={d.pulso} /> : (
+                  <Image src="/imagenes/bodega.webp" alt="Comerciante venezolano en su bodega, con el punto de venta a la vista" fill priority
+                    sizes="(max-width: 1040px) 100vw, 50vw" />
+                )}
                 {usd && eur && d.bcv && <Conversor tasas={{ USD: usd.tasa, EUR: eur.tasa }} fechaValor={fechaCorta(d.bcv.fecha_valor)} />}
               </div>
             </div>
@@ -138,22 +144,7 @@ export default async function Portada() {
           </section>
         )}
 
-        <section className={s.seccion} style={{ paddingBottom: 72 }}>
-          <h2 className={s.seccionTituloChico}>Hecho para quien factura, declara e integra</h2>
-          <div className={s.perfiles}>
-            {[
-              ["comerciantes", "Comerciantes", "Sabe si cada producto va exento, al 8 %, al 16 % o al 31 % antes de facturar, y convierte a bolívares con la tasa oficial.", "Comerciante atendiendo en su negocio"],
-              ["contadores", "Contadores y asesores", "Base legal con su Gaceta, renglón de la Forma 30 y próximos deberes por RIF para especiales y ordinarios.", "Contadora revisando declaraciones en su escritorio"],
-              ["desarrolladores", "Desarrolladores", "Una API key gratuita para POS, ERP y tiendas en línea, con Swagger y respuestas en texto decimal exacto.", "Equipo de desarrollo integrando un sistema de punto de venta"],
-            ].map(([img, titulo, texto, alt]) => (
-              <div key={img} className={s.perfil}>
-                <div className={s.perfilFoto}><Image src={`/imagenes/${img}.webp`} alt={alt} fill sizes="(max-width: 700px) 100vw, 33vw" /></div>
-                <strong>{titulo}</strong>
-                <span>{texto}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <CasosDeUso casos={casos} hoy={d.hoy} />
 
         <section id="herramientas" className={s.seccion}>
           <div className={s.seccionCabeza}>

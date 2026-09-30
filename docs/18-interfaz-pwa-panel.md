@@ -50,7 +50,7 @@
 | Catálogo legal IVA | Artículos no encontrados por el clasificador (qué se consultó y desde dónde) para curaduría. Reglas por artículo, con sus opciones fiscales, base legal y renglón de la Forma 30. La **edición** exige Gaceta y motivo, y antes de guardar ejecuta los **casos de referencia** con la regla modificada. Cada regla lleva su historial de versiones |
 | Arancel | Versiones del arancel, sinónimos comerciales de la detección (agregar grupos, validados con los casos de la detección), detecciones para curaduría y observaciones de la fuente |
 | Calendario | Mes con días inhábiles y vencimientos. Agregar un día inhábil (p. ej. un día no laborable decretado) **recalcula las prórrogas** del COT art. 10 en la misma transacción |
-| Noticiero | Estado de las 10 fuentes, lecturas horarias, «Leer ahora», pausar o reactivar una fuente y ocultar titulares ([docs/20](20-noticiero.md)) |
+| Noticiero | Estado de las 10 fuentes, lecturas horarias, «Leer ahora», pausar o reactivar una fuente y ocultar titulares ([docs/20](20-noticiero.md)). Pulso oficial: cuentas de los entes, usuario de Instagram, pausar, leer y ocultar publicaciones ([docs/21](21-pulso-oficial-y-casos.md)) |
 | Mi cuenta | Editar el nombre propio, cambiar la contraseña y activar o desactivar la 2FA |
 | Auditoría | Todos los eventos (sesiones, API keys, usuarios, lecturas del BCV, catálogos), con filtros, búsqueda, paginación y exportación CSV (celdas protegidas contra fórmulas) |
 

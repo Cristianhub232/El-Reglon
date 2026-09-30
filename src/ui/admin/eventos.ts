@@ -13,6 +13,7 @@ export const CATEGORIAS: Record<Categoria, { titulo: string; clase: string }> = 
 export function categoria(accion: string): Categoria {
   const m = accion.split(".")[0];
   if (m === "bcv" || m === "iva" || m === "arancel" || m === "calendario" || m === "noticias") return m;
+  if (m === "pulso") return "noticias";
   return "acceso";
 }
 
@@ -58,6 +59,12 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "noticias.fuente.activar": return `Reactivó ${t("nombre")}`;
     case "noticias.titular.ocultar": return `Ocultó «${t("titulo")}» (${t("fuente")})`;
     case "noticias.titular.mostrar": return `Volvió a mostrar «${t("titulo")}» (${t("fuente")})`;
+    case "pulso.leer": return `Pulso oficial, lectura manual (${t("cuenta")}): ${t("nuevas")} nuevas${Number(d.errores) ? ` · ${t("errores")} con error` : ""}`;
+    case "pulso.cuenta.pausar": return `Pausó la cuenta ${t("cuenta")} (${t("ente")})`;
+    case "pulso.cuenta.activar": return `Activó la cuenta ${t("cuenta")} (${t("ente")})`;
+    case "pulso.cuenta.usuario": return `${t("ente")}: Instagram ${d.antes ? `@${t("antes")}` : "sin usuario"} → ${d.despues ? `@${t("despues")}` : "sin usuario"}`;
+    case "pulso.publicacion.ocultar": return `Ocultó «${t("titulo")}» (${t("cuenta")})`;
+    case "pulso.publicacion.mostrar": return `Volvió a mostrar «${t("titulo")}» (${t("cuenta")})`;
     default: return Object.entries(d).slice(0, 4).map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`).join(" · ");
   }
 }

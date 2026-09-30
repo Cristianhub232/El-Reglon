@@ -6,9 +6,9 @@ export const POR_PAGINA = 50;
 
 // Categorías por prefijo de la acción (las que no son de un módulo son "acceso": sesiones, usuarios y API keys)
 const CONDICION: Record<Categoria, string> = {
-  acceso: "split_part(accion, '.', 1) NOT IN ('bcv', 'iva', 'arancel', 'calendario', 'noticias')",
+  acceso: "split_part(accion, '.', 1) NOT IN ('bcv', 'iva', 'arancel', 'calendario', 'noticias', 'pulso')",
   iva: "accion LIKE 'iva.%'", bcv: "accion LIKE 'bcv.%'", arancel: "accion LIKE 'arancel.%'", calendario: "accion LIKE 'calendario.%'",
-  noticias: "accion LIKE 'noticias.%'",
+  noticias: "(accion LIKE 'noticias.%' OR accion LIKE 'pulso.%')",
 };
 
 export async function eventos(cat: Categoria | null, q: string, pagina: number, limite = POR_PAGINA) {

@@ -39,7 +39,7 @@ export function parsearPortada(html: string): Portada {
   return { fecha_valor: f[1], tasas };
 }
 
-function certificadosExtra(): string[] {
+export function certificadosExtra(): string[] {
   const dir = join(process.cwd(), "config", "ca");
   try {
     return readdirSync(dir).filter((f) => f.endsWith(".pem")).map((f) => readFileSync(join(dir, f), "utf8"));

@@ -3,6 +3,7 @@
 import { consulta } from "../../core/db.ts";
 import { hoyCaracas } from "../../core/validacion.ts";
 import { titularesPortada, ultimaLectura } from "../noticias/consultas.ts";
+import { pulsoPortada } from "../pulso/consultas.ts";
 
 export interface Moneda { codigo: "USD" | "EUR"; tasa: string; variacion: number | null; serie: number[] }
 
@@ -32,7 +33,7 @@ async function tasas(hoy: string) {
 
 export async function datosPortada() {
   const hoy = hoyCaracas();
-  const [bcv, inhabiles, alicuotas, cifras, noticias, noticiasLeidas] = await Promise.all([
+  const [bcv, inhabiles, alicuotas, cifras, noticias, noticiasLeidas, pulso] = await Promise.all([
     tasas(hoy),
     consulta<{ fecha: string; descripcion: string; tipo: "NACIONAL" | "BANCARIO" }>(
       "SELECT fecha, descripcion, tipo FROM calendario.dia_inhabil WHERE fecha >= $1::date ORDER BY fecha LIMIT 6", [hoy]),
@@ -42,11 +43,12 @@ export async function datosPortada() {
               (SELECT extract(year FROM min(fecha_valor))::text FROM bcv.publicacion) AS desde`),
     titularesPortada(5).catch(() => []),          // sin el esquema del noticiero, la portada sigue funcionando
     ultimaLectura().catch(() => null),
+    pulsoPortada(5).catch(() => []),
   ]);
   const pct = (c: string) => alicuotas.find((a) => a.codigo === c)?.porcentaje ?? null;
 
   return {
-    hoy, bcv, inhabiles, noticias, noticiasLeidas,
+    hoy, bcv, inhabiles, noticias, noticiasLeidas, pulso,
     alicuotas: { general: pct("GENERAL"), reducida: pct("REDUCIDA"), adicional: pct("ADICIONAL_SUNTUARIA") },
     cifras: { reglas: Number(cifras[0]?.reglas ?? 0), publicaciones: Number(cifras[0]?.publicaciones ?? 0), desde: cifras[0]?.desde ?? null },
   };
