@@ -66,7 +66,7 @@ docker compose --profile app up -d --build # API/UI en http://127.0.0.1:3000 y p
 npm run apikey -- crear --nombre "prueba" --permisos bcv,arancel,calendario,rif
 ```
 
-Desarrollo local: `npm install`, `npm run dev`, `npm run typecheck`.
+Desarrollo local: `npm install`, `npm run dev`, `npm run typecheck`. Producción (Caddy, dominio y Metabase): [19](19-despliegue-produccion.md).
 
 ## 6. Verificación (27/09/2026)
 

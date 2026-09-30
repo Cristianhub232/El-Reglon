@@ -1,0 +1,36 @@
+# El Renglón · proxy inverso con TLS automático (Let's Encrypt). Ver docs/19.
+# Instalar: sudo cp despliegue/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+# DNS: registros A de @, www y metabase hacia el IP del servidor.
+# Opcional: correo de contacto para Let's Encrypt (avisos de vencimiento). Agréguelo solo en el servidor:
+# {
+# 	email usted@ejemplo.com
+# }
+
+(comun) {
+	encode zstd gzip
+	header Strict-Transport-Security "max-age=31536000"
+}
+
+# Aplicación (API, sitio y panel)
+elrenglonve.org {
+	import comun
+	reverse_proxy 127.0.0.1:3000
+	log {
+		output file /var/log/caddy/elrenglonve.log
+	}
+}
+
+# Metabase (análisis, conexión de solo lectura)
+metabase.elrenglonve.org {
+	import comun
+	reverse_proxy 127.0.0.1:3001
+}
+
+www.elrenglonve.org {
+	redir https://elrenglonve.org{uri} permanent
+}
+
+# Quien entre por el IP a secas va al dominio
+http://40.160.143.39 {
+	redir https://elrenglonve.org{uri} permanent
+}
