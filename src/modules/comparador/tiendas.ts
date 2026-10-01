@@ -2,7 +2,7 @@
 // y la configuración de PM2 (comparador/ecosystem.config.cjs)
 import registro from "../../../datos/comparador/tiendas.json" with { type: "json" };
 
-export type Plataforma = "vtex" | "woocommerce" | "alacena" | "magento";
+export type Plataforma = "vtex" | "woocommerce" | "alacena" | "magento" | "farmatodo" | "plansuarez" | "gama";
 export type Moneda = "VES" | "USD";
 export type Rubro = "supermercado" | "farmacia" | "electronica" | "hogar";
 export interface Sede { clave: string; nombre: string; ciudad?: string; estado?: string }
@@ -11,6 +11,8 @@ export interface Tienda {
   sucursales?: Sede[]; predeterminada?: string;          // catálogo por sede (p. ej. Central Madeirense)
   ubicacion?: { ciudad: string; estado: string };        // tiendas de una sola ciudad
   api?: string;                                          // dirección de su API cuando no es la del sitio
+  // Tiendas por índice: su robots.txt prohíbe la búsqueda pero permite las páginas de producto de su sitemap
+  indice?: { sitemap: string; patron: string; pausa_ms: number };
 }
 
 export const TIENDAS = registro.tiendas as Tienda[];

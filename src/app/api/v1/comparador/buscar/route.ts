@@ -27,6 +27,6 @@ export const GET = endpoint("comparador", async (_req, url) => {
     nombre: g.nombre, presentacion: g.presentacion || null, imagen: g.imagen, tiendas: new Set(g.ofertas.map((o) => o.tienda)).size,
     mejor_precio: { tienda: g.mejor.tienda, precio_bs: g.mejor.precio_bs.toFixed(2), precio_usd: g.mejor.precio_usd.toFixed(2) },
     ofertas: g.ofertas.map((o) => ({ tienda: o.tienda, sucursal: o.sucursal, nombre: o.nombre, marca: o.marca, ean: o.ean, url: o.url, disponible: o.disponible,
-      precio: o.precio, moneda: o.moneda, precio_bs: o.precio_bs.toFixed(2), precio_usd: o.precio_usd.toFixed(2) })),
-  })), aviso: "Precios publicados por cada tienda en línea al momento de la consulta; pueden variar por sucursal. Conversión con la tasa BCV aplicable a hoy." };
+      precio: o.precio, moneda: o.moneda, precio_bs: o.precio_bs.toFixed(2), precio_usd: o.precio_usd.toFixed(2), precio_leido_en: o.leido_en ?? null })),
+  })), aviso: "Precios publicados por cada tienda en línea: al momento de la consulta o, si 'precio_leido_en' tiene fecha, cuando se leyó su página de producto (tiendas que no permiten búsquedas automáticas). Pueden variar por sucursal. Conversión con la tasa BCV aplicable a hoy." };
 });

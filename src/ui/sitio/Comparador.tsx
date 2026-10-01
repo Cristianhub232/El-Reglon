@@ -3,7 +3,7 @@
 // (NDJSON de /api/publico/comparador/buscar). Las ofertas se emparejan aquí mismo con la misma regla que la API.
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { agrupar, type Grupo, type Oferta } from "../../modules/comparador/emparejar.ts";
-import { numero } from "../formato.ts";
+import { haceCuanto, numero } from "../formato.ts";
 import s from "./comparador.module.css";
 
 export interface TiendaPublica { id: string; nombre: string; rubros: string[]; ciudad: string | null; predeterminada: string | null; sucursales: { clave: string; nombre: string }[] }
@@ -151,7 +151,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
           {!todos && grupos.length > VISIBLES && <button type="button" className={s.mas} onClick={() => setTodos(true)}>Ver los {grupos.length} productos</button>}
         </>
       )}
-      <p className={s.aviso}>Precios publicados por cada tienda en su sitio web al momento de la consulta; pueden variar por sucursal y existencia. El Renglón no vende productos. También por API: <span className="mono">/api/v1/comparador/buscar</span>.</p>
+      <p className={s.aviso}>Precios publicados por cada tienda en su sitio web al momento de la consulta; en Farmatodo, Plan Suárez y Gama, cuando se leyó su página (se indica hace cuánto). Pueden variar por sucursal y existencia. El Renglón no vende productos. También por API: <span className="mono">/api/v1/comparador/buscar</span>.</p>
     </section>
   );
 }
@@ -180,7 +180,7 @@ function Tarjeta({ g }: { g: Grupo }) {
           <li key={`${o.tienda}-${o.id_externo}`}>
             <a href={o.url} target="_blank" rel="noopener noreferrer nofollow" title={o.sucursal ? `${o.tienda_nombre} · ${o.sucursal}` : o.tienda_nombre}>{o.tienda_nombre}{o.sucursal ? <small> · {o.sucursal}</small> : null}</a>
             <span className="mono">Bs. {numero(o.precio_bs, 2)}</span>
-            <span className={`mono ${s.diferencia}`}>{i === 0 ? (tiendas > 1 ? "más barato" : "") : `+${numero(((o.precio_bs / g.mejor.precio_bs) - 1) * 100, 0)} %`}{o.disponible ? "" : " · agotado"}</span>
+            <span className={`mono ${s.diferencia}`}>{i === 0 ? (tiendas > 1 ? "más barato" : "") : `+${numero(((o.precio_bs / g.mejor.precio_bs) - 1) * 100, 0)} %`}{o.disponible ? "" : " · agotado"}{o.leido_en ? <small title="Precio leído de su página de producto: esta tienda no permite búsquedas automáticas"> · {haceCuanto(o.leido_en)}</small> : null}</span>
           </li>
         ))}
       </ul>

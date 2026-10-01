@@ -1,10 +1,11 @@
 // Servicio de una tienda (un proceso por tienda bajo PM2, docs/22). Responde GET /buscar?q= con las ofertas de la
-// tienda en su moneda y GET /salud. Cuida a la tienda: caché de 15 min por término, como mucho 2 consultas a la vez
+// tienda en su moneda y GET /salud. Las tiendas por índice además recorren su sitemap sin prisa (indice/indexador.ts). Cuida a la tienda: caché de 15 min por término, como mucho 2 consultas a la vez
 // y una consulta repetida en curso se comparte. Lo que llega se guarda en segundo plano (producto e historial de precio).
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createHash, timingSafeEqual } from "node:crypto";
 import { consulta } from "../../core/db.ts";
-import { buscarEnTienda } from "./adaptadores/index.ts";
+import { AGENTE, buscarEnTienda } from "./adaptadores/index.ts";
+import { buscarEnIndice, iniciarIndice } from "./indice/indexador.ts";
 import type { OfertaTienda } from "./adaptadores/tipos.ts";
 import { basico, ean } from "./normalizar.ts";
 import { sedeDe, type Tienda } from "./tiendas.ts";
@@ -61,12 +62,22 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
   const cola: (() => void)[] = [];
   const credencial = credencialInterna();
   let sucursales = new Map<string, number>();
-  registrarTienda(t).then((ids) => { sucursales = ids; }, (e) => console.error(`[comparador:${t.id}] no se pudo registrar la tienda: ${(e as Error).message}`));
+  registrarTienda(t).then((ids) => {
+    sucursales = ids;
+    // COMPARADOR_INDICE=0 apaga el recorrido (p. ej. en la copia local, para no duplicar la carga sobre las tiendas);
+    // la búsqueda sigue funcionando con lo ya indexado
+    if (t.indice && process.env.COMPARADOR_INDICE !== "0") iniciarIndice(t, () => sucursales.get(""), AGENTE);
+  }, (e) => console.error(`[comparador:${t.id}] no se pudo registrar la tienda: ${(e as Error).message}`));
 
   const turno = () => new Promise<void>((r) => { if (activas < EN_PARALELO) { activas++; r(); } else cola.push(() => { activas++; r(); }); });
   const liberar = () => { activas--; cola.shift()?.(); };
 
   async function buscar(q: string, sede: string | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean }> {
+    // Tiendas por índice: la búsqueda no sale a la tienda, se resuelve en la base (lo guarda el recorrido lento)
+    if (t.indice) {
+      const s = sucursales.get("");
+      return { ofertas: s === undefined ? [] : await buscarEnIndice(t, s, q), cache: false };
+    }
     const clave = `${sede ?? ""}|${basico(q)}`;
     const c = cache.get(clave);
     if (c && c.hasta > Date.now()) return { ofertas: c.ofertas, cache: true };

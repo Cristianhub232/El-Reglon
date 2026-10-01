@@ -11,7 +11,8 @@ import s from "../../../ui/admin/admin.module.css";
 
 export const metadata = { title: "Comparador de precios" };
 
-const PLATAFORMAS: Record<string, string> = { vtex: "VTEX (API de catálogo)", woocommerce: "WooCommerce (página de búsqueda)", alacena: "Página de búsqueda", magento: "Magento (API GraphQL)" };
+const PLATAFORMAS: Record<string, string> = { vtex: "VTEX (API de catálogo)", woocommerce: "WooCommerce (página de búsqueda)", alacena: "Página de búsqueda", magento: "Magento (API GraphQL)",
+  farmatodo: "Índice por sitemap", plansuarez: "Índice por sitemap", gama: "Índice por sitemap (API de producto)" };
 
 async function salud(puerto: number): Promise<{ ok: boolean; cache?: number; en_curso?: number }> {
   try {
@@ -25,7 +26,7 @@ async function salud(puerto: number): Promise<{ ok: boolean; cache?: number; en_
 export default async function ComparadorAdmin() {
   const u = await requerirSeccion("comparador");
   const gestiona = puede(u.rol, "comparador.gestionar");
-  const [estado, [k], masBuscadas, sinResultados, recientes, servicios] = await Promise.all([
+  const [estado, [k], masBuscadas, sinResultados, recientes, servicios, indices] = await Promise.all([
     consulta<{ id: string; activa: boolean; ultima_respuesta: string | null; ultimo_error: string | null; ultimo_error_en: string | null; errores_seguidos: number; productos: number; con_ean: number }>(
       `SELECT t.id, t.activa, t.ultima_respuesta::text, t.ultimo_error, t.ultimo_error_en::text, t.errores_seguidos,
               (SELECT count(*)::int FROM comparador.producto p JOIN comparador.sucursal su ON su.id = p.sucursal_id WHERE su.tienda_id = t.id) AS productos,
@@ -45,7 +46,14 @@ export default async function ComparadorAdmin() {
     consulta<{ termino: string; origen: string; ofertas: number; grupos: number; tiendas_ok: number; tiendas_error: number; duracion_ms: number; realizada_en: string }>(
       "SELECT termino, origen, ofertas, grupos, tiendas_ok, tiendas_error, duracion_ms, realizada_en::text FROM comparador.busqueda ORDER BY realizada_en DESC LIMIT 15"),
     Promise.all(TIENDAS.map((t) => salud(t.puerto))),
+    consulta<{ tienda_id: string; urls: number; leidas: number; dia: number; pausa_ms: number; sitemap: string | null; espera: string | null; errores_seguidos: number; ultimo_error: string | null; robots: number }>(
+      `SELECT e.tienda_id, e.urls, e.pausa_ms, e.sitemap_leido_en::text AS sitemap, e.en_espera_hasta::text AS espera, e.errores_seguidos, e.ultimo_error,
+              (SELECT count(*)::int FROM comparador.indice_url u WHERE u.tienda_id = e.tienda_id AND u.en_sitemap AND u.estado = 'ok') AS leidas,
+              (SELECT count(*)::int FROM comparador.indice_url u WHERE u.tienda_id = e.tienda_id AND u.en_sitemap AND u.ultimo_ok > now() - interval '1 day') AS dia,
+              (SELECT count(*)::int FROM comparador.indice_url u WHERE u.tienda_id = e.tienda_id AND u.estado = 'robots') AS robots
+         FROM comparador.indice_estado e`).catch(() => []),
   ]);
+  const indicePor = new Map(indices.map((x) => [x.tienda_id, x]));
   const porId = new Map(estado.map((e) => [e.id, e]));
   return (
     <div className={s.seccion}>
@@ -80,7 +88,16 @@ export default async function ComparadorAdmin() {
                       : <span className="punto t-exento">en línea{sv.cache ? ` · ${sv.cache} en caché` : ""}</span>}
                   </td>
                   <td className={s.apagado} title={e?.ultima_respuesta ? fechaHora(e.ultima_respuesta) : undefined}>{haceCuanto(e?.ultima_respuesta ?? null)}</td>
-                  <td className="mono">{entero(e?.productos ?? 0)}{e?.productos ? <span className={s.apagado}> · {Math.round((e.con_ean / e.productos) * 100)} % con EAN</span> : null}</td>
+                  <td className="mono">{t.indice && (() => {
+                    const x = indicePor.get(t.id);
+                    if (!x) return <span className={s.apagado} style={{ display: "block", fontFamily: "var(--sans)" }}>índice: empezando…</span>;
+                    const vuelta = x.urls && x.pausa_ms ? (x.urls * x.pausa_ms) / 3_600_000 : null;
+                    return <span className={s.apagado} style={{ display: "block", fontFamily: "var(--sans)" }}>
+                      índice: {entero(x.leidas)} de {entero(x.urls)} páginas · {entero(x.dia)} en 24 h{vuelta ? ` · vuelta completa ≈ ${vuelta < 1 ? "< 1" : Math.round(vuelta)} h` : ""}
+                      {x.robots ? ` · ${x.robots} vetadas por robots.txt` : ""}{x.espera && Date.parse(x.espera) > Date.now() ? ` · en espera por error (${x.ultimo_error?.slice(0, 60)})` : ""}
+                    </span>;
+                  })()}
+                  {entero(e?.productos ?? 0)}{e?.productos ? <span className={s.apagado}> · {Math.round((e.con_ean / e.productos) * 100)} % con EAN</span> : null}</td>
                   {gestiona && (
                     <td>
                       <FormAccion accion={accionActivarTienda} boton={activa ? "Pausar" : "Reactivar"} estiloBoton={activa ? "peligro" : "texto"} className=""

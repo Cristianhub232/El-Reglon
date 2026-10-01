@@ -13,6 +13,7 @@ export interface Oferta {
   tienda: string; tienda_nombre: string; sucursal: string | null; id_externo: string; nombre: string; marca: string | null; ean: string | null;
   url: string; imagen: string | null; disponible: boolean;
   precio: string; moneda: "VES" | "USD"; precio_bs: number; precio_usd: number;
+  leido_en?: string | null;   // tiendas por índice: cuándo se leyó el precio en su página
 }
 export interface Grupo { clave: string; nombre: string; presentacion: string; imagen: string | null; ofertas: Oferta[]; mejor: Oferta; relevancia: number }
 

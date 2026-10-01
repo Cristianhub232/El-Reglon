@@ -1,5 +1,5 @@
 {
-  "_nota": "Tiendas del comparador (docs/22). Cada una corre como un servicio propio bajo PM2 en el contenedor 'comparador', en su puerto. 'moneda' es la moneda en que la tienda publica sus precios. 'sucursales' (opcional): catálogos por sede; se consulta la que elige la persona o 'predeterminada'. 'ubicacion' (opcional): tiendas de una sola ciudad. Pendientes o excluidas, con el motivo, en docs/22.",
+  "_nota": "Tiendas del comparador (docs/22). Cada una corre como un servicio propio bajo PM2 en el contenedor 'comparador', en su puerto. 'moneda' es la moneda en que la tienda publica sus precios. 'sucursales' (opcional): catálogos por sede; se consulta la que elige la persona o 'predeterminada'. 'ubicacion' (opcional): tiendas de una sola ciudad. 'indice' (opcional): tiendas cuyo robots.txt prohíbe la búsqueda pero permite sus páginas de producto: se recorre su sitemap sin prisa y se busca en el índice propio. Pendientes o excluidas, con el motivo, en docs/22.",
   "tiendas": [
     {
       "id": "locatel",
@@ -160,6 +160,57 @@
       ],
       "puerto": 4106,
       "api": "https://nuweapp.com/graphql"
+    },
+    {
+      "id": "farmatodo",
+      "nombre": "Farmatodo",
+      "sitio": "https://www.farmatodo.com.ve",
+      "plataforma": "farmatodo",
+      "moneda": "VES",
+      "rubros": [
+        "farmacia",
+        "supermercado"
+      ],
+      "puerto": 4107,
+      "indice": {
+        "sitemap": "https://www.farmatodo.com.ve/sitemap.xml",
+        "patron": "^https://www\\.farmatodo\\.com\\.ve/producto/\\d+-",
+        "pausa_ms": 2000
+      }
+    },
+    {
+      "id": "plansuarez",
+      "nombre": "Plan Suárez",
+      "sitio": "https://www.plansuarez.com",
+      "plataforma": "plansuarez",
+      "moneda": "VES",
+      "rubros": [
+        "supermercado",
+        "hogar"
+      ],
+      "puerto": 4108,
+      "indice": {
+        "sitemap": "https://www.plansuarez.com/sitemap.xml",
+        "patron": "route=product/product&product_id=\\d+$",
+        "pausa_ms": 5000
+      }
+    },
+    {
+      "id": "gama",
+      "nombre": "Gama",
+      "sitio": "https://gamaenlinea.com",
+      "plataforma": "gama",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4109,
+      "api": "https://api.cl94ncbhsi-excelsior1-p1-public.model-t.cc.commerce.ondemand.com/occ/v2/egb2c-spa",
+      "indice": {
+        "sitemap": "https://gamaenlinea.com/sitemap.xml",
+        "patron": "^https://gamaenlinea\\.com/es/.+/p/\\d+$",
+        "pausa_ms": 2000
+      }
     }
   ]
 }

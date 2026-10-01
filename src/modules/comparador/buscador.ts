@@ -39,7 +39,7 @@ export function convertir(t: Tienda, o: OfertaTienda, tasaUsd: number | null, se
   const bs = t.moneda === "VES" ? n : tasaUsd ? n * tasaUsd : NaN;
   const usd = t.moneda === "USD" ? n : tasaUsd ? n / tasaUsd : NaN;
   return { tienda: t.id, tienda_nombre: t.nombre, sucursal: sede?.nombre ?? t.ubicacion?.ciudad ?? null, id_externo: o.id_externo, nombre: o.nombre, marca: o.marca, ean: o.ean, url: o.url,
-    imagen: o.imagen, disponible: o.disponible, precio: o.precio, moneda: t.moneda, precio_bs: redondo(bs), precio_usd: redondo(usd) };
+    imagen: o.imagen, disponible: o.disponible, precio: o.precio, moneda: t.moneda, precio_bs: redondo(bs), precio_usd: redondo(usd), leido_en: o.leido_en ?? null };
 }
 
 async function preguntar(t: Tienda, q: string, sede: Sede | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean }> {

@@ -72,6 +72,7 @@ services:
     environment:
       <<: *entorno_app
       COMPARADOR_ESCUCHA: 0.0.0.0
+      COMPARADOR_INDICE: ${COMPARADOR_INDICE:-1}   # 0: no recorrer los sitemaps (Farmatodo, Plan Suárez, Gama) en esta copia
     depends_on:
       db: { condition: service_healthy }
     restart: unless-stopped

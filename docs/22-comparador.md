@@ -39,17 +39,35 @@ Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, 
 | Central Madeirense | WooCommerce, página de búsqueda **de cada sede** (`/Bello-Monte-08/?s=…`) | US$ («REF») | Activa, con **16 sedes** (Gran Caracas, Altos Mirandinos y Maiquetía); por defecto, Bello Monte |
 | La Alacena Market | Página de búsqueda (`/buscar?filtro=`) | US$ | Activa (Maracaibo, Zulia) |
 | Ivoo | Magento, API GraphQL pública (`nuweapp.com/graphql`) | US$ | Activa (electrónica y hogar) |
-| Farmatodo | — | — | **Pendiente.** Su `robots.txt` prohíbe la búsqueda automática (`Disallow: /buscar*`) y su API de búsqueda es privada. Solo quedaría leer cada página de producto del sitemap (un rastreo completo); mejor pedírselo a Farmatodo |
-| Gama | SAP Commerce | — | **Pendiente.** Su `robots.txt` prohíbe la búsqueda (`*?query=*`) |
-| Plan Suárez | OpenCart | — | **Pendiente.** Su `robots.txt` prohíbe la búsqueda (`route=product/search`) |
+| Farmatodo | **Por índice**: sitemap (13.589 productos) y datos estructurados de cada página | Bs. | Activa. Su `robots.txt` prohíbe la búsqueda (`/buscar*`) pero permite las páginas de producto. Vuelta completa ≈ 7,5 h (2 s por página) |
+| Plan Suárez | **Por índice**: sitemap (9.766 productos) y la página de cada producto; el código de barras sale del nombre de la imagen | Bs. | Activa. Prohíbe la búsqueda (`route=product/search`) y pide `Crawl-delay: 5`. Vuelta completa ≈ 13,5 h |
+| Gama | **Por índice**: sitemap (1.024 productos) y su API pública de producto (OCC) | US$ («REF») | Activa. Prohíbe la búsqueda (`*?query=*`). Vuelta completa ≈ 35 min |
 | Mercasa, Que Mantequilla | Next.js propio | — | **Pendientes.** Buscan desde el navegador por su `/api`, que su `robots.txt` prohíbe |
 | Río Market | Instaleap | — | **Pendiente.** Su API exige credenciales internas del sitio |
 | Multimax | Astro | — | **Excluida.** Cloudflare responde con un desafío antibots (`cf-mitigated: challenge`) |
 | Plazas | Cloudflare | — | **Excluida.** Desafío antibots |
 | Makro (tienda.makro.com.co) | — | — | **Excluida.** Es de Colombia (pesos colombianos); Makro Venezuela no vende en línea |
 
+### Tiendas por índice
+
+Algunas tiendas prohíben en su `robots.txt` la búsqueda automática, pero permiten sus páginas de producto y las publican en su sitemap precisamente para que se lean. Para ellas no se consulta su buscador. Su servicio (`src/modules/comparador/indice/`) funciona así:
+
+1. **Lee el sitemap** una vez al día y guarda las páginas de producto en `comparador.indice_url`. Las que dejan de aparecer ya no se leen.
+2. **Recorre las páginas una a una**, empezando por la que lleva más tiempo sin leerse, con una pausa entre cada una: la mayor entre la configurada en `tiendas.json` y el `Crawl-delay` de la tienda.
+   - Antes de cada página **comprueba su `robots.txt`**, que se relee cada día. Una URL vetada se marca y no se vuelve a pedir.
+3. **Guarda** producto, precio e historial en las mismas tablas que las demás tiendas. Además guarda el nombre normalizado y la fecha de lectura (`leido_en`).
+4. **Si la tienda responde 429, 403 o 5xx**, deja de leer y espera cada vez más tiempo (1, 2, 4… minutos, hasta 1 hora).
+
+La búsqueda de esas tiendas se resuelve **en el índice propio**:
+- todas las palabras deben aparecer, sin acentos y en cualquier orden (índice trigram de PostgreSQL);
+- solo se usan páginas leídas en los últimos 3 días, con su último precio.
+
+Cada precio indica hace cuánto se leyó: en la portada («· hace 3 h») y en la API (`precio_leido_en`).
+
+`COMPARADOR_INDICE=0` apaga el recorrido en una copia; la búsqueda sigue con lo ya indexado. **Debe estar encendido solo en producción**, para no duplicar la carga sobre las tiendas.
+
 **Reglas para leer una tienda:**
-- Se respeta su `robots.txt`.
+- Se respeta su `robots.txt`: si prohíbe la búsqueda pero permite las páginas de producto, se usa el índice; si prohíbe ambas, no se lee.
 - No se evaden protecciones antibots, como el desafío de Cloudflare.
 - No se usan APIs privadas ni credenciales internas.
 - Se lee solo lo que su propio buscador muestra a cualquier visitante.
@@ -95,7 +113,8 @@ No se descargan catálogos completos. Se guarda solo lo que devuelven las búsqu
 |---|---|
 | `tienda` | Registro sincronizado, si está activa y su última respuesta o error |
 | `sucursal` | Sede o sucursal. Cada tienda tiene la «Tienda en línea»; las que publican por sucursal (Central Madeirense por ruta, Plazas por subdominio) tendrán una fila por sucursal con su `clave`, estado y ciudad |
-| `producto` | Producto de una sucursal: id en la tienda, nombre, marca, EAN válido, URL e imagen |
+| `producto` | Producto de una sucursal: id en la tienda, nombre, marca, EAN válido, URL e imagen; en las tiendas por índice, también el nombre normalizado y `leido_en` |
+| `indice_url` / `indice_estado` | Tiendas por índice: páginas de su sitemap con el resultado de su última lectura, y el estado del recorrido (pausa, espera por errores) |
 | `precio` | Historial: una fila cuando cambian el precio o la existencia, o como mucho una al día |
 | `busqueda` | Término, origen (portada o API), resultados, tiendas que respondieron y duración. No se guarda quién busca |
 

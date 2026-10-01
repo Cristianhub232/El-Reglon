@@ -12,6 +12,7 @@ docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_D
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/noticias/002_pulso.sql
 # Comparador de precios: tiendas, sucursales, productos, historial de precios y permiso "comparador" (docs/22)
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/comparador/001_esquema.sql
+docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/comparador/002_indice.sql
 cargar() {
   local nombre="$1" salida
   if ! salida="$("${@:2}" 2>&1)"; then

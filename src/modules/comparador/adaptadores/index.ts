@@ -14,5 +14,7 @@ export function buscarEnTienda(t: Tienda, consulta: string, limite = 24, sucursa
     case "woocommerce": return buscarWoocommerce(t, consulta, limite, AGENTE, sedeDe(t, sucursal));
     case "alacena": return buscarAlacena(t, consulta, limite, AGENTE);
     case "magento": return buscarMagento(t, consulta, limite, AGENTE);
+    // Tiendas por índice: no se consulta su buscador (lo prohíbe su robots.txt); el servicio busca en el índice propio
+    case "farmatodo": case "plansuarez": case "gama": return Promise.reject(new Error("Tienda por índice: se busca en el índice propio"));
   }
 }
