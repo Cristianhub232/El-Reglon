@@ -28,3 +28,20 @@ export async function diasInhabiles(anio: number) {
   return { anio, base_legal: "COT art. 10 (feriados y días en que la banca no abre al público)", dias: await consulta(
     "SELECT fecha, descripcion, tipo, base_legal FROM calendario.dia_inhabil WHERE extract(year FROM fecha) = $1 ORDER BY fecha", [anio]) };
 }
+
+// Herramienta pública "Mis deberes tributarios" (portada): los próximos deberes del RIF con la cita corta del
+// instrumento de cada uno y las condiciones que se pueden declarar. El RIF no se guarda.
+export async function misDeberes(rif: string, tipo: string, condicionesPedidas: string[], desde: string, limite: number) {
+  const r = await proximos(rif, tipo, condicionesPedidas, desde, limite) as Awaited<ReturnType<typeof proximos>> & {
+    deberes: { fecha: string; fecha_limite: string; dias_restantes: number; obligacion: string; nombre: string; base_legal: string;
+      periodo_desde: string | null; periodo_hasta: string | null; aviso: string | null }[] };
+  const instrumentos = new Map((await consulta<{ codigo: string; nombre: string }>(
+    "SELECT o.codigo, i.nombre FROM calendario.obligacion o JOIN calendario.instrumento i ON i.codigo = o.instrumento")).map((f) => [f.codigo, f.nombre]));
+  const corto = (n: string | undefined) => /Providencia[^:]*SNAT\/(\d{4})\/(\d+)/.exec(n ?? "")?.[0].replace("Providencia Administrativa", "Providencia")
+    ?? (/Reglamento/.test(n ?? "") ? "Reglamento de la Ley de IVA" : n ?? "");
+  return { ...r, deberes: r.deberes.map((d) => {
+    const inst = corto(instrumentos.get(d.obligacion));
+    // Si la base legal ya nombra el instrumento (ordinarios: "Reglamento General Ley IVA art. 60"), va sola
+    return { ...d, base: inst && !/Reglamento|Providencia|Decreto/i.test(d.base_legal) ? `${inst}, ${d.base_legal}` : d.base_legal };
+  }) };
+}

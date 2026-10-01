@@ -162,6 +162,15 @@ async function main() {
   verificar("clasificador público: trae imagen_referencia (foto o null)", r.estado === 200 && "imagen_referencia" in (r.cuerpo ?? {})
     && (r.cuerpo.imagen_referencia === null || /^https:\/\//.test(r.cuerpo.imagen_referencia.url)), r.cuerpo?.imagen_referencia);
 
+  console.log("Mis deberes tributarios (público)");
+  r = await get("/api/publico/calendario/deberes?rif=J309876546&tipo=especial&condiciones=ENTE_PUBLICO");
+  verificar("RIF sin guiones y en minúsculas → deberes con base legal, incluido el aporte del 70 %", r.estado === 200 && r.cuerpo?.rif === "J-30987654-6"
+    && r.cuerpo.deberes.length > 0 && r.cuerpo.deberes.every((d: any) => d.base && d.fecha_limite >= d.fecha) && r.cuerpo.deberes.some((d: any) => d.obligacion === "APORTE_70"), r.cuerpo);
+  r = await get("/api/publico/calendario/deberes?rif=V-12345678-9&tipo=ORDINARIO");
+  verificar("dígito verificador incorrecto → 400 con el dígito esperado", r.estado === 400 && /se esperaba/.test(r.cuerpo?.error?.mensaje ?? ""), r.cuerpo);
+  r = await get("/api/publico/calendario/condiciones");
+  verificar("condiciones declarables", r.estado === 200 && r.cuerpo?.condiciones?.some((c: any) => c.codigo === "ENTE_PUBLICO"), r.cuerpo);
+
   console.log("Comparador de precios");
   verificar("sin permiso 'comparador' → 403", (await get("/api/v1/comparador/tiendas", K)).estado === 403);
   const CP = await clave("comparador", ["comparador"]);

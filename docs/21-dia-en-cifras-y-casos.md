@@ -47,4 +47,12 @@ Las empresas, los RIF (J-40123456-9 y J-30987654-6, válidos pero de ejemplo) y 
   - lleva el nombre del producto y la tienda, con enlace;
   - no se consulta ningún servicio externo; si no hay coincidencia o la imagen no carga, no se muestra nada;
   - llega en el campo `imagen_referencia` de `/api/publico/iva/clasificar`.
+- **«Mis deberes tributarios»** (sección Herramientas, `#deberes`). La persona elige su tipo de contribuyente (especial u ordinario), escribe su RIF y, si es especial, marca sus condiciones (ente público, minería, juegos de azar…). Ve sus próximos deberes:
+  - agrupados por mes, con la fecha límite real (traslados del COT art. 10);
+  - con el período que se declara, la base legal (Providencia SNAT/2025/000091 o Reglamento de la Ley de IVA) y una cuenta regresiva;
+  - el RIF se valida con su dígito verificador y el error indica cuál se esperaba;
+  - **«Agregar a mi calendario (.ics)»** descarga un archivo RFC 5545 (un evento por vencimiento, aviso el día anterior) para Google Calendar, Outlook o el teléfono. Lo genera el navegador (`src/ui/sitio/ics.ts`);
+  - privacidad: el RIF no se guarda en el servidor; en el navegador solo si la persona marca «Recordar mi RIF en este equipo»;
+  - endpoints públicos (límite de 30 consultas por minuto por IP): `GET /api/publico/calendario/deberes?rif=&tipo=&condiciones=` y `GET /api/publico/calendario/condiciones`. Con API key existe `GET /api/v1/calendario/proximos`.
+  - El ejemplo «Contador o asesor» de los casos de uso enlaza a la herramienta.
 

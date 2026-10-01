@@ -12,6 +12,8 @@ import { CasosDeUso } from "../ui/sitio/Casos.tsx";
 import { DiaEnCifras } from "../ui/sitio/DiaEnCifras.tsx";
 import { Comparador } from "../ui/sitio/Comparador.tsx";
 import { HistorialTasas } from "../ui/sitio/HistorialTasas.tsx";
+import { MisDeberes } from "../ui/sitio/MisDeberes.tsx";
+import { condiciones as condicionesCal } from "../modules/calendario/consultas.ts";
 import { tiendasActivas } from "../modules/comparador/buscador.ts";
 import { imagenReferencia } from "../modules/comparador/referencia.ts";
 import { datosCasos } from "../modules/web/casos.ts";
@@ -49,6 +51,7 @@ export default async function Portada() {
   const usd = d.bcv?.monedas.find((m) => m.codigo === "USD");
   const casos = await datosCasos(d.hoy, usd?.tasa ?? null);
   const tiendasComparador = await tiendasActivas().catch(() => []);
+  const condicionesCalendario = (await condicionesCal().catch(() => ({ condiciones: [] }))).condiciones as { codigo: string; descripcion: string }[];
   const eur = d.bcv?.monedas.find((m) => m.codigo === "EUR");
   const proximo = d.inhabiles[0];
   const [principal, ...resto] = d.noticias;
@@ -184,6 +187,7 @@ export default async function Portada() {
                 <span className="aviso-legal">Los días bancarios no laborables también son inhábiles para declarar y pagar tributos.</span>
               </div>
             </div>
+            <MisDeberes condiciones={condicionesCalendario} />
           </div>
         </section>
       </ClasificadorProvider>

@@ -64,7 +64,7 @@ function Deberes({ d }: { d: Casos["deberes"] }) {
         </div>
       ))}
       {d.length === 0 && <div className={s.deber}><span className={s.deberTexto}><span>El calendario no tiene deberes próximos cargados.</span></span></div>}
-      <div className={s.pie}>Si el vencimiento cae en día inhábil, se traslada al siguiente día hábil (COT art. 10).</div>
+      <div className={s.pie}>Si el vencimiento cae en día inhábil, se traslada al siguiente día hábil (COT art. 10). · <a href="#deberes">Consulta los de tu RIF</a></div>
     </div>
   );
 }
