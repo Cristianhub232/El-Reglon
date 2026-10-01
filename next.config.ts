@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const config: NextConfig = {
   output: "standalone",
-  serverExternalPackages: ["pg"],
+  serverExternalPackages: ["pg", "web-push"],   // externos: los programadores (scripts/) los cargan desde node_modules
   poweredByHeader: false,
   // Solo desarrollo: permitir abrir el servidor de desarrollo por 127.0.0.1 (además de localhost)
   allowedDevOrigins: ["127.0.0.1"],

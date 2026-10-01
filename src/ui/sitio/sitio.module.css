@@ -17,6 +17,14 @@
   .obtener { font-size: 14px; padding: 9px 12px; }
   .obtenerLargo { display: none; }
 }
+.ingresarCorto { display: none; }
+/* Teléfonos angostos (≤ 380 px): con la campana, "Iniciar sesión" pasa a "Entrar" para que la cabecera quepa */
+@media (max-width: 380px) {
+  .cabeceraInterior { gap: 6px; }
+  .marca { width: 100px; height: 32px; }
+  .ingresarLargo { display: none; }
+  .ingresarCorto { display: inline; }
+}
 
 .pie { border-top: 1px solid var(--linea); margin-top: auto; }
 .pieInterior { padding: 32px var(--margen); display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-size: 13px; color: var(--texto-3); }

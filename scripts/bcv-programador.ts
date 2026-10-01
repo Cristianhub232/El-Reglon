@@ -2,6 +2,7 @@
 // Si falla, reintenta cada 15 minutos hasta 3 veces antes de esperar la siguiente hora.
 import "./entorno.ts";
 import { ingestar } from "../src/modules/bcv/ingesta.ts";
+import { avisarTasa } from "../src/modules/avisos/temas.ts";
 import { hoyCaracas } from "../src/core/validacion.ts";
 
 const horas = (process.env.BCV_HORAS ?? "8,14,20").split(",").map(Number).filter((h) => Number.isInteger(h) && h >= 0 && h <= 23).sort((a, b) => a - b);
@@ -20,7 +21,13 @@ function proxima(desde = Date.now()): number {
 
 async function ejecutar(intento = 1): Promise<void> {
   try {
-    console.log(JSON.stringify({ momento: new Date().toISOString(), ...(await ingestar(hoyCaracas(), "bcv-programador")) }));
+    const r = await ingestar(hoyCaracas(), "bcv-programador");
+    console.log(JSON.stringify({ momento: new Date().toISOString(), ...r }));
+    // Tasa nueva: aviso push a quienes lo pidieron (docs/24); si falla, la lectura de la tasa no se ve afectada
+    if (r.estado === "registrada") {
+      await avisarTasa(r.fecha_valor).then((a) => a && console.log(`[bcv-programador] aviso de tasa: ${JSON.stringify(a)}`))
+        .catch((e) => console.error(`[bcv-programador] aviso de tasa: ${(e as Error).message}`));
+    }
   } catch (e) {
     console.error(`[bcv-programador] intento ${intento}: ${(e as Error).message}`);
     if (intento < 4) { await new Promise((r) => setTimeout(r, 15 * 60_000)); return ejecutar(intento + 1); }

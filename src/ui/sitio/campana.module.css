@@ -1,0 +1,49 @@
+/* Campana de avisos de la cabecera y su ventana: sin sombras ni brillos, solo bordes */
+.campana { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex: none;
+  border: 1px solid var(--linea); border-radius: 10px; background: var(--blanco); color: var(--tinta); cursor: pointer; }
+.campana:hover { border-color: var(--tinta); }
+.marca { position: absolute; top: 7px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--amarillo); border: 2px solid var(--blanco); }
+.campana:focus-visible, .cerrar:focus-visible, .segmentado button:focus-visible, .agregar:focus-visible, .quitar:focus-visible, .desactivar:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 2px; }
+@media (max-width: 460px) { .campana { width: 36px; height: 36px; } }
+
+.dialogo { width: min(560px, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 0; border: 1px solid var(--linea); border-radius: 14px; background: var(--blanco); color: var(--tinta); }
+.dialogo::backdrop { background: rgba(14, 36, 64, .55); }
+.contenido { padding: 20px clamp(14px, 3vw, 22px) 22px; display: flex; flex-direction: column; gap: 16px; }
+.cabeza { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.cabeza div { display: flex; flex-direction: column; gap: 4px; }
+.cabeza h2 { font: 700 22px/1.2 var(--serif); color: var(--tinta); }
+.cabeza span { font-size: 14px; color: var(--texto-3); }
+.cerrar { border: 1px solid var(--linea); background: var(--blanco); border-radius: 8px; width: 34px; height: 34px; font-size: 22px; line-height: 1; color: var(--tinta); cursor: pointer; flex: none; }
+
+.temas { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.tema { border: 1px solid var(--linea); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+.tema > label { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; }
+.tema > label input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--tinta); flex: none; }
+.tema > label > span { display: flex; flex-direction: column; gap: 2px; }
+.tema strong { font-size: 15px; color: var(--tinta); }
+.tema > label > span > span { font-size: 13px; line-height: 1.45; color: var(--texto-2); }
+
+.rifs { display: flex; flex-direction: column; gap: 10px; padding-left: 30px; }
+@media (max-width: 460px) { .rifs { padding-left: 0; } }
+.rif { display: flex; flex-direction: column; gap: 6px; }
+.fila { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.fila input { flex: 1 1 140px; min-width: 0; font: 500 15px var(--mono); padding: 8px 10px; border: 1px solid var(--linea); border-radius: 8px; background: var(--blanco); color: var(--tinta); }
+.fila input:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 1px; }
+.segmentado { display: inline-flex; border: 1px solid var(--linea); border-radius: 8px; overflow: hidden; flex: none; }
+.segmentado button { border: 0; background: var(--blanco); color: var(--texto-2); font: 600 13px var(--sans); padding: 8px 10px; cursor: pointer; }
+.segmentado button + button { border-left: 1px solid var(--linea); }
+.segmentado button[aria-pressed="true"] { background: var(--tinta); color: var(--papel); }
+.quitar { border: 1px solid var(--linea); background: var(--blanco); border-radius: 8px; width: 34px; height: 34px; font-size: 18px; color: var(--texto-2); cursor: pointer; flex: none; }
+.condiciones summary { font-size: 13px; color: var(--azul); font-weight: 600; cursor: pointer; }
+.condiciones > div { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; }
+.condiciones label { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.4; color: var(--texto-2); }
+.condiciones input { margin-top: 2px; accent-color: var(--tinta); }
+.agregar { align-self: flex-start; border: 0; background: transparent; color: var(--azul); font: 600 13px var(--sans); cursor: pointer; padding: 2px 0; }
+
+.botones { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.desactivar { border: 0; background: transparent; color: var(--rojo); font: 600 14px var(--sans); cursor: pointer; padding: 6px 0; }
+.nota { font-size: 15px; line-height: 1.55; color: var(--texto-2); padding: 14px; border: 1px solid var(--linea); border-radius: 10px; background: var(--papel); }
+.ok { font-size: 14px; color: var(--tinta); padding: 10px 12px; border-left: 3px solid var(--amarillo); background: var(--papel); }
+.error { font-size: 14px; color: var(--rojo); }
+.pie { font-size: 12px; line-height: 1.5; color: var(--texto-3); }
+.pie a { color: var(--azul); font-weight: 600; }

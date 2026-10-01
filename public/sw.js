@@ -2,7 +2,8 @@
 // - Nunca guarda en caché la API, el panel ni el inicio de sesión: son datos vivos o privados.
 // - Recursos estáticos con versión (/_next/static, íconos, imágenes): primero la caché.
 // - Páginas públicas: primero la red; sin conexión, la última copia o la página /sin-conexion.
-const VERSION = "renglon-v1";
+// - Avisos push (docs/24): muestra la notificación y, al tocarla, abre (o enfoca) la página indicada.
+const VERSION = "renglon-v2";
 const ESTATICOS = `${VERSION}-estaticos`;
 const PAGINAS = `${VERSION}-paginas`;
 const PRECARGA = ["/sin-conexion", "/iconos/icono.svg", "/iconos/icono-192.png", "/favicon.ico"];
@@ -45,3 +46,29 @@ self.addEventListener("fetch", (e) => {
     );
   }
 });
+
+// ── Avisos push ──────────────────────────────────────────────────────────────────────────────────────
+self.addEventListener("push", (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch { d = { cuerpo: e.data ? e.data.text() : "" }; }
+  const titulo = typeof d.titulo === "string" && d.titulo ? d.titulo : "El Renglón";
+  e.waitUntil(self.registration.showNotification(titulo, {
+    body: typeof d.cuerpo === "string" ? d.cuerpo : "",
+    icon: "/iconos/icono-192.png",
+    badge: "/iconos/icono-192.png",
+    tag: typeof d.etiqueta === "string" ? d.etiqueta : undefined,     // un aviso nuevo del mismo tema reemplaza al anterior
+    renotify: Boolean(d.etiqueta),
+    data: { url: typeof d.url === "string" && d.url.startsWith("/") ? d.url : "/" },
+  }));
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const destino = new URL(e.notification.data?.url || "/", self.location.origin).href;
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((ventanas) => {
+    const abierta = ventanas.find((v) => v.url.startsWith(self.location.origin));
+    if (abierta) { abierta.navigate(destino); return abierta.focus(); }
+    return self.clients.openWindow(destino);
+  }));
+});
+

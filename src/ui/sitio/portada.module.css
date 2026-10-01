@@ -249,6 +249,10 @@
   .tasaValor span { font-size: 16px; }
   .grafica { width: 104px; height: 33px; }
 }
+@media (max-width: 360px) {
+  .tasaValor strong { font-size: 28px; }
+  .grafica { width: 88px; height: 28px; }
+}
 
 /* Página /noticias */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }

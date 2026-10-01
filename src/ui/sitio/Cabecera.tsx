@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "../Logo.tsx";
+import { Campana } from "./Campana.tsx";
 import s from "./sitio.module.css";
 
 export function Cabecera() {
@@ -18,7 +19,8 @@ export function Cabecera() {
           <Link href="/docs" className={s.navOpcional}>Documentación</Link>
         </nav>
         <div className={s.acciones}>
-          <Link href="/ingresar" className={s.ingresar}>Iniciar sesión</Link>
+          <Campana />
+          <Link href="/ingresar" className={s.ingresar}><span className={s.ingresarLargo}>Iniciar sesión</span><span className={s.ingresarCorto}>Entrar</span></Link>
           <Link href="/#api" className={`boton boton-primario ${s.obtener}`}><span className={s.obtenerLargo}>Obtener </span>API key</Link>
         </div>
       </div>

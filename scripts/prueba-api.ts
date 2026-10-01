@@ -179,6 +179,27 @@ async function main() {
   verificar("robot → 204 sin cookie (no se registra)", v.status === 204 && !v.headers.get("set-cookie"));
   await consulta("DELETE FROM analitica.visita WHERE ruta = '/prueba-e2e'");
 
+  console.log("Avisos push");
+  r = await get("/api/publico/avisos/clave");
+  verificar("clave pública VAPID (o 404 sin claves configuradas)", (r.estado === 200 && /^[A-Za-z0-9_-]{80,}$/.test(r.cuerpo?.clave ?? "")) || r.estado === 404, r.cuerpo);
+  if (r.estado === 200) {
+    // Claves con formato válido pero que no son un punto de la curva: el cifrado falla antes de llamar a FCM
+    const keys = { p256dh: "B" + "A".repeat(86), auth: "A".repeat(22) };
+    const endpointPrueba = `https://fcm.googleapis.com/fcm/send/prueba-e2e-${Date.now()}`;
+    r = await post("/api/publico/avisos/suscripcion", { suscripcion: { endpoint: "https://ejemplo.com/push", keys }, temas: ["tasa"] });
+    verificar("suscripción a un servicio que no es de push → 400", r.estado === 400 && r.cuerpo?.error?.codigo === "suscripcion_invalida", r.cuerpo);
+    r = await post("/api/publico/avisos/suscripcion", { suscripcion: { endpoint: endpointPrueba, keys }, temas: ["deberes"], rifs: [{ rif: "J-12345678-0", tipo: "ESPECIAL" }] });
+    verificar("RIF con dígito verificador incorrecto → 400", r.estado === 400 && r.cuerpo?.error?.codigo === "rif_invalido", r.cuerpo);
+    const rifAviso = rifConTerminal(4);
+    r = await post("/api/publico/avisos/suscripcion", { suscripcion: { endpoint: endpointPrueba, keys }, temas: ["tasa", "deberes", "otro"], rifs: [{ rif: rifAviso.replace(/-/g, ""), tipo: "ORDINARIO" }] });
+    verificar("suscripción: temas válidos y RIF normalizado", r.estado === 200 && r.cuerpo?.temas?.join() === "tasa,deberes" && r.cuerpo?.rifs?.[0]?.rif === rifAviso && r.cuerpo?.nueva === true, r.cuerpo);
+    r = await post("/api/publico/avisos/estado", { endpoint: endpointPrueba });
+    verificar("estado del dispositivo: sus temas y su RIF", r.estado === 200 && r.cuerpo?.temas?.includes("deberes") && r.cuerpo?.rifs?.[0]?.tipo === "ORDINARIO", r.cuerpo);
+    r = await post("/api/publico/avisos/baja", { endpoint: endpointPrueba });
+    const despues = await post("/api/publico/avisos/estado", { endpoint: endpointPrueba });
+    verificar("baja: la suscripción y sus RIF se borran", r.cuerpo?.borrada === true && despues.cuerpo?.temas?.length === 0, [r.cuerpo, despues.cuerpo]);
+  }
+
   console.log("Comparador de precios");
   verificar("sin permiso 'comparador' → 403", (await get("/api/v1/comparador/tiendas", K)).estado === 403);
   const CP = await clave("comparador", ["comparador"]);

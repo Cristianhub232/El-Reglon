@@ -1,6 +1,6 @@
 // Roles y matriz de permisos del panel (resources/Admin.dc.html, "Matriz de permisos")
 export type Rol = "super" | "curador" | "dev" | "lectura";
-export type Seccion = "resumen" | "apikeys" | "usuarios" | "catalogo" | "arancel" | "calendario" | "noticias" | "comparador" | "visitas" | "auditoria";
+export type Seccion = "resumen" | "apikeys" | "usuarios" | "catalogo" | "arancel" | "calendario" | "noticias" | "comparador" | "avisos" | "visitas" | "auditoria";
 
 export const ROLES: Record<Rol, { nombre: string; corto: string; color: string; descripcion: string }> = {
   super: { nombre: "Superadministrador", corto: "Superadministrador", color: "#F2B632", descripcion: "Acceso total al sistema" },
@@ -18,24 +18,25 @@ export const SECCIONES: Record<Seccion, { titulo: string; ruta: string }> = {
   calendario: { titulo: "Calendario", ruta: "/admin/calendario" },
   noticias: { titulo: "Noticiero", ruta: "/admin/noticias" },
   comparador: { titulo: "Comparador de precios", ruta: "/admin/comparador" },
+  avisos: { titulo: "Avisos push", ruta: "/admin/avisos" },
   visitas: { titulo: "Visitas y RIF", ruta: "/admin/visitas" },
   auditoria: { titulo: "Auditoría", ruta: "/admin/auditoria" },
 };
 
 export const GRUPOS: [string, Seccion[]][] = [
   ["General", ["resumen"]], ["Acceso", ["apikeys", "usuarios"]],
-  ["Catálogos", ["catalogo", "arancel", "calendario"]], ["Contenido", ["noticias", "comparador"]], ["Control", ["visitas", "auditoria"]],
+  ["Catálogos", ["catalogo", "arancel", "calendario"]], ["Contenido", ["noticias", "comparador", "avisos"]], ["Control", ["visitas", "auditoria"]],
 ];
 
 const VE: Record<Rol, Seccion[]> = {
-  super: ["resumen", "apikeys", "usuarios", "catalogo", "arancel", "calendario", "noticias", "comparador", "visitas", "auditoria"],
-  curador: ["resumen", "catalogo", "arancel", "calendario", "noticias", "comparador", "auditoria"],
+  super: ["resumen", "apikeys", "usuarios", "catalogo", "arancel", "calendario", "noticias", "comparador", "avisos", "visitas", "auditoria"],
+  curador: ["resumen", "catalogo", "arancel", "calendario", "noticias", "comparador", "avisos", "auditoria"],
   dev: ["resumen", "apikeys"],
-  lectura: ["resumen", "apikeys", "catalogo", "arancel", "calendario", "noticias", "comparador", "auditoria"],
+  lectura: ["resumen", "apikeys", "catalogo", "arancel", "calendario", "noticias", "comparador", "avisos", "auditoria"],
 };
 export const puedeVer = (rol: Rol, s: Seccion) => VE[rol].includes(s);
 
-export type Permiso = "apikeys.gestionar" | "apikeys.propias" | "usuarios.gestionar" | "catalogo.editar" | "arancel.editar" | "calendario.editar" | "noticias.gestionar" | "comparador.gestionar";
+export type Permiso = "apikeys.gestionar" | "apikeys.propias" | "usuarios.gestionar" | "catalogo.editar" | "arancel.editar" | "calendario.editar" | "noticias.gestionar" | "comparador.gestionar" | "avisos.enviar";
 const PUEDE: Record<Permiso, Rol[]> = {
   "apikeys.gestionar": ["super"],             // cualquier API key y las solicitudes
   "apikeys.propias": ["super", "dev"],        // crear y revocar las propias
@@ -45,6 +46,7 @@ const PUEDE: Record<Permiso, Rol[]> = {
   "calendario.editar": ["super", "curador"],
   "noticias.gestionar": ["super", "curador"],        // leer ahora, activar fuentes, ocultar titulares
   "comparador.gestionar": ["super", "curador"],      // pausar o reactivar tiendas del comparador
+  "avisos.enviar": ["super", "curador"],             // avisos de novedades a todos los suscritos y pruebas
 };
 export const puede = (rol: Rol, p: Permiso) => PUEDE[p].includes(rol);
 
@@ -58,6 +60,8 @@ export const MATRIZ: [string, [string, string, string, string]][] = [
   ["Editar calendario", ["Sí", "Sí", "—", "Lectura"]],
   ["Gestionar noticiero", ["Sí", "Sí", "—", "Lectura"]],
   ["Gestionar comparador de precios", ["Sí", "Sí", "—", "Lectura"]],
+  ["Enviar avisos push de novedades", ["Sí", "Sí", "—", "Lectura"]],
+  ["Ver RIF seguidos en los avisos (datos personales)", ["Sí", "—", "—", "—"]],
   ["Ver visitas y RIF consultados (datos personales)", ["Sí", "—", "—", "—"]],
   ["Ver auditoría", ["Sí", "Sí", "—", "Sí"]],
 ];

@@ -3,6 +3,7 @@
 import "./entorno.ts";
 import { consulta, pool } from "../src/core/db.ts";
 import { recolectar } from "../src/modules/noticias/recolector.ts";
+import { avisosProgramados } from "../src/modules/avisos/temas.ts";
 
 const minuto = Number(process.env.NOTICIAS_MINUTO ?? 5);
 if (!Number.isInteger(minuto) || minuto < 0 || minuto > 59) throw new Error("NOTICIAS_MINUTO debe estar entre 0 y 59");
@@ -20,6 +21,14 @@ async function ejecutar(origen: string) {
 
 
 // Analítica del sitio (docs/23): visitas y RIF consultados de más de 12 meses se borran (cada hora, de paso)
+// Avisos push programados (docs/24): resumen de noticias (8, 13 y 19 h) y vencimientos (8 h)
+async function avisos() {
+  try {
+    const r = await avisosProgramados();
+    if (Object.values(r).some(Boolean)) console.log(JSON.stringify({ momento: new Date().toISOString(), avisos: r }));
+  } catch (e) { console.error(`[noticias-programador] avisos: ${(e as Error).message}`); }
+}
+
 async function purgarAnalitica() {
   try {
     const [r] = await consulta<{ n: number }>("SELECT analitica.purgar() AS n");
@@ -36,12 +45,14 @@ async function ciclo(): Promise<never> {
   const [u] = await consulta<{ vieja: boolean }>("SELECT coalesce(max(terminada) < now() - interval '1 hour', true) AS vieja FROM noticias.lectura");
   if (u.vieja) await ejecutar("programador");
   await purgarAnalitica();
+  await avisos();
   for (;;) {
     const t = proxima();
     console.log(`[noticias-programador] próxima lectura: ${new Date(t).toISOString()}`);
     await new Promise((r) => setTimeout(r, t - Date.now()));
     await ejecutar("programador");
     await purgarAnalitica();
+    await avisos();
   }
 }
 

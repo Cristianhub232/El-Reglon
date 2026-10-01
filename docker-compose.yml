@@ -43,6 +43,9 @@ services:
       SOPORTE_WHATSAPP: ${SOPORTE_WHATSAPP:-}
       SOPORTE_CORREO: ${SOPORTE_CORREO:-}
       WORLDNEWS_API_KEY: ${WORLDNEWS_API_KEY:-}   # noticiero: fuentes que no se leen por RSS (TalCual); ver docs/20
+      VAPID_PUBLICO: ${VAPID_PUBLICO:-}           # avisos push (docs/24): sin claves, los avisos no se ofrecen
+      VAPID_PRIVADO: ${VAPID_PRIVADO:-}
+      VAPID_CONTACTO: ${VAPID_CONTACTO:-mailto:soporte@elrenglonve.org}
       COMPARADOR_HOST: comparador                 # servicios de las tiendas del comparador (red interna); ver docs/22
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS
