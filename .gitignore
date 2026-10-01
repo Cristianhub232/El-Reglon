@@ -16,3 +16,10 @@ datos/**/extraccion/
 *.swp
 *.swo
 *~
+# Datos con contactos de empresas y personas (correo, teléfono, dirección): nunca al repositorio, que es público.
+# Fuentes originales y semilla saneada se copian aparte al servidor (docs/25)
+fuentes/privadas/
+datos/directorio/
+# Hojas de cálculo y CSV sueltos en la raíz del proyecto
+/*.xlsx
+/*.csv

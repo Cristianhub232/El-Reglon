@@ -17,6 +17,14 @@ const TEMAS: [Tema, string, string][] = [
   ["novedades", "Novedades de El Renglón", "Cuando agreguemos una herramienta o un módulo nuevo."],
 ];
 const MAX_RIF = 5;
+const PREGUNTADO = "avisos.preguntado";
+
+function preguntadoHace30Dias() {
+  try { return Date.now() - Number(localStorage.getItem(PREGUNTADO) ?? 0) < 30 * 86_400_000; } catch { return true; }
+}
+function recordarPregunta() {
+  try { localStorage.setItem(PREGUNTADO, String(Date.now())); } catch { /* sin almacenamiento */ }
+}
 const RIF_VACIO: RifSeguido = { rif: "", tipo: "ESPECIAL", condiciones: [] };
 
 function claveBinaria(b64: string) {
@@ -55,18 +63,25 @@ export function Campana() {
   const [mensaje, setMensaje] = useState<{ tipo: "ok" | "error"; texto: string } | null>(null);
 
   // Estado de este dispositivo: si ya tiene una suscripción, sus temas y RIF vienen del servidor
+  // Estado de este dispositivo: si ya tiene una suscripción, sus temas y RIF vienen del servidor. Si no la tiene, la
+  // ventana se abre sola al entrar (sin pedir aún el permiso del navegador); con "Ahora no" no vuelve en 30 días.
   useEffect(() => {
     const sop = detectar();
     setSoporte(sop);
-    if (sop !== "si" || Notification.permission !== "granted") return;
     (async () => {
-      const reg = await navigator.serviceWorker.getRegistration("/");
-      const sub = await reg?.pushManager.getSubscription();
-      if (!sub) return;
-      const e = await api<{ temas: Tema[]; rifs: RifSeguido[] }>("estado", { endpoint: sub.endpoint });
-      if (!e.temas.length) return;
-      setSuscrito(true); setTemas(e.temas);
-      if (e.rifs.length) setRifs(e.rifs);
+      if (sop === "si" && Notification.permission === "granted") {
+        const reg = await navigator.serviceWorker.getRegistration("/");
+        const sub = await reg?.pushManager.getSubscription();
+        if (sub) {
+          const e = await api<{ temas: Tema[]; rifs: RifSeguido[] }>("estado", { endpoint: sub.endpoint }).catch(() => null);
+          if (e?.temas.length) {
+            setSuscrito(true); setTemas(e.temas);
+            if (e.rifs.length) setRifs(e.rifs);
+            return;
+          }
+        }
+      }
+      if ((sop === "si" || sop === "ios") && !preguntadoHace30Dias()) setTimeout(() => void abrir(), 600);
     })().catch(() => {});
   }, []);
 
@@ -149,12 +164,12 @@ export function Campana() {
         {suscrito && <span className={s.marca} aria-hidden="true" />}
       </button>
 
-      <dialog ref={dialogo} className={s.dialogo} aria-labelledby="avisos-titulo" onClick={(e) => { if (e.target === e.currentTarget) dialogo.current?.close(); }}>
+      <dialog ref={dialogo} className={s.dialogo} aria-labelledby="avisos-titulo" onClose={recordarPregunta} onClick={(e) => { if (e.target === e.currentTarget) dialogo.current?.close(); }}>
         <div className={s.contenido}>
           <div className={s.cabeza}>
             <div>
               <h2 id="avisos-titulo">Avisos en este dispositivo</h2>
-              <span>{suscrito ? "Activados. Cambia los temas cuando quieras." : "Elige qué quieres recibir. No hace falta registrarse."}</span>
+              <span>{suscrito ? "Activados. Cambia los temas cuando quieras." : "¿Te avisamos? Elige qué quieres recibir en este dispositivo. No hace falta registrarse."}</span>
             </div>
             <button type="button" className={s.cerrar} onClick={() => dialogo.current?.close()} aria-label="Cerrar">×</button>
           </div>
@@ -212,7 +227,9 @@ export function Campana() {
                 <button type="button" className="boton boton-primario" onClick={guardar} disabled={ocupado || soporte === "comprobando"}>
                   {ocupado ? "Guardando…" : suscrito ? "Guardar cambios" : "Activar avisos"}
                 </button>
-                {suscrito && <button type="button" className={s.desactivar} onClick={desactivar} disabled={ocupado}>Desactivar avisos</button>}
+                {suscrito
+                  ? <button type="button" className={s.desactivar} onClick={desactivar} disabled={ocupado}>Desactivar avisos</button>
+                  : <button type="button" className={s.ahoraNo} onClick={() => dialogo.current?.close()}>Ahora no</button>}
               </div>
               <p className={s.pie}>Los RIF que sigas se guardan en nuestro servidor solo para enviarte estos avisos y se borran al desactivarlos · <a href="/privacidad#avisos">Privacidad</a></p>
             </>

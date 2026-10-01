@@ -32,3 +32,6 @@ cargar "Calendario y RIF" herramientas/calendario/cargar_calendario.sh
 # IVA: el cargador (Node) valida el catálogo, comprueba los textos legales contra las Gacetas (pdftotext)
 # y los prefijos contra el arancel ya cargado. Sin pdftotext: IVA_SIN_PDF=1 (los textos quedan sin verificar).
 cargar "IVA" node scripts/iva-cargar-catalogo.ts ${IVA_SIN_PDF:+--sin-pdf}
+# Directorio de contribuyentes (docs/25): su semilla tiene datos de contacto y no está en el repositorio; se copia aparte
+if [ -f datos/directorio/semilla/manifiesto.json ]; then cargar "Directorio" herramientas/directorio/cargar_directorio.sh
+else echo "· Directorio: sin semilla en datos/directorio/semilla, se omite (docs/25)"; fi
