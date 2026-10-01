@@ -1,7 +1,8 @@
 "use client";
 // "Mis deberes tributarios": el contribuyente indica su tipo, su RIF y (si es especial) sus condiciones, y ve sus
 // próximos deberes con la fecha límite real (traslados del COT art. 10). Se pueden llevar al calendario (.ics).
-// El RIF no se guarda en el servidor; en este navegador solo si la persona marca "recordar".
+// El RIF consultado se registra en el servidor con fines estadísticos (docs/23); en este navegador solo si la persona
+// marca "recordar".
 import { useEffect, useState, type FormEvent } from "react";
 import { diaSemana, fechaCorta } from "../formato.ts";
 import { calendarioIcs, type DeberIcs } from "./ics.ts";
@@ -109,6 +110,7 @@ export function MisDeberes({ condiciones }: { condiciones: Condicion[] }) {
           </details>
         )}
         <label className={s.recordar}><input type="checkbox" checked={recordar} onChange={(e) => setRecordar(e.target.checked)} /> Recordar mi RIF en este equipo</label>
+        <span className={s.aviso}>El RIF consultado queda registrado con fines estadísticos · <a href="/privacidad">Privacidad</a></span>
       </div>
       {error && <p className={s.error} role="alert">{error}</p>}
 
@@ -137,7 +139,7 @@ export function MisDeberes({ condiciones }: { condiciones: Condicion[] }) {
               ))}
             </div>
           ))}
-          <p className={s.nota}>{resultado.nota} Resultado orientativo según el calendario oficial cargado; verifica en el portal del SENIAT. No guardamos tu RIF.</p>
+          <p className={s.nota}>{resultado.nota} Resultado orientativo según el calendario oficial cargado; verifica en el portal del SENIAT. Registramos los RIF consultados con fines estadísticos (ver <a href="/privacidad">Privacidad</a>).</p>
         </div>
       )}
     </div>

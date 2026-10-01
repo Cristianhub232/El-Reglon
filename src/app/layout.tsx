@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { IBM_Plex_Mono, Public_Sans, Source_Serif_4 } from "next/font/google";
 import { SITIO_URL } from "../core/sitio.ts";
 import { RegistroServiceWorker } from "../ui/RegistroServiceWorker.tsx";
+import { AvisoCookies, RegistroVisita } from "../ui/Analitica.tsx";
 import "./globals.css";
 
 // Tipografías de la marca: se descargan al compilar y se sirven desde el propio dominio (sin llamadas a Google)
@@ -33,6 +34,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {children}
         <RegistroServiceWorker />
+        <RegistroVisita />
+        <AvisoCookies />
       </body>
     </html>
   );

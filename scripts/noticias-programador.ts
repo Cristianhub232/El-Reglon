@@ -19,6 +19,14 @@ async function ejecutar(origen: string) {
 }
 
 
+// Analítica del sitio (docs/23): visitas y RIF consultados de más de 12 meses se borran (cada hora, de paso)
+async function purgarAnalitica() {
+  try {
+    const [r] = await consulta<{ n: number }>("SELECT analitica.purgar() AS n");
+    if (r?.n) console.log(`[noticias-programador] analítica: ${r.n} registros de más de 12 meses borrados`);
+  } catch (e) { console.error(`[noticias-programador] analítica: ${(e as Error).message}`); }
+}
+
 function proxima(desde = Date.now()): number {
   const t = new Date(desde); t.setUTCMinutes(minuto, 0, 0);
   return t.getTime() > desde ? t.getTime() : t.getTime() + 3600_000;
@@ -27,11 +35,13 @@ function proxima(desde = Date.now()): number {
 async function ciclo(): Promise<never> {
   const [u] = await consulta<{ vieja: boolean }>("SELECT coalesce(max(terminada) < now() - interval '1 hour', true) AS vieja FROM noticias.lectura");
   if (u.vieja) await ejecutar("programador");
+  await purgarAnalitica();
   for (;;) {
     const t = proxima();
     console.log(`[noticias-programador] próxima lectura: ${new Date(t).toISOString()}`);
     await new Promise((r) => setTimeout(r, t - Date.now()));
     await ejecutar("programador");
+    await purgarAnalitica();
   }
 }
 

@@ -171,6 +171,14 @@ async function main() {
   r = await get("/api/publico/calendario/condiciones");
   verificar("condiciones declarables", r.estado === 200 && r.cuerpo?.condiciones?.some((c: any) => c.codigo === "ENTE_PUBLICO"), r.cuerpo);
 
+  console.log("Analítica del sitio");
+  const navegador = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36";
+  let v = await fetch(`${BASE}/api/publico/visita`, { method: "POST", headers: { "Content-Type": "application/json", "User-Agent": navegador }, body: JSON.stringify({ ruta: "/prueba-e2e" }) });
+  verificar("visita → 204 con cookie de visitante (1 año, HttpOnly)", v.status === 204 && /renglon_visitante=[0-9a-f-]{36}.*HttpOnly/i.test(v.headers.get("set-cookie") ?? ""), v.headers.get("set-cookie"));
+  v = await fetch(`${BASE}/api/publico/visita`, { method: "POST", headers: { "Content-Type": "application/json", "User-Agent": "Googlebot/2.1" }, body: JSON.stringify({ ruta: "/" }) });
+  verificar("robot → 204 sin cookie (no se registra)", v.status === 204 && !v.headers.get("set-cookie"));
+  await consulta("DELETE FROM analitica.visita WHERE ruta = '/prueba-e2e'");
+
   console.log("Comparador de precios");
   verificar("sin permiso 'comparador' → 403", (await get("/api/v1/comparador/tiendas", K)).estado === 403);
   const CP = await clave("comparador", ["comparador"]);

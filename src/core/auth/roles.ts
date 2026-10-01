@@ -1,6 +1,6 @@
 // Roles y matriz de permisos del panel (resources/Admin.dc.html, "Matriz de permisos")
 export type Rol = "super" | "curador" | "dev" | "lectura";
-export type Seccion = "resumen" | "apikeys" | "usuarios" | "catalogo" | "arancel" | "calendario" | "noticias" | "comparador" | "auditoria";
+export type Seccion = "resumen" | "apikeys" | "usuarios" | "catalogo" | "arancel" | "calendario" | "noticias" | "comparador" | "visitas" | "auditoria";
 
 export const ROLES: Record<Rol, { nombre: string; corto: string; color: string; descripcion: string }> = {
   super: { nombre: "Superadministrador", corto: "Superadministrador", color: "#F2B632", descripcion: "Acceso total al sistema" },
@@ -18,16 +18,17 @@ export const SECCIONES: Record<Seccion, { titulo: string; ruta: string }> = {
   calendario: { titulo: "Calendario", ruta: "/admin/calendario" },
   noticias: { titulo: "Noticiero", ruta: "/admin/noticias" },
   comparador: { titulo: "Comparador de precios", ruta: "/admin/comparador" },
+  visitas: { titulo: "Visitas y RIF", ruta: "/admin/visitas" },
   auditoria: { titulo: "Auditoría", ruta: "/admin/auditoria" },
 };
 
 export const GRUPOS: [string, Seccion[]][] = [
   ["General", ["resumen"]], ["Acceso", ["apikeys", "usuarios"]],
-  ["Catálogos", ["catalogo", "arancel", "calendario"]], ["Contenido", ["noticias", "comparador"]], ["Control", ["auditoria"]],
+  ["Catálogos", ["catalogo", "arancel", "calendario"]], ["Contenido", ["noticias", "comparador"]], ["Control", ["visitas", "auditoria"]],
 ];
 
 const VE: Record<Rol, Seccion[]> = {
-  super: ["resumen", "apikeys", "usuarios", "catalogo", "arancel", "calendario", "noticias", "comparador", "auditoria"],
+  super: ["resumen", "apikeys", "usuarios", "catalogo", "arancel", "calendario", "noticias", "comparador", "visitas", "auditoria"],
   curador: ["resumen", "catalogo", "arancel", "calendario", "noticias", "comparador", "auditoria"],
   dev: ["resumen", "apikeys"],
   lectura: ["resumen", "apikeys", "catalogo", "arancel", "calendario", "noticias", "comparador", "auditoria"],
@@ -57,5 +58,6 @@ export const MATRIZ: [string, [string, string, string, string]][] = [
   ["Editar calendario", ["Sí", "Sí", "—", "Lectura"]],
   ["Gestionar noticiero", ["Sí", "Sí", "—", "Lectura"]],
   ["Gestionar comparador de precios", ["Sí", "Sí", "—", "Lectura"]],
+  ["Ver visitas y RIF consultados (datos personales)", ["Sí", "—", "—", "—"]],
   ["Ver auditoría", ["Sí", "Sí", "—", "Sí"]],
 ];

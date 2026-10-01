@@ -9,5 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITIO_URL}/noticias`, lastModified: hoy, changeFrequency: "hourly", priority: 0.8 },   // titulares de los medios cada hora
     { url: `${SITIO_URL}/solicitar-api-key`, lastModified: hoy, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITIO_URL}/docs`, lastModified: hoy, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITIO_URL}/privacidad`, lastModified: hoy, changeFrequency: "yearly", priority: 0.2 },
   ];
 }

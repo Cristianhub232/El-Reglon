@@ -61,6 +61,7 @@ node scripts/usuario.ts crear --correo usted@empresa.com.ve --nombre "Su nombre"
 20. [Noticiero](docs/20-noticiero.md): titulares de 10 medios venezolanos leídos cada hora (RSS, WordPress y WorldNewsAPI), portada, `/noticias`, API y moderación en el panel.
 21. [El día en cifras y casos de uso](docs/21-dia-en-cifras-y-casos.md): carrusel del hero con datos propios (vencimientos, días inhábiles, monedas del BCV, moneda de mayor valor, dato del catálogo de IVA y actividad) y ejemplos por perfil calculados con los módulos reales.
 22. [Comparador de precios](docs/22-comparador.md): «¿Dónde está más barato?» en vivo en tiendas venezolanas en línea, un servicio por tienda bajo PM2, emparejamiento por código de barras y precios en Bs. y US$.
+23. [Analítica y privacidad](docs/23-analitica.md): visitas con cookie propia, RIF consultados, aviso de cookies, página de privacidad y conservación de 12 meses.
 - [Diseños](resources/): identidad de marca, logo, landing, inicio de sesión y panel (se abren en el navegador).
 
 > Resultado orientativo: cuando hay varias opciones, la selección corresponde al usuario bajo su responsabilidad y análisis. Las reglas deben ser validadas por un asesor tributario.

@@ -17,6 +17,8 @@
 .condiciones > div { display: flex; flex-direction: column; gap: 8px; padding: 10px 0 4px; max-width: 760px; }
 .condiciones label, .recordar { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
 .condiciones input, .recordar input { margin-top: 2px; accent-color: var(--tinta); }
+.aviso { font-size: 12px; color: var(--texto-3); }
+.aviso a, .nota a { color: var(--azul); font-weight: 600; }
 .error { margin: 0 24px 16px; padding: 10px 12px; border-radius: 8px; background: var(--condicionado-fondo); color: var(--condicionado-texto); font-size: 14px; }
 
 .resultado { border-top: 1px solid var(--linea-suave); }

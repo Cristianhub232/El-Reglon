@@ -1,0 +1,11 @@
+/* Aviso de cookies: franja discreta abajo, sin sombras ni brillos */
+.aviso {
+  position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50; margin: 0 auto; max-width: 760px;
+  display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; padding: 12px 16px;
+  background: var(--tinta); color: var(--papel); border: 1px solid rgba(246, 243, 234, .2); border-radius: 12px; font-size: 14px;
+}
+.aviso p { flex: 1 1 320px; margin: 0; line-height: 1.45; }
+.aviso a { color: var(--amarillo); font-weight: 600; }
+.aviso button { border: 0; border-radius: 8px; padding: 8px 16px; background: var(--amarillo); color: var(--tinta); font: 700 14px var(--sans); cursor: pointer; }
+.aviso button:focus-visible, .aviso a:focus-visible { outline: 3px solid var(--papel); outline-offset: 2px; }
+@media print { .aviso { display: none; } }

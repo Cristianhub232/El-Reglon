@@ -7,6 +7,8 @@ cd "$(dirname "$0")/.."
 set -a; [ -f .env ] && . ./.env; set +a
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/core/001_esquema.sql
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/core/002_usuarios.sql
+# Analítica del sitio público: visitas (cookie propia) y RIF consultados, 12 meses (docs/23)
+docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/core/003_analitica.sql
 # Noticiero: esquema, fuentes y permiso "noticias" (los titulares los trae noticias-programador); 002 retira el Pulso oficial
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/noticias/001_esquema.sql
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/noticias/002_pulso.sql

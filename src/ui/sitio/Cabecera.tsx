@@ -38,6 +38,7 @@ export function PiePagina() {
           <span>Datos de productos: Open Food Facts (ODbL)</span>
           <a href="/api/salud">Estado del servicio</a>
           <Link href="/docs">Swagger</Link>
+          <Link href="/privacidad">Privacidad</Link>
         </div>
       </div>
     </footer>
