@@ -41,10 +41,10 @@ export async function registrarTienda(t: Tienda): Promise<Map<string, number>> {
 async function guardar(sucursal: number, t: Tienda, ofertas: OfertaTienda[]) {
   for (const o of ofertas) {
     const [p] = await consulta<{ id: string }>(
-      `INSERT INTO comparador.producto (sucursal_id, id_externo, nombre, marca, ean, url, imagen) VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (sucursal_id, id_externo) DO UPDATE SET nombre = $3, marca = $4, ean = $5, url = $6, imagen = $7, visto_ultimo = now()
+      `INSERT INTO comparador.producto (sucursal_id, id_externo, nombre, marca, ean, url, imagen, nombre_busqueda) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       ON CONFLICT (sucursal_id, id_externo) DO UPDATE SET nombre = $3, marca = $4, ean = $5, url = $6, imagen = $7, nombre_busqueda = $8, visto_ultimo = now()
        RETURNING id`,
-      [sucursal, o.id_externo, o.nombre.slice(0, 300), o.marca, ean(o.ean), o.url, o.imagen?.startsWith("https://") ? o.imagen : null]);
+      [sucursal, o.id_externo, o.nombre.slice(0, 300), o.marca, ean(o.ean), o.url, o.imagen?.startsWith("https://") ? o.imagen : null, basico(`${o.marca ?? ""} ${o.nombre}`)]);
     // Nueva fila de historial solo si cambió el precio o la existencia, o si la última tiene más de un día
     await consulta(
       `INSERT INTO comparador.precio (producto_id, precio, precio_lista, moneda, disponible)

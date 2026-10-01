@@ -29,3 +29,22 @@ Reemplaza a la sección «Hecho para quien factura, declara e integra», que era
 | Desarrollador | `curl` a `POST /api/v1/iva/clasificar` y su respuesta | Respuesta real del motor, recortada |
 
 Las empresas, los RIF (J-40123456-9 y J-30987654-6, válidos pero de ejemplo) y los precios en US$ son ficticios. Las alícuotas, la base legal, la tasa y las fechas son las reales del día.
+
+## Otros elementos de la portada
+
+- **Descripción del inicio.** Resume lo que hace la plataforma hoy: el IVA de cada producto con su base legal, la tasa BCV, dónde comprarlo más barato (comparador), el arancel, el calendario y el RIF.
+  - La etiqueta dice «Gratis · abierto · con base legal oficial». Antes decía «homologado al SENIAT», que no corresponde a ninguna homologación formal.
+  - El segundo botón lleva al comparador. La API key sigue en la cabecera y en su sección.
+- **«Ver historial» de la tasa BCV.** Abre una ventana (`<dialog>`, se cierra con Esc o tocando fuera) con:
+  - la línea de tendencia de una moneda a la vez (dólar o euro: escalas distintas, nunca dos ejes);
+  - los períodos: 30 y 90 publicaciones, 1 año y todo;
+  - la última tasa, la variación del período y el mínimo y máximo;
+  - el valor de cada fecha al pasar el cursor, o con las flechas del teclado;
+  - la tabla de publicaciones con dólar y euro y sus variaciones, más la descarga en CSV.
+  - Los datos (unas 420 publicaciones desde 2025) llegan con la página: no hay consultas extra.
+- **Imagen de referencia del clasificador de IVA.** Si el resultado queda «determinado», se muestra la foto de un producto que el comparador ya vio en una tienda (`src/modules/comparador/referencia.ts`):
+  - primero por **código de barras** exacto; si no hay, por nombre (todas las palabras, el más parecido);
+  - lleva el nombre del producto y la tienda, con enlace;
+  - no se consulta ningún servicio externo; si no hay coincidencia o la imagen no carga, no se muestra nada;
+  - llega en el campo `imagen_referencia` de `/api/publico/iva/clasificar`.
+

@@ -11,7 +11,9 @@ import { TitularItem, TitularPrincipal } from "../ui/sitio/Titulares.tsx";
 import { CasosDeUso } from "../ui/sitio/Casos.tsx";
 import { DiaEnCifras } from "../ui/sitio/DiaEnCifras.tsx";
 import { Comparador } from "../ui/sitio/Comparador.tsx";
+import { HistorialTasas } from "../ui/sitio/HistorialTasas.tsx";
 import { tiendasActivas } from "../modules/comparador/buscador.ts";
+import { imagenReferencia } from "../modules/comparador/referencia.ts";
 import { datosCasos } from "../modules/web/casos.ts";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
 import { Grafica } from "../ui/sitio/Grafica.tsx";
@@ -43,6 +45,7 @@ export default async function Portada() {
   const origen = `${host.startsWith("localhost") || host.startsWith("127.") ? "http" : "https"}://${host}`;
   const inicial = await clasificarSolicitud({ nombre: EJEMPLOS[0].texto, operacion: "nacional", precio_compra: null, precio_venta: null, moneda: null }, null)
     .catch(() => null) as Resultado | null;
+  if (inicial?.estado === "determinado") inicial.imagen_referencia = await imagenReferencia(EJEMPLOS[0].texto, []).catch(() => null);
   const usd = d.bcv?.monedas.find((m) => m.codigo === "USD");
   const casos = await datosCasos(d.hoy, usd?.tasa ?? null);
   const tiendasComparador = await tiendasActivas().catch(() => []);
@@ -68,12 +71,12 @@ export default async function Portada() {
           <div className={s.heroRejilla}>
             <div className={s.heroTexto}>
               <div className={s.heroTextoArriba}>
-                <span className={s.heroEtiqueta}>Gratis · abierto · homologado al SENIAT</span>
+                <span className={s.heroEtiqueta}>Gratis · abierto · con base legal oficial</span>
                 <h1 className={s.heroTitulo}>Cómo tributa cada renglón.</h1>
-                <p className={s.heroLead}>Clasificación de IVA con su base legal, tasas oficiales del BCV, arancel de aduanas, calendario tributario y validación del RIF. En un solo lugar, para toda Venezuela.</p>
+                <p className={s.heroLead}>El IVA de cada producto con su base legal, la tasa oficial del BCV y dónde comprarlo más barato en las principales cadenas del país. También el arancel de aduanas, el calendario tributario y la validación del RIF. Todo en un solo lugar, para toda Venezuela.</p>
                 <div className={s.heroBotones}>
                   <a href="#herramientas" className="boton boton-primario">Consultar gratis</a>
-                  <a href="#api" className="boton boton-secundario">Obtener API key</a>
+                  <a href="#comparador" className="boton boton-secundario">Comparar precios</a>
                 </div>
               </div>
               <div className={s.fuentes}>
@@ -86,7 +89,7 @@ export default async function Portada() {
               <div className={s.tasas} id="tasas">
                 <div className={s.tasasCabeza}>
                   <strong>Tasa oficial BCV {d.bcv?.vigente ? "de hoy" : "vigente"}</strong>
-                  {d.bcv && <span>Fecha valor {diaSemana(d.bcv.fecha_valor)} {fecha(d.bcv.fecha_valor)}</span>}
+                  {d.bcv && <span className={s.tasasFecha}>Fecha valor {diaSemana(d.bcv.fecha_valor)} {fecha(d.bcv.fecha_valor)}{d.bcv.historial.length > 1 && <HistorialTasas historial={d.bcv.historial} />}</span>}
                 </div>
                 {d.bcv && !d.bcv.vigente && (
                   <span className={s.aviso}>Aún no hay tasa publicada con fecha valor de hoy: se muestra la última publicación del BCV.</span>

@@ -28,7 +28,12 @@ async function tasas(hoy: string) {
   const [lectura] = await consulta<{ momento: string | null; publicado_en: string | null }>(
     `SELECT (SELECT max(ocurrido_en) FROM core.auditoria WHERE accion IN ('bcv.registrada', 'bcv.sin_cambios', 'bcv.discrepancia')) AS momento,
             (SELECT publicado_en FROM bcv.publicacion WHERE fecha_valor = $1::date) AS publicado_en`, [p.fecha_valor]);
-  return { fecha_valor: p.fecha_valor, vigente: p.fecha_valor >= hoy, monedas, leida: lectura?.momento ?? lectura?.publicado_en ?? null };
+  // Historial completo para la ventana "Ver historial" (≈ 250 publicaciones por año: pocos KB)
+  const historial = await consulta<{ f: string; usd: number | null; eur: number | null }>(
+    `SELECT fecha_valor::text AS f, max(venta_bs) FILTER (WHERE moneda = 'USD')::float AS usd, max(venta_bs) FILTER (WHERE moneda = 'EUR')::float AS eur
+       FROM bcv.tasa WHERE moneda IN ('USD', 'EUR') AND fecha_valor <= $1::date GROUP BY fecha_valor ORDER BY fecha_valor`, [p.fecha_valor]);
+  return { fecha_valor: p.fecha_valor, vigente: p.fecha_valor >= hoy, monedas, leida: lectura?.momento ?? lectura?.publicado_en ?? null,
+    historial: historial.filter((h): h is { f: string; usd: number; eur: number } => h.usd !== null && h.eur !== null) };
 }
 
 export async function datosPortada() {

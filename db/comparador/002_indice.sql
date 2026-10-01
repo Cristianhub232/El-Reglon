@@ -43,3 +43,9 @@ END $$;
 -- (solo tiendas cuyas URL llevan el nombre del producto: Farmatodo y Gama). El ritmo no cambia.
 ALTER TABLE comparador.indice_url ADD COLUMN IF NOT EXISTS prioridad timestamptz;
 CREATE INDEX IF NOT EXISTS indice_url_prioridad ON comparador.indice_url (tienda_id, prioridad DESC) WHERE prioridad IS NOT NULL;
+
+-- Nombre normalizado también en los productos de las tiendas que se consultan en vivo (lo usa la imagen de referencia
+-- del clasificador de IVA). Relleno de lo ya guardado; desde ahora lo escribe el servicio de cada tienda.
+CREATE EXTENSION IF NOT EXISTS unaccent;
+UPDATE comparador.producto SET nombre_busqueda = regexp_replace(lower(unaccent(coalesce(marca, '') || ' ' || nombre)), '[^a-z0-9.,"]+', ' ', 'g')
+ WHERE nombre_busqueda IS NULL;

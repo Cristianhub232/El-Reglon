@@ -158,6 +158,10 @@ async function main() {
   verificar("limite=0 → 400", (await get("/api/v1/noticias?limite=0", N)).estado === 400);
   verificar("fuente con caracteres inválidos → 400", (await get("/api/v1/noticias?fuente=%27%3B--", N)).estado === 400);
 
+  r = await post("/api/publico/iva/clasificar", { codigo: "7591002200046", operacion: "nacional" });
+  verificar("clasificador público: trae imagen_referencia (foto o null)", r.estado === 200 && "imagen_referencia" in (r.cuerpo ?? {})
+    && (r.cuerpo.imagen_referencia === null || /^https:\/\//.test(r.cuerpo.imagen_referencia.url)), r.cuerpo?.imagen_referencia);
+
   console.log("Comparador de precios");
   verificar("sin permiso 'comparador' → 403", (await get("/api/v1/comparador/tiendas", K)).estado === 403);
   const CP = await clave("comparador", ["comparador"]);

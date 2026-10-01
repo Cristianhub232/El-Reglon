@@ -14,6 +14,24 @@ export interface Opcion {
 export interface Resultado {
   estado: "determinado" | "condicionado" | "no_determinado"; opciones: Opcion[];
   advertencias: string[]; notas_operacion: string[]; entrada?: { codigos: { tipo: string }[] };
+  // Foto de un producto que el comparador vio en una tienda (solo si quedó determinado; ver comparador/referencia.ts)
+  imagen_referencia?: { url: string; producto: string; tienda: string; enlace: string } | null;
+}
+
+// Imagen de referencia de la tienda; si no carga (enlace roto o bloqueo), no se muestra nada
+function ImagenRef({ r, chica }: { r: NonNullable<Resultado["imagen_referencia"]>; chica?: boolean }) {
+  const [fallo, setFallo] = useState(false);
+  if (fallo) return null;
+  // imagen de la tienda, cargada directo (sin el optimizador de Next)
+  const img = <img src={r.url} alt={`Imagen de referencia: ${r.producto}`} loading="lazy" decoding="async" referrerPolicy="no-referrer"
+    className={chica ? s.refChica : s.refImagen} onError={() => setFallo(true)} />;
+  if (chica) return img;
+  return (
+    <div className={s.referencia}>
+      {img}
+      <span><strong>Imagen de referencia</strong>{r.producto} · <a href={r.enlace} target="_blank" rel="noopener noreferrer nofollow">{r.tienda} ↗</a></span>
+    </div>
+  );
 }
 
 // Un texto de solo dígitos (o con guiones) es un código: EAN, UPC, ISBN, ISSN…
@@ -110,6 +128,7 @@ export function BarraClasificador() {
         <div className={s.barraResultado} aria-live="polite">
           {c.cargando ? <span className={s.cargando}>Clasificando…</span> : c.error ? <span className="t-adicional">{c.error}</span> : primera ? (
             <span className={s.barraPrimera}>
+              {c.resultado?.imagen_referencia && <ImagenRef r={c.resultado.imagen_referencia} chica />}
               <strong className={`punto punto-mono t-${claseCategoria(primera.categoria)}`}>{etiquetaTasa(primera.categoria, primera.alicuota_total)}</strong>
               <span className={s.barraCategoria}>{primera.denominacion}</span>
               <span className={`mono ${s.barraBase}`}>{cita(primera)}</span>
@@ -154,6 +173,7 @@ export function PanelClasificador() {
               <span className={`mono ${s.opcionBase}`}>{cita(o)}</span>
             </div>
           ))}
+          {r?.imagen_referencia && <ImagenRef r={r.imagen_referencia} />}
           {notas.slice(0, 3).map((n, i) => <div key={i} className={s.resultadoNota}>{n}</div>)}
         </div>
         <span className="aviso-legal">Resultado orientativo. Cuando hay varias opciones, la selección corresponde al usuario bajo su responsabilidad y análisis. Catálogo en validación por el asesor tributario.</span>
