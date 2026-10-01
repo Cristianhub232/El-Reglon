@@ -14,6 +14,7 @@ export interface Oferta {
   url: string; imagen: string | null; disponible: boolean;
   precio: string; moneda: "VES" | "USD"; precio_bs: number; precio_usd: number;
   leido_en?: string | null;   // tiendas por índice: cuándo se leyó el precio en su página
+  dudoso?: boolean;           // precio desproporcionado frente al resto del grupo (error probable de la tienda)
 }
 export interface Grupo { clave: string; nombre: string; presentacion: string; imagen: string | null; ofertas: Oferta[]; mejor: Oferta; relevancia: number }
 
@@ -59,6 +60,23 @@ function compatibles(x: Interna, y: Interna): boolean {
   return resto.length <= 1 && !resto.some(distintiva);
 }
 
+// Precio dudoso: menos del 40 % o más de 2,5 veces la mediana de las ofertas del mismo producto (con 3 o más);
+// con solo 2, si una cuesta más de 4 veces la otra, se marcan las dos. Así un error de la tienda (p. ej. un precio
+// viejo en su página) nunca sale como "el más barato".
+function marcarDudosos(ofertas: Oferta[]): Oferta[] {
+  const copia = ofertas.map((o) => ({ ...o, dudoso: false }));
+  const precios = copia.map((o) => o.precio_bs).filter((p) => p > 0);
+  if (copia.length >= 3) {
+    // Mediana de todas las ofertas (incluida la propia): un solo precio absurdo no la arrastra
+    const orden = [...precios].sort((a, b) => a - b);
+    const mediana = orden.length % 2 ? orden[(orden.length - 1) / 2] : (orden[orden.length / 2 - 1] + orden[orden.length / 2]) / 2;
+    for (const o of copia) o.dudoso = o.precio_bs < mediana * 0.4 || o.precio_bs > mediana * 2.5;
+  } else if (copia.length === 2 && Math.max(...precios) > Math.min(...precios) * 4) {
+    for (const o of copia) o.dudoso = true;
+  }
+  return copia;
+}
+
 // Pertinencia frente a lo buscado: palabras exactas, del mismo género, o prefijo si lo buscado tiene 4 letras o más
 function pertinencia(q: string[], ws: string[]): number {
   if (!q.length) return 1;
@@ -79,7 +97,8 @@ export function agrupar(ofertas: Oferta[], consulta: string): Grupo[] {
   // Con muy pocas palabras buscadas, todas deben aparecer ("harina pan" no trae un tamizador de harina)
   const minimo = q.length <= 2 ? 1 : 0.66;
   return grupos.map((g) => {
-    const ordenadas = g.map((x) => x.o).sort((a, b) => Number(b.disponible) - Number(a.disponible) || a.precio_bs - b.precio_bs);
+    const ofertasG = marcarDudosos(g.map((x) => x.o));
+    const ordenadas = ofertasG.sort((a, b) => Number(Boolean(a.dudoso)) - Number(Boolean(b.dudoso)) || Number(b.disponible) - Number(a.disponible) || a.precio_bs - b.precio_bs);
     const todas = [...new Set(g.flatMap((x) => [...x.palabras, ...(x.marca ? x.marca.split(/\s+/) : [])]))];
     const base = g.find((x) => x.ean) ?? g[0];
     return {

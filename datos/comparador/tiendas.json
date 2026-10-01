@@ -175,7 +175,8 @@
       "indice": {
         "sitemap": "https://www.farmatodo.com.ve/sitemap.xml",
         "patron": "^https://www\\.farmatodo\\.com\\.ve/producto/\\d+-",
-        "pausa_ms": 2000
+        "pausa_ms": 2000,
+        "slug": true
       }
     },
     {
@@ -209,7 +210,8 @@
       "indice": {
         "sitemap": "https://gamaenlinea.com/sitemap.xml",
         "patron": "^https://gamaenlinea\\.com/es/.+/p/\\d+$",
-        "pausa_ms": 2000
+        "pausa_ms": 2000,
+        "slug": true
       }
     }
   ]

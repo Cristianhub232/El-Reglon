@@ -12,7 +12,7 @@ export interface Tienda {
   ubicacion?: { ciudad: string; estado: string };        // tiendas de una sola ciudad
   api?: string;                                          // dirección de su API cuando no es la del sitio
   // Tiendas por índice: su robots.txt prohíbe la búsqueda pero permite las páginas de producto de su sitemap
-  indice?: { sitemap: string; patron: string; pausa_ms: number };
+  indice?: { sitemap: string; patron: string; pausa_ms: number; slug?: boolean };   // slug: la URL lleva el nombre del producto
 }
 
 export const TIENDAS = registro.tiendas as Tienda[];

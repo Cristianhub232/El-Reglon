@@ -38,3 +38,8 @@ DO $$ BEGIN
     GRANT SELECT ON comparador.indice_url, comparador.indice_estado TO metabase_lectura;
   END IF;
 END $$;
+
+-- Prioridad: cuando alguien busca algo que aún no está leído (o está viejo), sus páginas pasan al frente de la fila
+-- (solo tiendas cuyas URL llevan el nombre del producto: Farmatodo y Gama). El ritmo no cambia.
+ALTER TABLE comparador.indice_url ADD COLUMN IF NOT EXISTS prioridad timestamptz;
+CREATE INDEX IF NOT EXISTS indice_url_prioridad ON comparador.indice_url (tienda_id, prioridad DESC) WHERE prioridad IS NOT NULL;

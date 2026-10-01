@@ -7,7 +7,7 @@ import { haceCuanto, numero } from "../formato.ts";
 import s from "./comparador.module.css";
 
 export interface TiendaPublica { id: string; nombre: string; rubros: string[]; ciudad: string | null; predeterminada: string | null; sucursales: { clave: string; nombre: string }[] }
-type EstadoTienda = { estado: "esperando" } | { estado: "ok"; ofertas: number; ms: number } | { estado: "error"; mensaje: string };
+type EstadoTienda = { estado: "esperando" } | { estado: "ok"; ofertas: number; ms: number; leyendo: number } | { estado: "error"; mensaje: string };
 
 const EJEMPLOS = ["Harina PAN", "Acetaminofén 500 mg", "Televisor 32", "Leche en polvo"];
 const VISIBLES = 9;
@@ -55,7 +55,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
           if (ev.tipo === "inicio") setTasa(ev.tasa ?? null);
           if (ev.tipo === "tienda") {
             setOfertas((o) => [...o, ...ev.ofertas]);
-            setEstados((e) => ({ ...e, [ev.tienda]: { estado: "ok", ofertas: ev.ofertas.length, ms: ev.ms } }));
+            setEstados((e) => ({ ...e, [ev.tienda]: { estado: "ok", ofertas: ev.ofertas.length, ms: ev.ms, leyendo: ev.leyendo ?? 0 } }));
           }
           if (ev.tipo === "error") setEstados((e) => ({ ...e, [ev.tienda]: { estado: "error", mensaje: ev.mensaje } }));
         }
@@ -131,6 +131,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
               <span key={t.id} className={`${s.pastilla} ${e.estado === "ok" ? s.pastillaOk : e.estado === "error" ? s.pastillaError : ""}`}>
                 {e.estado === "esperando" && <span className={s.girando} aria-hidden="true" />}
                 {t.nombre}{t.ciudad ? ` (${t.ciudad})` : ""}{e.estado === "ok" ? ` · ${e.ofertas || "sin"} resultado${e.ofertas === 1 ? "" : "s"}` : e.estado === "error" ? " · no respondió" : ""}
+                {e.estado === "ok" && e.leyendo > 0 && <span title="Esta tienda no permite búsquedas automáticas: leemos sus páginas de producto una a una. Vuelve a buscar en un minuto."> · leyendo {e.leyendo} página{e.leyendo === 1 ? "" : "s"} de su catálogo</span>}
               </span>
             );
           })}
@@ -171,7 +172,7 @@ function Tarjeta({ g }: { g: Grupo }) {
         </div>
       </div>
       <div className={s.mejor}>
-        <span>{tiendas > 1 ? "Mejor precio" : "Precio"}{g.mejor.disponible ? "" : " (agotado)"}</span>
+        <span>{g.mejor.dudoso ? "Precios muy distintos: verifica en cada tienda" : tiendas > 1 ? "Mejor precio" : "Precio"}{g.mejor.disponible ? "" : " (agotado)"}</span>
         <strong className="mono">Bs. {numero(g.mejor.precio_bs, 2)}</strong>
         <span className="mono">US$ {numero(g.mejor.precio_usd, 2)} · {g.mejor.tienda_nombre}{g.mejor.sucursal ? ` (${g.mejor.sucursal})` : ""}</span>
       </div>
@@ -180,7 +181,7 @@ function Tarjeta({ g }: { g: Grupo }) {
           <li key={`${o.tienda}-${o.id_externo}`}>
             <a href={o.url} target="_blank" rel="noopener noreferrer nofollow" title={o.sucursal ? `${o.tienda_nombre} · ${o.sucursal}` : o.tienda_nombre}>{o.tienda_nombre}{o.sucursal ? <small> · {o.sucursal}</small> : null}</a>
             <span className="mono">Bs. {numero(o.precio_bs, 2)}</span>
-            <span className={`mono ${s.diferencia}`}>{i === 0 ? (tiendas > 1 ? "más barato" : "") : `+${numero(((o.precio_bs / g.mejor.precio_bs) - 1) * 100, 0)} %`}{o.disponible ? "" : " · agotado"}{o.leido_en ? <small title="Precio leído de su página de producto: esta tienda no permite búsquedas automáticas"> · {haceCuanto(o.leido_en)}</small> : null}</span>
+            <span className={`mono ${s.diferencia}`}>{o.dudoso ? <b className={s.dudoso} title="Este precio no guarda proporción con el de las otras tiendas: puede ser un error o un precio viejo en su página. Verifícalo en la tienda.">precio dudoso</b> : i === 0 ? (tiendas > 1 ? "más barato" : "") : `${o.precio_bs >= g.mejor.precio_bs ? "+" : "−"}${numero(Math.abs((o.precio_bs / g.mejor.precio_bs) - 1) * 100, 0)} %`}{o.disponible ? "" : " · agotado"}{o.leido_en ? <small title="Precio leído de su página de producto: esta tienda no permite búsquedas automáticas"> · {haceCuanto(o.leido_en)}</small> : null}</span>
           </li>
         ))}
       </ul>

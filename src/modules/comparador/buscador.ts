@@ -10,7 +10,7 @@ import { sedeDe, TIENDAS, type Sede, type Tienda } from "./tiendas.ts";
 
 export type Evento =
   | { tipo: "inicio"; consulta: string; tasa: { usd: string; fecha_valor: string } | null; tiendas: { id: string; nombre: string; rubros: string[]; sucursal: Sede | null }[] }
-  | { tipo: "tienda"; tienda: string; sucursal: string | null; ofertas: Oferta[]; ms: number; cache: boolean }
+  | { tipo: "tienda"; tienda: string; sucursal: string | null; ofertas: Oferta[]; ms: number; cache: boolean; leyendo: number }
   | { tipo: "error"; tienda: string; mensaje: string; ms: number }
   | { tipo: "fin"; ms: number };
 
@@ -42,14 +42,14 @@ export function convertir(t: Tienda, o: OfertaTienda, tasaUsd: number | null, se
     imagen: o.imagen, disponible: o.disponible, precio: o.precio, moneda: t.moneda, precio_bs: redondo(bs), precio_usd: redondo(usd), leido_en: o.leido_en ?? null };
 }
 
-async function preguntar(t: Tienda, q: string, sede: Sede | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean }> {
+async function preguntar(t: Tienda, q: string, sede: Sede | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean; leyendo: number }> {
   const host = process.env.COMPARADOR_HOST ?? "127.0.0.1";
   const credencial = credencialInterna();
   const r = await fetch(`http://${host}:${t.puerto}/buscar?q=${encodeURIComponent(q)}${sede ? `&sucursal=${encodeURIComponent(sede.clave)}` : ""}`, {
     headers: credencial ? { "x-comparador": credencial } : {}, signal: AbortSignal.timeout(20_000) });
-  const d = await r.json().catch(() => null) as { ofertas?: OfertaTienda[]; cache?: boolean; error?: string } | null;
+  const d = await r.json().catch(() => null) as { ofertas?: OfertaTienda[]; cache?: boolean; leyendo?: number; error?: string } | null;
   if (!r.ok || !d?.ofertas) throw new Error(d?.error ?? `HTTP ${r.status}`);
-  return { ofertas: d.ofertas, cache: Boolean(d.cache) };
+  return { ofertas: d.ofertas, cache: Boolean(d.cache), leyendo: d.leyendo ?? 0 };
 }
 
 // Sedes pedidas en la URL: sucursal.<tienda>=<clave> (p. ej. sucursal.centralmadeirense=Chacaito-07)
@@ -69,7 +69,7 @@ export async function* buscarEnTiendas(q: string, pedidas: Record<string, string
   const pendientes = new Map(tiendas.map((t) => {
     const desde = Date.now(), sede = sedes.get(t.id) ?? null;
     const p: Promise<Evento> = preguntar(t, q, sede).then(
-      (r) => ({ tipo: "tienda", tienda: t.id, sucursal: sede?.nombre ?? null, ofertas: r.ofertas.map((o) => convertir(t, o, tasaUsd, sede)), ms: Date.now() - desde, cache: r.cache }),
+      (r) => ({ tipo: "tienda", tienda: t.id, sucursal: sede?.nombre ?? null, ofertas: r.ofertas.map((o) => convertir(t, o, tasaUsd, sede)), ms: Date.now() - desde, cache: r.cache, leyendo: r.leyendo }),
       (e) => ({ tipo: "error", tienda: t.id, mensaje: (e as Error).name === "TimeoutError" ? "No respondió a tiempo" : "No disponible en este momento", ms: Date.now() - desde }));
     return [t.id, p] as const;
   }));

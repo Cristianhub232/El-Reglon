@@ -5,7 +5,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { createHash, timingSafeEqual } from "node:crypto";
 import { consulta } from "../../core/db.ts";
 import { AGENTE, buscarEnTienda } from "./adaptadores/index.ts";
-import { buscarEnIndice, iniciarIndice } from "./indice/indexador.ts";
+import { buscarEnIndice, iniciarIndice, priorizar } from "./indice/indexador.ts";
 import type { OfertaTienda } from "./adaptadores/tipos.ts";
 import { basico, ean } from "./normalizar.ts";
 import { sedeDe, type Tienda } from "./tiendas.ts";
@@ -72,11 +72,13 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
   const turno = () => new Promise<void>((r) => { if (activas < EN_PARALELO) { activas++; r(); } else cola.push(() => { activas++; r(); }); });
   const liberar = () => { activas--; cola.shift()?.(); };
 
-  async function buscar(q: string, sede: string | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean }> {
-    // Tiendas por índice: la búsqueda no sale a la tienda, se resuelve en la base (lo guarda el recorrido lento)
+  async function buscar(q: string, sede: string | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean; leyendo?: number }> {
+    // Tiendas por índice: la búsqueda no sale a la tienda, se resuelve en la base (lo guarda el recorrido lento);
+    // lo buscado que aún no está leído pasa al frente de la fila del recorrido
     if (t.indice) {
       const s = sucursales.get("");
-      return { ofertas: s === undefined ? [] : await buscarEnIndice(t, s, q), cache: false };
+      const [ofertas, leyendo] = await Promise.all([s === undefined ? [] : buscarEnIndice(t, s, q), priorizar(t, q).catch(() => 0)]);
+      return { ofertas, cache: false, leyendo };
     }
     const clave = `${sede ?? ""}|${basico(q)}`;
     const c = cache.get(clave);
@@ -128,7 +130,8 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
     const inicio = Date.now();
     try {
       const r = await buscar(q, sede?.clave ?? null);
-      responder(res, 200, { tienda: t.id, sucursal: sede ? { clave: sede.clave, nombre: sede.nombre } : null, ofertas: r.ofertas, cache: r.cache, ms: Date.now() - inicio });
+      responder(res, 200, { tienda: t.id, sucursal: sede ? { clave: sede.clave, nombre: sede.nombre } : null, ofertas: r.ofertas, cache: r.cache,
+        leyendo: r.leyendo ?? 0, ms: Date.now() - inicio });
     } catch (e) {
       responder(res, 502, { tienda: t.id, error: (e as Error).message, ms: Date.now() - inicio });
     }

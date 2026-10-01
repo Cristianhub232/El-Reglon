@@ -64,6 +64,12 @@ La búsqueda de esas tiendas se resuelve **en el índice propio**:
 
 Cada precio indica hace cuánto se leyó: en la portada («· hace 3 h») y en la API (`precio_leido_en`).
 
+**Lo buscado pasa al frente de la fila.** La primera vuelta completa toma horas (Farmatodo ≈ 7,5 h). Para que una búsqueda no espere tanto, en las tiendas cuyas URL llevan el nombre del producto (Farmatodo y Gama, `slug: true`) funciona así:
+- Al buscar, hasta 15 páginas cuya URL contiene todas las palabras, y que no se han leído en las últimas 6 horas, reciben **prioridad**.
+- El recorrido las lee primero, **al mismo ritmo** de siempre (una cada 2 s).
+- Mientras tanto, la portada indica «leyendo N páginas de su catálogo». Una búsqueda repetida a los pocos segundos ya las trae.
+- Plan Suárez no puede priorizarse, porque sus URL solo llevan un número (`product_id`); se completa con la vuelta normal.
+
 `COMPARADOR_INDICE=0` apaga el recorrido en una copia; la búsqueda sigue con lo ya indexado. **Debe estar encendido solo en producción**, para no duplicar la carga sobre las tiendas.
 
 **Reglas para leer una tienda:**
@@ -93,6 +99,7 @@ Está en `src/modules/comparador/emparejar.ts` y es el mismo en el servidor (API
    - **Nombres que difieren como mucho en una palabra, de un solo lado**, sin contar la marca ni las palabras de empaque (frasco, paquete, tipo…). Se aceptan abreviaturas («arr» = «arroz», «dulc» = «dulce») y el género («blanco» = «blanca»).
    - Esa palabra no puede ser un **atributo distintivo**, como descremada, completa, integral, sin gluten, amarilla o dulce. Es mejor no comparar que comparar mal.
 3. **Cada oferta debe ser compatible con todas las del grupo**, no solo con una, así que no se forman cadenas. Dos productos distintos de la misma tienda y sede nunca se juntan.
+5. **Precio dudoso.** Dentro de un mismo producto, una oferta por debajo del 40 % o por encima de 2,5 veces la mediana se marca como «precio dudoso». La mediana se calcula con todas las ofertas, si hay 3 o más; con 2, se marcan ambas si una cuesta más de 4 veces la otra. Esa oferta va al final y nunca sale como «el más barato» (en la API, `precio_dudoso`). Ejemplo real: Farmatodo publicaba la Harina PAN 1 kg a Bs. 84,20 en su propia página, con las demás tiendas alrededor de Bs. 1.000.
 4. **Dos ofertas con códigos de barras distintos nunca se juntan.** Si comparten código, son el mismo producto aunque cada tienda lo rotule distinto (por ejemplo, Genven y Leti).
 
 Medido con 10 búsquedas reales (harina pan, arroz mary, mayonesa mavesa, pasta primor, leche en polvo…): 33 productos comparables entre tiendas, sin emparejamientos falsos.

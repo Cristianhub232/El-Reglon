@@ -73,10 +73,10 @@ export function iniciarIndice(t: Tienda, sucursal: () => number | undefined, age
   async function leerUna(): Promise<boolean> {
     const [f] = await consulta<{ url: string }>(
       `SELECT url FROM comparador.indice_url WHERE tienda_id = $1 AND en_sitemap AND coalesce(estado, '') <> 'robots'
-        ORDER BY ultimo_intento NULLS FIRST LIMIT 1`, [t.id]);
+        ORDER BY prioridad DESC NULLS LAST, ultimo_intento NULLS FIRST LIMIT 1`, [t.id]);
     if (!f) return false;
     const marcar = (estado: string, productoId: number | null = null) => consulta(
-      `UPDATE comparador.indice_url SET ultimo_intento = now(), estado = $3, producto_id = coalesce($4, producto_id),
+      `UPDATE comparador.indice_url SET ultimo_intento = now(), estado = $3, producto_id = coalesce($4, producto_id), prioridad = NULL,
          ultimo_ok = CASE WHEN $3 = 'ok' THEN now() ELSE ultimo_ok END WHERE tienda_id = $1 AND url = $2`, [t.id, f.url, estado.slice(0, 200), productoId]);
     const u = new URL(f.url);
     if (!robots!.permitido(u.pathname + u.search)) { await marcar("robots"); return true; }
@@ -119,6 +119,24 @@ export function iniciarIndice(t: Tienda, sucursal: () => number | undefined, age
     }
   }
   void ciclo();
+}
+
+// Lo buscado pasa al frente de la fila: páginas cuya URL contiene todas las palabras y que no se han leído en las
+// últimas 6 horas (como mucho 15 por búsqueda). Devuelve cuántas quedan en la fila con prioridad.
+export async function priorizar(t: Tienda, q: string): Promise<number> {
+  if (!t.indice?.slug) return 0;
+  const ws = palabras(q).filter((w) => w.length >= 3).slice(0, 6);
+  if (!ws.length) return 0;
+  await consulta(
+    `UPDATE comparador.indice_url SET prioridad = now() WHERE (tienda_id, url) IN (
+       SELECT tienda_id, url FROM comparador.indice_url
+        WHERE tienda_id = $1 AND en_sitemap AND coalesce(estado, '') <> 'robots' AND lower(url) LIKE ALL ($2::text[])
+          AND (ultimo_ok IS NULL OR ultimo_ok < now() - interval '6 hours') AND prioridad IS NULL
+        ORDER BY ultimo_ok NULLS FIRST LIMIT 15)`, [t.id, ws.map((w) => `%${w}%`)]);
+  const [f] = await consulta<{ n: number }>(
+    `SELECT count(*)::int AS n FROM comparador.indice_url WHERE tienda_id = $1 AND prioridad IS NOT NULL AND lower(url) LIKE ALL ($2::text[])`,
+    [t.id, ws.map((w) => `%${w}%`)]);
+  return f.n;
 }
 
 // Búsqueda en el índice: todas las palabras (sin acentos, en cualquier orden), solo productos leídos en los
