@@ -66,7 +66,7 @@
 /* Conversor */
 .conversor {
   position: absolute; right: var(--margen); bottom: 28px; width: 320px; max-width: calc(100% - 40px);
-  background: var(--blanco); border: 1px solid var(--linea); border-radius: 12px; box-shadow: var(--sombra); display: flex; flex-direction: column;
+  background: var(--blanco); border: 1px solid var(--linea); border-radius: 12px; display: flex; flex-direction: column;
 }
 @media (max-width: 640px) { .conversor { right: 20px; left: 20px; width: auto; } }
 .conversorCabeza { padding: 14px 16px; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--linea-suave); }

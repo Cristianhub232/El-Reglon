@@ -6,11 +6,14 @@ import { agrupar, type Grupo, type Oferta } from "../../modules/comparador/empar
 import { haceCuanto, numero } from "../formato.ts";
 import s from "./comparador.module.css";
 
-export interface TiendaPublica { id: string; nombre: string; rubros: string[]; ciudad: string | null; predeterminada: string | null; sucursales: { clave: string; nombre: string }[] }
+export interface TiendaPublica { id: string; nombre: string; rubros: string[]; ciudad: string | null }
 type EstadoTienda = { estado: "esperando" } | { estado: "ok"; ofertas: number; ms: number; leyendo: number } | { estado: "error"; mensaje: string };
+type Orden = "relevancia" | "menor" | "mayor";
 
 const EJEMPLOS = ["Harina PAN", "Acetaminofén 500 mg", "Televisor 32", "Leche en polvo"];
 const VISIBLES = 9;
+const ORDENES: [Orden, string][] = [["relevancia", "Más relevantes"], ["menor", "Menor precio"], ["mayor", "Mayor precio"]];
+const GUARDADO = "comparador.filtros";
 
 export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
   const [texto, setTexto] = useState("");
@@ -21,11 +24,10 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
   const [buscando, setBuscando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [todos, setTodos] = useState(false);
+  // Filtros: cadenas que se dejan fuera y orden; se recuerdan en este navegador
+  const [fuera, setFuera] = useState<string[]>([]);
+  const [orden, setOrden] = useState<Orden>("relevancia");
   const control = useRef<AbortController | null>(null);
-  // Sede elegida por tienda (solo las que tienen catálogo por sede), recordada en este navegador
-  const [sedes, setSedes] = useState<Record<string, string>>({});
-  const sedesRef = useRef(sedes);
-  sedesRef.current = sedes;
 
   async function buscar(q: string) {
     const limpio = q.trim().replace(/\s+/g, " ");
@@ -36,8 +38,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
     setTexto(limpio); setConsulta(limpio); setOfertas([]); setError(null); setTodos(false); setBuscando(true);
     setEstados(Object.fromEntries(tiendas.map((t) => [t.id, { estado: "esperando" }])));
     try {
-      const extra = Object.entries(sedesRef.current).map(([t, s]) => `&sucursal.${encodeURIComponent(t)}=${encodeURIComponent(s)}`).join("");
-      const r = await fetch(`/api/publico/comparador/buscar?q=${encodeURIComponent(limpio)}${extra}`, { signal: c.signal });
+      const r = await fetch(`/api/publico/comparador/buscar?q=${encodeURIComponent(limpio)}`, { signal: c.signal });
       if (!r.ok || !r.body) {
         const d = await r.json().catch(() => null) as { error?: { mensaje?: string } } | null;
         throw new Error(d?.error?.mensaje ?? "No se pudo buscar en este momento");
@@ -68,30 +69,38 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
     }
   }
 
-  // Enlace compartible: /?comparar=harina%20pan
+  // Filtros guardados y enlace compartible (/?comparar=harina%20pan)
   useEffect(() => {
     try {
-      const guardadas = JSON.parse(localStorage.getItem("comparador.sedes") ?? "{}") as Record<string, string>;
-      const validas = Object.fromEntries(Object.entries(guardadas).filter(([t, s]) => tiendas.some((x) => x.id === t && x.sucursales.some((y) => y.clave === s))));
-      sedesRef.current = validas;
-      setSedes(validas);
+      const g = JSON.parse(localStorage.getItem(GUARDADO) ?? "{}") as { fuera?: string[]; orden?: Orden };
+      if (Array.isArray(g.fuera)) setFuera(g.fuera.filter((id) => tiendas.some((t) => t.id === id)));
+      if (g.orden && ORDENES.some(([o]) => o === g.orden)) setOrden(g.orden);
     } catch { /* sin almacenamiento */ }
     const q = new URLSearchParams(location.search).get("comparar");
     if (q) void buscar(q);
     return () => control.current?.abort();
   }, []);
+  const guardar = (f: string[], o: Orden) => { try { localStorage.setItem(GUARDADO, JSON.stringify({ fuera: f, orden: o })); } catch { /* sin almacenamiento */ } };
+  const alternar = (id: string) => {
+    const nuevo = fuera.includes(id) ? fuera.filter((x) => x !== id) : [...fuera, id];
+    if (nuevo.length === tiendas.length) return;            // siempre queda al menos una cadena
+    setFuera(nuevo); setTodos(false); guardar(nuevo, orden);
+  };
+  const soloEsta = (id: string) => { const nuevo = tiendas.map((t) => t.id).filter((x) => x !== id); setFuera(nuevo); guardar(nuevo, orden); };
+  const todas = () => { setFuera([]); guardar([], orden); };
+  const ordenar = (o: Orden) => { setOrden(o); guardar(fuera, o); };
 
-  const grupos = useMemo(() => (consulta ? agrupar(ofertas, consulta) : []), [ofertas, consulta]);
+  // Se emparejan solo las ofertas de las cadenas elegidas: el "mejor precio" es el mejor entre ellas
+  const grupos = useMemo(() => {
+    if (!consulta) return [];
+    const g = agrupar(ofertas.filter((o) => !fuera.includes(o.tienda)), consulta);
+    if (orden === "relevancia") return g;
+    const signo = orden === "menor" ? 1 : -1;
+    // Los productos cuyo mejor precio es dudoso van al final en cualquier orden
+    return [...g].sort((a, b) => Number(Boolean(a.mejor.dudoso)) - Number(Boolean(b.mejor.dudoso)) || signo * (a.mejor.precio_bs - b.mejor.precio_bs));
+  }, [ofertas, consulta, fuera, orden]);
   const comparables = grupos.filter((g) => new Set(g.ofertas.map((o) => o.tienda)).size > 1).length;
   const enviar = (e: FormEvent) => { e.preventDefault(); void buscar(texto); };
-  const elegirSede = (tienda: string, clave: string) => {
-    const nuevas = { ...sedesRef.current, [tienda]: clave };
-    sedesRef.current = nuevas;
-    setSedes(nuevas);
-    try { localStorage.setItem("comparador.sedes", JSON.stringify(nuevas)); } catch { /* sin almacenamiento */ }
-    if (consulta) void buscar(consulta);
-  };
-  const conSedes = tiendas.filter((t) => t.sucursales.length > 0);
 
   return (
     <section className={s.seccion} id="comparador" aria-labelledby="comparador-titulo">
@@ -99,8 +108,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
         <span className={s.sobretitulo}>Nuevo · Comparador de precios</span>
         <h2 id="comparador-titulo" className={s.titulo}>¿Dónde está más barato?</h2>
         <p className={s.lead}>
-          Busca un producto y compara su precio en {tiendas.map((t) => t.nombre).join(", ").replace(/, ([^,]*)$/, " y $1")} al momento.
-          En bolívares y en dólares, a la tasa BCV del día.
+          Busca un producto y compara su precio en {tiendas.length} cadenas venezolanas al momento. En bolívares y en dólares, a la tasa BCV del día.
         </p>
       </div>
 
@@ -114,38 +122,51 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
         <span>Prueba con:</span>
         {EJEMPLOS.map((x) => <button key={x} type="button" onClick={() => void buscar(x)}>{x}</button>)}
       </div>
-      {conSedes.map((t) => (
-        <label key={t.id} className={s.sede}>
-          <span>Sede de {t.nombre}</span>
-          <select value={sedes[t.id] ?? t.predeterminada ?? t.sucursales[0].clave} onChange={(e) => elegirSede(t.id, e.target.value)}>
-            {t.sucursales.map((x) => <option key={x.clave} value={x.clave}>{x.nombre}</option>)}
-          </select>
-        </label>
-      ))}
 
-      {consulta && (
-        <div className={s.estado} aria-live="polite">
-          {tiendas.map((t) => {
-            const e = estados[t.id] ?? { estado: "esperando" };
-            return (
-              <span key={t.id} className={`${s.pastilla} ${e.estado === "ok" ? s.pastillaOk : e.estado === "error" ? s.pastillaError : ""}`}>
-                {e.estado === "esperando" && <span className={s.girando} aria-hidden="true" />}
-                {t.nombre}{t.ciudad ? ` (${t.ciudad})` : ""}{e.estado === "ok" ? ` · ${e.ofertas || "sin"} resultado${e.ofertas === 1 ? "" : "s"}` : e.estado === "error" ? " · no respondió" : ""}
-                {e.estado === "ok" && e.leyendo > 0 && <span title="Esta tienda no permite búsquedas automáticas: leemos sus páginas de producto una a una. Vuelve a buscar en un minuto."> · leyendo {e.leyendo} página{e.leyendo === 1 ? "" : "s"} de su catálogo</span>}
-              </span>
-            );
-          })}
-          {tasa && <span className={s.tasa}>Tasa BCV <b className="mono">{numero(tasa.usd, 4)}</b> · fecha valor {tasa.fecha_valor.slice(8, 10)}/{tasa.fecha_valor.slice(5, 7)}</span>}
+      <div className={s.filtros}>
+        <div className={s.filtro} role="group" aria-labelledby="filtro-cadenas">
+          <span id="filtro-cadenas" className={s.filtroTitulo}>Cadenas</span>
+          <div className={s.cadenas}>
+            {tiendas.map((t) => {
+              const e = estados[t.id];
+              const activa = !fuera.includes(t.id);
+              return (
+                <button key={t.id} type="button" aria-pressed={activa} onClick={() => alternar(t.id)} onDoubleClick={() => soloEsta(t.id)}
+                  title={activa ? `Quitar ${t.nombre} de la comparación (doble clic: solo ${t.nombre})` : `Incluir ${t.nombre}`}
+                  className={`${s.cadena} ${activa ? s.cadenaActiva : ""} ${e?.estado === "error" ? s.cadenaError : ""}`}>
+                  {consulta && activa && e?.estado === "esperando" && <span className={s.girando} aria-hidden="true" />}
+                  <span>{t.nombre}{t.ciudad ? ` (${t.ciudad})` : ""}</span>
+                  {consulta && e?.estado === "ok" && <span className={s.cuenta}>{e.ofertas}{e.leyendo > 0 ? ` · leyendo ${e.leyendo}` : ""}</span>}
+                  {consulta && e?.estado === "error" && <span className={s.cuenta}>no respondió</span>}
+                </button>
+              );
+            })}
+            {fuera.length > 0 && <button type="button" className={s.todas} onClick={todas}>Todas</button>}
+          </div>
         </div>
+        <div className={s.filtro} role="group" aria-labelledby="filtro-orden">
+          <span id="filtro-orden" className={s.filtroTitulo}>Ordenar</span>
+          <div className={s.segmentado}>
+            {ORDENES.map(([o, nombre]) => (
+              <button key={o} type="button" aria-pressed={orden === o} onClick={() => ordenar(o)}>{nombre}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      {consulta && Object.values(estados).some((e) => e.estado === "ok" && e.leyendo > 0) && (
+        <p className={s.nota}>«Leyendo»: algunas cadenas no permiten búsquedas automáticas; leemos sus páginas de producto una a una. Vuelve a buscar en un minuto para ver lo que falta.</p>
       )}
       {error && <p className={s.error}>{error}</p>}
 
       {consulta && !buscando && grupos.length === 0 && !error && (
-        <p className={s.vacio}>No encontramos «{consulta}» en las tiendas. Prueba con otras palabras o con la marca.</p>
+        <p className={s.vacio}>No encontramos «{consulta}» en {fuera.length ? "las cadenas elegidas" : "las tiendas"}. Prueba con otras palabras o con la marca{fuera.length ? ", o incluye más cadenas" : ""}.</p>
       )}
       {grupos.length > 0 && (
         <>
-          <p className={s.resumen}>{grupos.length} producto{grupos.length === 1 ? "" : "s"}{comparables ? ` · ${comparables} en más de una tienda` : ""}{buscando ? " · llegando más resultados…" : ""}</p>
+          <p className={s.resumen}>
+            {grupos.length} producto{grupos.length === 1 ? "" : "s"}{comparables ? ` · ${comparables} en más de una tienda` : ""}{buscando ? " · llegando más resultados…" : ""}
+            {tasa && <span className={s.tasa}>Tasa BCV <b className="mono">{numero(tasa.usd, 4)}</b> · fecha valor {tasa.fecha_valor.slice(8, 10)}/{tasa.fecha_valor.slice(5, 7)}</span>}
+          </p>
           <div className={s.rejilla}>
             {(todos ? grupos : grupos.slice(0, VISIBLES)).map((g) => <Tarjeta key={g.clave} g={g} />)}
           </div>

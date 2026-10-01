@@ -87,7 +87,15 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
     if (!promesa) {
       promesa = (async () => {
         await turno();
-        try { return await buscarEnTienda(t, q, 24, sede); } finally { liberar(); }
+        try {
+          try { return await buscarEnTienda(t, q, 24, sede); }
+          catch (e) {
+            // Un fallo de red pasajero (conexión cortada, DNS) se reintenta una vez; un HTTP de error de la tienda, no
+            if (!(e instanceof TypeError) && (e as Error).message !== "fetch failed") throw e;
+            await new Promise((r) => setTimeout(r, 700));
+            return await buscarEnTienda(t, q, 24, sede);
+          }
+        } finally { liberar(); }
       })();
       enCurso.set(clave, promesa);
       promesa.finally(() => enCurso.delete(clave)).catch(() => {});

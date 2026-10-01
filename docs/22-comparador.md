@@ -80,13 +80,21 @@ Cada precio indica hace cuánto se leyó: en la portada («· hace 3 h») y en l
 
 **Sedes.** Algunas tiendas tienen un catálogo por sede: Central Madeirense publica un sitio por sucursal y los precios cambian entre ellas.
 - En `tiendas.json`, esas tiendas declaran `sucursales` (clave, nombre, ciudad, estado) y una `predeterminada`.
-- La portada muestra un selector («Sede de Central Madeirense»), recordado en el navegador.
-- En la URL o la API se pide con `sucursal.<tienda>=<clave>`, por ejemplo `sucursal.centralmadeirense=Chacaito-07`.
+- La portada consulta la sede predeterminada (Bello Monte) y no menciona sedes.
+- La API permite pedir otra sede con `sucursal.<tienda>=<clave>`, por ejemplo `sucursal.centralmadeirense=Chacaito-07`.
 - Las tiendas de una sola ciudad declaran su `ubicacion`, que se muestra junto a su nombre.
 
 **Sumar una tienda:**
 - Si su plataforma ya tiene lector (por ejemplo, otra VTEX), basta con una entrada en `tiendas.json` con un puerto libre, y reconstruir.
 - Si es una plataforma nueva, hay que escribir su lector en `src/modules/comparador/adaptadores/` (devuelve `OfertaTienda[]`) y agregar una línea en `adaptadores/index.ts`.
+
+## Portada: filtros
+
+- **Cadenas.** Una ficha por cadena con su estado: resultados, «leyendo N» o «no respondió». Al pulsarla se quita o se vuelve a incluir; las quitadas se ven tachadas, y «Todas» las restablece. Doble clic deja solo esa cadena. Siempre queda al menos una.
+  - El emparejamiento y el «mejor precio» se calculan **solo con las cadenas elegidas**.
+  - La búsqueda sigue preguntando a todas, así que cambiar el filtro es instantáneo.
+- **Ordenar.** Más relevantes (por defecto), menor precio o mayor precio, según el mejor precio de cada producto. Los productos cuyo mejor precio es dudoso van al final en cualquier orden.
+- **Memoria.** Los filtros se recuerdan en el navegador (`localStorage`, clave `comparador.filtros`).
 
 ## Emparejamiento
 

@@ -29,14 +29,14 @@
 
 .tarjeta {
   position: relative; z-index: 2; margin: 20px 24px; width: 360px; max-width: calc(100% - 48px); padding: 16px 18px 14px;
-  background: var(--blanco); border-radius: 12px; box-shadow: var(--sombra); display: flex; flex-direction: column; gap: 10px;
+  background: var(--blanco); border: 1px solid var(--linea); border-radius: 12px; display: flex; flex-direction: column; gap: 10px;
   animation: entrar 400ms ease;
 }
 @keyframes entrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .tarjeta, .lamina span { animation: none; } .punto, .lamina::before { transition: none; } }
 
 .etiqueta { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--azul); letter-spacing: .01em; }
-.etiqueta::before { content: ""; width: 18px; height: 3px; border-radius: 2px; background: var(--acento, var(--amarillo)); box-shadow: inset 0 0 0 1px rgba(14, 36, 64, .08); }
+.etiqueta::before { content: ""; width: 18px; height: 3px; border-radius: 2px; background: var(--acento, var(--amarillo)); }
 .figura { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .figura strong { font-size: 34px; line-height: 1; color: var(--tinta); letter-spacing: -.02em; }
 .figura span { font-size: 13px; color: var(--texto-2); }
