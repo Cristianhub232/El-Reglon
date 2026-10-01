@@ -3,13 +3,14 @@
 import { ErrorApi, respuestaError } from "../../../../../core/http.ts";
 import { limitarPorIp } from "../../../../../core/limite-ip.ts";
 import { registrarUso } from "../../../../../core/uso.ts";
-import { buscarEnTiendas, registrarBusqueda } from "../../../../../modules/comparador/buscador.ts";
+import { buscarEnTiendas, registrarBusqueda, sedesPedidas } from "../../../../../modules/comparador/buscador.ts";
 import { agrupar, type Oferta } from "../../../../../modules/comparador/emparejar.ts";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   let q: string;
+  const sedes = sedesPedidas(new URL(req.url).searchParams);
   try {
     limitarPorIp(req.headers, "comparador-publico", 12);
     q = (new URL(req.url).searchParams.get("q") ?? "").trim().replace(/\s+/g, " ");
@@ -26,7 +27,7 @@ export async function GET(req: Request) {
       const ofertas: Oferta[] = [];
       let ok = 0, errores = 0, ms = 0;
       try {
-        for await (const ev of buscarEnTiendas(q)) {
+        for await (const ev of buscarEnTiendas(q, sedes)) {
           if (ev.tipo === "tienda") { ok++; ofertas.push(...ev.ofertas); }
           if (ev.tipo === "error") errores++;
           if (ev.tipo === "fin") ms = ev.ms;

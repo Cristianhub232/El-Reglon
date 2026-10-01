@@ -162,7 +162,7 @@ async function main() {
   verificar("sin permiso 'comparador' → 403", (await get("/api/v1/comparador/tiendas", K)).estado === 403);
   const CP = await clave("comparador", ["comparador"]);
   r = await get("/api/v1/comparador/tiendas", CP);
-  verificar("tiendas del comparador (VTEX: Locatel, SAAS y Damasco)", r.estado === 200 && r.cuerpo?.tiendas?.some((t: any) => t.id === "locatel"), r.cuerpo);
+  verificar("tiendas del comparador, Central Madeirense con sus sedes", r.estado === 200 && r.cuerpo?.tiendas?.some((t: any) => t.id === "locatel") && r.cuerpo.tiendas.find((t: any) => t.id === "centralmadeirense")?.sucursales?.length >= 10, r.cuerpo);
   verificar("consulta de una letra → 400", (await get("/api/v1/comparador/buscar?q=a", CP)).estado === 400);
   verificar("limite=0 → 400", (await get("/api/v1/comparador/buscar?q=harina&limite=0", CP)).estado === 400);
   r = await get("/api/v1/comparador/buscar?q=harina%20pan&limite=5", CP);

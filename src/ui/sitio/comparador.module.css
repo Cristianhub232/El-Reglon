@@ -33,6 +33,11 @@
 .ejemplos button:hover { border-color: var(--amarillo); color: var(--amarillo); }
 .ejemplos button:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 2px; }
 
+.sede { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #C9D2DF; flex-wrap: wrap; }
+.sede select { height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid rgba(246, 243, 234, .3); background: rgba(246, 243, 234, .08); color: var(--papel); font: 500 14px var(--sans); }
+.sede select option { color: var(--tinta); }
+.sede select:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 2px; }
+.ofertas a small { font-size: 11px; font-weight: 500; color: var(--texto-3); }
 .estado { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
 .pastilla {
   display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;

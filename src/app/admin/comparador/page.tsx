@@ -11,7 +11,7 @@ import s from "../../../ui/admin/admin.module.css";
 
 export const metadata = { title: "Comparador de precios" };
 
-const PLATAFORMAS: Record<string, string> = { vtex: "VTEX (API de catálogo)" };
+const PLATAFORMAS: Record<string, string> = { vtex: "VTEX (API de catálogo)", woocommerce: "WooCommerce (página de búsqueda)", alacena: "Página de búsqueda", magento: "Magento (API GraphQL)" };
 
 async function salud(puerto: number): Promise<{ ok: boolean; cache?: number; en_curso?: number }> {
   try {
@@ -71,7 +71,7 @@ export default async function ComparadorAdmin() {
               const errorReciente = e?.ultimo_error && (!e.ultima_respuesta || (e.ultimo_error_en ?? "") > e.ultima_respuesta);
               return (
                 <tr key={t.id} style={{ opacity: activa ? 1 : 0.6 }}>
-                  <td><span className={s.celdaNombre}><strong>{t.nombre}</strong><span>{t.sitio.replace("https://", "")} · {t.rubros.join(", ")} · publica en {t.moneda === "VES" ? "Bs." : "US$"}</span></span></td>
+                  <td><span className={s.celdaNombre}><strong>{t.nombre}</strong><span>{t.sitio.replace("https://", "")} · {t.rubros.join(", ")} · publica en {t.moneda === "VES" ? "Bs." : "US$"}{t.sucursales?.length ? ` · ${t.sucursales.length} sedes` : ""}{t.ubicacion ? ` · ${t.ubicacion.ciudad}` : ""}</span></span></td>
                   <td className={s.apagado}>{PLATAFORMAS[t.plataforma] ?? t.plataforma}</td>
                   <td style={{ maxWidth: 300 }}>
                     {!sv.ok ? <span className="punto t-adicional">sin respuesta (pm2 · puerto {t.puerto})</span>

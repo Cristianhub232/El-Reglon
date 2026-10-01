@@ -7,7 +7,7 @@ import { consulta } from "../../core/db.ts";
 import { buscarEnTienda } from "./adaptadores/index.ts";
 import type { OfertaTienda } from "./adaptadores/tipos.ts";
 import { basico, ean } from "./normalizar.ts";
-import type { Tienda } from "./tiendas.ts";
+import { sedeDe, type Tienda } from "./tiendas.ts";
 
 const CACHE_MS = 15 * 60_000, CACHE_MAX = 500, EN_PARALELO = 2;
 
@@ -17,15 +17,24 @@ export function credencialInterna(): string | null {
   return s.length >= 32 ? createHash("sha256").update(`comparador:${s}`).digest("hex") : null;
 }
 
-export async function registrarTienda(t: Tienda): Promise<number> {
+// Registra la tienda y sus sedes. Devuelve el id de sucursal por clave ("" = la tienda en línea, sin sede)
+export async function registrarTienda(t: Tienda): Promise<Map<string, number>> {
   await consulta(
     `INSERT INTO comparador.tienda (id, nombre, sitio, plataforma, moneda, rubros) VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT (id) DO UPDATE SET nombre = $2, sitio = $3, plataforma = $4, moneda = $5, rubros = $6`,
     [t.id, t.nombre, t.sitio, t.plataforma, t.moneda, t.rubros]);
-  const [s] = await consulta<{ id: number }>(
-    `INSERT INTO comparador.sucursal (tienda_id, nombre, clave) VALUES ($1, 'Tienda en línea', NULL)
-     ON CONFLICT (tienda_id, coalesce(clave, '')) DO UPDATE SET nombre = comparador.sucursal.nombre RETURNING id`, [t.id]);
-  return s.id;
+  const sedes = [{ clave: null as string | null, nombre: t.ubicacion ? `Tienda en línea (${t.ubicacion.ciudad})` : "Tienda en línea",
+    ciudad: t.ubicacion?.ciudad ?? null, estado: t.ubicacion?.estado ?? null },
+    ...(t.sucursales ?? []).map((s) => ({ clave: s.clave as string | null, nombre: s.nombre, ciudad: s.ciudad ?? null, estado: s.estado ?? null }))];
+  const ids = new Map<string, number>();
+  for (const s of sedes) {
+    const [f] = await consulta<{ id: number }>(
+      `INSERT INTO comparador.sucursal (tienda_id, nombre, clave, ciudad, estado) VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (tienda_id, coalesce(clave, '')) DO UPDATE SET nombre = $2, ciudad = $4, estado = $5 RETURNING id`,
+      [t.id, s.nombre, s.clave, s.ciudad, s.estado]);
+    ids.set(s.clave ?? "", f.id);
+  }
+  return ids;
 }
 
 async function guardar(sucursal: number, t: Tienda, ofertas: OfertaTienda[]) {
@@ -51,21 +60,21 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
   let activas = 0;
   const cola: (() => void)[] = [];
   const credencial = credencialInterna();
-  let sucursal: number | null = null;
-  registrarTienda(t).then((id) => { sucursal = id; }, (e) => console.error(`[comparador:${t.id}] no se pudo registrar la tienda: ${(e as Error).message}`));
+  let sucursales = new Map<string, number>();
+  registrarTienda(t).then((ids) => { sucursales = ids; }, (e) => console.error(`[comparador:${t.id}] no se pudo registrar la tienda: ${(e as Error).message}`));
 
   const turno = () => new Promise<void>((r) => { if (activas < EN_PARALELO) { activas++; r(); } else cola.push(() => { activas++; r(); }); });
   const liberar = () => { activas--; cola.shift()?.(); };
 
-  async function buscar(q: string): Promise<{ ofertas: OfertaTienda[]; cache: boolean }> {
-    const clave = basico(q);
+  async function buscar(q: string, sede: string | null): Promise<{ ofertas: OfertaTienda[]; cache: boolean }> {
+    const clave = `${sede ?? ""}|${basico(q)}`;
     const c = cache.get(clave);
     if (c && c.hasta > Date.now()) return { ofertas: c.ofertas, cache: true };
     let promesa = enCurso.get(clave);
     if (!promesa) {
       promesa = (async () => {
         await turno();
-        try { return await buscarEnTienda(t, q); } finally { liberar(); }
+        try { return await buscarEnTienda(t, q, 24, sede); } finally { liberar(); }
       })();
       enCurso.set(clave, promesa);
       promesa.finally(() => enCurso.delete(clave)).catch(() => {});
@@ -75,7 +84,8 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
       cache.set(clave, { hasta: Date.now() + CACHE_MS, ofertas });
       if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value!);
       void consulta("UPDATE comparador.tienda SET ultima_respuesta = now(), errores_seguidos = 0 WHERE id = $1", [t.id]).catch(() => {});
-      if (sucursal !== null) void guardar(sucursal, t, ofertas).catch((e) => console.error(`[comparador:${t.id}] guardar: ${(e as Error).message}`));
+      const sucursal = sucursales.get(sede ?? "");
+      if (sucursal !== undefined) void guardar(sucursal, t, ofertas).catch((e) => console.error(`[comparador:${t.id}] guardar: ${(e as Error).message}`));
       return { ofertas, cache: false };
     } catch (e) {
       const mensaje = (e as Error).name === "TimeoutError" ? "Tiempo de espera agotado" : (e as Error).message;
@@ -103,10 +113,11 @@ export function iniciarServicio(t: Tienda, opciones: { puerto: number; escucha: 
     if (url.pathname !== "/buscar") return responder(res, 404, { error: "no_encontrado" });
     const q = (url.searchParams.get("q") ?? "").trim();
     if (q.length < 2 || q.length > 100) return responder(res, 400, { error: "consulta_invalida" });
+    const sede = sedeDe(t, url.searchParams.get("sucursal"));
     const inicio = Date.now();
     try {
-      const r = await buscar(q);
-      responder(res, 200, { tienda: t.id, ofertas: r.ofertas, cache: r.cache, ms: Date.now() - inicio });
+      const r = await buscar(q, sede?.clave ?? null);
+      responder(res, 200, { tienda: t.id, sucursal: sede ? { clave: sede.clave, nombre: sede.nombre } : null, ofertas: r.ofertas, cache: r.cache, ms: Date.now() - inicio });
     } catch (e) {
       responder(res, 502, { tienda: t.id, error: (e as Error).message, ms: Date.now() - inicio });
     }

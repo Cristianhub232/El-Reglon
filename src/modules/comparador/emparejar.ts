@@ -1,49 +1,93 @@
 // Emparejamiento de ofertas de varias tiendas en "grupos" (el mismo producto). Corre en el servidor (API) y en el
-// navegador (los resultados llegan tienda por tienda). Regla: mismo código de barras, o misma marca y presentación
-// con nombres parecidos. Nunca se juntan dos ofertas con códigos de barras distintos.
-import { clavePresentacion, ean as eanValido, palabras, presentaciones, textoPresentacion, basico } from "./normalizar.ts";
+// navegador (los resultados llegan tienda por tienda). Reglas, de más fuerte a más débil:
+//   1. Mismo código de barras válido → mismo producto. Códigos distintos → nunca se juntan.
+//   2. Sin código: misma presentación, misma marca (dada por la tienda o deducida del nombre) y nombres que solo se
+//      diferencian en una palabra de un lado ("Pasta Primor Vermicelli" ≈ "Pasta Primor Larga Vermicelli"; pero
+//      "Dedal" ≠ "Vermicelli" y "Descremada" no puede faltar de un lado). Se aceptan abreviaturas ("arr" = "arroz")
+//      y el género ("blanco" = "blanca").
+//   3. Cada oferta debe ser compatible con todas las del grupo (sin cadenas) y un grupo no junta dos productos
+//      distintos de la misma tienda y sede.
+import { basico, clavePresentacion, ean as eanValido, palabras, presentaciones, textoPresentacion } from "./normalizar.ts";
 
 export interface Oferta {
-  tienda: string; tienda_nombre: string; id_externo: string; nombre: string; marca: string | null; ean: string | null;
+  tienda: string; tienda_nombre: string; sucursal: string | null; id_externo: string; nombre: string; marca: string | null; ean: string | null;
   url: string; imagen: string | null; disponible: boolean;
   precio: string; moneda: "VES" | "USD"; precio_bs: number; precio_usd: number;
 }
 export interface Grupo { clave: string; nombre: string; presentacion: string; imagen: string | null; ofertas: Oferta[]; mejor: Oferta; relevancia: number }
 
-interface Interna { o: Oferta; ean: string | null; marca: string | null; pres: string; palabras: Set<string> }
+// Palabras que describen el empaque, no el producto ("Premium" o "Tradicional" sí distinguen productos: no van aquí)
+const RELLENO = new Set(["frasco", "paquete", "paq", "pote", "lata", "bolsa", "botella", "envase", "unidad", "und", "tipo", "presentacion"]);
+// Atributos que, si un nombre los dice y el otro no, impiden emparejar: mejor no comparar que comparar mal
+const DISTINTIVAS = ["descrem", "semidescrem", "complet", "deslactos", "integral", "light", "diet", "zero", "sin", "libre", "gluten",
+  "organic", "dulc", "salad", "picant", "amarill", "blanc", "negr", "rojo", "roja", "verde", "infantil", "nino", "adulto"];
+const distintiva = (w: string) => DISTINTIVAS.some((d) => w.startsWith(d));
 
-const parecido = (a: Set<string>, b: Set<string>) => {
-  let comunes = 0;
-  for (const x of a) if (b.has(x)) comunes++;
-  return comunes / Math.max(1, Math.min(a.size, b.size));
+interface Interna { o: Oferta; ean: string | null; marca: string | null; pres: string; palabras: string[]; origen: string }
+
+const raiz = (w: string) => w.replace(/[aoe]$/, "");
+// Misma palabra, mismo género, o abreviatura de la tienda (al menos 3 letras: "arr" → "arroz", "dulc" → "dulce")
+function igual(a: string, b: string): boolean {
+  if (a === b || raiz(a) === raiz(b)) return true;
+  const [corta, larga] = a.length <= b.length ? [a, b] : [b, a];
+  return corta.length >= 3 && larga.startsWith(corta) && !/^\d/.test(corta);
+}
+const contiene = (lista: string[], w: string) => lista.some((x) => igual(x, w));
+
+const sinMarca = (ws: string[], marcas: (string | null)[]) => {
+  const m = marcas.filter(Boolean).flatMap((x) => basico(x!).split(/\s+/));
+  return ws.filter((w) => !m.some((x) => igual(x, w)) && !RELLENO.has(w));
 };
 
+function compatibles(x: Interna, y: Interna): boolean {
+  if (x.ean && y.ean) return x.ean === y.ean;
+  if (x.origen === y.origen) return false;                               // dos productos distintos de la misma tienda y sede
+  if (!x.pres || x.pres !== y.pres) return false;
+  // Marca: si las dos la traen, igual; si solo una, el nombre de la otra debe contenerla
+  if (x.marca && y.marca && x.marca !== y.marca && !igual(x.marca, y.marca)) return false;
+  const marca = x.marca ?? y.marca;
+  if (marca) {
+    const partes = marca.split(/\s+/);
+    for (const z of [x, y]) if (!z.marca && !partes.every((p) => contiene(z.palabras, p))) return false;
+  }
+  const a = sinMarca(x.palabras, [x.marca, y.marca]), b = sinMarca(y.palabras, [x.marca, y.marca]);
+  if (!a.length || !b.length) return false;
+  const soloA = a.filter((w) => !contiene(b, w)), soloB = b.filter((w) => !contiene(a, w));
+  // Como mucho una palabra de diferencia, de un solo lado, y que no sea un atributo distintivo
+  const resto = [...soloA, ...soloB];
+  return resto.length <= 1 && !resto.some(distintiva);
+}
+
+// Pertinencia frente a lo buscado: palabras exactas, del mismo género, o prefijo si lo buscado tiene 4 letras o más
+function pertinencia(q: string[], ws: string[]): number {
+  if (!q.length) return 1;
+  return q.filter((w) => ws.some((x) => x === w || raiz(x) === raiz(w) || (w.length >= 4 && x.startsWith(w)))).length / q.length;
+}
+
 export function agrupar(ofertas: Oferta[], consulta: string): Grupo[] {
-  const q = new Set(palabras(consulta));
-  const internas: Interna[] = ofertas.map((o) => {
-    const marca = o.marca ? basico(o.marca).replace(/[^a-z0-9]/g, "") || null : null;
-    return { o, ean: eanValido(o.ean), marca, pres: clavePresentacion(presentaciones(o.nombre)),
-      palabras: new Set([...palabras(o.nombre)].filter((w) => w !== marca)) };
-  });
+  const q = palabras(consulta);
+  const internas: Interna[] = ofertas.map((o) => ({
+    o, ean: eanValido(o.ean), marca: o.marca ? basico(o.marca).replace(/[^a-z0-9 ]/g, "").trim() || null : null,
+    pres: clavePresentacion(presentaciones(o.nombre)), palabras: palabras(o.nombre), origen: `${o.tienda}|${o.sucursal ?? ""}`,
+  }));
   const grupos: Interna[][] = [];
   for (const x of internas) {
-    const destino = grupos.find((g) => g.some((y) =>
-      (x.ean && y.ean && x.ean === y.ean)
-      || (!(x.ean && y.ean) && x.pres !== "" && x.pres === y.pres && (!x.marca || !y.marca || x.marca === y.marca) && parecido(x.palabras, y.palabras) >= 0.75)));
+    const destino = grupos.find((g) => g.every((y) => compatibles(x, y)));
     if (destino) destino.push(x); else grupos.push([x]);
   }
+  // Con muy pocas palabras buscadas, todas deben aparecer ("harina pan" no trae un tamizador de harina)
+  const minimo = q.length <= 2 ? 1 : 0.66;
   return grupos.map((g) => {
     const ordenadas = g.map((x) => x.o).sort((a, b) => Number(b.disponible) - Number(a.disponible) || a.precio_bs - b.precio_bs);
-    const todas = new Set(g.flatMap((x) => [...x.palabras, ...(x.marca ? [x.marca] : [])]));
-    const relevancia = q.size ? [...q].filter((w) => todas.has(w) || [...todas].some((t) => t.startsWith(w))).length / q.size : 1;
-    const base = g[0];
+    const todas = [...new Set(g.flatMap((x) => [...x.palabras, ...(x.marca ? x.marca.split(/\s+/) : [])]))];
+    const base = g.find((x) => x.ean) ?? g[0];
     return {
-      clave: base.ean ? `ean:${base.ean}` : `${base.marca ?? ""}|${base.pres}|${base.o.tienda}:${base.o.id_externo}`,
+      clave: base.ean ? `ean:${base.ean}` : `${base.origen}:${base.o.id_externo}`,
       nombre: base.o.nombre, presentacion: textoPresentacion(presentaciones(base.o.nombre)),
-      imagen: ordenadas.find((o) => o.imagen)?.imagen ?? null, ofertas: ordenadas, mejor: ordenadas[0], relevancia,
+      imagen: ordenadas.find((o) => o.imagen)?.imagen ?? null, ofertas: ordenadas, mejor: ordenadas[0], relevancia: pertinencia(q, todas),
     };
   })
-    .filter((g) => g.relevancia >= 0.5)
+    .filter((g) => g.relevancia >= minimo)
     // Primero lo más pertinente, luego lo que aparece en más tiendas (lo comparable) y por último el precio
     .sort((a, b) => b.relevancia - a.relevancia || new Set(b.ofertas.map((o) => o.tienda)).size - new Set(a.ofertas.map((o) => o.tienda)).size || a.mejor.precio_bs - b.mejor.precio_bs);
 }

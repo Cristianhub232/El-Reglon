@@ -124,7 +124,8 @@ export default async function Portada() {
           <BarraClasificador />
         </section>
 
-        {tiendasComparador.length > 0 && <Comparador tiendas={tiendasComparador.map((x) => ({ id: x.id, nombre: x.nombre, rubros: x.rubros }))} />}
+        {tiendasComparador.length > 0 && <Comparador tiendas={tiendasComparador.map((x) => ({ id: x.id, nombre: x.nombre, rubros: x.rubros, ciudad: x.ubicacion?.ciudad ?? null,
+          predeterminada: x.predeterminada ?? null, sucursales: (x.sucursales ?? []).map((y) => ({ clave: y.clave, nombre: y.nombre })) }))} />}
 
         <div className={s.cifras}>
           <div className={s.cifra}><strong>{d.cifras.reglas}</strong><span>reglas del catálogo de IVA, con su texto legal verificado contra la Gaceta</span></div>

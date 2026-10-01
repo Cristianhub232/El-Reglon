@@ -1,8 +1,165 @@
 {
-  "_nota": "Tiendas del comparador (docs/22). Cada una corre como un servicio propio bajo PM2 en el contenedor 'comparador', en su puerto. 'moneda' es la moneda en que la tienda publica sus precios. Excluidas por bloqueo antibots: Plazas (Cloudflare). Excluida por no ser de Venezuela: Makro Colombia.",
+  "_nota": "Tiendas del comparador (docs/22). Cada una corre como un servicio propio bajo PM2 en el contenedor 'comparador', en su puerto. 'moneda' es la moneda en que la tienda publica sus precios. 'sucursales' (opcional): catálogos por sede; se consulta la que elige la persona o 'predeterminada'. 'ubicacion' (opcional): tiendas de una sola ciudad. Pendientes o excluidas, con el motivo, en docs/22.",
   "tiendas": [
-    { "id": "locatel", "nombre": "Locatel", "sitio": "https://www.locatel.com.ve", "plataforma": "vtex", "moneda": "VES", "rubros": ["farmacia", "supermercado"], "puerto": 4101 },
-    { "id": "farmaciasaas", "nombre": "Farmacias SAAS", "sitio": "https://www.farmaciasaas.com", "plataforma": "vtex", "moneda": "USD", "rubros": ["farmacia", "supermercado"], "puerto": 4102 },
-    { "id": "damasco", "nombre": "Damasco", "sitio": "https://www.damascovzla.com", "plataforma": "vtex", "moneda": "USD", "rubros": ["electronica", "hogar"], "puerto": 4103 }
+    {
+      "id": "locatel",
+      "nombre": "Locatel",
+      "sitio": "https://www.locatel.com.ve",
+      "plataforma": "vtex",
+      "moneda": "VES",
+      "rubros": [
+        "farmacia",
+        "supermercado"
+      ],
+      "puerto": 4101
+    },
+    {
+      "id": "farmaciasaas",
+      "nombre": "Farmacias SAAS",
+      "sitio": "https://www.farmaciasaas.com",
+      "plataforma": "vtex",
+      "moneda": "USD",
+      "rubros": [
+        "farmacia",
+        "supermercado"
+      ],
+      "puerto": 4102
+    },
+    {
+      "id": "damasco",
+      "nombre": "Damasco",
+      "sitio": "https://www.damascovzla.com",
+      "plataforma": "vtex",
+      "moneda": "USD",
+      "rubros": [
+        "electronica",
+        "hogar"
+      ],
+      "puerto": 4103
+    },
+    {
+      "id": "centralmadeirense",
+      "nombre": "Central Madeirense",
+      "sitio": "https://tucentralonline.com",
+      "plataforma": "woocommerce",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4104,
+      "predeterminada": "Bello-Monte-08",
+      "sucursales": [
+        {
+          "clave": "Av-Presidente-Medina-02",
+          "nombre": "Av. Presidente Medina",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Plaza-Las-Americas-03",
+          "nombre": "Plaza Las Américas",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Santa-Marta-06",
+          "nombre": "Santa Marta",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Chacaito-07",
+          "nombre": "Chacaíto",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Bello-Monte-08",
+          "nombre": "Bello Monte",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "el-marques-09",
+          "nombre": "El Marqués",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "lomas-del-avila-10",
+          "nombre": "Lomas del Ávila",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "San-Jose-11",
+          "nombre": "San José",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "La-Boyera-18",
+          "nombre": "La Boyera",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Catia-19",
+          "nombre": "Catia",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "altos-mirandinos-23",
+          "nombre": "Altos Mirandinos",
+          "ciudad": "Altos Mirandinos",
+          "estado": "Miranda"
+        },
+        {
+          "clave": "Montalban-25",
+          "nombre": "Montalbán",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Bello-Campo-43",
+          "nombre": "Bello Campo",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "La-Lagunita-44",
+          "nombre": "La Lagunita",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "La-Alameda-50",
+          "nombre": "La Alameda",
+          "ciudad": "Caracas"
+        },
+        {
+          "clave": "Maiquetia-53",
+          "nombre": "Maiquetía",
+          "ciudad": "Maiquetía",
+          "estado": "La Guaira"
+        }
+      ]
+    },
+    {
+      "id": "laalacena",
+      "nombre": "La Alacena Market",
+      "sitio": "https://laalacenamarket.com.ve",
+      "plataforma": "alacena",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4105,
+      "ubicacion": {
+        "ciudad": "Maracaibo",
+        "estado": "Zulia"
+      }
+    },
+    {
+      "id": "ivoo",
+      "nombre": "Ivoo",
+      "sitio": "https://www.ivoo.com",
+      "plataforma": "magento",
+      "moneda": "USD",
+      "rubros": [
+        "electronica",
+        "hogar"
+      ],
+      "puerto": 4106,
+      "api": "https://nuweapp.com/graphql"
+    }
   ]
 }

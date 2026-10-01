@@ -6,7 +6,7 @@ import { agrupar, type Grupo, type Oferta } from "../../modules/comparador/empar
 import { numero } from "../formato.ts";
 import s from "./comparador.module.css";
 
-interface TiendaPublica { id: string; nombre: string; rubros: string[] }
+export interface TiendaPublica { id: string; nombre: string; rubros: string[]; ciudad: string | null; predeterminada: string | null; sucursales: { clave: string; nombre: string }[] }
 type EstadoTienda = { estado: "esperando" } | { estado: "ok"; ofertas: number; ms: number } | { estado: "error"; mensaje: string };
 
 const EJEMPLOS = ["Harina PAN", "Acetaminofén 500 mg", "Televisor 32", "Leche en polvo"];
@@ -17,11 +17,15 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
   const [consulta, setConsulta] = useState<string | null>(null);
   const [ofertas, setOfertas] = useState<Oferta[]>([]);
   const [estados, setEstados] = useState<Record<string, EstadoTienda>>({});
-  const [tasa, setTasa] = useState<string | null>(null);
+  const [tasa, setTasa] = useState<{ usd: string; fecha_valor: string } | null>(null);
   const [buscando, setBuscando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [todos, setTodos] = useState(false);
   const control = useRef<AbortController | null>(null);
+  // Sede elegida por tienda (solo las que tienen catálogo por sede), recordada en este navegador
+  const [sedes, setSedes] = useState<Record<string, string>>({});
+  const sedesRef = useRef(sedes);
+  sedesRef.current = sedes;
 
   async function buscar(q: string) {
     const limpio = q.trim().replace(/\s+/g, " ");
@@ -32,7 +36,8 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
     setTexto(limpio); setConsulta(limpio); setOfertas([]); setError(null); setTodos(false); setBuscando(true);
     setEstados(Object.fromEntries(tiendas.map((t) => [t.id, { estado: "esperando" }])));
     try {
-      const r = await fetch(`/api/publico/comparador/buscar?q=${encodeURIComponent(limpio)}`, { signal: c.signal });
+      const extra = Object.entries(sedesRef.current).map(([t, s]) => `&sucursal.${encodeURIComponent(t)}=${encodeURIComponent(s)}`).join("");
+      const r = await fetch(`/api/publico/comparador/buscar?q=${encodeURIComponent(limpio)}${extra}`, { signal: c.signal });
       if (!r.ok || !r.body) {
         const d = await r.json().catch(() => null) as { error?: { mensaje?: string } } | null;
         throw new Error(d?.error?.mensaje ?? "No se pudo buscar en este momento");
@@ -47,7 +52,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
         resto = lineas.pop() ?? "";
         for (const l of lineas.filter(Boolean)) {
           const ev = JSON.parse(l);
-          if (ev.tipo === "inicio") setTasa(ev.tasa?.usd ?? null);
+          if (ev.tipo === "inicio") setTasa(ev.tasa ?? null);
           if (ev.tipo === "tienda") {
             setOfertas((o) => [...o, ...ev.ofertas]);
             setEstados((e) => ({ ...e, [ev.tienda]: { estado: "ok", ofertas: ev.ofertas.length, ms: ev.ms } }));
@@ -65,6 +70,12 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
 
   // Enlace compartible: /?comparar=harina%20pan
   useEffect(() => {
+    try {
+      const guardadas = JSON.parse(localStorage.getItem("comparador.sedes") ?? "{}") as Record<string, string>;
+      const validas = Object.fromEntries(Object.entries(guardadas).filter(([t, s]) => tiendas.some((x) => x.id === t && x.sucursales.some((y) => y.clave === s))));
+      sedesRef.current = validas;
+      setSedes(validas);
+    } catch { /* sin almacenamiento */ }
     const q = new URLSearchParams(location.search).get("comparar");
     if (q) void buscar(q);
     return () => control.current?.abort();
@@ -73,6 +84,14 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
   const grupos = useMemo(() => (consulta ? agrupar(ofertas, consulta) : []), [ofertas, consulta]);
   const comparables = grupos.filter((g) => new Set(g.ofertas.map((o) => o.tienda)).size > 1).length;
   const enviar = (e: FormEvent) => { e.preventDefault(); void buscar(texto); };
+  const elegirSede = (tienda: string, clave: string) => {
+    const nuevas = { ...sedesRef.current, [tienda]: clave };
+    sedesRef.current = nuevas;
+    setSedes(nuevas);
+    try { localStorage.setItem("comparador.sedes", JSON.stringify(nuevas)); } catch { /* sin almacenamiento */ }
+    if (consulta) void buscar(consulta);
+  };
+  const conSedes = tiendas.filter((t) => t.sucursales.length > 0);
 
   return (
     <section className={s.seccion} id="comparador" aria-labelledby="comparador-titulo">
@@ -95,6 +114,14 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
         <span>Prueba con:</span>
         {EJEMPLOS.map((x) => <button key={x} type="button" onClick={() => void buscar(x)}>{x}</button>)}
       </div>
+      {conSedes.map((t) => (
+        <label key={t.id} className={s.sede}>
+          <span>Sede de {t.nombre}</span>
+          <select value={sedes[t.id] ?? t.predeterminada ?? t.sucursales[0].clave} onChange={(e) => elegirSede(t.id, e.target.value)}>
+            {t.sucursales.map((x) => <option key={x.clave} value={x.clave}>{x.nombre}</option>)}
+          </select>
+        </label>
+      ))}
 
       {consulta && (
         <div className={s.estado} aria-live="polite">
@@ -103,11 +130,11 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
             return (
               <span key={t.id} className={`${s.pastilla} ${e.estado === "ok" ? s.pastillaOk : e.estado === "error" ? s.pastillaError : ""}`}>
                 {e.estado === "esperando" && <span className={s.girando} aria-hidden="true" />}
-                {t.nombre}{e.estado === "ok" ? ` · ${e.ofertas || "sin"} resultado${e.ofertas === 1 ? "" : "s"}` : e.estado === "error" ? " · no respondió" : ""}
+                {t.nombre}{t.ciudad ? ` (${t.ciudad})` : ""}{e.estado === "ok" ? ` · ${e.ofertas || "sin"} resultado${e.ofertas === 1 ? "" : "s"}` : e.estado === "error" ? " · no respondió" : ""}
               </span>
             );
           })}
-          {tasa && <span className={s.tasa}>Tasa BCV <b className="mono">{numero(tasa, 4)}</b></span>}
+          {tasa && <span className={s.tasa}>Tasa BCV <b className="mono">{numero(tasa.usd, 4)}</b> · fecha valor {tasa.fecha_valor.slice(8, 10)}/{tasa.fecha_valor.slice(5, 7)}</span>}
         </div>
       )}
       {error && <p className={s.error}>{error}</p>}
@@ -146,12 +173,12 @@ function Tarjeta({ g }: { g: Grupo }) {
       <div className={s.mejor}>
         <span>{tiendas > 1 ? "Mejor precio" : "Precio"}{g.mejor.disponible ? "" : " (agotado)"}</span>
         <strong className="mono">Bs. {numero(g.mejor.precio_bs, 2)}</strong>
-        <span className="mono">US$ {numero(g.mejor.precio_usd, 2)} · {g.mejor.tienda_nombre}</span>
+        <span className="mono">US$ {numero(g.mejor.precio_usd, 2)} · {g.mejor.tienda_nombre}{g.mejor.sucursal ? ` (${g.mejor.sucursal})` : ""}</span>
       </div>
       <ul className={s.ofertas}>
         {g.ofertas.map((o, i) => (
           <li key={`${o.tienda}-${o.id_externo}`}>
-            <a href={o.url} target="_blank" rel="noopener noreferrer nofollow">{o.tienda_nombre}</a>
+            <a href={o.url} target="_blank" rel="noopener noreferrer nofollow" title={o.sucursal ? `${o.tienda_nombre} · ${o.sucursal}` : o.tienda_nombre}>{o.tienda_nombre}{o.sucursal ? <small> · {o.sucursal}</small> : null}</a>
             <span className="mono">Bs. {numero(o.precio_bs, 2)}</span>
             <span className={`mono ${s.diferencia}`}>{i === 0 ? (tiendas > 1 ? "más barato" : "") : `+${numero(((o.precio_bs / g.mejor.precio_bs) - 1) * 100, 0)} %`}{o.disponible ? "" : " · agotado"}</span>
           </li>

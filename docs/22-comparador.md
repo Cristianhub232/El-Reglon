@@ -31,14 +31,34 @@ navegador ──▶ app (Next) ──▶ comparador-locatel      ─▶ www.loca
 
 Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, plataforma, moneda en que publica, rubros y puerto. Los servicios se sincronizan con la tabla `comparador.tienda` al arrancar.
 
-| Tienda | Plataforma | Moneda | Estado |
+| Tienda | Cómo se lee | Moneda | Estado |
 |---|---|---|---|
-| Locatel | VTEX (API pública de catálogo) | Bs. | Activa |
+| Locatel | VTEX, API pública de catálogo (trae el EAN) | Bs. | Activa |
 | Farmacias SAAS | VTEX | US$ | Activa |
 | Damasco | VTEX | US$ | Activa (electrónica y hogar) |
-| Río Market, Gama, Ivoo, Plan Suárez, Central Madeirense, Que Mantequilla, La Alacena, Multimax, Mercasa, Farmatodo | Varias (Next.js propio, SAP Commerce, Magento, OpenCart, WooCommerce, Algolia) | — | Próximas: un lector por plataforma, una por una |
-| Plazas | Cloudflare con desafío antibots | — | Excluida: no se evaden protecciones |
-| Makro (tienda.makro.com.co) | — | — | Excluida: es de Colombia (pesos colombianos) |
+| Central Madeirense | WooCommerce, página de búsqueda **de cada sede** (`/Bello-Monte-08/?s=…`) | US$ («REF») | Activa, con **16 sedes** (Gran Caracas, Altos Mirandinos y Maiquetía); por defecto, Bello Monte |
+| La Alacena Market | Página de búsqueda (`/buscar?filtro=`) | US$ | Activa (Maracaibo, Zulia) |
+| Ivoo | Magento, API GraphQL pública (`nuweapp.com/graphql`) | US$ | Activa (electrónica y hogar) |
+| Farmatodo | — | — | **Pendiente.** Su `robots.txt` prohíbe la búsqueda automática (`Disallow: /buscar*`) y su API de búsqueda es privada. Solo quedaría leer cada página de producto del sitemap (un rastreo completo); mejor pedírselo a Farmatodo |
+| Gama | SAP Commerce | — | **Pendiente.** Su `robots.txt` prohíbe la búsqueda (`*?query=*`) |
+| Plan Suárez | OpenCart | — | **Pendiente.** Su `robots.txt` prohíbe la búsqueda (`route=product/search`) |
+| Mercasa, Que Mantequilla | Next.js propio | — | **Pendientes.** Buscan desde el navegador por su `/api`, que su `robots.txt` prohíbe |
+| Río Market | Instaleap | — | **Pendiente.** Su API exige credenciales internas del sitio |
+| Multimax | Astro | — | **Excluida.** Cloudflare responde con un desafío antibots (`cf-mitigated: challenge`) |
+| Plazas | Cloudflare | — | **Excluida.** Desafío antibots |
+| Makro (tienda.makro.com.co) | — | — | **Excluida.** Es de Colombia (pesos colombianos); Makro Venezuela no vende en línea |
+
+**Reglas para leer una tienda:**
+- Se respeta su `robots.txt`.
+- No se evaden protecciones antibots, como el desafío de Cloudflare.
+- No se usan APIs privadas ni credenciales internas.
+- Se lee solo lo que su propio buscador muestra a cualquier visitante.
+
+**Sedes.** Algunas tiendas tienen un catálogo por sede: Central Madeirense publica un sitio por sucursal y los precios cambian entre ellas.
+- En `tiendas.json`, esas tiendas declaran `sucursales` (clave, nombre, ciudad, estado) y una `predeterminada`.
+- La portada muestra un selector («Sede de Central Madeirense»), recordado en el navegador.
+- En la URL o la API se pide con `sucursal.<tienda>=<clave>`, por ejemplo `sucursal.centralmadeirense=Chacaito-07`.
+- Las tiendas de una sola ciudad declaran su `ubicacion`, que se muestra junto a su nombre.
 
 **Sumar una tienda:**
 - Si su plataforma ya tiene lector (por ejemplo, otra VTEX), basta con una entrada en `tiendas.json` con un puerto libre, y reconstruir.
@@ -49,11 +69,15 @@ Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, 
 Está en `src/modules/comparador/emparejar.ts` y es el mismo en el servidor (API) y en el navegador.
 
 1. **Código de barras.** Si dos ofertas tienen el mismo EAN o UPC válido (se comprueba el dígito verificador GS1), son el mismo producto. Los códigos internos de las tiendas (por ejemplo, `D0006035` en Damasco) se descartan.
-2. **Sin código de barras.** Hacen falta las tres cosas:
-   - la misma **presentación** (normalizada en `normalizar.ts`: `1KG` = `1 kg` = 1000 g; `X10` = `10 tabletas` = `10 comp`);
-   - la misma marca, si ambas la tienen;
-   - nombres con al menos el 75 % de las palabras en común (sin acentos ni palabras vacías, singular y plural iguales).
-3. **Dos ofertas con códigos de barras distintos nunca se juntan.**
+2. **Sin código de barras.** Hacen falta todas estas condiciones:
+   - **Misma presentación**, normalizada en `normalizar.ts`: `1KG` = `1 kg` = 1000 g; `X10` = `10 tabletas` = `10 comp`. Los números de modelo (`2T-C32GF2060L`) no cuentan como cantidad.
+   - **Misma marca.** Si una tienda no la envía, el nombre de su producto debe contener la marca de la otra.
+   - **Nombres que difieren como mucho en una palabra, de un solo lado**, sin contar la marca ni las palabras de empaque (frasco, paquete, tipo…). Se aceptan abreviaturas («arr» = «arroz», «dulc» = «dulce») y el género («blanco» = «blanca»).
+   - Esa palabra no puede ser un **atributo distintivo**, como descremada, completa, integral, sin gluten, amarilla o dulce. Es mejor no comparar que comparar mal.
+3. **Cada oferta debe ser compatible con todas las del grupo**, no solo con una, así que no se forman cadenas. Dos productos distintos de la misma tienda y sede nunca se juntan.
+4. **Dos ofertas con códigos de barras distintos nunca se juntan.** Si comparten código, son el mismo producto aunque cada tienda lo rotule distinto (por ejemplo, Genven y Leti).
+
+Medido con 10 búsquedas reales (harina pan, arroz mary, mayonesa mavesa, pasta primor, leche en polvo…): 33 productos comparables entre tiendas, sin emparejamientos falsos.
 
 Los productos se ordenan así: primero los más pertinentes a la búsqueda, luego los que aparecen en más tiendas (los comparables) y por último el precio. Dentro de cada producto, las ofertas van de la más barata a la más cara, con la diferencia en porcentaje.
 
@@ -93,7 +117,7 @@ Contenido → Comparador de precios. Lo ven super, curador y lectura; pausa y re
 
 ## Próximos pasos
 
-- Lectores para las demás plataformas, una tienda a la vez.
+- Las tiendas pendientes, si cambian sus condiciones o con un acuerdo con cada cadena.
 - Sucursales de Central Madeirense (por ruta).
 - Precio por unidad (Bs./kg) para comparar presentaciones distintas.
 - Historial de precio por producto y alertas.

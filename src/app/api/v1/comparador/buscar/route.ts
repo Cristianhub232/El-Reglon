@@ -1,6 +1,6 @@
 import { endpoint } from "../../../../../core/ruta.ts";
 import { ErrorApi } from "../../../../../core/http.ts";
-import { buscarEnTiendas, registrarBusqueda } from "../../../../../modules/comparador/buscador.ts";
+import { buscarEnTiendas, registrarBusqueda, sedesPedidas } from "../../../../../modules/comparador/buscador.ts";
 import { agrupar, type Oferta } from "../../../../../modules/comparador/emparejar.ts";
 
 export const dynamic = "force-dynamic";
@@ -11,12 +11,13 @@ export const GET = endpoint("comparador", async (_req, url) => {
   const limite = url.searchParams.get("limite") ? Number(url.searchParams.get("limite")) : 20;
   if (!Number.isInteger(limite) || limite < 1 || limite > 50) throw new ErrorApi(400, "parametro_invalido", "'limite' debe ser un entero entre 1 y 50");
   const ofertas: Oferta[] = [];
-  const tiendas: { id: string; estado: "ok" | "error"; ofertas: number; ms: number; mensaje?: string }[] = [];
+  const tiendas: { id: string; sucursal: string | null; estado: "ok" | "error"; ofertas: number; ms: number; mensaje?: string }[] = [];
+  const sedes = new Map<string, string | null>();
   let tasa = null, ms = 0;
-  for await (const ev of buscarEnTiendas(q)) {
-    if (ev.tipo === "inicio") tasa = ev.tasa;
-    if (ev.tipo === "tienda") { ofertas.push(...ev.ofertas); tiendas.push({ id: ev.tienda, estado: "ok", ofertas: ev.ofertas.length, ms: ev.ms }); }
-    if (ev.tipo === "error") tiendas.push({ id: ev.tienda, estado: "error", ofertas: 0, ms: ev.ms, mensaje: ev.mensaje });
+  for await (const ev of buscarEnTiendas(q, sedesPedidas(url.searchParams))) {
+    if (ev.tipo === "inicio") { tasa = ev.tasa; for (const t of ev.tiendas) sedes.set(t.id, t.sucursal?.clave ?? null); }
+    if (ev.tipo === "tienda") { ofertas.push(...ev.ofertas); tiendas.push({ id: ev.tienda, sucursal: sedes.get(ev.tienda) ?? null, estado: "ok", ofertas: ev.ofertas.length, ms: ev.ms }); }
+    if (ev.tipo === "error") tiendas.push({ id: ev.tienda, sucursal: sedes.get(ev.tienda) ?? null, estado: "error", ofertas: 0, ms: ev.ms, mensaje: ev.mensaje });
     if (ev.tipo === "fin") ms = ev.ms;
   }
   const grupos = agrupar(ofertas, q);
@@ -25,7 +26,7 @@ export const GET = endpoint("comparador", async (_req, url) => {
   return { consulta: q, tasa_bcv: tasa, tiendas, total_grupos: grupos.length, productos: grupos.slice(0, limite).map((g) => ({
     nombre: g.nombre, presentacion: g.presentacion || null, imagen: g.imagen, tiendas: new Set(g.ofertas.map((o) => o.tienda)).size,
     mejor_precio: { tienda: g.mejor.tienda, precio_bs: g.mejor.precio_bs.toFixed(2), precio_usd: g.mejor.precio_usd.toFixed(2) },
-    ofertas: g.ofertas.map((o) => ({ tienda: o.tienda, nombre: o.nombre, marca: o.marca, ean: o.ean, url: o.url, disponible: o.disponible,
+    ofertas: g.ofertas.map((o) => ({ tienda: o.tienda, sucursal: o.sucursal, nombre: o.nombre, marca: o.marca, ean: o.ean, url: o.url, disponible: o.disponible,
       precio: o.precio, moneda: o.moneda, precio_bs: o.precio_bs.toFixed(2), precio_usd: o.precio_usd.toFixed(2) })),
   })), aviso: "Precios publicados por cada tienda en línea al momento de la consulta; pueden variar por sucursal. Conversión con la tasa BCV aplicable a hoy." };
 });

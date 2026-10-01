@@ -25,6 +25,7 @@ export function basico(s: string): string {
     .replace(/\b([a-z])\.(?=[a-z]\.)/g, "$1")      // P.A.N. → pan
     .replace(/\b([a-z])\.(?![a-z])/g, "$1")
     .replace(/[^a-z0-9.,"\s]/g, " ")
+    .replace(/([a-z])(\d)(?![\d.,]*\s*(?:kg|g|gr|grs|mg|ml|l|lt|lts|cc|oz|un|und)\b)/g, "$1 $2")
     .replace(/\s+/g, " ").trim();
 }
 
