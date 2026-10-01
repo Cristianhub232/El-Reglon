@@ -168,7 +168,9 @@
 .perfil span { font-size: 15px; line-height: 1.5; color: var(--texto-2); }
 
 /* Herramientas */
-.herramientas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 24px; align-items: start; }
+/* Dos columnas fijas (con auto-fit, "Mis deberes" a todo el ancho dejaba una tercera columna vacía en pantallas anchas) */
+.herramientas { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 1000px) { .herramientas { grid-template-columns: minmax(0, 1fr); } }
 .columna { display: flex; flex-direction: column; gap: 24px; }
 .herramienta { overflow: hidden; }
 .herramientaCabeza { padding: 22px 24px; border-bottom: 1px solid var(--linea-suave); display: flex; flex-direction: column; gap: 4px; }
