@@ -9,3 +9,6 @@ db
 herramientas
 premisa.md
 resources
+!datos/comparador
+# Copias temporales de editores (pueden contener el .env)
+*.swp

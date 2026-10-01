@@ -1,7 +1,7 @@
 // Formato del token: rgl_<prefijo de 8 hex>_<secreto base64url>. En la base solo se guarda su SHA-256.
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 
-export const PERMISOS = ["iva", "bcv", "arancel", "calendario", "rif", "noticias", "admin"] as const;
+export const PERMISOS = ["iva", "bcv", "arancel", "calendario", "rif", "noticias", "comparador", "admin"] as const;
 export type Permiso = (typeof PERMISOS)[number];
 
 export function generarToken(): { token: string; prefijo: string; hash: string } {

@@ -1,0 +1,8 @@
+{
+  "_nota": "Tiendas del comparador (docs/22). Cada una corre como un servicio propio bajo PM2 en el contenedor 'comparador', en su puerto. 'moneda' es la moneda en que la tienda publica sus precios. Excluidas por bloqueo antibots: Plazas (Cloudflare). Excluida por no ser de Venezuela: Makro Colombia.",
+  "tiendas": [
+    { "id": "locatel", "nombre": "Locatel", "sitio": "https://www.locatel.com.ve", "plataforma": "vtex", "moneda": "VES", "rubros": ["farmacia", "supermercado"], "puerto": 4101 },
+    { "id": "farmaciasaas", "nombre": "Farmacias SAAS", "sitio": "https://www.farmaciasaas.com", "plataforma": "vtex", "moneda": "USD", "rubros": ["farmacia", "supermercado"], "puerto": 4102 },
+    { "id": "damasco", "nombre": "Damasco", "sitio": "https://www.damascovzla.com", "plataforma": "vtex", "moneda": "USD", "rubros": ["electronica", "hogar"], "puerto": 4103 }
+  ]
+}

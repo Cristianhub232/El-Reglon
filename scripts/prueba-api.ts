@@ -158,6 +158,22 @@ async function main() {
   verificar("limite=0 → 400", (await get("/api/v1/noticias?limite=0", N)).estado === 400);
   verificar("fuente con caracteres inválidos → 400", (await get("/api/v1/noticias?fuente=%27%3B--", N)).estado === 400);
 
+  console.log("Comparador de precios");
+  verificar("sin permiso 'comparador' → 403", (await get("/api/v1/comparador/tiendas", K)).estado === 403);
+  const CP = await clave("comparador", ["comparador"]);
+  r = await get("/api/v1/comparador/tiendas", CP);
+  verificar("tiendas del comparador (VTEX: Locatel, SAAS y Damasco)", r.estado === 200 && r.cuerpo?.tiendas?.some((t: any) => t.id === "locatel"), r.cuerpo);
+  verificar("consulta de una letra → 400", (await get("/api/v1/comparador/buscar?q=a", CP)).estado === 400);
+  verificar("limite=0 → 400", (await get("/api/v1/comparador/buscar?q=harina&limite=0", CP)).estado === 400);
+  r = await get("/api/v1/comparador/buscar?q=harina%20pan&limite=5", CP);
+  verificar("comparación: cada tienda responde ok o error, productos con mejor precio en Bs. y US$", r.estado === 200
+    && r.cuerpo.tiendas.every((t: any) => t.estado === "ok" || t.estado === "error") && r.cuerpo.productos.length <= 5
+    && r.cuerpo.productos.every((p: any) => /^\d+\.\d{2}$/.test(p.mejor_precio.precio_bs) && /^\d+\.\d{2}$/.test(p.mejor_precio.precio_usd)), r.cuerpo);
+  const flujo = await fetch(`${BASE}/api/publico/comparador/buscar?q=harina%20pan`);
+  const lineas = (await flujo.text()).trim().split("\n").map((l) => JSON.parse(l));
+  verificar("portada: flujo NDJSON inicio → tiendas → fin", flujo.headers.get("content-type")?.includes("ndjson") === true
+    && lineas[0]?.tipo === "inicio" && lineas.at(-1)?.tipo === "fin" && lineas.filter((l) => l.tipo === "tienda" || l.tipo === "error").length === lineas[0].tiendas.length, lineas.map((l) => l.tipo));
+
   console.log("IVA");
   const sinPrecios = { precio_compra: null, precio_venta: null, moneda: null };
   const clasificar = (c: Record<string, unknown>) => post("/api/v1/iva/clasificar", { operacion: "nacional", ...sinPrecios, ...c }, K);

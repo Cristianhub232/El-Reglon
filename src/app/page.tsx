@@ -10,6 +10,8 @@ import { EJEMPLOS } from "../ui/sitio/ejemplos.ts";
 import { TitularItem, TitularPrincipal } from "../ui/sitio/Titulares.tsx";
 import { CasosDeUso } from "../ui/sitio/Casos.tsx";
 import { DiaEnCifras } from "../ui/sitio/DiaEnCifras.tsx";
+import { Comparador } from "../ui/sitio/Comparador.tsx";
+import { tiendasActivas } from "../modules/comparador/buscador.ts";
 import { datosCasos } from "../modules/web/casos.ts";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
 import { Grafica } from "../ui/sitio/Grafica.tsx";
@@ -26,6 +28,7 @@ const MODULOS = [
   ["Calendario", "Próximos deberes tributarios 2026 por RIF, para contribuyentes especiales y ordinarios, con prórrogas del COT art. 10.", "/api/v1/calendario"],
   ["RIF", "Validación del RIF con dígito verificador.", "/api/v1/rif"],
   ["Noticias", "Titulares de diez medios venezolanos, actualizados cada hora, con enlace al artículo original.", "/api/v1/noticias"],
+  ["Comparador", "Precio de un producto en varias tiendas venezolanas en línea, emparejado por código de barras, en Bs. y US$.", "/api/v1/comparador"],
 ] as const;
 
 function Variacion({ v, corta }: { v: number | null; corta?: boolean }) {
@@ -42,6 +45,7 @@ export default async function Portada() {
     .catch(() => null) as Resultado | null;
   const usd = d.bcv?.monedas.find((m) => m.codigo === "USD");
   const casos = await datosCasos(d.hoy, usd?.tasa ?? null);
+  const tiendasComparador = await tiendasActivas().catch(() => []);
   const eur = d.bcv?.monedas.find((m) => m.codigo === "EUR");
   const proximo = d.inhabiles[0];
   const [principal, ...resto] = d.noticias;
@@ -119,6 +123,8 @@ export default async function Portada() {
           </div>
           <BarraClasificador />
         </section>
+
+        {tiendasComparador.length > 0 && <Comparador tiendas={tiendasComparador.map((x) => ({ id: x.id, nombre: x.nombre, rubros: x.rubros }))} />}
 
         <div className={s.cifras}>
           <div className={s.cifra}><strong>{d.cifras.reglas}</strong><span>reglas del catálogo de IVA, con su texto legal verificado contra la Gaceta</span></div>

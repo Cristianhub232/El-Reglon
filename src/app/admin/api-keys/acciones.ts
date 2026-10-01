@@ -7,7 +7,7 @@ import { auditar, SinPermiso, usuarioConPermiso } from "../../../core/auth/dal.t
 import { puede } from "../../../core/auth/roles.ts";
 import type { EstadoAccion } from "../../../ui/admin/FormAccion.tsx";
 
-const MODULOS = ["iva", "bcv", "arancel", "calendario", "rif", "noticias"];
+const MODULOS = ["iva", "bcv", "arancel", "calendario", "rif", "noticias", "comparador"];
 const LIMITE_DEV = 120;   // un desarrollador puede crear sus keys hasta 120 consultas por minuto
 
 function error(e: unknown): EstadoAccion {

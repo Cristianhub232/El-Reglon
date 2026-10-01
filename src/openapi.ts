@@ -43,6 +43,7 @@ export const especificacion = {
     { name: "Calendario", description: "Calendario tributario 2026: especiales (Providencia SNAT/2025/000091) y ordinarios (Reglamento IVA art. 60); COT art. 10" },
     { name: "RIF", description: "Validación del RIF con dígito verificador" },
     { name: "Noticias", description: "Titulares de medios venezolanos (Efecto Cocuyo, El Pitazo, Runrun.es, TalCual, Crónica Uno, Caraota Digital, Monitoreamos, El Estímulo, La Iguana TV y Alertas24), leídos cada hora" },
+    { name: "Comparador", description: "Comparador de precios en tiendas venezolanas en línea (farmacias, supermercados y electrónica), en vivo, con los precios en Bs. y US$ a la tasa BCV del día" },
     { name: "Servicio", description: "Estado del servicio" },
   ],
   components: {
@@ -212,6 +213,14 @@ export const especificacion = {
       { actualizado: "2026-09-30 15:25:36.861-04", total: 118, pagina: 1, limite: 1, noticias: [{ id: 1, fuente: "efectococuyo", fuente_nombre: "Efecto Cocuyo",
         url: "https://efectococuyo.com/la-humanidad/foro-penal-mas-de-900-personas-han-sido-acusadas/", titulo: "Foro Penal: Más de 900 personas han sido acusadas de incitar al odio desde 2017",
         resumen: "Gonzalo Himiob, dijo a EFE que…", imagen: "https://…/AN1-20-1024x768.jpg", autor: "Efecto Cocuyo", categoria: "La Humanidad", publicado_en: "2026-09-30 15:17:25-04" }] }),
+    "/api/v1/comparador/buscar": op("Comparador", "Comparar el precio de un producto entre tiendas",
+      "Consulta en vivo a todas las tiendas activas y empareja las ofertas del mismo producto: por código de barras (EAN) o, si no lo hay, por marca, presentación y nombre. Devuelve cada producto con su mejor precio y las ofertas de cada tienda, en la moneda en que la publica y convertidas a Bs. y US$ con la tasa BCV aplicable a hoy. `tiendas` indica qué tienda respondió. Los precios pueden variar por sucursal.",
+      [qr("q", "Producto, p. ej. 'harina pan 1 kg' o 'acetaminofen 500'"), q("limite", "Productos a devolver, 1 a 50 (por defecto 20)")],
+      { consulta: "acetaminofen 500", tasa_bcv: { usd: "859.06290000", fecha_valor: "2026-09-30" }, tiendas: [{ id: "locatel", estado: "ok", ofertas: 24, ms: 640 }],
+        total_grupos: 8, productos: [{ nombre: "ACETAMINOFEN COMP 500MG X10 LETI", presentacion: "500 mg · 10 un", tiendas: 2,
+          mejor_precio: { tienda: "locatel", precio_bs: "316.69", precio_usd: "0.37" },
+          ofertas: [{ tienda: "locatel", ean: "7591020001234", precio: "316.69", moneda: "VES", precio_bs: "316.69", precio_usd: "0.37", disponible: true }] }] }),
+    "/api/v1/comparador/tiendas": op("Comparador", "Tiendas del comparador", "Tiendas activas, sus rubros y la moneda en que publican sus precios."),
     "/api/v1/noticias/fuentes": op("Noticias", "Medios del noticiero", "Identificador, nombre, sitio, si está activo, última lectura correcta y titulares de las últimas 24 horas."),
   },
 };

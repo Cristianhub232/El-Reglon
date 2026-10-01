@@ -49,7 +49,7 @@ export default async function ApiKeys() {
               </div>
               <div className={s.etiquetaChica}><span>Módulos permitidos <span className={s.obligatorio}>*</span></span>
                 <div className={s.casillas}>
-                  {["iva", "bcv", "arancel", "calendario", "rif", "noticias"].map((m) => (
+                  {["iva", "bcv", "arancel", "calendario", "rif", "noticias", "comparador"].map((m) => (
                     <label key={m}><input type="checkbox" name="permisos" value={m} defaultChecked={m === "iva" || m === "bcv"} /><span className="mono">{m}</span></label>
                   ))}
                 </div>

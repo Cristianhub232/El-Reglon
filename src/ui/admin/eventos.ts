@@ -7,13 +7,13 @@ export const CATEGORIAS: Record<Categoria, { titulo: string; clase: string }> = 
   bcv: { titulo: "BCV", clase: "t-condicionado" },
   arancel: { titulo: "Arancel", clase: "t-reducida" },
   calendario: { titulo: "Calendario", clase: "t-adicional" },
-  noticias: { titulo: "Noticiero", clase: "t-apagado" },
+  noticias: { titulo: "Contenido", clase: "t-apagado" },
 };
 
 export function categoria(accion: string): Categoria {
   const m = accion.split(".")[0];
   if (m === "bcv" || m === "iva" || m === "arancel" || m === "calendario" || m === "noticias") return m;
-  if (m === "pulso") return "noticias";
+  if (m === "pulso" || m === "comparador") return "noticias";
   return "acceso";
 }
 
@@ -65,6 +65,8 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "pulso.cuenta.usuario": return `${t("ente")}: Instagram ${d.antes ? `@${t("antes")}` : "sin usuario"} → ${d.despues ? `@${t("despues")}` : "sin usuario"}`;
     case "pulso.publicacion.ocultar": return `Ocultó «${t("titulo")}» (${t("cuenta")})`;
     case "pulso.publicacion.mostrar": return `Volvió a mostrar «${t("titulo")}» (${t("cuenta")})`;
+    case "comparador.tienda.pausar": return `Pausó ${t("nombre")} en el comparador`;
+    case "comparador.tienda.activar": return `Reactivó ${t("nombre")} en el comparador`;
     default: return Object.entries(d).slice(0, 4).map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`).join(" · ");
   }
 }

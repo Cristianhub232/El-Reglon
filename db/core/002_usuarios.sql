@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS core.solicitud_api_key (
     correo        text NOT NULL,
     organizacion  text,
     uso           text NOT NULL,
-    permisos      text[] NOT NULL CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias'] AND cardinality(permisos) > 0),
+    permisos      text[] NOT NULL CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias','comparador'] AND cardinality(permisos) > 0),
     estado        text NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'aprobada', 'rechazada')),
     atendida_por  integer REFERENCES core.usuario (id) ON DELETE SET NULL,
     atendida_en   timestamptz,

@@ -31,7 +31,7 @@ const NOMBRADAS: Record<string, string> = {
   amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", hellip: "…", laquo: "«", raquo: "»", ldquo: "“", rdquo: "”",
   lsquo: "‘", rsquo: "’", ndash: "–", mdash: "—", iquest: "¿", iexcl: "¡", ntilde: "ñ", Ntilde: "Ñ", uuml: "ü", Uuml: "Ü", deg: "°", euro: "€",
 };
-for (const v of "aeiouAEIOU") NOMBRADAS[`${v}acute`] = `${v}́`.normalize("NFC");
+for (const v of "aeiouAEIOU") NOMBRADAS[`${v}acute`] = `${v}\u0301`.normalize("NFC");
 
 export function decodificar(s: string): string {
   return s.replace(/&(#\d+|#x[0-9a-f]+|[a-z]+);/gi, (m, e: string) => {

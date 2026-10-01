@@ -72,10 +72,10 @@ ON CONFLICT (id) DO UPDATE SET nombre = EXCLUDED.nombre, sitio = EXCLUDED.sitio,
 -- Permiso "noticias" para las API keys (GET /api/v1/noticias)
 ALTER TABLE core.api_key DROP CONSTRAINT IF EXISTS api_key_permisos_check;
 ALTER TABLE core.api_key ADD CONSTRAINT api_key_permisos_check
-    CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias','admin'] AND cardinality(permisos) > 0);
+    CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias','comparador','admin'] AND cardinality(permisos) > 0);
 ALTER TABLE core.solicitud_api_key DROP CONSTRAINT IF EXISTS solicitud_api_key_permisos_check;
 ALTER TABLE core.solicitud_api_key ADD CONSTRAINT solicitud_api_key_permisos_check
-    CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias'] AND cardinality(permisos) > 0);
+    CHECK (permisos <@ ARRAY['iva','bcv','arancel','calendario','rif','noticias','comparador'] AND cardinality(permisos) > 0);
 
 -- Metabase (si está instalado) también puede leer el noticiero
 DO $$ BEGIN

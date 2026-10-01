@@ -6,7 +6,7 @@ import { ErrorApi } from "../../core/http.ts";
 import { limitarPorIp } from "../../core/limite-ip.ts";
 
 export interface EstadoSolicitud { error?: string; ok?: boolean }
-const MODULOS = ["iva", "bcv", "arancel", "calendario", "rif", "noticias"];
+const MODULOS = ["iva", "bcv", "arancel", "calendario", "rif", "noticias", "comparador"];
 
 export async function accionSolicitar(_p: EstadoSolicitud, form: FormData): Promise<EstadoSolicitud> {
   try { limitarPorIp(await headers(), "solicitud-api-key", 3); }

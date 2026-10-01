@@ -51,6 +51,7 @@
 | Arancel | Versiones del arancel, sinónimos comerciales de la detección (agregar grupos, validados con los casos de la detección), detecciones para curaduría y observaciones de la fuente |
 | Calendario | Mes con días inhábiles y vencimientos. Agregar un día inhábil (p. ej. un día no laborable decretado) **recalcula las prórrogas** del COT art. 10 en la misma transacción |
 | Noticiero | Estado de las 10 fuentes, lecturas horarias, «Leer ahora», pausar o reactivar una fuente y ocultar titulares ([docs/20](20-noticiero.md)). |
+| Comparador de precios | Estado de cada tienda (servicio PM2, última respuesta, productos con EAN), pausar o reactivar, lo más buscado y lo buscado sin resultado ([docs/22](22-comparador.md)) |
 | Mi cuenta | Editar el nombre propio, cambiar la contraseña y activar o desactivar la 2FA |
 | Auditoría | Todos los eventos (sesiones, API keys, usuarios, lecturas del BCV, catálogos), con filtros, búsqueda, paginación y exportación CSV (celdas protegidas contra fórmulas) |
 

@@ -26,7 +26,7 @@ services:
 
   app:
     profiles: ["app"]
-    build: .
+    build: { context: ., target: ejecucion }
     image: elrenglon-app:0.1.0
     container_name: elrenglon-app
     environment: &entorno_app
@@ -43,6 +43,7 @@ services:
       SOPORTE_WHATSAPP: ${SOPORTE_WHATSAPP:-}
       SOPORTE_CORREO: ${SOPORTE_CORREO:-}
       WORLDNEWS_API_KEY: ${WORLDNEWS_API_KEY:-}   # noticiero: fuentes que no se leen por RSS (TalCual); ver docs/20
+      COMPARADOR_HOST: comparador                 # servicios de las tiendas del comparador (red interna); ver docs/22
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS
     depends_on:
@@ -59,6 +60,20 @@ services:
       BCV_HORAS: ${BCV_HORAS:-8,14,20}
     depends_on:
       app: { condition: service_started }
+    restart: unless-stopped
+
+  # Comparador de precios: un servicio por tienda bajo PM2 (pm2-runtime), solo en la red interna (sin puertos
+  # publicados). Ver docs/22 y comparador/ecosystem.config.cjs. Estado: docker exec elrenglon-comparador pm2 ls
+  comparador:
+    profiles: ["app"]
+    build: { context: ., target: comparador }
+    image: elrenglon-comparador:0.1.0
+    container_name: elrenglon-comparador
+    environment:
+      <<: *entorno_app
+      COMPARADOR_ESCUCHA: 0.0.0.0
+    depends_on:
+      db: { condition: service_healthy }
     restart: unless-stopped
 
   # Noticiero: lee los titulares de los medios cada hora (RSS, WordPress y WorldNewsAPI). Ver docs/20.

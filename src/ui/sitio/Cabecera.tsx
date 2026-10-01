@@ -10,6 +10,7 @@ export function Cabecera() {
           <Logo tipo="horizontal" variante="claro" fondo="#F6F3EA" />
         </Link>
         <nav className={s.nav} aria-label="Principal">
+          <Link href="/#comparador">Comparador</Link>
           <Link href="/#herramientas">Herramientas</Link>
           <Link href="/#noticias">Noticias</Link>
           <Link href="/#modulos">Módulos</Link>
