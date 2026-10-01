@@ -22,7 +22,8 @@ export interface Grupo { clave: string; nombre: string; presentacion: string; im
 const RELLENO = new Set(["frasco", "paquete", "paq", "pote", "lata", "bolsa", "botella", "envase", "unidad", "und", "tipo", "presentacion"]);
 // Atributos que, si un nombre los dice y el otro no, impiden emparejar: mejor no comparar que comparar mal
 const DISTINTIVAS = ["descrem", "semidescrem", "complet", "deslactos", "integral", "light", "diet", "zero", "sin", "libre", "gluten",
-  "organic", "dulc", "salad", "picant", "amarill", "blanc", "negr", "rojo", "roja", "verde", "infantil", "nino", "adulto"];
+  "organic", "dulc", "salad", "picant", "amarill", "blanc", "negr", "rojo", "roja", "verde", "infantil", "nino", "adulto",
+  "mayor", "bulto", "caja", "fardo"];                 // venta al mayor: nunca se empareja con unidades sueltas
 const distintiva = (w: string) => DISTINTIVAS.some((d) => w.startsWith(d));
 
 interface Interna { o: Oferta; ean: string | null; marca: string | null; pres: string; palabras: string[]; origen: string }

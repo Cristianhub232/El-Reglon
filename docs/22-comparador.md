@@ -39,9 +39,16 @@ Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, 
 | Central Madeirense | WooCommerce, página de búsqueda **de cada sede** (`/Bello-Monte-08/?s=…`) | US$ («REF») | Activa, con **16 sedes** (Gran Caracas, Altos Mirandinos y Maiquetía); por defecto, Bello Monte |
 | La Alacena Market | Página de búsqueda (`/buscar?filtro=`) | US$ | Activa (Maracaibo, Zulia) |
 | Ivoo | Magento, API GraphQL pública (`nuweapp.com/graphql`) | US$ | Activa (electrónica y hogar) |
+| Punto al Mayor | Shopify: su búsqueda pública (`/search/suggest.json`) y el archivo público de cada producto (`/products/<handle>.js`) | US$ | Activa (mayorista y minorista, Gran Caracas). Se compara la variante «Detal»; lo que no la tiene se muestra como «(al mayor)» y nunca se empareja con unidades sueltas |
+| Mafabre | WooCommerce, API pública de tienda (`/wp-json/wc/store/v1/products`, precios en céntimos) | US$ | Activa (Caracas) |
+| Kromi | Su búsqueda (`Products.php?des=`) pide los productos a su servicio (`MatchingProductList.php`) con la sesión anónima de cualquier visitante | US$ | Activa. El precio llega sin IVA: se suma el impuesto de cada producto, como hace su página |
 | Farmatodo | **Por índice**: sitemap (13.589 productos) y datos estructurados de cada página | Bs. | Activa. Su `robots.txt` prohíbe la búsqueda (`/buscar*`) pero permite las páginas de producto. Vuelta completa ≈ 7,5 h (2 s por página) |
 | Plan Suárez | **Por índice**: sitemap (9.766 productos) y la página de cada producto; el código de barras sale del nombre de la imagen | Bs. | Activa. Prohíbe la búsqueda (`route=product/search`) y pide `Crawl-delay: 5`. Vuelta completa ≈ 13,5 h |
 | Gama | **Por índice**: sitemap (1.024 productos) y su API pública de producto (OCC) | US$ («REF») | Activa. Prohíbe la búsqueda (`*?query=*`). Vuelta completa ≈ 35 min |
+| Farmahorro | WooCommerce con el buscador FiboSearch | — | **Pendiente.** Su página de búsqueda no devuelve productos a una consulta automática y la ruta del buscador no responde |
+| Sigo (Margarita) | nopCommerce | — | **Por revisar.** La búsqueda responde, pero con precios en $0,00 (probablemente exige elegir tienda) |
+| Forum Supermayorista, Unicasa | — | — | Sin catálogo en línea (Forum vende por WhatsApp; Unicasa es informativa) |
+| Farmarebajas | — | — | **Excluida.** Responde 403 al acceso automático |
 | Mercasa, Que Mantequilla | Next.js propio | — | **Pendientes.** Buscan desde el navegador por su `/api`, que su `robots.txt` prohíbe |
 | Río Market | Instaleap | — | **Pendiente.** Su API exige credenciales internas del sitio |
 | Multimax | Astro | — | **Excluida.** Cloudflare responde con un desafío antibots (`cf-mitigated: challenge`) |

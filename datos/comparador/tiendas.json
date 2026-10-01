@@ -213,6 +213,39 @@
         "pausa_ms": 2000,
         "slug": true
       }
+    },
+    {
+      "id": "puntoalmayor",
+      "nombre": "Punto al Mayor",
+      "sitio": "https://puntoalmayor.com",
+      "plataforma": "shopify",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4110
+    },
+    {
+      "id": "mafabre",
+      "nombre": "Mafabre",
+      "sitio": "https://mafabre.com",
+      "plataforma": "woostore",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4111
+    },
+    {
+      "id": "kromi",
+      "nombre": "Kromi",
+      "sitio": "https://www.kromionline.com",
+      "plataforma": "kromi",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4112
     }
   ]
 }

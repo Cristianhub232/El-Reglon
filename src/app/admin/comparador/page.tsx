@@ -12,6 +12,7 @@ import s from "../../../ui/admin/admin.module.css";
 export const metadata = { title: "Comparador de precios" };
 
 const PLATAFORMAS: Record<string, string> = { vtex: "VTEX (API de catálogo)", woocommerce: "WooCommerce (página de búsqueda)", alacena: "Página de búsqueda", magento: "Magento (API GraphQL)",
+  shopify: "Shopify (búsqueda pública)", woostore: "WooCommerce (API de tienda)", kromi: "Búsqueda de su página",
   farmatodo: "Índice por sitemap", plansuarez: "Índice por sitemap", gama: "Índice por sitemap (API de producto)" };
 
 async function salud(puerto: number): Promise<{ ok: boolean; cache?: number; en_curso?: number }> {
