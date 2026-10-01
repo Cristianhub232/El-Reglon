@@ -111,12 +111,6 @@
 .ejemplo[aria-pressed="true"] { color: var(--tinta); border-bottom-color: var(--tinta); }
 
 /* Cifras */
-.cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); border-bottom: 1px solid var(--linea); background: var(--blanco); padding: 0 var(--margen); }
-.cifra { padding: 24px 24px 24px 0; display: flex; flex-direction: column; gap: 4px; }
-.cifra + .cifra { border-left: 1px solid var(--linea-suave); padding-left: 24px; }
-@media (max-width: 760px) { .cifra + .cifra { border-left: 0; padding-left: 0; border-top: 1px solid var(--linea-suave); } }
-.cifra strong { font: 600 32px var(--serif); color: var(--tinta); }
-.cifra span { font-size: 13px; line-height: 1.4; color: var(--texto-2); }
 
 /* Secciones */
 .seccion { padding: 80px var(--margen); display: flex; flex-direction: column; gap: 36px; scroll-margin-top: 72px; }

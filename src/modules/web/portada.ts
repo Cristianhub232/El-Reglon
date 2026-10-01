@@ -1,5 +1,5 @@
 // Datos de la página principal, todos de las tablas oficiales: tasas BCV con su serie de 7 días, días inhábiles,
-// alícuotas vigentes, cifras del ecosistema y los titulares del noticiero (medios venezolanos, cada hora).
+// alícuotas vigentes y los titulares del noticiero (medios venezolanos, cada hora).
 import { consulta } from "../../core/db.ts";
 import { hoyCaracas } from "../../core/validacion.ts";
 import { titularesPortada, ultimaLectura } from "../noticias/consultas.ts";
@@ -38,14 +38,11 @@ async function tasas(hoy: string) {
 
 export async function datosPortada() {
   const hoy = hoyCaracas();
-  const [bcv, inhabiles, alicuotas, cifras, noticias, noticiasLeidas] = await Promise.all([
+  const [bcv, inhabiles, alicuotas, noticias, noticiasLeidas] = await Promise.all([
     tasas(hoy),
     consulta<{ fecha: string; descripcion: string; tipo: "NACIONAL" | "BANCARIO" }>(
       "SELECT fecha, descripcion, tipo FROM calendario.dia_inhabil WHERE fecha >= $1::date ORDER BY fecha LIMIT 6", [hoy]),
     consulta<{ codigo: string; porcentaje: string }>("SELECT codigo, porcentaje FROM iva.alicuotas_vigentes($1::date)", [hoy]),
-    consulta<{ reglas: string; publicaciones: string; desde: string | null }>(
-      `SELECT (SELECT count(*) FROM iva.regla) AS reglas, (SELECT count(*) FROM bcv.publicacion) AS publicaciones,
-              (SELECT extract(year FROM min(fecha_valor))::text FROM bcv.publicacion) AS desde`),
     titularesPortada(5).catch(() => []),          // sin el esquema del noticiero, la portada sigue funcionando
     ultimaLectura().catch(() => null),
   ]);
@@ -54,7 +51,6 @@ export async function datosPortada() {
   return {
     hoy, bcv, inhabiles, noticias, noticiasLeidas, enCifras: await diaEnCifras(hoy, bcv?.fecha_valor ?? null),
     alicuotas: { general: pct("GENERAL"), reducida: pct("REDUCIDA"), adicional: pct("ADICIONAL_SUNTUARIA") },
-    cifras: { reglas: Number(cifras[0]?.reglas ?? 0), publicaciones: Number(cifras[0]?.publicaciones ?? 0), desde: cifras[0]?.desde ?? null },
   };
 }
 

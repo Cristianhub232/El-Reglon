@@ -17,7 +17,7 @@ import { imagenReferencia } from "../modules/comparador/referencia.ts";
 import { datosCasos } from "../modules/web/casos.ts";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
 import { Grafica } from "../ui/sitio/Grafica.tsx";
-import { diaSemana, entero, fecha, fechaCorta, fechaLarga, hora, numero } from "../ui/formato.ts";
+import { diaSemana, fecha, fechaCorta, fechaLarga, hora, numero } from "../ui/formato.ts";
 import s from "../ui/sitio/portada.module.css";
 
 export const dynamic = "force-dynamic";
@@ -128,12 +128,6 @@ export default async function Portada() {
         </section>
 
         {tiendasComparador.length > 0 && <Comparador tiendas={tiendasComparador.map((x) => ({ id: x.id, nombre: x.nombre, rubros: x.rubros, ciudad: x.ubicacion?.ciudad ?? null }))} />}
-
-        <div className={s.cifras}>
-          <div className={s.cifra}><strong>{d.cifras.reglas}</strong><span>reglas del catálogo de IVA, con su texto legal verificado contra la Gaceta</span></div>
-          <div className={s.cifra}><strong>{entero(d.cifras.publicaciones)}</strong><span>publicaciones oficiales del BCV desde {d.cifras.desde ?? "2025"}</span></div>
-          <div className={s.cifra}><strong>{MODULOS.length}</strong><span>módulos con una sola API key gratuita</span></div>
-        </div>
 
         {principal && (
           <section id="noticias" className={`${s.seccion} ${s.noticias}`}>
