@@ -64,7 +64,7 @@ sudo usermod -aG docker $USER            # y volver a entrar
 | CPU | **2 vCores** (Intel Haswell) | carga media 0,2–0,35 | Sobrado |
 | RAM | **4 GB** | ~3 GB usados, ~840 MB disponibles | **Justo: es el límite del servidor** |
 | Swap | 4 GB (`/swapfile` y `/swapfile2`) | ~2,1 GB usados | Se usa de verdad: lo que va al swap responde más lento |
-| Disco | **40 GB** (sin discos adicionales) | ~20 GB usados, ~19 GB libres | Suficiente |
+| Disco | **40 GB** (sin discos adicionales) | ~16 GB usados, ~23 GB libres (tras limpiar la caché de builds) | Suficiente |
 
 **Memoria por servicio:**
 
@@ -77,7 +77,7 @@ sudo usermod -aG docker $USER            # y volver a entrar
 | `noticias-programador` y `bcv-programador` | ~15–45 MB cada uno | |
 | Fuera de Docker | ~400–500 MB | Servidor de VS Code y Claude Code, usados para administrar el servidor. Al cerrar la sesión del editor se libera |
 
-**Disco:** imágenes de Docker ~7 GB, caché de builds ~4 GB (recuperable sin riesgo con `docker builder prune -f`; se vuelve a llenar con cada build), volumen de PostgreSQL ~1,3 GB, respaldos en `~/respaldos/` (~41 MB cada uno; conviene conservar solo los últimos 10).
+**Disco:** imágenes de Docker ~3,3 GB, volumen de PostgreSQL ~1,3 GB y respaldos en `~/respaldos/` (~41 MB cada uno; se conservan los 10 más recientes, §6). La caché de builds de Docker crece con cada despliegue: el 03/10/2026 se recuperaron 3,9 GB con `docker builder prune -f`, que no toca imágenes en uso, contenedores ni datos. Conviene repetirlo cuando el disco libre baje de 10 GB.
 
 ### Antes de desplegar otra API en este servidor
 
@@ -130,6 +130,7 @@ Procedimiento usado en cada despliegue:
 ```bash
 cd ~/renglon-produccion && set -a && . ./.env && set +a
 docker compose exec -T db pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc > ~/respaldos/elrenglon-$(date +%Y%m%d-%H%M).dump
+ls -t ~/respaldos/*.dump | tail -n +11 | xargs -r rm      # se conservan los 10 respaldos más recientes
 git pull && npm ci
 herramientas/instalar_bd.sh                 # esquemas y semillas (idempotente; también recarga el directorio si está su semilla)
 docker compose build app comparador && docker compose up -d
