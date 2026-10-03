@@ -55,6 +55,41 @@ sudo usermod -aG docker $USER            # y volver a entrar
   ```
 - **Memoria.** Metabase (Java) ocupa ~1,2 GB y el comparador ~440 MB (12 tiendas, unos 35–40 MB por tienda). Con 4 GB de RAM hay **4 GB de swap** (`/swapfile` y `/swapfile2`, ambos en `/etc/fstab`; `vm.swappiness=10`) y Java se limita con `METABASE_JAVA_OPTS=-Xmx1g`. **Recomendado: subir a 8 GB** si crecen las tiendas o el uso de Metabase.
 
+### Capacidad del servidor (medida el 03/10/2026)
+
+**Plan:** OVH **VPS-1 2027** (Ubuntu 26.04). Se amplía desde el panel de OVH («pasando a la gama superior»); los cambios de RAM o vCores suelen requerir un reinicio, tras el cual todo vuelve a arrancar solo.
+
+| Recurso | Capacidad | Uso medido | Margen |
+|---|---|---|---|
+| CPU | **2 vCores** (Intel Haswell) | carga media 0,2–0,35 | Sobrado |
+| RAM | **4 GB** | ~3 GB usados, ~840 MB disponibles | **Justo: es el límite del servidor** |
+| Swap | 4 GB (`/swapfile` y `/swapfile2`) | ~2,1 GB usados | Se usa de verdad: lo que va al swap responde más lento |
+| Disco | **40 GB** (sin discos adicionales) | ~20 GB usados, ~19 GB libres | Suficiente |
+
+**Memoria por servicio:**
+
+| Servicio | Memoria | Nota |
+|---|---|---|
+| `metabase` (Java) | ~0,9–1,2 GB | El mayor consumo. Limitado con `-Xmx1g` |
+| `comparador` | ~300–440 MB | 12 procesos PM2; unos 35–40 MB más por cada tienda nueva |
+| `db` (PostgreSQL) | ~170–330 MB | Crece con las consultas pesadas (el directorio tiene 2 millones de filas) |
+| `app` | ~100 MB | |
+| `noticias-programador` y `bcv-programador` | ~15–45 MB cada uno | |
+| Fuera de Docker | ~400–500 MB | Servidor de VS Code y Claude Code, usados para administrar el servidor. Al cerrar la sesión del editor se libera |
+
+**Disco:** imágenes de Docker ~7 GB, caché de builds ~4 GB (recuperable sin riesgo con `docker builder prune -f`; se vuelve a llenar con cada build), volumen de PostgreSQL ~1,3 GB, respaldos en `~/respaldos/` (~41 MB cada uno; conviene conservar solo los últimos 10).
+
+### Antes de desplegar otra API en este servidor
+
+La CPU y el disco alcanzan; **la RAM no tiene margen**. Una API de Node ocupa al menos 100–200 MB, y si trae su propia base de datos, otros 150–300 MB. Con 4 GB, todo eso iría al swap y el sitio, la API y Metabase responderían más lento.
+
+1. **Ampliar a 8 GB de RAM** (recomendado) desde el panel de OVH antes de desplegarla. Alternativas si no se amplía: detener Metabase cuando no se use (`docker compose stop metabase`, libera ~1 GB), o bajar su memoria (`METABASE_JAVA_OPTS=-Xmx768m`).
+2. **Puertos:** ya usados `127.0.0.1:3000` (app), `3001` (Metabase) y `55432` (PostgreSQL). La nueva API debe escuchar solo en `127.0.0.1` y en otro puerto (p. ej. `3002`); nunca exponerla directamente.
+3. **Dirección pública:** un subdominio nuevo, con su registro **A** en Spaceship hacia `40.160.143.39` y su bloque en `/etc/caddy/Caddyfile` (`reverse_proxy 127.0.0.1:3002`). Caddy emite el certificado solo.
+4. **Separación:** su propio proyecto de Docker Compose y su propio `.env` (o un servicio aparte en este compose), con `restart: unless-stopped` y nombres de contenedor distintos de `elrenglon-*`.
+5. **Base de datos:** si usa PostgreSQL, mejor una base aparte en el mismo contenedor `db` (con su propio rol) que un segundo PostgreSQL, que ocuparía más memoria. Incluirla en los respaldos.
+6. Medir después del despliegue (`free -m`, `docker stats --no-stream`) y actualizar esta tabla.
+
 ## 3. Instalación
 
 ```bash
@@ -136,7 +171,7 @@ Estado al 03/10/2026:
 - [ ] **Cambiar las contraseñas de los buzones** `ventas@`, `admin@` y `soporte@` por contraseñas generadas, antes de activar la prospección. Las nuevas de `ventas@` y `soporte@` van al `.env` entre comillas simples y hay que reiniciar los servicios.
 - [ ] Agregar `CORREO_SOPORTE_CLAVE` al `.env` para que la Bandeja lea soporte@ (docs/27).
 - [ ] Mantener activa la **renovación automática del dominio** (vence en septiembre de 2027) y del plan de Spacemail.
-- [ ] Recomendado: subir la VPS a 8 GB de RAM (§2).
+- [ ] Recomendado: subir la VPS a 8 GB de RAM (§2), **imprescindible antes de desplegar otra API** en este servidor.
 - [ ] Opcional: borrar la "Sample Database" de Metabase (Administración → Bases de datos).
 
 ## 9. Indexación en Google (SEO)
