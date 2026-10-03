@@ -218,21 +218,41 @@ async function main() {
 
   console.log("Prospección por correo");
   {
-    const { armarCorreo, SECTORES } = await import("../src/modules/prospeccion/plantillas.ts");
+    const { armarCorreo, SECTORES, EJEMPLOS_IVA, RIF_EJEMPLO } = await import("../src/modules/prospeccion/plantillas.ts");
     const { validar } = await import("../src/modules/prospeccion/prospectos.ts");
+    const { deberesDe } = await import("../src/modules/prospeccion/datos.ts");
     const tasa = { usd: "190.5", eur: "221.25", fecha_valor: "2026-10-01" };
     const correos = Object.keys(SECTORES).flatMap((sec) => (["inicial", "seguimiento"] as const).map((tipo) =>
-      armarCorreo({ empresa: "Bodega <b>La Esquina</b>", contacto: null, sector: sec as keyof typeof SECTORES, token: "a".repeat(32) }, tipo, tasa)));
-    verificar("plantillas: 6 sectores × 2 correos, estilo carta con enlaces a las herramientas, baja visible y datos escapados", correos.length === 12 && correos.every((c) =>
+      armarCorreo({ empresa: "Bodega <b>La Esquina</b>", contacto: null, sector: sec as keyof typeof SECTORES, token: "a".repeat(32), rif: RIF_EJEMPLO }, tipo, { tasa })));
+    verificar("plantillas: 8 sectores × 2 correos, estilo carta con enlaces a las herramientas, baja visible y datos escapados", correos.length === 16 && correos.every((c) =>
       c.asunto.length <= 100 && c.html.includes(`/baja?t=${"a".repeat(32)}`) && c.texto.includes("/baja?t=") && !c.html.includes("<b>La Esquina")
       && !/undefined|NaN/.test(c.html + c.texto) && c.html.includes("Bs. 190,50") && !/<img|<button/i.test(c.html)
-      && /href="https:\/\/[^"]+\/(#(herramientas|comparador|deberes|tasas)|docs|solicitar-api-key)/.test(c.html)), correos.map((c) => c.asunto));
-    const ca = armarCorreo({ empresa: "Inversiones Ejemplo, C.A.", contacto: null, sector: "general", token: "a".repeat(32) }, "inicial", null);
+      && /href="https:\/\/[^"]*(#(herramientas|comparador|deberes|tasas)|\/docs|\/solicitar-api-key)/.test(c.html)), correos.map((c) => c.asunto));
+    const ca = armarCorreo({ empresa: "Inversiones Ejemplo, C.A.", contacto: null, sector: "general", token: "a".repeat(32) }, "inicial", { tasa: null });
     verificar("plantillas: sin doble punto tras «C.A.»", !ca.texto.includes("C.A..") && ca.texto.includes("Inversiones Ejemplo, C.A."), ca.texto.split("\n")[2]);
     verificar("validación de prospectos: correo, sector y origen", validar({ empresa: "Farmacia X", correo: "a@b.co", sector: "Farmacias", origen: "web" }).ok
       && !validar({ empresa: "X S.A.", correo: "no-es-correo", sector: "", origen: "web" }).ok
       && !validar({ empresa: "X S.A.", correo: "a@b.co", sector: "panadería", origen: "web" }).ok
       && !validar({ empresa: "X S.A.", correo: "a@b.co", sector: "", origen: "" }).ok);
+    // Los ejemplos de IVA del correo son fijos: se comprueban contra el clasificador real
+    const malos: string[] = [];
+    for (const [nombre, alicuota] of Object.values(EJEMPLOS_IVA)) {
+      const c = await post("/api/publico/iva/clasificar", { nombre, operacion: "nacional" });
+      const cat = c.cuerpo?.opciones?.[0]?.categoria;
+      if (cat !== (alicuota === "exento" ? "EXENTO" : "ALICUOTA_GENERAL")) malos.push(`${nombre}: ${cat}`);
+    }
+    verificar("ejemplos de IVA del correo = lo que dice el clasificador", malos.length === 0, malos);
+    verificar("sin RIF no hay contribuyente especial; sin consentimiento no hay persona natural",
+      !validar({ empresa: "Inversiones X", correo: "a@b.co", sector: "especial", origen: "directorio" }).ok
+      && !validar({ empresa: "María", correo: "m@b.co", sector: "persona natural", origen: "formulario" }).ok
+      && validar({ empresa: "María", correo: "m@b.co", sector: "persona natural", origen: "formulario del sitio", consentimiento: true }).ok);
+    const deberes = await deberesDe(RIF_EJEMPLO);
+    const esp = armarCorreo({ empresa: "Inversiones X, C.A.", contacto: null, sector: "especial", token: "a".repeat(32), rif: RIF_EJEMPLO }, "inicial", { tasa, deberes });
+    verificar("contribuyente especial: sus próximos deberes en el asunto y enlace a «Mis deberes» con su RIF",
+      (deberes?.length ?? 0) > 0 && /vence el \d\d\/\d\d\/\d{4}$/.test(esp.asunto) && esp.html.includes(`rif=${RIF_EJEMPLO}&amp;tipo=ESPECIAL`), [esp.asunto, deberes?.[0]]);
+    const per = armarCorreo({ empresa: "María", contacto: null, sector: "consumidor", token: "a".repeat(32) }, "inicial",
+      { tasa, precios: [{ producto: "Arroz Mary 900 g", consulta: "arroz mary 900", minimo: 95.4, maximo: 120, cadenas: 3, tienda: "Locatel" }] });
+    verificar("persona natural: más barato hoy, con enlace a la comparación", per.texto.startsWith("Hola, María:") && per.html.includes("comparar=arroz+mary+900") && per.html.includes("Bs. 95,40"), per.asunto);
     let r1 = await fetch(BASE + "/baja?t=prueba");
     verificar("página /baja de un correo de prueba: no da de baja nada", r1.status === 200 && (await r1.text()).includes("correo de prueba"));
     r = await post(`/api/publico/prospeccion/baja?t=${"0".repeat(32)}`, {});

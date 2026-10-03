@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auditar, SinPermiso, usuarioConPermiso } from "../../../core/auth/dal.ts";
 import { correoConfigurado, enviarCorreo } from "../../../modules/prospeccion/envio.ts";
-import { SECTORES, type Sector } from "../../../modules/prospeccion/plantillas.ts";
+import { datosEjemplo, SECTORES, type Sector } from "../../../modules/prospeccion/plantillas.ts";
 import { cambiarEstado, crear, guardarAjustes, importar } from "../../../modules/prospeccion/prospectos.ts";
 import type { EstadoAccion } from "../../../ui/admin/FormAccion.tsx";
 
@@ -33,7 +33,8 @@ export async function accionCrear(_p: EstadoAccion, form: FormData): Promise<Est
   try {
     const u = await usuarioConPermiso("prospeccion.gestionar");
     const n = { empresa: String(form.get("empresa") ?? ""), contacto: String(form.get("contacto") ?? ""), correo: String(form.get("correo") ?? ""),
-      sector: String(form.get("sector") ?? ""), origen: String(form.get("origen") ?? ""), notas: String(form.get("notas") ?? "") };
+      sector: String(form.get("sector") ?? ""), origen: String(form.get("origen") ?? ""), notas: String(form.get("notas") ?? ""),
+      rif: String(form.get("rif") ?? ""), consentimiento: form.get("consentimiento") === "on" };
     const r = await crear(n, u.correo);
     if (typeof r === "object") return { error: r.error };
     if (r === "duplicado") return { error: "Ese correo ya está en la lista" };
@@ -78,7 +79,7 @@ export async function accionPrueba(_p: EstadoAccion, form: FormData): Promise<Es
     const correo = String(form.get("correo") ?? "").trim().toLowerCase(), sector = String(form.get("sector") ?? "") as Sector;
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) return { error: "Correo no válido" };
     if (!(sector in SECTORES)) return { error: "Sector no válido" };
-    const r = await enviarCorreo(correo, { empresa: "Empresa de Ejemplo, C.A.", contacto: null, sector, token: "prueba" }, "prueba", { creadoPor: u.correo });
+    const r = await enviarCorreo(correo, datosEjemplo(sector), "prueba", { creadoPor: u.correo });
     await auditar(u, "prospeccion.prueba", { correo, sector, ok: r.ok });
     refrescar();
     return r.ok ? { ok: `Prueba enviada a ${correo}: «${r.asunto}»` } : { error: `No se pudo enviar: ${r.error}` };

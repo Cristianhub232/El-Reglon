@@ -4,7 +4,8 @@
 // (página /baja). Si algún día el volumen crece, la baja en un clic ya existe: POST /api/publico/prospeccion/baja?t=…
 import nodemailer, { type Transporter } from "nodemailer";
 import { consulta } from "../../core/db.ts";
-import { armarCorreo, type DatosCorreo, type Tasa, type TipoCorreo } from "./plantillas.ts";
+import { deberesDe, preciosDelDia } from "./datos.ts";
+import { armarCorreo, type Contexto, type DatosCorreo, type Tasa, type TipoCorreo } from "./plantillas.ts";
 
 const USUARIO = () => process.env.CORREO_SMTP_USUARIO || "ventas@elrenglonve.org";
 export const correoConfigurado = () => Boolean(process.env.CORREO_SMTP_CLAVE);
@@ -34,12 +35,22 @@ export async function tasaDelDia(): Promise<Tasa | null> {
   } catch { return null; }
 }
 
+// Datos reales del correo según el sector: tasa del día siempre; deberes del RIF (especiales); precios (personas)
+export async function contextoPara(d: DatosCorreo): Promise<Contexto> {
+  const [tasa, deberes, precios] = await Promise.all([
+    tasaDelDia(),
+    d.sector === "especial" && d.rif ? deberesDe(d.rif) : Promise.resolve(null),
+    d.sector === "consumidor" ? preciosDelDia() : Promise.resolve(null),
+  ]);
+  return { tasa, deberes, precios };
+}
+
 export interface Resultado { ok: boolean; error?: string; permanente?: boolean; messageId?: string; asunto: string }
 
 // Envía un correo y lo registra en prospeccion.envio. "permanente" = el servidor rechazó la dirección (5xx).
 export async function enviarCorreo(para: string, d: DatosCorreo, tipo: TipoCorreo | "prueba",
-  opciones: { prospectoId?: number | null; creadoPor: string; tasa?: Tasa | null }): Promise<Resultado> {
-  const c = armarCorreo(d, tipo === "prueba" ? "inicial" : tipo, opciones.tasa === undefined ? await tasaDelDia() : opciones.tasa);
+  opciones: { prospectoId?: number | null; creadoPor: string; contexto?: Contexto }): Promise<Resultado> {
+  const c = armarCorreo(d, tipo === "prueba" ? "inicial" : tipo, opciones.contexto ?? await contextoPara(d));
   let r: Resultado;
   try {
     const info = await smtp().sendMail({

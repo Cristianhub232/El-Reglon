@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS prospeccion.prospecto (
     empresa       text        NOT NULL CHECK (length(trim(empresa)) BETWEEN 2 AND 160),
     contacto      text        CHECK (length(contacto) <= 120),
     correo        text        NOT NULL CHECK (correo ~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' AND length(correo) <= 254),
-    sector        text        NOT NULL DEFAULT 'general'
-                              CHECK (sector IN ('general', 'comercio', 'farmacia', 'importador', 'contador', 'desarrollador')),
+    sector        text        NOT NULL DEFAULT 'general',     -- valores: restricción prospecto_sector_check (abajo)
     origen        text        NOT NULL CHECK (length(trim(origen)) BETWEEN 2 AND 200),   -- de dónde salió el contacto
     notas         text        CHECK (length(notas) <= 1000),
     -- pendiente → contactado (1.er correo) → seguimiento (2.º y último) · respondio / descartado / baja / rebote detienen todo
@@ -22,6 +21,18 @@ CREATE TABLE IF NOT EXISTS prospeccion.prospecto (
     creado_en     timestamptz NOT NULL DEFAULT now(),
     actualizado_en timestamptz NOT NULL DEFAULT now()
 );
+-- 03/10/2026: contribuyentes especiales (con RIF: el correo muestra sus próximos deberes) y personas naturales
+-- (comparador de precios; solo con consentimiento: escribirle a particulares sin permiso es spam)
+ALTER TABLE prospeccion.prospecto ADD COLUMN IF NOT EXISTS rif text CHECK (rif ~ '^[VEJPGC]-\d{8}-\d$');
+ALTER TABLE prospeccion.prospecto ADD COLUMN IF NOT EXISTS consentimiento boolean NOT NULL DEFAULT false;
+ALTER TABLE prospeccion.prospecto DROP CONSTRAINT IF EXISTS prospecto_sector_check;
+ALTER TABLE prospeccion.prospecto ADD CONSTRAINT prospecto_sector_check
+    CHECK (sector IN ('general', 'comercio', 'farmacia', 'importador', 'contador', 'desarrollador', 'especial', 'consumidor'));
+ALTER TABLE prospeccion.prospecto DROP CONSTRAINT IF EXISTS prospecto_especial_rif;
+ALTER TABLE prospeccion.prospecto ADD CONSTRAINT prospecto_especial_rif CHECK (sector <> 'especial' OR rif IS NOT NULL);
+ALTER TABLE prospeccion.prospecto DROP CONSTRAINT IF EXISTS prospecto_consumidor_consentimiento;
+ALTER TABLE prospeccion.prospecto ADD CONSTRAINT prospecto_consumidor_consentimiento CHECK (sector <> 'consumidor' OR consentimiento);
+
 CREATE UNIQUE INDEX IF NOT EXISTS prospecto_correo ON prospeccion.prospecto (lower(correo));
 CREATE INDEX IF NOT EXISTS prospecto_estado ON prospeccion.prospecto (estado, ultimo_envio);
 
@@ -68,7 +79,7 @@ DO $$ BEGIN
     GRANT USAGE ON SCHEMA prospeccion TO metabase_lectura;
     GRANT SELECT ON prospeccion.envio, prospeccion.baja, prospeccion.ajuste TO metabase_lectura;
     -- Sin el token: con él cualquiera podría dar de baja a un prospecto
-    GRANT SELECT (id, empresa, contacto, correo, sector, origen, notas, estado, envios, ultimo_envio, creado_por, creado_en, actualizado_en)
+    GRANT SELECT (id, empresa, contacto, correo, sector, rif, consentimiento, origen, notas, estado, envios, ultimo_envio, creado_por, creado_en, actualizado_en)
       ON prospeccion.prospecto TO metabase_lectura;
   END IF;
 END $$;

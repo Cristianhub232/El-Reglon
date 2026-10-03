@@ -9,16 +9,20 @@ export const ESTADOS = {
 } as const;
 export type EstadoProspecto = keyof typeof ESTADOS;
 
-export interface NuevoProspecto { empresa: string; contacto?: string | null; correo: string; sector: string; origen: string; notas?: string | null }
+export interface NuevoProspecto { empresa: string; contacto?: string | null; correo: string; sector: string; origen: string; notas?: string | null;
+  rif?: string | null; consentimiento?: boolean }
 type Validado = { ok: true; p: Required<NuevoProspecto> & { sector: Sector } } | { ok: false; error: string };
 
 const sinTildes = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 const CORREO = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-// Acepta la clave ("farmacia") o el nombre ("Farmacias"); vacío = general
+const ALIAS: Record<string, Sector> = { "contribuyente especial": "especial", especiales: "especial", persona: "consumidor",
+  "persona natural": "consumidor", "personas naturales": "consumidor", personas: "consumidor" };
+// Acepta la clave ("farmacia"), el nombre ("Farmacias") o un alias ("persona natural"); vacío = general
 export function sector(v: string): Sector | null {
   const s = sinTildes(v);
   if (!s) return "general";
+  if (ALIAS[s]) return ALIAS[s];
   for (const [k, nombre] of Object.entries(SECTORES)) if (s === k || s === sinTildes(nombre) || sinTildes(nombre).startsWith(s)) return k as Sector;
   return null;
 }
@@ -32,23 +36,35 @@ export function validar(n: NuevoProspecto): Validado {
   if (origen.length < 2 || origen.length > 200) return { ok: false, error: "Indique de dónde salió el contacto (p. ej. «web de la empresa»)" };
   if (contacto && contacto.length > 120) return { ok: false, error: "El nombre del contacto es demasiado largo" };
   if (notas && notas.length > 1000) return { ok: false, error: "Las notas no pueden superar 1.000 caracteres" };
-  return { ok: true, p: { empresa, correo, origen, contacto, notas, sector: sec } };
+  const rif = n.rif?.trim().toUpperCase() || null, consentimiento = Boolean(n.consentimiento);
+  if (sec === "especial" && !rif) return { ok: false, error: "Para un contribuyente especial indique su RIF: el correo muestra sus próximos deberes" };
+  if (sec === "consumidor" && !consentimiento) return { ok: false, error: "A una persona natural solo se le escribe si aceptó recibir correos: indíquelo y explique cómo en «origen»" };
+  return { ok: true, p: { empresa, correo, origen, contacto, notas, sector: sec, rif, consentimiento } };
 }
 
 export type Alta = "agregado" | "duplicado" | "en_baja";
 export async function crear(n: NuevoProspecto, creadoPor: string): Promise<Alta | { error: string }> {
   const v = validar(n);
   if (!v.ok) return { error: v.error };
+  // RIF con el dígito verificador oficial (rif.validar); se guarda con guiones: J-12345678-9
+  let rif: string | null = null;
+  if (v.p.rif) {
+    const [x] = await consulta<{ valido: boolean; rif_formateado: string | null; mensaje: string }>("SELECT valido, rif_formateado, mensaje FROM rif.validar($1)", [v.p.rif]);
+    if (!x?.valido) return { error: `RIF no válido (${v.p.rif}): ${x?.mensaje ?? ""}` };
+    rif = x.rif_formateado;
+  }
   const [b] = await consulta("SELECT 1 FROM prospeccion.baja WHERE correo = $1", [v.p.correo]);
   if (b) return "en_baja";
   const r = await consulta(
-    `INSERT INTO prospeccion.prospecto (empresa, contacto, correo, sector, origen, notas, creado_por)
-     VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT ((lower(correo))) DO NOTHING RETURNING id`,
-    [v.p.empresa, v.p.contacto, v.p.correo, v.p.sector, v.p.origen, v.p.notas, creadoPor]);
+    `INSERT INTO prospeccion.prospecto (empresa, contacto, correo, sector, origen, notas, rif, consentimiento, creado_por)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT ((lower(correo))) DO NOTHING RETURNING id`,
+    [v.p.empresa, v.p.contacto, v.p.correo, v.p.sector, v.p.origen, v.p.notas, rif, v.p.consentimiento, creadoPor]);
   return r.length ? "agregado" : "duplicado";
 }
 
-// CSV (separado por ; o ,): empresa, contacto, correo, sector, origen. La primera línea puede ser el encabezado.
+// CSV (separado por ; o ,): empresa, contacto, correo, sector, origen, rif, consentimiento (sí/no). Las dos últimas
+// columnas son opcionales salvo para contribuyentes especiales (RIF) y personas naturales (consentimiento). La primera
+// línea puede ser el encabezado.
 export async function importar(csv: string, creadoPor: string) {
   const lineas = csv.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
   if (lineas.length > 500) return { error: "Como máximo 500 líneas por importación" } as const;
@@ -56,8 +72,8 @@ export async function importar(csv: string, creadoPor: string) {
   const r = { agregados: 0, duplicados: 0, en_baja: 0, errores: [] as string[] };
   for (const [i, l] of lineas.entries()) {
     const sep = l.includes(";") ? ";" : ",";
-    const [empresa = "", contacto = "", correo = "", sec = "", origen = ""] = l.split(sep).map((x) => x.trim().replace(/^"|"$/g, ""));
-    const a = await crear({ empresa, contacto, correo, sector: sec, origen }, creadoPor);
+    const [empresa = "", contacto = "", correo = "", sec = "", origen = "", rif = "", acepto = ""] = l.split(sep).map((x) => x.trim().replace(/^"|"$/g, ""));
+    const a = await crear({ empresa, contacto, correo, sector: sec, origen, rif, consentimiento: /^(s[ií]|si|yes|1|true|x)$/i.test(acepto) }, creadoPor);
     if (typeof a === "object") { if (r.errores.length < 20) r.errores.push(`Línea ${i + 1}: ${a.error}`); continue; }
     if (a === "agregado") r.agregados++; else if (a === "duplicado") r.duplicados++; else r.en_baja++;
   }

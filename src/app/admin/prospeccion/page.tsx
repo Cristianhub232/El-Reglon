@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { consulta } from "../../../core/db.ts";
 import { requerirSeccion } from "../../../core/auth/dal.ts";
-import { correoConfigurado, tasaDelDia } from "../../../modules/prospeccion/envio.ts";
-import { armarCorreo, SECTORES, type Sector, type TipoCorreo } from "../../../modules/prospeccion/plantillas.ts";
+import { contextoPara, correoConfigurado } from "../../../modules/prospeccion/envio.ts";
+import { armarCorreo, datosEjemplo, SECTORES, type Sector, type TipoCorreo } from "../../../modules/prospeccion/plantillas.ts";
 import { ESTADOS, type EstadoProspecto } from "../../../modules/prospeccion/prospectos.ts";
 import { FormAccion } from "../../../ui/admin/FormAccion.tsx";
 import { fechaHora } from "../../../ui/formato.ts";
@@ -25,7 +25,8 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
   const tipo: TipoCorreo = q.tipo === "seguimiento" ? "seguimiento" : "inicial";
   const filtro = q.estado && q.estado in ESTADOS ? q.estado : null;
 
-  const [[a], porEstado, prospectos, envios, tasa] = await Promise.all([
+  const ejemplo = datosEjemplo(vista);
+  const [[a], porEstado, prospectos, envios, contexto] = await Promise.all([
     consulta<{ activo: boolean; limite_diario: number; hora_inicio: number; hora_fin: number; dias_seguimiento: number; proximo_envio: string | null; actualizado_por: string | null; enviados_hoy: number; bajas: number }>(
       `SELECT a.*, a.proximo_envio::text,
               (SELECT count(*)::int FROM prospeccion.envio WHERE tipo <> 'prueba' AND resultado = 'enviado'
@@ -33,17 +34,17 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
               (SELECT count(*)::int FROM prospeccion.baja) AS bajas
          FROM prospeccion.ajuste a`),
     consulta<{ estado: EstadoProspecto; n: number }>("SELECT estado, count(*)::int AS n FROM prospeccion.prospecto GROUP BY estado"),
-    consulta<{ id: number; empresa: string; contacto: string | null; correo: string; sector: Sector; origen: string; estado: EstadoProspecto; envios: number; ultimo_envio: string | null }>(
-      `SELECT id::int, empresa, contacto, correo, sector, origen, estado, envios, ultimo_envio::text FROM prospeccion.prospecto
+    consulta<{ id: number; empresa: string; contacto: string | null; correo: string; sector: Sector; origen: string; rif: string | null; estado: EstadoProspecto; envios: number; ultimo_envio: string | null }>(
+      `SELECT id::int, empresa, contacto, correo, sector, origen, rif, estado, envios, ultimo_envio::text FROM prospeccion.prospecto
         WHERE ($1::text IS NULL OR estado = $1) ORDER BY actualizado_en DESC LIMIT 200`, [filtro]),
     consulta<{ id: number; correo: string; tipo: string; asunto: string; resultado: string; error: string | null; creado_por: string | null; enviado_en: string }>(
       "SELECT id::int, correo, tipo, asunto, resultado, error, creado_por, enviado_en::text FROM prospeccion.envio ORDER BY enviado_en DESC LIMIT 30"),
-    tasaDelDia(),
+    contextoPara(ejemplo),
   ]);
   const n = (e: EstadoProspecto) => porEstado.find((x) => x.estado === e)?.n ?? 0;
   const total = porEstado.reduce((t, x) => t + x.n, 0);
   const configurado = correoConfigurado();
-  const muestra = armarCorreo({ empresa: "Empresa de Ejemplo, C.A.", contacto: null, sector: vista, token: "prueba" }, tipo, tasa);
+  const muestra = armarCorreo(ejemplo, tipo, contexto);
   const horas = Array.from({ length: 14 }, (_, i) => i + 7);
 
   return (
@@ -114,6 +115,9 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
                 <label className={s.etiquetaChica}><span>Correo</span><input className={s.campoChico} type="email" name="correo" required placeholder="compras@empresa.com.ve" /></label>
               </div>
               <label className={s.etiquetaChica}><span>Sector</span><select className={s.campoChico} name="sector" defaultValue="general">{Object.entries(SECTORES).map(([k, t]) => <option key={k} value={k}>{t}</option>)}</select></label>
+              <label className={s.etiquetaChica}><span>RIF <span className={s.apagado}>(obligatorio para contribuyentes especiales: el correo muestra sus próximos deberes)</span></span><input className={`${s.campoChico} mono`} name="rif" maxLength={14} placeholder="J-12345678-9" /></label>
+              <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 14 }}><input type="checkbox" name="consentimiento" style={{ marginTop: 3 }} />
+                <span>Aceptó recibir correos de El Renglón <span className={s.apagado}>(obligatorio para personas naturales: explique cómo en el origen)</span></span></label>
               <label className={s.etiquetaChica}><span>¿De dónde salió el contacto?</span><input className={s.campoChico} name="origen" required minLength={2} maxLength={200} placeholder="Web de la empresa, sección Contacto" /></label>
               <label className={s.etiquetaChica}><span>Notas <span className={s.apagado}>(opcional)</span></span><textarea className={s.campoChico} name="notas" maxLength={1000} rows={2} /></label>
             </FormAccion>
@@ -122,9 +126,9 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
         <div className={s.panel}>
           <div className={s.panelCabeza}><strong>Importar CSV</strong><span className={s.apagado}>hasta 500 líneas</span></div>
           <div className={s.panelCuerpo}>
-            <p className={s.apagado} style={{ fontSize: 14, lineHeight: 1.5, margin: 0 }}>Una línea por empresa, separada por <code>;</code>: empresa; contacto; correo; sector; origen. Los repetidos y los que se dieron de baja se omiten.</p>
+            <p className={s.apagado} style={{ fontSize: 14, lineHeight: 1.5, margin: 0 }}>Una línea por contacto, separada por <code>;</code>: empresa; contacto; correo; sector; origen; rif; consentimiento. El RIF es obligatorio para «especial» y el consentimiento («sí») para «persona natural». Los repetidos y los que se dieron de baja se omiten.</p>
             <FormAccion accion={accionImportar} boton="Importar">
-              <textarea className={`${s.campoChico} mono`} name="csv" required rows={7} placeholder={"empresa;contacto;correo;sector;origen\nFarmacia Los Andes;María Pérez;compras@losandes.com.ve;farmacia;Web de la empresa"} />
+              <textarea className={`${s.campoChico} mono`} name="csv" required rows={7} placeholder={"empresa;contacto;correo;sector;origen;rif;consentimiento\nFarmacia Los Andes;María Pérez;compras@losandes.com.ve;farmacia;Web de la empresa;;\nInversiones X, C.A.;;tributos@x.com.ve;especial;Directorio de especiales;J-12345678-4;"} />
             </FormAccion>
           </div>
         </div>
@@ -141,7 +145,7 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
               {prospectos.map((p) => (
                 <tr key={p.id}>
                   <td style={{ maxWidth: 260 }}><span className={s.celdaNombre}><strong>{p.empresa}</strong><span>{p.contacto ? `${p.contacto} · ` : ""}{p.origen}</span></span></td>
-                  <td className="mono" style={{ fontSize: 13 }}>{p.correo}</td>
+                  <td className="mono" style={{ fontSize: 13 }}>{p.correo}{p.rif && <><br /><span className={s.apagado}>{p.rif}</span></>}</td>
                   <td className={s.apagado}>{SECTORES[p.sector]}</td>
                   <td><span className={`punto ${COLOR[p.estado]}`}>{ESTADOS[p.estado]}</span></td>
                   <td className={s.apagado} style={{ whiteSpace: "nowrap" }}>{p.ultimo_envio ? `${fechaHora(p.ultimo_envio)} · ${p.envios}` : "—"}</td>

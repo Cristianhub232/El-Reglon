@@ -28,7 +28,18 @@ export function MisDeberes({ condiciones }: { condiciones: Condicion[] }) {
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
 
+  // Enlace directo (/?rif=J-12345678-9&tipo=ESPECIAL#deberes, p. ej. desde los correos): rellena y consulta sola
+  const [consultarAlAbrir, setConsultarAlAbrir] = useState(false);
+  useEffect(() => { if (consultarAlAbrir) { setConsultarAlAbrir(false); void consultar(); } }, [consultarAlAbrir]);
+
   useEffect(() => {
+    const u = new URLSearchParams(location.search), rifUrl = u.get("rif"), tipoUrl = u.get("tipo")?.toUpperCase();
+    if (rifUrl && /^[VEJPGC]/i.test(rifUrl.trim())) {
+      setRif(rifUrl.trim().toUpperCase());
+      if (tipoUrl === "ESPECIAL" || tipoUrl === "ORDINARIO") setTipo(tipoUrl);
+      setConsultarAlAbrir(true);
+      return;
+    }
     try {
       const g = JSON.parse(localStorage.getItem(GUARDADO) ?? "null") as { rif?: string; tipo?: Tipo; condiciones?: string[] } | null;
       if (g?.rif) {

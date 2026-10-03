@@ -10,7 +10,7 @@ interface Estado {
   activo: boolean; limite_diario: number; dias_seguimiento: number; dia: number; hora: number; hora_inicio: number; hora_fin: number;
   enviados_hoy: number; listo: boolean; nuevo_dia: boolean; segundos_restantes: number;
 }
-interface Candidato { id: number; empresa: string; contacto: string | null; correo: string; sector: Sector; token: string; tipo: "inicial" | "seguimiento" }
+interface Candidato { id: number; empresa: string; contacto: string | null; correo: string; sector: Sector; token: string; rif: string | null; tipo: "inicial" | "seguimiento" }
 
 export interface Paso { enviado?: { correo: string; tipo: string; ok: boolean; error?: string }; motivo?: string }
 
@@ -37,10 +37,11 @@ async function unPaso(): Promise<Paso> {
   if (!a.listo) return { motivo: "esperando" };
 
   const [p] = await consulta<Candidato>(`
-    SELECT p.id::int, p.empresa, p.contacto, p.correo, p.sector, p.token,
+    SELECT p.id::int, p.empresa, p.contacto, p.correo, p.sector, p.token, p.rif,
            CASE WHEN p.estado = 'contactado' THEN 'seguimiento' ELSE 'inicial' END AS tipo
       FROM prospeccion.prospecto p
      WHERE NOT EXISTS (SELECT 1 FROM prospeccion.baja b WHERE b.correo = lower(p.correo))
+       AND (p.sector <> 'consumidor' OR p.consentimiento)              -- particulares: solo con consentimiento
        AND (p.estado = 'pendiente'
             OR (p.estado = 'contactado' AND p.envios = 1 AND p.ultimo_envio < now() - make_interval(days => $1)))
      ORDER BY (p.estado = 'contactado') DESC, coalesce(p.ultimo_envio, p.creado_en), p.id
