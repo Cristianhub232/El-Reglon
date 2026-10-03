@@ -219,7 +219,7 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
                   <td style={{ maxWidth: 260 }}><span className={s.celdaNombre}><strong>{p.empresa}</strong><span>{p.contacto ? `${p.contacto} · ` : ""}{p.origen}</span></span></td>
                   <td className="mono" style={{ fontSize: 13 }}>{p.correo}{p.rif && <><br /><span className={s.apagado}>{p.rif}</span></>}</td>
                   <td className={s.apagado}>{SECTORES[p.sector]}</td>
-                  <td><span className={`punto ${COLOR[p.estado]}`}>{ESTADOS[p.estado]}</span></td>
+                  <td><span className={`punto ${COLOR[p.estado]}`}>{ESTADOS[p.estado]}</span>{p.sector === "consumidor" && <><br /><span className={s.apagado} style={{ fontSize: 12 }}>solo a mano</span></>}</td>
                   <td className={s.apagado} style={{ whiteSpace: "nowrap" }}>{p.ultimo_envio ? `${fechaHora(p.ultimo_envio)} · ${p.envios}` : "—"}</td>
                   <td style={{ whiteSpace: "nowrap" }}>
                     <Link href={url({ ver: String(p.id) }, "#vista")} className={s.botonTexto}>Ver su correo</Link>
