@@ -5,14 +5,14 @@ import { consulta } from "../../../core/db.ts";
 import type { OfertaTienda } from "../adaptadores/tipos.ts";
 import { basico, ean as eanValido, palabras } from "../normalizar.ts";
 import type { Tienda } from "../tiendas.ts";
-import { leerFarmahorro, leerFarmatodo, leerGama, leerPlanSuarez, type LectorPagina } from "./paginas.ts";
+import { leerFarmahorro, leerFarmatodo, leerGama, leerPlanSuarez, leerSchemaOrg, type LectorPagina } from "./paginas.ts";
 import { interpretarRobots, type Robots } from "./robots.ts";
 import { urlsDeSitemap } from "./sitemap.ts";
 
 const DIA = 86_400_000;
 const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const LECTORES: Record<string, LectorPagina> = { farmatodo: leerFarmatodo, plansuarez: leerPlanSuarez, farmahorro: leerFarmahorro };
+const LECTORES: Record<string, LectorPagina> = { farmatodo: leerFarmatodo, plansuarez: leerPlanSuarez, farmahorro: leerFarmahorro, epa: leerSchemaOrg };
 
 // Qué descargar por cada página: la página misma o, en Gama, su API pública de producto
 function fuenteDe(t: Tienda, url: string): string {
@@ -80,7 +80,9 @@ export function iniciarIndice(t: Tienda, sucursal: () => number | undefined, age
          ultimo_ok = CASE WHEN $3 = 'ok' THEN now() ELSE ultimo_ok END WHERE tienda_id = $1 AND url = $2`, [t.id, f.url, estado.slice(0, 200), productoId]);
     const u = new URL(f.url);
     if (!robots!.permitido(u.pathname + u.search)) { await marcar("robots"); return true; }
-    const r = await fetch(fuenteDe(t, f.url), { headers: { "User-Agent": agente, Accept: "text/html,application/json" }, signal: AbortSignal.timeout(30_000) });
+    // "cookie": la sede que se lee en tiendas que cambian de sede entre peticiones (EPA: store=t6, Caracas)
+    const r = await fetch(fuenteDe(t, f.url), { headers: { "User-Agent": agente, Accept: "text/html,application/json", ...(cfg.cookie ? { Cookie: cfg.cookie } : {}) },
+      signal: AbortSignal.timeout(30_000) });
     if (r.status === 429 || r.status === 403 || r.status >= 500) { await marcar(`error: HTTP ${r.status}`); throw new Error(`La tienda respondió HTTP ${r.status}`); }
     if (r.status === 404 || r.status === 410) { await marcar("http_404"); return true; }
     if (!r.ok) { await marcar(`error: HTTP ${r.status}`); return true; }

@@ -188,7 +188,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
           {!todos && grupos.length > VISIBLES && <button type="button" className={s.mas} onClick={() => setTodos(true)}>Ver los {grupos.length} productos</button>}
         </>
       )}
-      <p className={s.aviso}>Precios publicados por cada tienda en su sitio web al momento de la consulta; en Farmatodo, Plan Suárez y Gama, cuando se leyó su página (se indica hace cuánto). Pueden variar por sucursal y existencia. El Renglón no vende productos. También por API: <span className="mono">/api/v1/comparador/buscar</span>.</p>
+      <p className={s.aviso}>Precios publicados por cada tienda en su sitio web al momento de la consulta; en Farmatodo, Plan Suárez, Gama y EPA, cuando se leyó su página (se indica hace cuánto). Pueden variar por sucursal y existencia. El Renglón no vende productos. También por API: <span className="mono">/api/v1/comparador/buscar</span>.</p>
     </section>
   );
 }

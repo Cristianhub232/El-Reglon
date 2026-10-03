@@ -308,6 +308,28 @@
       ],
       "puerto": 4117,
       "modelo_sku": true
+    },
+    {
+      "id": "epa",
+      "nombre": "EPA",
+      "sitio": "https://ve.epaenlinea.com",
+      "plataforma": "epa",
+      "moneda": "USD",
+      "rubros": [
+        "hogar"
+      ],
+      "puerto": 4118,
+      "indice": {
+        "sitemap": "https://ve.epaenlinea.com/media/sitemap/sitemap.xml",
+        "patron": "^https://ve\\.epaenlinea\\.com/[^/?#]+\\.html$",
+        "pausa_ms": 3000,
+        "slug": true,
+        "cookie": "store=t6"
+      },
+      "ubicacion": {
+        "ciudad": "Caracas",
+        "estado": "Distrito Capital"
+      }
     }
   ]
 }

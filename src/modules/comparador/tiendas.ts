@@ -2,7 +2,7 @@
 // y la configuración de PM2 (comparador/ecosystem.config.cjs)
 import registro from "../../../datos/comparador/tiendas.json" with { type: "json" };
 
-export type Plataforma = "vtex" | "woocommerce" | "alacena" | "magento" | "shopify" | "woostore" | "kromi" | "medusa" | "arigato" | "instaleap" | "farmatodo" | "plansuarez" | "gama" | "farmahorro";
+export type Plataforma = "vtex" | "woocommerce" | "alacena" | "magento" | "shopify" | "woostore" | "kromi" | "medusa" | "arigato" | "instaleap" | "farmatodo" | "plansuarez" | "gama" | "farmahorro" | "epa";
 export type Moneda = "VES" | "USD";
 export type Rubro = "supermercado" | "farmacia" | "electronica" | "hogar";
 export interface Sede { clave: string; nombre: string; ciudad?: string; estado?: string }
@@ -14,7 +14,8 @@ export interface Tienda {
   modelo_sku?: boolean;                                  // WooCommerce: el SKU es el modelo con prefijo de marca ("LG-LM22SGPK")
   nombre_vtex?: "titulo";                                // VTEX: usar el título del producto en vez de su nombre corto
   // Tiendas por índice: su robots.txt prohíbe la búsqueda pero permite las páginas de producto de su sitemap
-  indice?: { sitemap: string; patron: string; pausa_ms: number; slug?: boolean };   // slug: la URL lleva el nombre del producto
+  // slug: la URL lleva el nombre del producto; cookie: se envía al leer cada página (p. ej. la sede, "store=t6")
+  indice?: { sitemap: string; patron: string; pausa_ms: number; slug?: boolean; cookie?: string };
 }
 
 export const TIENDAS = registro.tiendas as Tienda[];

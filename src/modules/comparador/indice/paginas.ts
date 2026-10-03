@@ -34,6 +34,10 @@ export const leerFarmatodo: LectorPagina = (t, url, html) => {
     precio: precio.toFixed(2), precio_lista: null, disponible: !/OutOfStock|SoldOut/i.test(oferta?.availability ?? "") };
 };
 
+// Lector genérico de datos estructurados schema.org (Product con offers): el de Farmatodo sirve tal cual. EPA (Magento)
+// publica un solo "offer", el de su sede predeterminada (Caracas), con el precio en US$.
+export const leerSchemaOrg: LectorPagina = leerFarmatodo;
+
 // "Bs.4,397.91" → 4397.91 (coma de miles, punto decimal; el punto de "Bs." no cuenta)
 const cifraIngles = (s: string) => Number((/\d[\d,]*(?:\.\d+)?/.exec(s)?.[0] ?? "").replace(/,/g, "")) || NaN;
 
