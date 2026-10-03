@@ -136,6 +136,8 @@
 .metaFuente { color: var(--texto-3); }
 .tituloPrincipal { font: 700 clamp(26px, 2.4vw, 34px)/1.15 var(--serif); color: var(--tinta); text-wrap: balance; }
 .textoPrincipal { font-size: 16px; line-height: 1.55; color: var(--texto-2); max-width: 620px; }
+/* Los medios a veces traen enlaces largos sin espacios en el resumen: se cortan para no ensanchar la página en el teléfono */
+.noticiasRejilla, .textoPrincipal, .tituloPrincipal { overflow-wrap: anywhere; }
 .tituloItem { font: 600 18px/1.3 var(--serif); color: var(--tinta); text-wrap: pretty; }
 /* Titulares de medios: foto del medio o, si no hay, una lámina tipográfica con su nombre */
 .enlaceNoticia { color: inherit; text-decoration: none; }

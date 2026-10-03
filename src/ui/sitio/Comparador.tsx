@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { agrupar, type Grupo, type Oferta } from "../../modules/comparador/emparejar.ts";
 import { haceCuanto, numero } from "../formato.ts";
+import { CATEGORIAS } from "./categorias.tsx";
 import s from "./comparador.module.css";
 
 export interface TiendaPublica { id: string; nombre: string; rubros: string[]; ciudad: string | null }
@@ -103,6 +104,8 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
 
   return (
     <section className={s.seccion} id="comparador" aria-labelledby="comparador-titulo">
+      <div className={s.arriba}>
+      <div className={s.principal}>
       <div className={s.cabeza}>
         <span className={s.sobretitulo}>Nuevo · Comparador de precios</span>
         <h2 id="comparador-titulo" className={s.titulo}>¿Dónde está más barato?</h2>
@@ -120,6 +123,18 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
       <div className={s.ejemplos}>
         <span>Prueba con:</span>
         {EJEMPLOS.map((x) => <button key={x} type="button" onClick={() => void buscar(x)}>{x}</button>)}
+      </div>
+      </div>
+
+      <nav className={s.categorias} aria-label="Buscar por categoría">
+        {CATEGORIAS.map((c) => (
+          <button key={c.consulta} type="button" aria-pressed={consulta === c.consulta} onClick={() => void buscar(c.consulta)}
+            className={s.categoria} title={`Comparar precios de ${c.nombre.toLowerCase()}`}>
+            {c.icono}
+            <span>{c.nombre}</span>
+          </button>
+        ))}
+      </nav>
       </div>
 
       <div className={s.filtros}>
