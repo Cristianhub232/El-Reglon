@@ -46,6 +46,10 @@ services:
       VAPID_PUBLICO: ${VAPID_PUBLICO:-}           # avisos push (docs/24): sin claves, los avisos no se ofrecen
       VAPID_PRIVADO: ${VAPID_PRIVADO:-}
       VAPID_CONTACTO: ${VAPID_CONTACTO:-mailto:soporte@elrenglonve.org}
+      CORREO_SMTP_HOST: ${CORREO_SMTP_HOST:-mail.spacemail.com}   # prospección por correo (docs/26): buzón ventas@ de Spacemail
+      CORREO_SMTP_PUERTO: ${CORREO_SMTP_PUERTO:-465}
+      CORREO_SMTP_USUARIO: ${CORREO_SMTP_USUARIO:-ventas@elrenglonve.org}
+      CORREO_SMTP_CLAVE: ${CORREO_SMTP_CLAVE:-}                   # sin clave no se envía nada
       COMPARADOR_HOST: comparador                 # servicios de las tiendas del comparador (red interna); ver docs/22
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS

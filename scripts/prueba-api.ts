@@ -216,6 +216,42 @@ async function main() {
   verificar("portada: flujo NDJSON inicio → tiendas → fin", flujo.headers.get("content-type")?.includes("ndjson") === true
     && lineas[0]?.tipo === "inicio" && lineas.at(-1)?.tipo === "fin" && lineas.filter((l) => l.tipo === "tienda" || l.tipo === "error").length === lineas[0].tiendas.length, lineas.map((l) => l.tipo));
 
+  console.log("Prospección por correo");
+  {
+    const { armarCorreo, SECTORES } = await import("../src/modules/prospeccion/plantillas.ts");
+    const { validar } = await import("../src/modules/prospeccion/prospectos.ts");
+    const tasa = { usd: "190.5", eur: "221.25", fecha_valor: "2026-10-01" };
+    const correos = Object.keys(SECTORES).flatMap((sec) => (["inicial", "seguimiento"] as const).map((tipo) =>
+      armarCorreo({ empresa: "Bodega <b>La Esquina</b>", contacto: null, sector: sec as keyof typeof SECTORES, token: "a".repeat(32) }, tipo, tasa)));
+    verificar("plantillas: 6 sectores × 2 correos, con baja visible, sin datos sin escapar", correos.length === 12 && correos.every((c) =>
+      c.asunto.length <= 100 && c.html.includes(`/baja?t=${"a".repeat(32)}`) && c.texto.includes("/baja?t=") && !c.html.includes("<b>La Esquina")
+      && !/undefined|NaN/.test(c.html + c.texto) && c.html.includes("Bs. 190,50")), correos.map((c) => c.asunto));
+    verificar("validación de prospectos: correo, sector y origen", validar({ empresa: "Farmacia X", correo: "a@b.co", sector: "Farmacias", origen: "web" }).ok
+      && !validar({ empresa: "X S.A.", correo: "no-es-correo", sector: "", origen: "web" }).ok
+      && !validar({ empresa: "X S.A.", correo: "a@b.co", sector: "panadería", origen: "web" }).ok
+      && !validar({ empresa: "X S.A.", correo: "a@b.co", sector: "", origen: "" }).ok);
+    let r1 = await fetch(BASE + "/baja?t=prueba");
+    verificar("página /baja de un correo de prueba: no da de baja nada", r1.status === 200 && (await r1.text()).includes("correo de prueba"));
+    r = await post(`/api/publico/prospeccion/baja?t=${"0".repeat(32)}`, {});
+    verificar("baja en un clic con un enlace que no existe → 404", r.estado === 404 && r.cuerpo?.error?.codigo === "enlace_invalido", r.cuerpo);
+    const correoPrueba = `prueba-e2e-${Date.now()}@ejemplo.com`;
+    const [p] = await consulta<{ id: number; token: string }>(
+      "INSERT INTO prospeccion.prospecto (empresa, correo, sector, origen) VALUES ('Prueba E2E', $1, 'general', 'prueba automática') RETURNING id::int, token", [correoPrueba]);
+    r1 = await fetch(BASE + `/baja?t=${p.token}`);
+    const [antes] = await consulta<{ estado: string }>("SELECT estado FROM prospeccion.prospecto WHERE id = $1", [p.id]);
+    verificar("abrir el enlace de baja no da de baja (solo el botón)", r1.status === 200 && antes.estado === "pendiente");
+    r1 = await fetch(BASE + `/api/publico/prospeccion/baja?t=${p.token}`, { method: "POST", body: "List-Unsubscribe=One-Click", headers: { "content-type": "application/x-www-form-urlencoded" } });
+    const [despues] = await consulta<{ estado: string; en_baja: boolean }>(
+      "SELECT estado, EXISTS (SELECT 1 FROM prospeccion.baja WHERE correo = $2) AS en_baja FROM prospeccion.prospecto WHERE id = $1", [p.id, correoPrueba]);
+    verificar("baja en un clic (RFC 8058): el prospecto queda en baja y en la lista de supresión", r1.status === 200 && despues.estado === "baja" && despues.en_baja, despues);
+    await consulta("DELETE FROM prospeccion.prospecto WHERE id = $1", [p.id]);
+    await consulta("DELETE FROM prospeccion.baja WHERE correo = $1", [correoPrueba]);
+    r1 = await fetch(BASE + "/admin/prospeccion", { redirect: "manual" });
+    verificar("panel de prospección sin sesión → redirige a /ingresar", r1.status === 307 && (r1.headers.get("location") ?? "").includes("/ingresar"));
+    const limite = await consulta("UPDATE prospeccion.ajuste SET limite_diario = 31").then(() => "aceptado", () => "rechazado");
+    verificar("la base rechaza más de 30 correos por día", limite === "rechazado");
+  }
+
   console.log("IVA");
   const sinPrecios = { precio_compra: null, precio_venta: null, moneda: null };
   const clasificar = (c: Record<string, unknown>) => post("/api/v1/iva/clasificar", { operacion: "nacional", ...sinPrecios, ...c }, K);
