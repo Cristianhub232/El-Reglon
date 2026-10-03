@@ -2,7 +2,7 @@
 // y la configuración de PM2 (comparador/ecosystem.config.cjs)
 import registro from "../../../datos/comparador/tiendas.json" with { type: "json" };
 
-export type Plataforma = "vtex" | "woocommerce" | "alacena" | "magento" | "shopify" | "woostore" | "kromi" | "medusa" | "arigato" | "instaleap" | "farmatodo" | "plansuarez" | "gama" | "farmahorro" | "epa";
+export type Plataforma = "vtex" | "woocommerce" | "alacena" | "magento" | "shopify" | "woostore" | "kromi" | "medusa" | "arigato" | "instaleap" | "readdy" | "farmatodo" | "plansuarez" | "gama" | "farmahorro" | "epa";
 export type Moneda = "VES" | "USD";
 export type Rubro = "supermercado" | "farmacia" | "electronica" | "hogar";
 export interface Sede { clave: string; nombre: string; ciudad?: string; estado?: string }

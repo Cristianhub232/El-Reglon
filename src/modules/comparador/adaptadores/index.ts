@@ -8,6 +8,7 @@ import { buscarWooStore } from "./woostore.ts";
 import { buscarInstaleap } from "./instaleap.ts";
 import { buscarMagento } from "./magento.ts";
 import { buscarMedusa } from "./medusa.ts";
+import { buscarReaddy } from "./readdy.ts";
 import type { OfertaTienda } from "./tipos.ts";
 import { buscarVtex } from "./vtex.ts";
 import { buscarWoocommerce } from "./woocommerce.ts";
@@ -26,6 +27,7 @@ export function buscarEnTienda(t: Tienda, consulta: string, limite = 24, sucursa
     case "medusa": return buscarMedusa(t, consulta, limite, AGENTE);
     case "arigato": return buscarArigato(t, consulta, limite, AGENTE);
     case "instaleap": return buscarInstaleap(t, consulta, limite, AGENTE);
+    case "readdy": return buscarReaddy(t, consulta, limite, AGENTE);
     // Tiendas por índice: no se consulta su buscador (lo prohíbe su robots.txt); el servicio busca en el índice propio
     case "farmatodo": case "plansuarez": case "gama": case "farmahorro": case "epa": return Promise.reject(new Error("Tienda por índice: se busca en el índice propio"));
   }

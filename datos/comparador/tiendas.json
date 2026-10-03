@@ -330,6 +330,17 @@
         "ciudad": "Caracas",
         "estado": "Distrito Capital"
       }
+    },
+    {
+      "id": "rpc",
+      "nombre": "Catálogo RPC",
+      "sitio": "https://catalogorpc.readdy.co",
+      "plataforma": "readdy",
+      "moneda": "USD",
+      "rubros": [
+        "hogar"
+      ],
+      "puerto": 4119
     }
   ]
 }
