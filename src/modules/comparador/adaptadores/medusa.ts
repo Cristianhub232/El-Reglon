@@ -1,6 +1,7 @@
 // Lector de tiendas Medusa con vitrina Next.js (Tiendas Daka): su página de resultados (/ve/results/<búsqueda>)
 // trae los productos en los datos de la propia página (self.__next_f.push). Cada tarjeta lleva el SKU, el nombre,
-// la marca, la imagen y el precio en US$; "disabled" marca lo que no se puede comprar.
+// la marca, la imagen y el precio en US$; "disabled" marca lo que no se puede comprar. Su CDN no entrega las imágenes
+// directamente (403): se usan por su optimizador público (/_next/image), como en su propia tienda.
 import type { Tienda } from "../tiendas.ts";
 import { flujoNext, objetoEn, pagina, textoPlano } from "./comun.ts";
 import type { OfertaTienda } from "./tipos.ts";
@@ -25,7 +26,7 @@ export async function buscarMedusa(t: Tienda, consulta: string, limite: number, 
     const precio = p.variant?.calculated_price?.calculated_amount;
     if (!(typeof precio === "number" && precio > 0) || p.variant?.calculated_price?.currency_code !== "usd") continue;
     salida.push({ id_externo: p.variant?.sku || p.productHandle, nombre: textoPlano(p.title), marca: p.brandName && !/ning[uú]n\s+fabricante/i.test(p.brandName) ? textoPlano(p.brandName) : null, ean: null,
-      url: `${origen}${pais}/products/${encodeURIComponent(p.productHandle)}`, imagen: p.thumbnail?.startsWith("https://") ? p.thumbnail : null,
+      url: `${origen}${pais}/products/${encodeURIComponent(p.productHandle)}`, imagen: p.thumbnail?.startsWith("https://") ? `${origen}/_next/image?url=${encodeURIComponent(p.thumbnail)}&w=384&q=75` : null,
       precio: precio.toFixed(2), precio_lista: null, disponible: !p.disabled });
     if (salida.length >= limite) break;
   }

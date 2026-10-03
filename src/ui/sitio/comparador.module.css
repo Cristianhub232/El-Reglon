@@ -41,14 +41,15 @@
 .cadena {
   display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; cursor: pointer;
   border: 1px solid rgba(246, 243, 234, .28); background: transparent; color: #9FB0C6; font: 600 13px var(--sans);
-  text-decoration: line-through; text-decoration-color: rgba(159, 176, 198, .6);
 }
-.cadenaActiva { background: var(--papel); border-color: var(--papel); color: var(--tinta); text-decoration: none; }
+/* Sin selección todas se ven (claras); con selección, las elegidas van en amarillo y el resto queda atenuado */
+.cadenaActiva { background: var(--papel); border-color: var(--papel); color: var(--tinta); }
+.cadenaElegida { background: var(--amarillo); border-color: var(--amarillo); color: var(--tinta); }
 .cadenaError.cadenaActiva { background: #F4D9D6; border-color: #F4D9D6; }
 .cadena:hover { border-color: var(--amarillo); }
 .cadena:focus-visible, .segmentado button:focus-visible, .todas:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 2px; }
 .cuenta { font: 600 12px var(--mono); padding: 1px 7px; border-radius: 999px; background: rgba(14, 36, 64, .08); }
-.cadena:not(.cadenaActiva) .cuenta { background: rgba(246, 243, 234, .1); }
+.cadena:not(.cadenaActiva):not(.cadenaElegida) .cuenta { background: rgba(246, 243, 234, .1); }
 .todas { border: 0; background: transparent; color: var(--amarillo); font: 600 13px var(--sans); cursor: pointer; padding: 7px 4px; text-decoration: underline; text-underline-offset: 3px; }
 .segmentado { display: inline-flex; border: 1px solid rgba(246, 243, 234, .28); border-radius: 10px; overflow: hidden; }
 .segmentado button { border: 0; background: transparent; color: #C9D2DF; font: 600 13px var(--sans); padding: 8px 14px; cursor: pointer; }

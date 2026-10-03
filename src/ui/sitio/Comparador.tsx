@@ -24,8 +24,8 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
   const [buscando, setBuscando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [todos, setTodos] = useState(false);
-  // Filtros: cadenas que se dejan fuera y orden; se recuerdan en este navegador
-  const [fuera, setFuera] = useState<string[]>([]);
+  // Filtros: cadenas elegidas (ninguna = todas) y orden; se recuerdan en este navegador
+  const [elegidas, setElegidas] = useState<string[]>([]);
   const [orden, setOrden] = useState<Orden>("relevancia");
   const control = useRef<AbortController | null>(null);
 
@@ -72,33 +72,32 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
   // Filtros guardados y enlace compartible (/?comparar=harina%20pan)
   useEffect(() => {
     try {
-      const g = JSON.parse(localStorage.getItem(GUARDADO) ?? "{}") as { fuera?: string[]; orden?: Orden };
-      if (Array.isArray(g.fuera)) setFuera(g.fuera.filter((id) => tiendas.some((t) => t.id === id)));
+      const g = JSON.parse(localStorage.getItem(GUARDADO) ?? "{}") as { elegidas?: string[]; orden?: Orden };
+      if (Array.isArray(g.elegidas)) setElegidas(g.elegidas.filter((id) => tiendas.some((t) => t.id === id)));
       if (g.orden && ORDENES.some(([o]) => o === g.orden)) setOrden(g.orden);
     } catch { /* sin almacenamiento */ }
     const q = new URLSearchParams(location.search).get("comparar");
     if (q) void buscar(q);
     return () => control.current?.abort();
   }, []);
-  const guardar = (f: string[], o: Orden) => { try { localStorage.setItem(GUARDADO, JSON.stringify({ fuera: f, orden: o })); } catch { /* sin almacenamiento */ } };
+  const guardar = (e: string[], o: Orden) => { try { localStorage.setItem(GUARDADO, JSON.stringify({ elegidas: e, orden: o })); } catch { /* sin almacenamiento */ } };
+  // Pulsar una cadena la muestra (solo las elegidas); pulsarla de nuevo la quita de la selección
   const alternar = (id: string) => {
-    const nuevo = fuera.includes(id) ? fuera.filter((x) => x !== id) : [...fuera, id];
-    if (nuevo.length === tiendas.length) return;            // siempre queda al menos una cadena
-    setFuera(nuevo); setTodos(false); guardar(nuevo, orden);
+    const nuevo = elegidas.includes(id) ? elegidas.filter((x) => x !== id) : [...elegidas, id];
+    setElegidas(nuevo.length === tiendas.length ? [] : nuevo); setTodos(false); guardar(nuevo.length === tiendas.length ? [] : nuevo, orden);
   };
-  const soloEsta = (id: string) => { const nuevo = tiendas.map((t) => t.id).filter((x) => x !== id); setFuera(nuevo); guardar(nuevo, orden); };
-  const todas = () => { setFuera([]); guardar([], orden); };
-  const ordenar = (o: Orden) => { setOrden(o); guardar(fuera, o); };
+  const todas = () => { setElegidas([]); guardar([], orden); };
+  const ordenar = (o: Orden) => { setOrden(o); guardar(elegidas, o); };
 
   // Se emparejan solo las ofertas de las cadenas elegidas: el "mejor precio" es el mejor entre ellas
   const grupos = useMemo(() => {
     if (!consulta) return [];
-    const g = agrupar(ofertas.filter((o) => !fuera.includes(o.tienda)), consulta);
+    const g = agrupar(elegidas.length ? ofertas.filter((o) => elegidas.includes(o.tienda)) : ofertas, consulta);
     if (orden === "relevancia") return g;
     const signo = orden === "menor" ? 1 : -1;
     // Los productos cuyo mejor precio es dudoso van al final en cualquier orden
     return [...g].sort((a, b) => Number(Boolean(a.mejor.dudoso)) - Number(Boolean(b.mejor.dudoso)) || signo * (a.mejor.precio_bs - b.mejor.precio_bs));
-  }, [ofertas, consulta, fuera, orden]);
+  }, [ofertas, consulta, elegidas, orden]);
   const comparables = grupos.filter((g) => new Set(g.ofertas.map((o) => o.tienda)).size > 1).length;
   const enviar = (e: FormEvent) => { e.preventDefault(); void buscar(texto); };
 
@@ -129,19 +128,20 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
           <div className={s.cadenas}>
             {tiendas.map((t) => {
               const e = estados[t.id];
-              const activa = !fuera.includes(t.id);
+              const elegida = elegidas.includes(t.id);
+              const visible = !elegidas.length || elegida;
               return (
-                <button key={t.id} type="button" aria-pressed={activa} onClick={() => alternar(t.id)} onDoubleClick={() => soloEsta(t.id)}
-                  title={activa ? `Quitar ${t.nombre} de la comparación (doble clic: solo ${t.nombre})` : `Incluir ${t.nombre}`}
-                  className={`${s.cadena} ${activa ? s.cadenaActiva : ""} ${e?.estado === "error" ? s.cadenaError : ""}`}>
-                  {consulta && activa && e?.estado === "esperando" && <span className={s.girando} aria-hidden="true" />}
+                <button key={t.id} type="button" aria-pressed={elegida} onClick={() => alternar(t.id)}
+                  title={elegida ? `Quitar ${t.nombre} de la selección` : `Ver ${elegidas.length ? "también " : "solo "}${t.nombre}`}
+                  className={`${s.cadena} ${elegida ? s.cadenaElegida : visible ? s.cadenaActiva : ""} ${e?.estado === "error" ? s.cadenaError : ""}`}>
+                  {consulta && visible && e?.estado === "esperando" && <span className={s.girando} aria-hidden="true" />}
                   <span>{t.nombre}{t.ciudad ? ` (${t.ciudad})` : ""}</span>
                   {consulta && e?.estado === "ok" && <span className={s.cuenta}>{e.ofertas}{e.leyendo > 0 ? ` · leyendo ${e.leyendo}` : ""}</span>}
                   {consulta && e?.estado === "error" && <span className={s.cuenta}>no respondió</span>}
                 </button>
               );
             })}
-            {fuera.length > 0 && <button type="button" className={s.todas} onClick={todas}>Todas</button>}
+            {elegidas.length > 0 && <button type="button" className={s.todas} onClick={todas}>Todas</button>}
           </div>
         </div>
         <div className={s.filtro} role="group" aria-labelledby="filtro-orden">
@@ -159,7 +159,7 @@ export function Comparador({ tiendas }: { tiendas: TiendaPublica[] }) {
       {error && <p className={s.error}>{error}</p>}
 
       {consulta && !buscando && grupos.length === 0 && !error && (
-        <p className={s.vacio}>No encontramos «{consulta}» en {fuera.length ? "las cadenas elegidas" : "las tiendas"}. Prueba con otras palabras o con la marca{fuera.length ? ", o incluye más cadenas" : ""}.</p>
+        <p className={s.vacio}>No encontramos «{consulta}» en {elegidas.length ? "las cadenas elegidas" : "las tiendas"}. Prueba con otras palabras o con la marca{elegidas.length ? ", o elige más cadenas" : ""}.</p>
       )}
       {grupos.length > 0 && (
         <>

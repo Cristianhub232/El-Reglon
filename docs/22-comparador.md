@@ -99,7 +99,7 @@ Cada precio indica hace cuánto se leyó: en la portada («· hace 3 h») y en l
 
 ## Portada: filtros
 
-- **Cadenas.** Una ficha por cadena con su estado: resultados, «leyendo N» o «no respondió». Al pulsarla se quita o se vuelve a incluir; las quitadas se ven tachadas, y «Todas» las restablece. Doble clic deja solo esa cadena. Siempre queda al menos una.
+- **Cadenas.** Una ficha por cadena con su estado: resultados, «leyendo N» o «no respondió». Sin ninguna elegida se ven todas. **Al pulsar una se ven solo sus productos**; se pueden elegir varias, que quedan en amarillo, y pulsarla de nuevo la quita de la selección. «Todas» limpia la selección. Cambió el 03/10/2026: antes pulsar una cadena la quitaba.
   - El emparejamiento y el «mejor precio» se calculan **solo con las cadenas elegidas**.
   - La búsqueda sigue preguntando a todas, así que cambiar el filtro es instantáneo.
 - **Ordenar.** Más relevantes (por defecto), menor precio o mayor precio, según el mejor precio de cada producto. Los productos cuyo mejor precio es dudoso van al final en cualquier orden.
