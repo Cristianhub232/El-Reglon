@@ -15,4 +15,5 @@ PSQL=(docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POST
 "${PSQL[@]}" -q -f /db/directorio/001_esquema.sql
 sed "s#__DIR__#/$DIR#g" db/directorio/002_cargar_semilla.sql | "${PSQL[@]}" -1 -f - \
   -v esperado_contribuyentes="$(leer conteos.contribuyentes)" -v esperado_direcciones="$(leer conteos.direcciones)" \
-  -v esperado_importadores="$(leer conteos.importadores)" -v esperado_software="$(leer conteos.software)"
+  -v esperado_importadores="$(leer conteos.importadores)" -v esperado_software="$(leer conteos.software)" \
+  -v esperado_pagadores="$(leer conteos.pagadores)" -v esperado_pagos_region="$(leer conteos.pagos_region)"

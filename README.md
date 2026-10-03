@@ -63,7 +63,7 @@ node scripts/usuario.ts crear --correo usted@empresa.com.ve --nombre "Su nombre"
 22. [Comparador de precios](docs/22-comparador.md): «¿Dónde está más barato?» en vivo en tiendas venezolanas en línea, un servicio por tienda bajo PM2, emparejamiento por código de barras y precios en Bs. y US$.
 23. [Analítica y privacidad](docs/23-analitica.md): visitas con cookie propia, RIF consultados, aviso de cookies, página de privacidad y conservación de 12 meses.
 24. [Avisos push](docs/24-avisos.md): campana en la cabecera; tasa BCV al publicarse, noticias 3 veces al día, deberes por RIF 3 días antes y el día, y novedades desde el panel.
-25. [Directorio de contribuyentes](docs/25-directorio.md): importadores (CIF) y sistemas de facturación, saneados sin duplicados; datos personales fuera del repositorio.
+25. [Directorio de contribuyentes](docs/25-directorio.md): importadores (CIF), sistemas de facturación y mayores pagadores por región, saneados sin duplicados; datos personales fuera del repositorio.
 - [Diseños](resources/): identidad de marca, logo, landing, inicio de sesión y panel (se abren en el navegador).
 
 > Resultado orientativo: cuando hay varias opciones, la selección corresponde al usuario bajo su responsabilidad y análisis. Las reglas deben ser validadas por un asesor tributario.

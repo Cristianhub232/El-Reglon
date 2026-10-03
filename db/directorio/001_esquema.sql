@@ -59,3 +59,27 @@ CREATE TABLE IF NOT EXISTS directorio.software (
     UNIQUE (rif, sistema, version)
 );
 CREATE INDEX IF NOT EXISTS software_rif ON directorio.software (rif);
+
+-- Pagadores: monto total pagado por contribuyente según la exportación "Mejores pagadores" (cortada en las 1.048.575 filas
+-- de mayor monto; ver docs/25). No todos están en contribuyente: es otra fuente, sin contacto.
+CREATE TABLE IF NOT EXISTS directorio.pagador (
+    rif        text          PRIMARY KEY CHECK (rif ~ '^[VEJPGC]-\d{8}-\d$'),
+    nombre     text,                                                 -- razón social, o apellidos si es persona natural (5 sin nombre)
+    id_fuente  bigint        NOT NULL UNIQUE,                        -- "ID Contribuyente Pago" de la fuente
+    monto      numeric(20,2) NOT NULL CHECK (monto > 0),
+    puesto     int           NOT NULL,                               -- 1 = el que más pagó
+    regiones   smallint      NOT NULL CHECK (regiones >= 1),
+    especial   boolean       NOT NULL,                               -- pagó en la Región de Contribuyentes Especiales
+    rif_valido boolean       NOT NULL,
+    terminal   smallint      GENERATED ALWAYS AS (right(rif, 1)::smallint) STORED
+);
+CREATE INDEX IF NOT EXISTS pagador_puesto ON directorio.pagador (puesto);
+CREATE INDEX IF NOT EXISTS pagador_terminal ON directorio.pagador (terminal, puesto);
+
+-- Desglose por región de recaudación (NULL: la fuente no la indica)
+CREATE TABLE IF NOT EXISTS directorio.pago_region (
+    rif    text          NOT NULL REFERENCES directorio.pagador (rif) ON DELETE CASCADE,
+    region text,
+    monto  numeric(20,2) NOT NULL CHECK (monto > 0),
+    UNIQUE NULLS NOT DISTINCT (rif, region)
+);

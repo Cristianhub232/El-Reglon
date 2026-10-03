@@ -4,8 +4,10 @@
 Fuentes (no van al repositorio: tienen correos, teléfonos y direcciones):
   fuentes/privadas/directorio/Importadores.xlsx            importadores con su CIF (una fila por nombre declarado)
   fuentes/privadas/directorio/proveesores SOftware.csv     sistemas de facturación (una fila por sistema y dirección)
+  fuentes/privadas/directorio/Mejores PAgadores Terminal Deberes.csv
+                                                           monto pagado por contribuyente y región (una fila por RIF y región)
 
-Salida en datos/directorio/semilla/: contribuyente.csv, direccion.csv, importador.csv, software.csv,
+Salida en datos/directorio/semilla/: contribuyente.csv, direccion.csv, importador.csv, software.csv, pagador.csv, pago_region.csv,
 manifiesto.json (conteos que la carga verifica) e informe.json (qué se limpió).
 
 Reglas:
@@ -13,6 +15,9 @@ Reglas:
   - Importadores con el mismo RIF y el nombre escrito distinto ("ZONA TECH, C.A." / "ZONA TECH , C.A") se unen:
     se suma el CIF y se guardan los nombres declarados.
   - Software: una fila por ID de la fuente; las filas repetidas por cada dirección de la empresa se separan en direccion.
+  - Pagadores: un RIF aparece una vez por cada región donde pagó (Capital, Contribuyentes Especiales…). Se deja una fila
+    por RIF con el total y el desglose por región aparte. "Digito Verif" es el último dígito del RIF (el terminal): se omite.
+    La exportación viene cortada en el límite de filas de Excel/Metabase (1.048.575), ordenada de mayor a menor monto.
   - Direcciones: sin repetir por RIF (misma vialidad, sector, edificación, local y teléfonos).
   - "NO INDICA", "NO APLICA", "-", "0000-0000000" y similares → vacío. Correos en minúscula y validados.
     Teléfonos como 0212-1234567. El campo "Pdf Data" ("[B@103488ef") no es el PDF y se descarta.
@@ -36,6 +41,7 @@ FUENTES = Path(sys.argv[1]) if len(sys.argv) > 1 else RAIZ / "fuentes/privadas/d
 SALIDA = Path(sys.argv[2]) if len(sys.argv) > 2 else RAIZ / "datos/directorio/semilla"
 XLSX = FUENTES / "Importadores.xlsx"
 SOFTWARE = FUENTES / "proveesores SOftware.csv"
+PAGADORES = FUENTES / "Mejores PAgadores Terminal Deberes.csv"
 
 informe = collections.Counter()
 
@@ -155,6 +161,50 @@ def clave(*partes: str) -> str:
     return re.sub(r"[^A-Z0-9]", "", s)
 
 
+REGIONES = {"REGIONCAPITAL": "Región Capital", "REGIONCENTRAL": "Región Central", "REGIONLIBERTADOR": "Región Libertador",
+            "REGIONLOSANDES": "Región Los Andes", "REGIONNORORIENTAL": "Región Nor Oriental",
+            "REGIONCENTROOCCIDENTAL": "Región Centro Occidental", "REGIONZULIANA": "Región Zuliana", "REGIONGUAYANA": "Región Guayana",
+            "REGIONINSULAR": "Región Insular", "REGIONLOSLLANOS": "Región Los Llanos", "REGIONFALCON": "Región Falcón",
+            "REGIONDECONTRIBUYENTESESPECIALES": "Región de Contribuyentes Especiales", "NIVELNORMATIVO": "Nivel Normativo",
+            "INFORMACIONNODISPONIBLE": "", "": ""}
+
+
+def pagadores() -> tuple[list[dict], list[dict]]:
+    """Una fila por RIF (total) y el desglose por región, sin repetir."""
+    total: dict[str, dict] = {}
+    region: dict[tuple, float] = collections.defaultdict(float)
+    anterior = None
+    with open(PAGADORES, encoding="utf-8-sig", newline="") as fh:
+        for f in csv.DictReader(fh):
+            informe["pagadores_filas_fuente"] += 1
+            r = rif(f["Rif Contribuyente"])
+            m = float(f["Suma Monto Total Pago"].replace(",", ""))
+            if anterior is not None and m > anterior + 1e-9:
+                raise ValueError("La exportación de pagadores no viene ordenada de mayor a menor")
+            anterior = m
+            k = clave(f["Region Nombre"])
+            if k not in REGIONES:
+                raise ValueError(f"Región desconocida: {f['Region Nombre']!r}")
+            nombre, id_fuente = texto(f["Apellido Contribuyente"]), re.sub(r"\D", "", f["ID Contribuyente Pago"])
+            p = total.setdefault(r, {"rif": r, "nombre": nombre, "id_fuente": id_fuente, "monto": 0.0, "regiones": 0})
+            if p["id_fuente"] != id_fuente:
+                raise ValueError(f"El RIF {r} tiene dos ID de la fuente")
+            p["nombre"] = p["nombre"] or nombre
+            p["monto"] += m
+            if (r, REGIONES[k]) in region:
+                informe["pagadores_region_repetida_sumada"] += 1
+            else:
+                p["regiones"] += 1
+            region[(r, REGIONES[k])] += m
+    informe["pagadores_rif_en_varias_regiones"] = sum(1 for p in total.values() if p["regiones"] > 1)
+    informe["pagadores_monto_minimo_exportado"] = round(anterior or 0, 2)
+    ps = sorted(total.values(), key=lambda p: p["rif"])
+    for p in ps:
+        p["monto"] = f"{p['monto']:.2f}"
+    rs = [{"rif": r, "region": g, "monto": f"{m:.2f}"} for (r, g), m in sorted(region.items())]
+    return ps, rs
+
+
 MEDIOS = {"FORMALIBRE": "Forma libre", "IMPRENTADIGITAL": "Imprenta digital", "MAQUINAFISCAL": "Máquina fiscal"}
 
 # --- Construcción ------------------------------------------------------------------------------------------------
@@ -245,6 +295,8 @@ def main():
         else:
             vistos[k] = sid
 
+    pg, pr = pagadores()
+
     SALIDA.mkdir(parents=True, exist_ok=True)
 
     def escribir(nombre: str, filas: list[dict], columnas: list[str]):
@@ -269,9 +321,12 @@ def main():
         "direccion.csv": escribir("direccion.csv", ds, ["rif", "vialidad", "sector", "edificacion", "local", "telefono", "telefono_2", "correo", "web"]),
         "importador.csv": escribir("importador.csv", im, ["rif", "nombres", "cif_usd", "cif_bs", "registros"]),
         "software.csv": escribir("software.csv", sw, ["id", "rif", "empresa", "sistema", "version", "medios", "categoria", "descripcion", "fecha_lanzamiento", "modalidad", "pdf_archivo"]),
+        "pagador.csv": escribir("pagador.csv", pg, ["rif", "nombre", "id_fuente", "monto", "regiones"]),
+        "pago_region.csv": escribir("pago_region.csv", pr, ["rif", "region", "monto"]),
     }
-    conteos = {"contribuyentes": len(cs), "direcciones": len(ds), "importadores": len(im), "software": len(sw)}
-    fuentes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (XLSX, SOFTWARE)}
+    conteos = {"contribuyentes": len(cs), "direcciones": len(ds), "importadores": len(im), "software": len(sw),
+               "pagadores": len(pg), "pagos_region": len(pr)}
+    fuentes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (XLSX, SOFTWARE, PAGADORES)}
     json.dump({"generado": date.today().isoformat(), "conteos": conteos, "sha256": sumas, "fuentes_sha256": fuentes},
               open(SALIDA / "manifiesto.json", "w"), indent=2, ensure_ascii=False)
     json.dump(dict(sorted(informe.items())), open(SALIDA / "informe.json", "w"), indent=2, ensure_ascii=False)
