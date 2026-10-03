@@ -53,6 +53,25 @@ export const leerPlanSuarez: LectorPagina = (_t, url, html) => {
     disponible: !/<b>Disponible:<\/b>\s*<span>\s*(Agotado|Sin existencia|Fuera de stock)/i.test(html) };
 };
 
+// Farmahorro (WooCommerce con tema propio): título (h1.product-title) y precio del bloque que lo sigue; la página
+// también trae los precios de productos relacionados, que no cuentan. El tema llama "product-sale-price" al precio
+// anterior, tachado en su hoja de estilos; el vigente es "product-regular-price" o "product-normal-price". Precio en Bs.
+export const leerFarmahorro: LectorPagina = (_t, url, html) => {
+  const i = html.indexOf('<h1 class="product-title"');
+  if (i < 0) return null;
+  const bloque = html.slice(i, html.indexOf("woocommerce-multi-currency", i) > i ? html.indexOf("woocommerce-multi-currency", i) : i + 4000);
+  const nombre = textoPlano(/<h1 class="product-title">([^<]+)/.exec(bloque)?.[1] ?? "");
+  const cifra = (clase: string) => precioEs(new RegExp(`class="${clase}"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">Bs\\.</span>([\\d.,]+)`).exec(bloque)?.[1] ?? "");
+  const precio = cifra("product-regular-price") ?? cifra("product-normal-price");
+  const anterior = cifra("product-sale-price");
+  const id = /\bpostid-(\d+)\b/.exec(html)?.[1];
+  if (!nombre || !precio || !id) return null;
+  const img = /<img[^>]*class="[^"]*wp-post-image[^"]*"[^>]*>/.exec(html)?.[0] ?? "";
+  const imagen = decodificar(/data-large_image="([^"]+)"/.exec(img)?.[1] ?? /\ssrc="([^"]+)"/.exec(img)?.[1] ?? "");
+  return { id_externo: id, nombre, marca: null, ean: null, url, imagen: imagen.startsWith("https://") ? imagen : null,
+    precio, precio_lista: anterior && Number(anterior) > Number(precio) ? anterior : null, disponible: !/\bout-of-stock\b/.test(bloque) };
+};
+
 // Gama (SAP Commerce): la API pública de producto (OCC). La URL de la página trae el código (/p/30010322).
 export const leerGama = (t: Tienda, url: string, json: string): OfertaTienda | null => {
   let d: { code?: string; name?: string; manufacturer?: string; price?: { value?: number; currencyIso?: string }; stock?: { stockLevelStatus?: string }; images?: { url?: string }[] };

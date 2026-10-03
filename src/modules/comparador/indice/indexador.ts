@@ -5,14 +5,14 @@ import { consulta } from "../../../core/db.ts";
 import type { OfertaTienda } from "../adaptadores/tipos.ts";
 import { basico, ean as eanValido, palabras } from "../normalizar.ts";
 import type { Tienda } from "../tiendas.ts";
-import { leerFarmatodo, leerGama, leerPlanSuarez, type LectorPagina } from "./paginas.ts";
+import { leerFarmahorro, leerFarmatodo, leerGama, leerPlanSuarez, type LectorPagina } from "./paginas.ts";
 import { interpretarRobots, type Robots } from "./robots.ts";
 import { urlsDeSitemap } from "./sitemap.ts";
 
 const DIA = 86_400_000;
 const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const LECTORES: Record<string, LectorPagina> = { farmatodo: leerFarmatodo, plansuarez: leerPlanSuarez };
+const LECTORES: Record<string, LectorPagina> = { farmatodo: leerFarmatodo, plansuarez: leerPlanSuarez, farmahorro: leerFarmahorro };
 
 // Qué descargar por cada página: la página misma o, en Gama, su API pública de producto
 function fuenteDe(t: Tienda, url: string): string {
