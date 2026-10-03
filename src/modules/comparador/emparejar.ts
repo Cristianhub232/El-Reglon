@@ -5,6 +5,8 @@
 //      diferencian en una palabra de un lado ("Pasta Primor Vermicelli" ≈ "Pasta Primor Larga Vermicelli"; pero
 //      "Dedal" ≠ "Vermicelli" y "Descremada" no puede faltar de un lado). Se aceptan abreviaturas ("arr" = "arroz")
 //      y el género ("blanco" = "blanca").
+//   2b. Electrónica y electrodomésticos (sin presentación): mismo código de modelo en el nombre ("UN50U8000FFXZA")
+//      y marcas que no se contradigan. El modelo debe coincidir exacto: variantes regionales distintas no se juntan.
 //   3. Cada oferta debe ser compatible con todas las del grupo (sin cadenas) y un grupo no junta dos productos
 //      distintos de la misma tienda y sede.
 import { basico, clavePresentacion, ean as eanValido, palabras, presentaciones, textoPresentacion } from "./normalizar.ts";
@@ -26,7 +28,14 @@ const DISTINTIVAS = ["descrem", "semidescrem", "complet", "deslactos", "integral
   "mayor", "bulto", "caja", "fardo"];                 // venta al mayor: nunca se empareja con unidades sueltas
 const distintiva = (w: string) => DISTINTIVAS.some((d) => w.startsWith(d));
 
-interface Interna { o: Oferta; ean: string | null; marca: string | null; pres: string; palabras: string[]; origen: string }
+interface Interna { o: Oferta; ean: string | null; marca: string | null; pres: string; palabras: string[]; origen: string; modelos: string[] }
+
+// Códigos de modelo del nombre: 6 a 20 caracteres con al menos 2 letras y 2 dígitos ("QN55S90HAEXPA", "W32A23SSM").
+// No cuentan las medidas ("1500ml", "180hz", "64gb") ni los códigos internos con guion de las tiendas ("LM-00001268").
+export function modelos(nombre: string): string[] {
+  return [...new Set(nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 6 && w.length <= 20
+    && (w.match(/[a-z]/g)?.length ?? 0) >= 2 && (w.match(/\d/g)?.length ?? 0) >= 2 && !/^\d+[a-z]{1,4}$/.test(w)))];
+}
 
 const raiz = (w: string) => w.replace(/[aoe]$/, "");
 // Misma palabra, mismo género, o abreviatura de la tienda (al menos 3 letras: "arr" → "arroz", "dulc" → "dulce")
@@ -45,6 +54,9 @@ const sinMarca = (ws: string[], marcas: (string | null)[]) => {
 function compatibles(x: Interna, y: Interna): boolean {
   if (x.ean && y.ean) return x.ean === y.ean;
   if (x.origen === y.origen) return false;                               // dos productos distintos de la misma tienda y sede
+  if (x.modelos.length && y.modelos.length && x.modelos.some((m) => y.modelos.includes(m))) {
+    return !(x.marca && y.marca && x.marca !== y.marca && !igual(x.marca, y.marca));
+  }
   if (!x.pres || x.pres !== y.pres) return false;
   // Marca: si las dos la traen, igual; si solo una, el nombre de la otra debe contenerla
   if (x.marca && y.marca && x.marca !== y.marca && !igual(x.marca, y.marca)) return false;
@@ -88,7 +100,7 @@ export function agrupar(ofertas: Oferta[], consulta: string): Grupo[] {
   const q = palabras(consulta);
   const internas: Interna[] = ofertas.map((o) => ({
     o, ean: eanValido(o.ean), marca: o.marca ? basico(o.marca).replace(/[^a-z0-9 ]/g, "").trim() || null : null,
-    pres: clavePresentacion(presentaciones(o.nombre)), palabras: palabras(o.nombre), origen: `${o.tienda}|${o.sucursal ?? ""}`,
+    pres: clavePresentacion(presentaciones(o.nombre)), palabras: palabras(o.nombre), origen: `${o.tienda}|${o.sucursal ?? ""}`, modelos: modelos(o.nombre),
   }));
   const grupos: Interna[][] = [];
   for (const x of internas) {

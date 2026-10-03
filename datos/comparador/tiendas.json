@@ -246,6 +246,31 @@
         "supermercado"
       ],
       "puerto": 4112
+    },
+    {
+      "id": "daka",
+      "nombre": "Tiendas Daka",
+      "sitio": "https://www.tiendasdaka.com/ve",
+      "plataforma": "medusa",
+      "moneda": "USD",
+      "rubros": [
+        "electronica",
+        "hogar"
+      ],
+      "puerto": 4113
+    },
+    {
+      "id": "naidahogar",
+      "nombre": "Naida Hogar",
+      "sitio": "https://www.naidahogar.com",
+      "plataforma": "arigato",
+      "moneda": "USD",
+      "rubros": [
+        "electronica",
+        "hogar"
+      ],
+      "puerto": 4114,
+      "api": "https://search.naidahogarr2.arigato.ai/query?db=naidahogarpre_products"
     }
   ]
 }

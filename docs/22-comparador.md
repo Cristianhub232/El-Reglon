@@ -42,6 +42,8 @@ Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, 
 | Punto al Mayor | Shopify: su búsqueda pública (`/search/suggest.json`) y el archivo público de cada producto (`/products/<handle>.js`) | US$ | Activa (mayorista y minorista, Gran Caracas). Se compara la variante «Detal»; lo que no la tiene se muestra como «(al mayor)» y nunca se empareja con unidades sueltas |
 | Mafabre | WooCommerce, API pública de tienda (`/wp-json/wc/store/v1/products`, precios en céntimos) | US$ | Activa (Caracas) |
 | Kromi | Su búsqueda (`Products.php?des=`) pide los productos a su servicio (`MatchingProductList.php`) con la sesión anónima de cualquier visitante | US$ | Activa. El precio llega sin IVA: se suma el impuesto de cada producto, como hace su página |
+| Tiendas Daka | Medusa con vitrina Next.js: su página de resultados (`/ve/results/<búsqueda>`) trae los productos en los datos de la propia página | US$ | Activa desde el 03/10/2026 (electrónica y hogar). Sus resultados no traen el modelo y su ficha solo tiene un UPC que ninguna otra tienda publica: por ahora no se empareja con otras tiendas |
+| Naida Hogar | Plataforma Arigato: su aplicación (Flutter) busca en un servicio público (`search.naidahogarr2.arigato.ai/query`, sin credenciales y abierto a cualquier origen) | US$ | Activa desde el 03/10/2026 (electrónica y hogar). Se compara el precio regular, el mismo que muestra en bolívares; el «precio especial» es una condición de pago. El SKU es el modelo del fabricante y se agrega al nombre |
 | Farmatodo | **Por índice**: sitemap (13.589 productos) y datos estructurados de cada página | Bs. | Activa. Su `robots.txt` prohíbe la búsqueda (`/buscar*`) pero permite las páginas de producto. Vuelta completa ≈ 7,5 h (2 s por página) |
 | Plan Suárez | **Por índice**: sitemap (9.766 productos) y la página de cada producto; el código de barras sale del nombre de la imagen | Bs. | Activa. Prohíbe la búsqueda (`route=product/search`) y pide `Crawl-delay: 5`. Vuelta completa ≈ 13,5 h |
 | Gama | **Por índice**: sitemap (1.024 productos) y su API pública de producto (OCC) | US$ («REF») | Activa. Prohíbe la búsqueda (`*?query=*`). Vuelta completa ≈ 35 min |
@@ -51,7 +53,7 @@ Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, 
 | Farmarebajas | — | — | **Excluida.** Responde 403 al acceso automático |
 | Mercasa, Que Mantequilla | Next.js propio | — | **Pendientes.** Buscan desde el navegador por su `/api`, que su `robots.txt` prohíbe |
 | Río Market | Instaleap | — | **Pendiente.** Su API exige credenciales internas del sitio |
-| Multimax | Astro | — | **Excluida.** Cloudflare responde con un desafío antibots (`cf-mitigated: challenge`) |
+| Multimax | Astro | — | **Excluida** (revisada de nuevo el 03/10/2026). Su `robots.txt` lo permite y con curl responde, pero al cliente del comparador Cloudflare le da un desafío antibots (403, `cf-mitigated: challenge`) en la búsqueda, las fichas y el sitemap de productos, y su API (`api.multimax.com.ve`) exige autenticación. Pasar el desafío imitando a un navegador sería evadir su protección. La vía es pedirle a Multimax que permita al comparador |
 | Plazas | Cloudflare | — | **Excluida.** Desafío antibots |
 | Makro (tienda.makro.com.co) | — | — | **Excluida.** Es de Colombia (pesos colombianos); Makro Venezuela no vende en línea |
 
@@ -113,9 +115,15 @@ Está en `src/modules/comparador/emparejar.ts` y es el mismo en el servidor (API
    - **Misma marca.** Si una tienda no la envía, el nombre de su producto debe contener la marca de la otra.
    - **Nombres que difieren como mucho en una palabra, de un solo lado**, sin contar la marca ni las palabras de empaque (frasco, paquete, tipo…). Se aceptan abreviaturas («arr» = «arroz», «dulc» = «dulce») y el género («blanco» = «blanca»).
    - Esa palabra no puede ser un **atributo distintivo**, como descremada, completa, integral, sin gluten, amarilla o dulce. Es mejor no comparar que comparar mal.
-3. **Cada oferta debe ser compatible con todas las del grupo**, no solo con una, así que no se forman cadenas. Dos productos distintos de la misma tienda y sede nunca se juntan.
-5. **Precio dudoso.** Dentro de un mismo producto, una oferta por debajo del 40 % o por encima de 2,5 veces la mediana se marca como «precio dudoso». La mediana se calcula con todas las ofertas, si hay 3 o más; con 2, se marcan ambas si una cuesta más de 4 veces la otra. Esa oferta va al final y nunca sale como «el más barato» (en la API, `precio_dudoso`). Ejemplo real: Farmatodo publicaba la Harina PAN 1 kg a Bs. 84,20 en su propia página, con las demás tiendas alrededor de Bs. 1.000.
-4. **Dos ofertas con códigos de barras distintos nunca se juntan.** Si comparten código, son el mismo producto aunque cada tienda lo rotule distinto (por ejemplo, Genven y Leti).
+3. **Electrónica y electrodomésticos: código de modelo.** Estos productos no tienen presentación, así que la regla 2 no los junta. Si dos nombres traen el mismo código de modelo, son el mismo producto, siempre que sus marcas no se contradigan.
+   - **Qué es un código de modelo:** de 6 a 20 caracteres, con al menos 2 letras y 2 dígitos (`UN55U8000FPXPA`, `BE200LAA`).
+   - **Qué no cuenta:** las medidas (`1500ml`, `180hz`, `64gb`) ni los códigos internos con guion (`LM-00001268`).
+   - **Coincidencia exacta:** variantes regionales distintas (`…FFXZA` / `…FPXPA`) no se juntan.
+
+   Ejemplo real: el Samsung de 55" `UN55U8000FPXPA` cuesta US$ 460 en Naida Hogar y US$ 535 en Damasco.
+4. **Cada oferta debe ser compatible con todas las del grupo**, no solo con una, así que no se forman cadenas. Dos productos distintos de la misma tienda y sede nunca se juntan.
+5. **Dos ofertas con códigos de barras distintos nunca se juntan.** Si comparten código, son el mismo producto aunque cada tienda lo rotule distinto (por ejemplo, Genven y Leti).
+6. **Precio dudoso.** Dentro de un mismo producto, una oferta por debajo del 40 % o por encima de 2,5 veces la mediana se marca como «precio dudoso». La mediana se calcula con todas las ofertas, si hay 3 o más; con 2, se marcan ambas si una cuesta más de 4 veces la otra. Esa oferta va al final y nunca sale como «el más barato» (en la API, `precio_dudoso`). Ejemplo real: Farmatodo publicaba la Harina PAN 1 kg a Bs. 84,20 en su propia página, con las demás tiendas alrededor de Bs. 1.000.
 
 Medido con 10 búsquedas reales (harina pan, arroz mary, mayonesa mavesa, pasta primor, leche en polvo…): 33 productos comparables entre tiendas, sin emparejamientos falsos.
 
