@@ -295,6 +295,19 @@
       ],
       "puerto": 4116,
       "nombre_vtex": "titulo"
+    },
+    {
+      "id": "venelectronics",
+      "nombre": "Venelectronics",
+      "sitio": "https://venelectronics.com",
+      "plataforma": "woostore",
+      "moneda": "USD",
+      "rubros": [
+        "electronica",
+        "hogar"
+      ],
+      "puerto": 4117,
+      "modelo_sku": true
     }
   ]
 }

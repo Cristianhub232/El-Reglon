@@ -11,6 +11,7 @@ export interface Tienda {
   sucursales?: Sede[]; predeterminada?: string;          // catálogo por sede (p. ej. Central Madeirense)
   ubicacion?: { ciudad: string; estado: string };        // tiendas de una sola ciudad
   api?: string;                                          // dirección de su API cuando no es la del sitio
+  modelo_sku?: boolean;                                  // WooCommerce: el SKU es el modelo con prefijo de marca ("LG-LM22SGPK")
   nombre_vtex?: "titulo";                                // VTEX: usar el título del producto en vez de su nombre corto
   // Tiendas por índice: su robots.txt prohíbe la búsqueda pero permite las páginas de producto de su sitemap
   indice?: { sitemap: string; patron: string; pausa_ms: number; slug?: boolean };   // slug: la URL lleva el nombre del producto

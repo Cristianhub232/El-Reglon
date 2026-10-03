@@ -5,8 +5,8 @@
 //      diferencian en una palabra de un lado ("Pasta Primor Vermicelli" ≈ "Pasta Primor Larga Vermicelli"; pero
 //      "Dedal" ≠ "Vermicelli" y "Descremada" no puede faltar de un lado). Se aceptan abreviaturas ("arr" = "arroz")
 //      y el género ("blanco" = "blanca").
-//   2b. Electrónica y electrodomésticos (sin presentación): mismo código de modelo en el nombre ("UN50U8000FFXZA")
-//      y marcas que no se contradigan. El modelo debe coincidir exacto: variantes regionales distintas no se juntan.
+//   2b. Electrónica y electrodomésticos (sin presentación): los mismos códigos de modelo en el nombre ("UN50U8000FFXZA"),
+//      todos (un combo de dos modelos no es una de sus piezas), y marcas que no se contradigan. El modelo debe coincidir exacto: variantes regionales distintas no se juntan.
 //   3. Cada oferta debe ser compatible con todas las del grupo (sin cadenas) y un grupo no junta dos productos
 //      distintos de la misma tienda y sede.
 import { basico, clavePresentacion, ean as eanValido, palabras, presentaciones, textoPresentacion } from "./normalizar.ts";
@@ -54,7 +54,8 @@ const sinMarca = (ws: string[], marcas: (string | null)[]) => {
 function compatibles(x: Interna, y: Interna): boolean {
   if (x.ean && y.ean) return x.ean === y.ean;
   if (x.origen === y.origen) return false;                               // dos productos distintos de la misma tienda y sede
-  if (x.modelos.length && y.modelos.length && x.modelos.some((m) => y.modelos.includes(m))) {
+  // Mismos modelos, todos: un combo ("lavadora WM20WV26W + secadora DF20WV2EW") no es una de sus piezas
+  if (x.modelos.length && y.modelos.length && x.modelos.length === y.modelos.length && x.modelos.every((m) => y.modelos.includes(m))) {
     return !(x.marca && y.marca && x.marca !== y.marca && !igual(x.marca, y.marca));
   }
   if (!x.pres || x.pres !== y.pres) return false;
