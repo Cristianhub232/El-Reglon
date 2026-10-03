@@ -1,0 +1,48 @@
+/* Botón flotante de contacto (docs/27): burbuja abajo a la derecha y ventana de mensaje. Por debajo del aviso de cookies. */
+.burbuja {
+  position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 49;
+  width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center; background: var(--tinta); color: var(--papel);
+  box-shadow: 0 6px 18px rgba(14, 36, 64, .28); transition: transform .15s ease;
+}
+.burbuja:hover { transform: scale(1.06); }
+.burbuja:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 3px; }
+.punto { position: absolute; top: 4px; right: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--amarillo); border: 2px solid var(--tinta); }
+
+.ventana {
+  position: fixed; right: 18px; bottom: calc(88px + env(safe-area-inset-bottom, 0px)); z-index: 49;
+  width: min(360px, calc(100vw - 24px)); max-height: calc(100vh - 120px); overflow: auto;
+  background: var(--blanco); border: 1px solid var(--linea); border-radius: 16px; box-shadow: 0 14px 40px rgba(14, 36, 64, .22);
+  display: flex; flex-direction: column; font-family: var(--sans);
+}
+.cabeza { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--tinta); color: var(--papel); border-radius: 15px 15px 0 0; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--papel); display: grid; place-items: center; flex: none; position: relative; }
+.avatar img { width: 28px; height: 28px; }
+.enLinea { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: #2E9E5B; border: 2px solid var(--tinta); }
+.cabeza strong { display: block; font-size: 15px; }
+.cabeza small { display: block; font-size: 12px; opacity: .8; margin-top: 2px; }
+.cerrar { margin-left: auto; border: 0; background: transparent; color: var(--papel); font-size: 22px; line-height: 1; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+.cerrar:focus-visible { outline: 2px solid var(--amarillo); }
+
+.cuerpo { padding: 16px; display: flex; flex-direction: column; gap: 12px; background: var(--papel-claro); }
+.globo { align-self: flex-start; max-width: 88%; background: var(--blanco); border: 1px solid var(--linea); border-radius: 4px 14px 14px 14px; padding: 10px 12px; font-size: 14px; line-height: 1.45; color: var(--texto); }
+.globo strong { display: block; font-size: 13px; color: var(--tinta); margin-bottom: 2px; }
+.formulario { display: flex; flex-direction: column; gap: 10px; }
+.formulario label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: var(--texto-2); }
+.formulario input[type="email"], .formulario input[type="text"], .formulario textarea {
+  font: 14px var(--sans); padding: 9px 11px; border: 1px solid var(--linea-fuerte); border-radius: 8px; background: var(--blanco); color: var(--texto); width: 100%; box-sizing: border-box;
+}
+.formulario textarea { resize: vertical; min-height: 84px; }
+.formulario input:focus, .formulario textarea:focus { outline: 2px solid var(--azul); outline-offset: 0; border-color: var(--azul); }
+.casilla { flex-direction: row !important; align-items: flex-start; gap: 8px !important; font-weight: 400 !important; color: var(--texto-2); }
+.casilla input { margin-top: 3px; }
+.trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.enviar { border: 0; border-radius: 22px; padding: 11px 16px; background: var(--tinta); color: var(--papel); font: 700 14px var(--sans); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.enviar:hover { background: var(--azul); }
+.enviar:disabled { opacity: .6; cursor: wait; }
+.nota { font-size: 11px; line-height: 1.45; color: var(--texto-3); margin: 0; }
+.nota a { color: var(--azul); }
+.error { font-size: 13px; color: var(--rojo); margin: 0; }
+.listo { text-align: center; padding: 8px 4px; font-size: 14px; line-height: 1.5; color: var(--texto-2); }
+.listo strong { display: block; font-size: 16px; color: var(--tinta); margin-bottom: 4px; }
+@media print { .burbuja, .ventana { display: none; } }

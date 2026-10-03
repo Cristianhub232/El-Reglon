@@ -39,9 +39,13 @@ CREATE INDEX IF NOT EXISTS prospecto_estado ON prospeccion.prospecto (estado, ul
 -- Bajas: lista de supresión permanente por correo. Sobrevive aunque el prospecto se borre o se vuelva a cargar.
 CREATE TABLE IF NOT EXISTS prospeccion.baja (
     correo   text        PRIMARY KEY CHECK (correo = lower(correo)),
-    origen   text        NOT NULL CHECK (origen IN ('enlace', 'un_clic', 'panel')),
+    origen   text        NOT NULL,                       -- valores: restricción baja_origen_check (abajo)
     en       timestamptz NOT NULL DEFAULT now()
 );
+
+-- 03/10/2026: también «respuesta» (el prospecto contestó «baja» al correo; lo detecta la lectura de ventas@, docs/27)
+ALTER TABLE prospeccion.baja DROP CONSTRAINT IF EXISTS baja_origen_check;
+ALTER TABLE prospeccion.baja ADD CONSTRAINT baja_origen_check CHECK (origen IN ('enlace', 'un_clic', 'panel', 'respuesta'));
 
 -- Cada correo enviado (o intentado). "prueba" = envío desde el panel a un correo propio; no cuenta para el límite.
 CREATE TABLE IF NOT EXISTS prospeccion.envio (

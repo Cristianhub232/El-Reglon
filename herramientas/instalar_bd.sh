@@ -19,6 +19,8 @@ docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_D
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/comparador/002_indice.sql
 # Prospección comercial por correo: prospectos, bajas, envíos y ajustes (docs/26)
 docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/prospeccion/001_esquema.sql
+# Contacto: mensajes del botón flotante y cursor de los buzones (docs/27)
+docker compose exec -T db psql -U "${POSTGRES_USER:-elrenglon}" -d "${POSTGRES_DB:-elrenglon}" -v ON_ERROR_STOP=1 -q -f /db/contacto/001_esquema.sql
 cargar() {
   local nombre="$1" salida
   if ! salida="$("${@:2}" 2>&1)"; then

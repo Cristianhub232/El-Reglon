@@ -5,6 +5,7 @@ import { consulta, pool } from "../src/core/db.ts";
 import { recolectar } from "../src/modules/noticias/recolector.ts";
 import { avisosProgramados } from "../src/modules/avisos/temas.ts";
 import { cicloProspeccion } from "../src/modules/prospeccion/programador.ts";
+import { revisarRespuestas } from "../src/modules/contacto/buzon.ts";
 
 const minuto = Number(process.env.NOTICIAS_MINUTO ?? 5);
 if (!Number.isInteger(minuto) || minuto < 0 || minuto > 59) throw new Error("NOTICIAS_MINUTO debe estar entre 0 y 59");
@@ -43,6 +44,11 @@ async function prospeccion() {
     const r = await cicloProspeccion();
     if (r.enviado) console.log(JSON.stringify({ momento: new Date().toISOString(), prospeccion: r.enviado }));
   } catch (e) { console.error(`[noticias-programador] prospección: ${(e as Error).message}`); }
+  // Respuestas de los prospectos en ventas@ (docs/27): baja, rebote o respondió
+  try {
+    const r = await revisarRespuestas();
+    if (r?.cambios.length) console.log(JSON.stringify({ momento: new Date().toISOString(), respuestas: r.cambios }));
+  } catch (e) { console.error(`[noticias-programador] buzón ventas@: ${(e as Error).message}`); }
 }
 
 function proxima(desde = Date.now()): number {
