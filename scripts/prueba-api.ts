@@ -253,6 +253,29 @@ async function main() {
     const per = armarCorreo({ empresa: "María", contacto: null, sector: "consumidor", token: "a".repeat(32) }, "inicial",
       { tasa, precios: [{ producto: "Arroz Mary 900 g", consulta: "arroz mary 900", minimo: 95.4, maximo: 120, cadenas: 3, tienda: "Locatel" }] });
     verificar("persona natural: más barato hoy, con enlace a la comparación", per.texto.startsWith("Hola, María:") && per.html.includes("comparar=arroz+mary+900") && per.html.includes("Bs. 95,40"), per.asunto);
+    const { nombrePropio, listar, buscarDirectorio, agregarDesdeDirectorio } = await import("../src/modules/prospeccion/prospectos.ts");
+    const { enviarAProspecto } = await import("../src/modules/prospeccion/programador.ts");
+    verificar("nombres en formato título con siglas: «INVERSIONES X C A» → «Inversiones X C.A.»",
+      nombrePropio("INVERSIONES DE LA COSTA C A") === "Inversiones de la Costa C.A." && nombrePropio("GRUPO RETCA, S.R.L") === "Grupo Retca, S.R.L."
+      && nombrePropio("tecnologia ava, c.a") === "Tecnologia Ava, C.A.", [nombrePropio("INVERSIONES DE LA COSTA C A"), nombrePropio("GRUPO RETCA, S.R.L")]);
+    const rifBusca = rifConTerminal(7);
+    const [tmp] = await consulta<{ id: number }>(
+      "INSERT INTO prospeccion.prospecto (empresa, correo, sector, origen, rif, estado) VALUES ('Busqueda Prueba E2E, C.A.', $1, 'especial', 'prueba automática', $2, 'baja') RETURNING id::int",
+      [`busca-e2e-${Date.now()}@ejemplo.com`, rifBusca]);
+    const porNombre = await listar({ q: "queda prueba e2e" }), porRif = await listar({ q: rifBusca.replace(/-/g, ""), sector: "especial" });
+    verificar("buscador de prospectos: por nombre parcial y por RIF sin guiones", porNombre.filas.some((f) => f.id === tmp.id) && porRif.filas.some((f) => f.id === tmp.id), [porNombre.total, porRif.total]);
+    const env = await enviarAProspecto(tmp.id, "prueba");
+    verificar("«Enviar ahora» se niega con un prospecto dado de baja", "error" in env && /baja/.test(env.error), env);
+    await consulta("DELETE FROM prospeccion.prospecto WHERE id = $1", [tmp.id]);
+    const dir = await buscarDirectorio("C.A.");
+    if (dir === null) verificar("buscador del directorio (sin directorio cargado → null)", true);
+    else {
+      const [ya] = await consulta<{ rif: string }>("SELECT rif FROM prospeccion.prospecto WHERE rif IS NOT NULL AND sector = 'especial' LIMIT 1");
+      const conProspecto = ya ? await buscarDirectorio(ya.rif.replace(/-/g, "")) : [];
+      const v = await agregarDesdeDirectorio("V-12345678-9", "general", "prueba");
+      verificar("directorio: busca por nombre y RIF, marca los que ya son prospectos y no agrega personas naturales como empresa",
+        dir.length > 0 && (!ya || conProspecto?.[0]?.prospecto_estado != null) && "error" in v, [dir.length, conProspecto?.[0]?.prospecto_estado, v]);
+    }
     let r1 = await fetch(BASE + "/baja?t=prueba");
     verificar("página /baja de un correo de prueba: no da de baja nada", r1.status === 200 && (await r1.text()).includes("correo de prueba"));
     r = await post(`/api/publico/prospeccion/baja?t=${"0".repeat(32)}`, {});

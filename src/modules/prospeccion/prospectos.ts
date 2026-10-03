@@ -110,3 +110,78 @@ export async function guardarAjustes(a: Ajustes, por: string) {
     [a.activo, a.limite_diario, a.hora_inicio, a.hora_fin, a.dias_seguimiento, por]);
   return { ok: true };
 }
+
+// ── Búsqueda en el panel ──────────────────────────────────────────────────────────────────────────────
+
+// Razón social en formato título con las siglas societarias normalizadas: «INVERSIONES X C A» → «Inversiones X C.A.».
+// Un asunto en mayúsculas sostenidas parece un grito (y es señal de spam).
+const MENORES = new Set(["de", "del", "la", "las", "los", "el", "y", "e", "en", "para", "por", "a"]);
+export function nombrePropio(s: string): string {
+  let t = s.trim().toUpperCase().replace(/\s+/g, " ");
+  t = t.replace(/\bS\s*\.?\s*R\s*\.?\s*L\b\.?/g, "S.R.L.").replace(/\b([CS])\s*\.?\s*A\b\.?/g, "$1.A.").replace(/\s+,/g, ",");
+  return t.split(" ").map((w, i) => {
+    if (/^[A-Z](\.[A-Z])+\.?,?$/.test(w)) return w;
+    const lw = w.toLowerCase();
+    return i > 0 && MENORES.has(lw) ? lw : lw.charAt(0).toUpperCase() + lw.slice(1);
+  }).join(" ");
+}
+
+const comodines = (q: string) => `%${q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
+export const POR_PAGINA = 50;
+
+export interface FilaProspecto { id: number; empresa: string; contacto: string | null; correo: string; sector: Sector; origen: string; rif: string | null;
+  estado: EstadoProspecto; envios: number; ultimo_envio: string | null }
+
+// Prospectos por texto (empresa, contacto, correo o RIF), estado y sector. Los pendientes salen en orden de envío.
+export async function listar(f: { q?: string | null; estado?: string | null; sector?: string | null; pagina?: number }) {
+  const q = f.q?.trim() || null, pagina = Math.max(1, f.pagina ?? 1);
+  const donde = `WHERE ($1::text IS NULL OR estado = $1) AND ($2::text IS NULL OR sector = $2)
+    AND ($3::text IS NULL OR empresa ILIKE $3 OR correo ILIKE $3 OR coalesce(rif, '') ILIKE $3 OR coalesce(contacto, '') ILIKE $3
+         OR replace(coalesce(rif, ''), '-', '') ILIKE replace($3, '-', ''))`;
+  const params = [f.estado || null, f.sector || null, q ? comodines(q) : null];
+  const [[{ total }], filas] = await Promise.all([
+    consulta<{ total: number }>(`SELECT count(*)::int AS total FROM prospeccion.prospecto ${donde}`, params),
+    consulta<FilaProspecto>(`SELECT id::int, empresa, contacto, correo, sector, origen, rif, estado, envios, ultimo_envio::text
+       FROM prospeccion.prospecto ${donde}
+      ORDER BY (estado = 'pendiente') DESC, CASE WHEN estado = 'pendiente' THEN extract(epoch FROM creado_en) ELSE -extract(epoch FROM actualizado_en) END, id
+      LIMIT ${POR_PAGINA} OFFSET $4`, [...params, (pagina - 1) * POR_PAGINA]),
+  ]);
+  return { total, pagina, paginas: Math.max(1, Math.ceil(total / POR_PAGINA)), filas };
+}
+
+// Directorio de contribuyentes (docs/25): empresas con correo, si son especiales o importadoras y si ya son prospectos
+export interface FilaDirectorio { rif: string; razon_social: string; correo: string | null; especial: boolean; puesto: number | null;
+  importador: boolean; software: boolean; prospecto_estado: EstadoProspecto | null; sugerido: Sector }
+export async function buscarDirectorio(q: string): Promise<FilaDirectorio[] | null> {
+  const [{ hay }] = await consulta<{ hay: boolean }>("SELECT to_regclass('directorio.contribuyente') IS NOT NULL AS hay");
+  if (!hay) return null;
+  const texto = q.trim();
+  if (texto.length < 3) return [];
+  const filas = await consulta<Omit<FilaDirectorio, "sugerido">>(`
+    SELECT c.rif, c.razon_social, lower(coalesce(nullif(c.correo, ''), d.correo)) AS correo, coalesce(p.especial, false) AS especial, p.puesto,
+           i.rif IS NOT NULL AS importador, EXISTS (SELECT 1 FROM directorio.software s WHERE s.rif = c.rif) AS software,
+           (SELECT pr.estado FROM prospeccion.prospecto pr WHERE pr.rif = c.rif OR lower(pr.correo) = lower(coalesce(nullif(c.correo, ''), d.correo)) LIMIT 1) AS prospecto_estado
+      FROM directorio.contribuyente c
+      LEFT JOIN LATERAL (SELECT x.correo FROM directorio.direccion x WHERE x.rif = c.rif AND x.correo IS NOT NULL ORDER BY x.id LIMIT 1) d ON true
+      LEFT JOIN directorio.pagador p ON p.rif = c.rif
+      LEFT JOIN directorio.importador i ON i.rif = c.rif
+     WHERE c.razon_social ILIKE $1 OR replace(c.rif, '-', '') ILIKE replace($1, '-', '')
+     ORDER BY similarity(c.razon_social, $2) DESC, p.puesto NULLS LAST
+     LIMIT 20`, [comodines(texto), texto]);
+  return filas.map((f) => ({ ...f, sugerido: f.especial ? "especial" : f.software ? "desarrollador" : f.importador ? "importador" : "general" }));
+}
+
+// Alta desde el directorio: el correo y el nombre se toman de la base, nunca del formulario
+export async function agregarDesdeDirectorio(rif: string, sec: string, creadoPor: string) {
+  const [c] = await consulta<{ razon_social: string; correo: string | null; puesto: number | null }>(`
+    SELECT c.razon_social, lower(coalesce(nullif(c.correo, ''),
+           (SELECT x.correo FROM directorio.direccion x WHERE x.rif = c.rif AND x.correo IS NOT NULL ORDER BY x.id LIMIT 1))) AS correo,
+           (SELECT p.puesto FROM directorio.pagador p WHERE p.rif = c.rif) AS puesto
+      FROM directorio.contribuyente c WHERE c.rif = $1`, [rif]);
+  if (!c) return { error: "Ese RIF no está en el directorio" } as const;
+  if (!c.correo) return { error: "Esa empresa no tiene correo en el directorio" } as const;
+  if (/^[VEP]-/.test(rif) && sec !== "consumidor") return { error: "Es una persona natural: solo se le escribe con su consentimiento (cárguela como «Personas naturales»)" } as const;
+  const empresa = nombrePropio(c.razon_social);
+  const r = await crear({ empresa, correo: c.correo, sector: sec, rif, origen: `Directorio de contribuyentes (docs/25)${c.puesto ? `; «Mejores pagadores», puesto ${c.puesto}` : ""}` }, creadoPor);
+  return typeof r === "object" ? r : { alta: r, empresa, correo: c.correo };
+}
