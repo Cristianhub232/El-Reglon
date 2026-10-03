@@ -223,9 +223,12 @@ async function main() {
     const tasa = { usd: "190.5", eur: "221.25", fecha_valor: "2026-10-01" };
     const correos = Object.keys(SECTORES).flatMap((sec) => (["inicial", "seguimiento"] as const).map((tipo) =>
       armarCorreo({ empresa: "Bodega <b>La Esquina</b>", contacto: null, sector: sec as keyof typeof SECTORES, token: "a".repeat(32) }, tipo, tasa)));
-    verificar("plantillas: 6 sectores × 2 correos, con baja visible, sin datos sin escapar", correos.length === 12 && correos.every((c) =>
+    verificar("plantillas: 6 sectores × 2 correos, estilo carta con enlaces a las herramientas, baja visible y datos escapados", correos.length === 12 && correos.every((c) =>
       c.asunto.length <= 100 && c.html.includes(`/baja?t=${"a".repeat(32)}`) && c.texto.includes("/baja?t=") && !c.html.includes("<b>La Esquina")
-      && !/undefined|NaN/.test(c.html + c.texto) && c.html.includes("Bs. 190,50")), correos.map((c) => c.asunto));
+      && !/undefined|NaN/.test(c.html + c.texto) && c.html.includes("Bs. 190,50") && !/<img|<button/i.test(c.html)
+      && /href="https:\/\/[^"]+\/(#(herramientas|comparador|deberes|tasas)|docs|solicitar-api-key)/.test(c.html)), correos.map((c) => c.asunto));
+    const ca = armarCorreo({ empresa: "Inversiones Ejemplo, C.A.", contacto: null, sector: "general", token: "a".repeat(32) }, "inicial", null);
+    verificar("plantillas: sin doble punto tras «C.A.»", !ca.texto.includes("C.A..") && ca.texto.includes("Inversiones Ejemplo, C.A."), ca.texto.split("\n")[2]);
     verificar("validación de prospectos: correo, sector y origen", validar({ empresa: "Farmacia X", correo: "a@b.co", sector: "Farmacias", origen: "web" }).ok
       && !validar({ empresa: "X S.A.", correo: "no-es-correo", sector: "", origen: "web" }).ok
       && !validar({ empresa: "X S.A.", correo: "a@b.co", sector: "panadería", origen: "web" }).ok

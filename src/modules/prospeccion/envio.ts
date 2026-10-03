@@ -1,8 +1,9 @@
 // Envío de los correos de prospección (docs/26) por SMTP (buzón ventas@ de Spacemail), con remitente "El Renglón".
-// Cada correo lleva List-Unsubscribe y List-Unsubscribe-Post (baja en un clic, exigida por Gmail y Yahoo).
+// Sin cabeceras List-Unsubscribe: son la señal más clara de boletín y llevan el correo a Promociones. Gmail y Yahoo
+// solo las exigen a quien envía más de 5.000 correos al día; aquí son 30 como mucho. La baja va en el texto del correo
+// (página /baja). Si algún día el volumen crece, la baja en un clic ya existe: POST /api/publico/prospeccion/baja?t=…
 import nodemailer, { type Transporter } from "nodemailer";
 import { consulta } from "../../core/db.ts";
-import { SITIO_URL } from "../../core/sitio.ts";
 import { armarCorreo, type DatosCorreo, type Tasa, type TipoCorreo } from "./plantillas.ts";
 
 const USUARIO = () => process.env.CORREO_SMTP_USUARIO || "ventas@elrenglonve.org";
@@ -43,10 +44,6 @@ export async function enviarCorreo(para: string, d: DatosCorreo, tipo: TipoCorre
   try {
     const info = await smtp().sendMail({
       from: { name: "El Renglón", address: USUARIO() }, to: para, subject: c.asunto, text: c.texto, html: c.html,
-      headers: {
-        "List-Unsubscribe": `<${SITIO_URL}/api/publico/prospeccion/baja?t=${d.token}>, <mailto:${USUARIO()}?subject=baja>`,
-        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-      },
     });
     const rechazado = info.rejected?.length ? String(info.rejected[0]) : null;
     r = rechazado ? { ok: false, error: `Rechazado por el servidor: ${rechazado}`, permanente: true, asunto: c.asunto }

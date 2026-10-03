@@ -9,7 +9,7 @@ Correos a empresas para ofrecerles El Renglón, decididos el 01/10/2026. **No es
 | Pocos por día | Límite configurable de 1 a 30 por día hábil. **La base rechaza más de 30** (`CHECK` en `prospeccion.ajuste`) |
 | Repartidos, nunca en ráfaga | Lunes a viernes, dentro del horario (hora de Caracas). El primer correo del día sale entre 0 y 40 minutos después de la hora de inicio; los siguientes se espacian repartiendo el tiempo que queda, ±40 %, con un mínimo de 10 minutos |
 | Un solo seguimiento | A los N días (3 a 30) del primer correo, si no hubo respuesta ni baja. Después, nada más |
-| Baja permanente | Enlace visible en cada correo (`/baja?t=…`) y cabeceras `List-Unsubscribe` + `List-Unsubscribe-Post` (baja en un clic de Gmail y Yahoo, RFC 8058). La dirección queda en `prospeccion.baja`: no se puede volver a cargar ni recibe más correos |
+| Baja permanente | Enlace al pie de cada correo (`/baja?t=…`) o responder «baja». La dirección queda en `prospeccion.baja`: no se puede volver a cargar ni recibe más correos |
 | Origen del contacto | Obligatorio al cargar cada prospecto: de dónde salió el correo (web de la empresa, directorio, tarjeta). Sin listas compradas |
 | Arranca en pausa | `activo = false` por defecto. Se activa desde el panel, con confirmación |
 
@@ -24,19 +24,25 @@ Calentamiento recomendado del buzón: 5 al día las dos primeras semanas y luego
 
 ## Plantillas (`src/modules/prospeccion/plantillas.ts`)
 
-Un primer correo por sector y un seguimiento común. Diseño de carta: poco HTML, sin imágenes salvo el logo, un solo botón. Los correos muy gráficos suelen ir a Promociones o a Spam.
+Un primer correo por sector y un seguimiento común, en **estilo de carta**: párrafos, una lista de **enlaces de texto directos a las herramientas** del sitio y la firma «El Renglón». Sin logo, sin botones y sin cajas de color.
 
-| Sector | Asunto del primer correo | Botón |
+**Por qué así (03/10/2026):** la primera versión, con logo, botón azul, cajas de color, texto oculto de vista previa y cabeceras `List-Unsubscribe`, llegó a **Promociones** en Gmail; una prueba de texto simple había llegado a **Principal**. Gmail clasifica por el aspecto del correo.
+- **Sin `List-Unsubscribe`:** es la señal más clara de boletín. Gmail y Yahoo solo la exigen a quien envía más de 5.000 correos al día (aquí, 30 como mucho). La baja en un clic sigue disponible por si el volumen crece: `POST /api/publico/prospeccion/baja?t=…` (RFC 8058).
+- Los enlaces llevan a las secciones de la portada: `#herramientas` (clasificador de IVA), `#comparador`, `#deberes`, `#tasas`, y a `/docs` y `/solicitar-api-key`.
+
+| Sector | Asunto del primer correo | Enlaces |
 |---|---|---|
-| General | «{empresa}: IVA, tasa BCV y deberes del SENIAT en un solo lugar» | Probar El Renglón gratis |
-| Comercio y bodegas | «{empresa}: ¿qué productos llevan IVA y cuáles no?» | Clasificar un producto ahora |
-| Farmacias | «{empresa}: el IVA de cada medicamento, con su base legal» | Probar el clasificador gratis |
-| Importadores | «{empresa}: código arancelario y tasa BCV aplicable en segundos» | Buscar un código arancelario |
-| Contadores | «{empresa}: los vencimientos del SENIAT de sus clientes, en un solo lugar» | Consultar los deberes de un RIF |
-| Desarrolladores | «{empresa}: API gratuita de IVA, tasa BCV y arancel» | Ver la documentación de la API |
+| General | «{empresa}: IVA, tasa BCV y deberes del SENIAT en un solo lugar» | Clasificador de IVA · Tasa BCV · Mis deberes · Comparador |
+| Comercio y bodegas | «{empresa}: ¿qué productos llevan IVA y cuáles no?» | Clasificador de IVA · Comparador · Tasa BCV |
+| Farmacias | «{empresa}: el IVA de cada medicamento, con su base legal» | Clasificador de IVA · Comparador (Farmatodo, Locatel…) · Tasa BCV |
+| Importadores | «{empresa}: código arancelario y tasa BCV aplicable en segundos» | Clasificador (acepta código arancelario) · Tasa BCV · API |
+| Contadores | «{empresa}: los vencimientos del SENIAT de sus clientes, en un solo lugar» | Mis deberes · Clasificador de IVA · Tasa BCV |
+| Desarrolladores | «{empresa}: API gratuita de IVA, tasa BCV y arancel» | Documentación de la API · API key gratuita · Clasificador |
 
-- Cada correo incluye la **tasa del BCV del día** (dólar y euro) como dato útil.
-- Los enlaces llevan `utm_source=correo&utm_medium=prospeccion&utm_campaign={sector}-{tipo}` para medir visitas.
+El seguimiento lleva los dos primeros enlaces del sector.
+
+- Cada correo menciona la **tasa del BCV del día** (dólar y euro) en una frase.
+- Los enlaces llevan `utm_source=correo&utm_campaign={sector}` para medir visitas.
 - Todo dato del prospecto se escapa. Se envía en HTML y en texto plano.
 
 ## Programador
@@ -58,4 +64,4 @@ Un primer correo por sector y un seguimiento común. Diseño de carta: poco HTML
 
 ## Pruebas
 
-`scripts/prueba-api.ts`, sección «Prospección por correo»: las 12 plantillas (escape, baja visible, tasa), la validación, que abrir `/baja` no da de baja, la baja en un clic con un prospecto temporal, el panel sin sesión y el tope de 30 por día.
+`scripts/prueba-api.ts`, sección «Prospección por correo»: las 12 plantillas (estilo carta sin imágenes ni botones, enlaces a las herramientas, escape, baja visible, tasa, sin doble punto tras «C.A.»), la validación, que abrir `/baja` no da de baja, la baja en un clic con un prospecto temporal, el panel sin sesión y el tope de 30 por día.
