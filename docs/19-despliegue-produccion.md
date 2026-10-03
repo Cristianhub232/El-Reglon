@@ -76,12 +76,8 @@ BASE_URL=http://127.0.0.1:3000 node scripts/prueba-api.ts      # 132/132 al 03/1
 
 - **Base interna.** Metabase guarda preguntas, tableros y usuarios en la base `metabase` (rol `metabase`) del mismo PostgreSQL, no en H2.
 - **Conexión a los datos.** Se agrega la base `elrenglon` con el rol **`metabase_lectura`** (`db/metabase/001_roles.sql`): solo `SELECT`, con `default_transaction_read_only` y `statement_timeout` de 120 s.
-- **Qué ve en producción** (columna «Metabase» de cada tabla en [DATABASE.md](../DATABASE.md)):
-  - todas las tablas de `arancel`, `bcv`, `calendario`, `iva`, `rif`, `noticias`, `comparador` y `analitica`, incluidas las que se creen después;
-  - **todo `core`**, también `usuario`, `sesion` y `api_key` (decisión del responsable, 01/10/2026; ven hashes, no contraseñas ni tokens);
-  - **todo `directorio`**, con correos, teléfonos y personas naturales (decisión del responsable, 03/10/2026; contradice la intención de docs/25). Si Metabase se abre a otras personas, conviene restringirlo;
-  - de `avisos`, `prospeccion` y `contacto`, solo columnas sin secretos (sin endpoints ni claves push, sin el token de baja, sin el texto, el correo ni la IP de los mensajes).
-- **Ojo:** `db/metabase/001_roles.sql` deja el acceso **restringido** (sin `usuario`, `sesion` ni `api_key`). Una instalación desde cero queda así; los permisos ampliados de producción se dieron a mano.
+- **Qué ve:** **lectura completa de todos los esquemas y tablas**, incluidas las que se creen en ellos después (decisión del responsable, 03/10/2026; antes había tablas con permisos por columna y Metabase fallaba con `SELECT *`). Incluye datos personales: correos, IP, teléfonos, el directorio, los mensajes de contacto, las suscripciones push con sus claves y los hashes de contraseñas y tokens. Sigue siendo **solo lectura**. Si Metabase se abre a otras personas, conviene restringirlo.
+- `db/metabase/001_roles.sql` (vía `herramientas/instalar_metabase.sh`, después de `instalar_bd.sh`) deja exactamente ese acceso. Un esquema **nuevo** necesita volver a correrlo.
 - **Configuración inicial antes de publicar.** El asistente de Metabase queda abierto para el primero que llegue. Complételo por un túnel (`ssh -L 3001:127.0.0.1:3001 servidor`, luego `http://localhost:3001`) o por la API (`POST /api/setup` con el `setup-token` de `/api/session/properties`) y **después** active su bloque en Caddy.
 - En la conexión, el host es `db`, el puerto `5432` y el usuario `metabase_lectura`. Tras crear esquemas o dar permisos nuevos: Administración → Bases de datos → El Renglón → «Sincronizar esquema ahora».
 

@@ -44,4 +44,4 @@ Registro de las visitas al sitio público y de los RIF consultados, decidido el 
   - páginas más vistas, de dónde llegan, dispositivos y navegadores;
   - RIF más consultados y recientes, con su IP;
   - visitas recientes con IP y visitante.
-- **Metabase** lee las tablas de analítica **sin la columna IP** (permisos por columna).
+- **Metabase** lee las tablas de analítica completas, con la IP (lectura completa de todos los esquemas desde el 03/10/2026, docs/19 §4).

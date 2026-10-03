@@ -1,6 +1,6 @@
 # Base de datos de El Renglón
 
-> Generado por `herramientas/documentar_bd.py` el **03/10/2026 11:54** (hora de Caracas) a partir de la base en servicio y de los comentarios de `db/**/*.sql`. No editar a mano: se mejora el comentario SQL y se vuelve a generar. Solo describe la estructura y cuenta filas; **no contiene datos**.
+> Generado por `herramientas/documentar_bd.py` el **03/10/2026 12:09** (hora de Caracas) a partir de la base en servicio y de los comentarios de `db/**/*.sql`. No editar a mano: se mejora el comentario SQL y se vuelve a generar. Solo describe la estructura y cuenta filas; **no contiene datos**.
 
 ## Resumen
 
@@ -14,18 +14,18 @@
 
 | Esquema | Para qué | Tablas | Filas | Tamaño | Lo escribe | Docs |
 |---|---|---:|---:|---:|---|---|
-| [`core`](#esquema-core) | Núcleo: API keys, usuarios del panel, sesiones, solicitudes de API key, uso diario y auditoría | 6 | 173 | 344 kB | La app (panel y API) | [15](docs/15-plataforma.md), [18](docs/18-interfaz-pwa-panel.md) |
-| [`iva`](#esquema-iva) | Clasificador de IVA: catálogo legal de reglas, alícuotas, base legal, decretos, consultas y productos no encontrados | 14 | 741 | 1 MB | Cargador `scripts/iva-cargar-catalogo.ts` y la app | [16](docs/16-clasificador-iva.md) |
+| [`core`](#esquema-core) | Núcleo: API keys, usuarios del panel, sesiones, solicitudes de API key, uso diario y auditoría | 6 | 181 | 352 kB | La app (panel y API) | [15](docs/15-plataforma.md), [18](docs/18-interfaz-pwa-panel.md) |
+| [`iva`](#esquema-iva) | Clasificador de IVA: catálogo legal de reglas, alícuotas, base legal, decretos, consultas y productos no encontrados | 14 | 741 | 1.1 MB | Cargador `scripts/iva-cargar-catalogo.ts` y la app | [16](docs/16-clasificador-iva.md) |
 | [`arancel`](#esquema-arancel) | Arancel de Aduanas (Decreto 4.944 y reformas 2025): secciones, capítulos, partidas, subpartidas, régimen legal y detección por nombre comercial | 17 + 2 vistas | 23.555 | 24.7 MB | Cargadores `herramientas/arancel` y `scripts/arancel-cargar-sinonimos.ts` | [09](docs/09-semilla-arancel.md), [17](docs/17-deteccion-arancelaria.md) |
 | [`bcv`](#esquema-bcv) | Tasas oficiales del BCV: publicaciones, tasas por moneda, observaciones y fuentes | 6 + 1 vista | 9.266 | 1.1 MB | Cargador histórico y `bcv-programador` (8, 14 y 20 h) | [11](docs/11-historico-tasas-bcv.md), [15](docs/15-plataforma.md) |
 | [`calendario`](#esquema-calendario) | Calendario tributario: obligaciones, vencimientos por terminal de RIF, condiciones y días inhábiles | 5 | 1.519 | 456 kB | Cargador `herramientas/calendario` | [13](docs/13-modulo-calendario.md) |
 | [`rif`](#esquema-rif) | Validación del RIF con dígito verificador (solo funciones) | 0 | 0 | 0 B | Cargador `herramientas/calendario` | [13](docs/13-modulo-calendario.md) |
-| [`noticias`](#esquema-noticias) | Noticiero: fuentes, titulares y lecturas | 3 | 860 | 1.1 MB | `noticias-programador` (cada hora) | [20](docs/20-noticiero.md) |
-| [`comparador`](#esquema-comparador) | Comparador de precios: tiendas, sucursales, productos, precios observados, búsquedas e índice por sitemaps | 7 | 110.889 | 40.6 MB | Contenedor `comparador` (PM2, un proceso por tienda) | [22](docs/22-comparador.md) |
-| [`analitica`](#esquema-analitica) | Analítica del sitio público: visitantes (cookie propia), visitas y RIF consultados; 12 meses | 3 | 201 | 216 kB | La app; purga en `noticias-programador` | [23](docs/23-analitica.md) |
+| [`noticias`](#esquema-noticias) | Noticiero: fuentes, titulares y lecturas | 3 | 873 | 1.2 MB | `noticias-programador` (cada hora) | [20](docs/20-noticiero.md) |
+| [`comparador`](#esquema-comparador) | Comparador de precios: tiendas, sucursales, productos, precios observados, búsquedas e índice por sitemaps | 7 | 111.176 | 40.6 MB | Contenedor `comparador` (PM2, un proceso por tienda) | [22](docs/22-comparador.md) |
+| [`analitica`](#esquema-analitica) | Analítica del sitio público: visitantes (cookie propia), visitas y RIF consultados; 12 meses | 3 | 213 | 216 kB | La app; purga en `noticias-programador` | [23](docs/23-analitica.md) |
 | [`avisos`](#esquema-avisos) | Avisos push: suscripciones, RIF seguidos y envíos | 4 | 13 | 184 kB | La app y los programadores | [24](docs/24-avisos.md) |
 | [`directorio`](#esquema-directorio) | Directorio de contribuyentes: empresas con contacto, importadores, sistemas de facturación y mayores pagadores (datos personales; semilla fuera del repositorio) | 6 | 2.032.640 | 330.1 MB | Cargador `herramientas/directorio` | [25](docs/25-directorio.md) |
-| [`prospeccion`](#esquema-prospeccion) | Prospección comercial por correo: prospectos, bajas permanentes, envíos y ajustes | 4 | 654 | 536 kB | Panel y `noticias-programador` (cada 5 min) | [26](docs/26-prospeccion.md) |
+| [`prospeccion`](#esquema-prospeccion) | Prospección comercial por correo: prospectos, bajas permanentes, envíos y ajustes | 4 | 654 | 544 kB | Panel y `noticias-programador` (cada 5 min) | [26](docs/26-prospeccion.md) |
 | [`contacto`](#esquema-contacto) | Mensajes del botón flotante de contacto y cursor de lectura de los buzones | 2 | 1 | 80 kB | La app y `noticias-programador` | [27](docs/27-contacto-y-bandeja.md) |
 
 ## Roles y permisos
@@ -133,7 +133,7 @@ Solicitudes públicas de API key (formulario /solicitar-api-key); un administrad
 
 ### `core.uso_diario`
 
-*127 filas · 64 kB · Metabase: sí*
+*135 filas · 72 kB · Metabase: sí*
 
 Consultas por día, API key y módulo (0 = herramientas públicas sin API key). Se acumulan en memoria y se escriben cada 30 s: no guarda IP ni contenido de las consultas.
 
@@ -293,7 +293,7 @@ El Renglón · Módulo IVA · Artículos que el clasificador no encontró (estad
 
 ### `iva.consulta_registro` 🔒
 
-*21 filas · 32 kB · Metabase: sí*
+*21 filas · 64 kB · Metabase: sí*
 
 Consultas ambiguas o sin resolver, para mejorar el catálogo (RF-14)
 
@@ -1045,7 +1045,7 @@ Noticiero: titulares de medios venezolanos leídos cada hora (RSS, API de WordPr
 
 ### `noticias.articulo`
 
-*778 filas · 984 kB · Metabase: sí*
+*790 filas · 1000 kB · Metabase: sí*
 
 | Columna | Tipo | Nulo | Predeterminado | Notas |
 |---|---|:---:|---|---|
@@ -1099,7 +1099,7 @@ Noticiero: titulares de medios venezolanos leídos cada hora (RSS, API de WordPr
 
 ### `noticias.lectura`
 
-*72 filas · 152 kB · Metabase: sí*
+*73 filas · 152 kB · Metabase: sí*
 
 Una fila por lectura (programador, panel o consola), con el resultado de cada fuente en "detalle"
 
@@ -1127,7 +1127,7 @@ Comparador de precios (docs/22): lo que devuelven las tiendas en cada búsqueda 
 
 ### `comparador.busqueda`
 
-*59 filas · 48 kB · Metabase: sí*
+*61 filas · 48 kB · Metabase: sí*
 
 Búsquedas (solo el término y el resultado, sin datos de quien busca): para el panel y para saber qué falta
 
@@ -1186,7 +1186,7 @@ Páginas de producto de cada tienda por índice (salen de su sitemap) y el resul
 
 ### `comparador.precio`
 
-*61.296 filas · 6.1 MB · Metabase: sí*
+*61.581 filas · 6.1 MB · Metabase: sí*
 
 Historial: una fila cuando el precio o la existencia cambian, o como mucho una por día si no cambian
 
@@ -1278,7 +1278,7 @@ Sede o sucursal. Cada tienda tiene al menos la "en línea" (clave NULL); las que
 
 ### `analitica.rif_consultado` 🔒
 
-*110 filas · 96 kB · Metabase: algunas columnas*
+*121 filas · 96 kB · Metabase: sí*
 
 RIF consultados: herramienta "Mis deberes tributarios" (web) y API (calendario y validación de RIF)
 
@@ -1292,9 +1292,9 @@ RIF consultados: herramienta "Mis deberes tributarios" (web) y API (calendario y
 | `herramienta` | text | no |  | deberes \| calendario \| rif |
 | `tipo` | text | sí |  | ESPECIAL \| ORDINARIO |
 | `condiciones` | text[] | no | `'{}'` |  |
-| `visitante_id` | uuid | sí |  | → `analitica.visitante` · oculta a Metabase |
-| `api_key_id` | integer | sí |  | oculta a Metabase |
-| `ip` | inet | sí |  | oculta a Metabase |
+| `visitante_id` | uuid | sí |  | → `analitica.visitante` |
+| `api_key_id` | integer | sí |  |  |
+| `ip` | inet | sí |  |  |
 
 - Regla `rif_consultado_origen_check`: `CHECK ((origen = ANY (ARRAY['web', 'api'])))`
 - Regla `rif_consultado_rif_check`: `CHECK ((rif ~ '^[VEJPGC]-\d{8}-\d$'))`
@@ -1303,7 +1303,7 @@ RIF consultados: herramienta "Mis deberes tributarios" (web) y API (calendario y
 
 ### `analitica.visita` 🔒
 
-*52 filas · 96 kB · Metabase: algunas columnas*
+*52 filas · 96 kB · Metabase: sí*
 
 Cada página vista en el sitio público (lo envía el navegador al cargar o cambiar de página)
 
@@ -1314,13 +1314,13 @@ Cada página vista en el sitio público (lo envía el navegador al cargar o camb
 | `ocurrida_en` | timestamptz | no | `now()` |  |
 | `ruta` | text | no |  |  |
 | `referente` | text | sí |  | dominio y ruta de donde llegó (sin parámetros) |
-| `ip` | inet | sí |  | oculta a Metabase |
+| `ip` | inet | sí |  |  |
 | `navegador` | text | sí |  |  |
 | `sistema` | text | sí |  |  |
 | `dispositivo` | text | sí |  |  |
 | `idioma` | text | sí |  |  |
 | `pantalla` | text | sí |  |  |
-| `agente` | text | sí |  | oculta a Metabase |
+| `agente` | text | sí |  |  |
 
 - Regla `visita_agente_check`: `CHECK ((length(agente) <= 400))`
 - Regla `visita_dispositivo_check`: `CHECK ((dispositivo = ANY (ARRAY['computadora', 'teléfono', 'tableta', 'otro'])))`
@@ -1333,7 +1333,7 @@ Cada página vista en el sitio público (lo envía el navegador al cargar o camb
 
 ### `analitica.visitante` 🔒
 
-*39 filas · 24 kB · Metabase: sí*
+*40 filas · 24 kB · Metabase: sí*
 
 Un visitante = un navegador con la cookie "renglon_visitante" (identificador aleatorio, no personal)
 
@@ -1386,7 +1386,7 @@ Cada envío (automático, desde el panel o de prueba); "clave" evita repetir el 
 
 ### `avisos.envio_deber` 🔒
 
-*0 filas · 16 kB · Metabase: no*
+*0 filas · 16 kB · Metabase: sí*
 
 Avisos de vencimiento ya enviados: uno por dispositivo, RIF, obligación, fecha y momento (3 días antes / el día)
 
@@ -1403,17 +1403,17 @@ Avisos de vencimiento ya enviados: uno por dispositivo, RIF, obligación, fecha 
 
 ### `avisos.suscripcion` 🔒
 
-*2 filas · 72 kB · Metabase: algunas columnas*
+*2 filas · 72 kB · Metabase: sí*
 
 | Columna | Tipo | Nulo | Predeterminado | Notas |
 |---|---|:---:|---|---|
 | `id` | bigint | no | autonumérico | **PK** |
-| `endpoint` | text | no |  | oculta a Metabase |
-| `p256dh` | text | no |  | oculta a Metabase |
-| `auth` | text | no |  | oculta a Metabase |
+| `endpoint` | text | no |  |  |
+| `p256dh` | text | no |  |  |
+| `auth` | text | no |  |  |
 | `temas` | text[] | no | `'{}'` |  |
-| `visitante_id` | uuid | sí |  | oculta a Metabase · cookie de analítica, si la hay |
-| `agente` | text | sí |  | oculta a Metabase |
+| `visitante_id` | uuid | sí |  | cookie de analítica, si la hay |
+| `agente` | text | sí |  |  |
 | `creada_en` | timestamptz | no | `now()` |  |
 | `actualizada_en` | timestamptz | no | `now()` |  |
 | `ultimo_envio` | timestamptz | sí |  |  |
@@ -1429,7 +1429,7 @@ Avisos de vencimiento ya enviados: uno por dispositivo, RIF, obligación, fecha 
 
 ### `avisos.suscripcion_rif` 🔒
 
-*0 filas · 32 kB · Metabase: no*
+*0 filas · 32 kB · Metabase: sí*
 
 RIF que sigue cada dispositivo (tema "deberes"); como mucho 5 por dispositivo (lo controla la API)
 
@@ -1662,7 +1662,7 @@ Cada correo enviado (o intentado). "prueba" = envío desde el panel a un correo 
 
 ### `prospeccion.prospecto` 🔒
 
-*639 filas · 424 kB · Metabase: algunas columnas*
+*639 filas · 432 kB · Metabase: sí*
 
 | Columna | Tipo | Nulo | Predeterminado | Notas |
 |---|---|:---:|---|---|
@@ -1674,7 +1674,7 @@ Cada correo enviado (o intentado). "prueba" = envío desde el panel a un correo 
 | `origen` | text | no |  | de dónde salió el contacto |
 | `notas` | text | sí |  |  |
 | `estado` | text | no | `'pendiente'` | pendiente → contactado (1.er correo) → seguimiento (2.º y último) · respondio / descartado / baja / rebote detienen todo |
-| `token` | text | no | `replace((gen_random_uuid()), '-', '')` | oculta a Metabase · enlace de baja |
+| `token` | text | no | `replace((gen_random_uuid()), '-', '')` | enlace de baja |
 | `envios` | integer | no | `0` |  |
 | `ultimo_envio` | timestamptz | sí |  |  |
 | `creado_por` | text | sí |  |  |
@@ -1708,7 +1708,7 @@ Contacto (docs/27): mensajes del botón flotante del sitio y lectura de los buzo
 
 ### `contacto.cursor_buzon`
 
-*1 filas · 32 kB · Metabase: no*
+*1 filas · 32 kB · Metabase: sí*
 
 Último correo revisado de cada buzón (para detectar respuestas de prospectos sin procesarlas dos veces)
 
@@ -1723,23 +1723,23 @@ Contacto (docs/27): mensajes del botón flotante del sitio y lectura de los buzo
 
 ### `contacto.mensaje` 🔒
 
-*0 filas · 48 kB · Metabase: algunas columnas*
+*0 filas · 48 kB · Metabase: sí*
 
 | Columna | Tipo | Nulo | Predeterminado | Notas |
 |---|---|:---:|---|---|
 | `id` | bigint | no | autonumérico | **PK** |
-| `correo` | text | no |  | oculta a Metabase |
-| `nombre` | text | sí |  | oculta a Metabase |
-| `mensaje` | text | no |  | oculta a Metabase |
+| `correo` | text | no |  |  |
+| `nombre` | text | sí |  |  |
+| `mensaje` | text | no |  |  |
 | `pagina` | text | sí |  | desde qué página escribió |
 | `novedades` | boolean | no | `false` | marcó «Quiero recibir novedades» |
 | `estado` | text | no | `'nuevo'` |  |
 | `notificado` | boolean | no | `false` | se avisó por correo a soporte@ |
-| `visitante_id` | uuid | sí |  | oculta a Metabase · cookie de analítica, si la hay |
-| `ip` | text | sí |  | oculta a Metabase |
-| `agente` | text | sí |  | oculta a Metabase |
+| `visitante_id` | uuid | sí |  | cookie de analítica, si la hay |
+| `ip` | text | sí |  |  |
+| `agente` | text | sí |  |  |
 | `creado_en` | timestamptz | no | `now()` |  |
-| `atendido_por` | text | sí |  | oculta a Metabase |
+| `atendido_por` | text | sí |  |  |
 | `atendido_en` | timestamptz | sí |  |  |
 
 - Regla `mensaje_agente_check`: `CHECK ((length(agente) <= 400))`

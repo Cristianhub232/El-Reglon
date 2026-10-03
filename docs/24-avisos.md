@@ -51,7 +51,7 @@ Notificaciones del navegador (Web Push), decididas el 01/10/2026. Se activan **s
 - **`avisos.suscripcion_rif`:** RIF, tipo y condiciones; se borran en cascada con la suscripción.
 - **`avisos.envio`:** historial (tema, clave, texto, origen, quién, destinatarios, entregados, fallidos). Se purga a los 12 meses con `avisos.purgar()`.
 - **`avisos.envio_deber`:** control de vencimientos avisados. Se purga una semana después de la fecha límite.
-- **Metabase:** solo ve `avisos.envio` y columnas de `avisos.suscripcion` sin endpoint ni claves.
+- **Metabase:** lee todas las tablas completas, también los endpoints y claves de las suscripciones (lectura completa desde el 03/10/2026, docs/19 §4).
 
 ## Panel: «Avisos push»
 
