@@ -13,7 +13,7 @@ export const CATEGORIAS: Record<Categoria, { titulo: string; clase: string }> = 
 export function categoria(accion: string): Categoria {
   const m = accion.split(".")[0];
   if (m === "bcv" || m === "iva" || m === "arancel" || m === "calendario" || m === "noticias") return m;
-  if (m === "pulso" || m === "comparador") return "noticias";
+  if (m === "pulso" || m === "comparador" || m === "prospeccion") return "noticias";
   return "acceso";
 }
 
@@ -67,6 +67,11 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "pulso.publicacion.mostrar": return `Volvió a mostrar «${t("titulo")}» (${t("cuenta")})`;
     case "comparador.tienda.pausar": return `Pausó ${t("nombre")} en el comparador`;
     case "comparador.tienda.activar": return `Reactivó ${t("nombre")} en el comparador`;
+    case "prospeccion.ajustes": return `Prospección ${d.activo ? "activa" : "en pausa"} · ${t("limite_diario")} al día, de ${t("hora_inicio")} a ${t("hora_fin")} h · seguimiento a los ${t("dias_seguimiento")} días`;
+    case "prospeccion.crear": return `${t("empresa")} · ${t("correo")} (${t("sector")})`;
+    case "prospeccion.importar": return `CSV: ${t("agregados")} agregados, ${t("duplicados")} repetidos, ${t("en_baja")} en baja${Number(d.errores) ? ` · ${t("errores")} con error` : ""}`;
+    case "prospeccion.estado": return `${t("empresa")} · ${t("correo")} → ${t("estado")}`;
+    case "prospeccion.prueba": return `Prueba (${t("sector")}) a ${t("correo")}${d.ok ? "" : " · falló"}`;
     default: return Object.entries(d).slice(0, 4).map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`).join(" · ");
   }
 }

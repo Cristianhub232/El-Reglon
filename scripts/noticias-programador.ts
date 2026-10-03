@@ -4,6 +4,7 @@ import "./entorno.ts";
 import { consulta, pool } from "../src/core/db.ts";
 import { recolectar } from "../src/modules/noticias/recolector.ts";
 import { avisosProgramados } from "../src/modules/avisos/temas.ts";
+import { cicloProspeccion } from "../src/modules/prospeccion/programador.ts";
 
 const minuto = Number(process.env.NOTICIAS_MINUTO ?? 5);
 if (!Number.isInteger(minuto) || minuto < 0 || minuto > 59) throw new Error("NOTICIAS_MINUTO debe estar entre 0 y 59");
@@ -36,6 +37,14 @@ async function purgarAnalitica() {
   } catch (e) { console.error(`[noticias-programador] analítica: ${(e as Error).message}`); }
 }
 
+// Prospección por correo (docs/26): cada 5 minutos; envía como mucho un correo por ciclo y solo si está activa
+async function prospeccion() {
+  try {
+    const r = await cicloProspeccion();
+    if (r.enviado) console.log(JSON.stringify({ momento: new Date().toISOString(), prospeccion: r.enviado }));
+  } catch (e) { console.error(`[noticias-programador] prospección: ${(e as Error).message}`); }
+}
+
 function proxima(desde = Date.now()): number {
   const t = new Date(desde); t.setUTCMinutes(minuto, 0, 0);
   return t.getTime() > desde ? t.getTime() : t.getTime() + 3600_000;
@@ -46,6 +55,7 @@ async function ciclo(): Promise<never> {
   if (u.vieja) await ejecutar("programador");
   await purgarAnalitica();
   await avisos();
+  setInterval(() => void prospeccion(), 5 * 60_000);
   for (;;) {
     const t = proxima();
     console.log(`[noticias-programador] próxima lectura: ${new Date(t).toISOString()}`);
