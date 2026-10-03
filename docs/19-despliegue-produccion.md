@@ -1,6 +1,6 @@
 # 19 · Despliegue en producción
 
-> Desplegado el 30/09/2026 en una VPS Ubuntu 26.04 (4 GB de RAM). Dominio **elrenglonve.org** (Spaceship). Aplicación, programador BCV, PostgreSQL y Metabase con Docker Compose, detrás de **Caddy** con TLS automático de Let's Encrypt.
+> Desplegado el 30/09/2026 en una VPS Ubuntu 26.04 de OVH (4 GB de RAM y 4 GB de swap). Dominio **elrenglonve.org** (Spaceship). Aplicación, programadores, comparador, PostgreSQL y Metabase con Docker Compose, detrás de **Caddy** con TLS automático de Let's Encrypt. Correo con **Spacemail**. Tablas y esquemas: [DATABASE.md](../DATABASE.md).
 
 ## 1. Arquitectura
 
@@ -10,7 +10,9 @@
 | `https://metabase.elrenglonve.org` | `metabase` (análisis) | `127.0.0.1:3001` |
 | `www.elrenglonve.org` y el IP a secas | redirigen a `https://elrenglonve.org` | — |
 | — | `db` (PostgreSQL 16: bases `elrenglon` y `metabase`) | `127.0.0.1:55432` |
-| — | `bcv-programador` (lectura del BCV a las 8, 14 y 20 h) | — |
+| — | `bcv-programador` (lectura del BCV a las 8, 14 y 20 h; avisos push de la tasa) | — |
+| — | `noticias-programador` (noticiero cada hora; purga de analítica; avisos push programados; cada 5 min, prospección por correo y respuestas en ventas@) | — |
+| — | `comparador` (PM2, un proceso por tienda; solo red interna) | puertos 4101–41xx internos |
 
 Solo Caddy (puertos 80 y 443) y SSH quedan expuestos. Todos los contenedores tienen `restart: unless-stopped` y Docker y Caddy arrancan con el sistema.
 
@@ -51,7 +53,7 @@ sudo usermod -aG docker $USER            # y volver a entrar
   curl -fsSL https://nodejs.org/dist/$V/SHASUMS256.txt | grep node-$V-linux-x64.tar.xz | sha256sum -c -
   sudo tar -xJf node-$V-linux-x64.tar.xz -C /usr/local --strip-components=1
   ```
-- **Memoria.** Metabase (Java) ocupa ~1,2 GB. Con 4 GB de RAM se agregan 2 GB de swap (`/swapfile`, `vm.swappiness=10`) y se limita Java con `METABASE_JAVA_OPTS=-Xmx1g`. Para tableros pesados conviene una instancia de 8 GB.
+- **Memoria.** Metabase (Java) ocupa ~1,2 GB y el comparador ~440 MB (12 tiendas, unos 35–40 MB por tienda). Con 4 GB de RAM hay **4 GB de swap** (`/swapfile` y `/swapfile2`, ambos en `/etc/fstab`; `vm.swappiness=10`) y Java se limita con `METABASE_JAVA_OPTS=-Xmx1g`. **Recomendado: subir a 8 GB** si crecen las tiendas o el uso de Metabase.
 
 ## 3. Instalación
 
@@ -61,21 +63,27 @@ cp .env.example .env && chmod 600 .env
 #   POSTGRES_PASSWORD, APP_SECRETO, METABASE_DB_PASSWORD, METABASE_LECTURA_PASSWORD y
 #   MB_ENCRYPTION_SECRET_KEY: cada uno con  openssl rand -hex 32
 #   COMPOSE_PROFILES=app,metabase   (así "docker compose up -d" levanta todo)
+#   VAPID_PUBLICO y VAPID_PRIVADO: npx web-push generate-vapid-keys (docs/24; no se cambian después)
+#   CORREO_SMTP_CLAVE y CORREO_SOPORTE_CLAVE: contraseñas de ventas@ y soporte@, ENTRE COMILLAS SIMPLES
+#   WORLDNEWS_API_KEY (docs/20) y SOPORTE_CORREO=soporte@elrenglonve.org
 docker compose up -d db && herramientas/instalar_bd.sh && herramientas/instalar_metabase.sh
 docker compose up -d --build
 node scripts/usuario.ts crear --correo usted@empresa.com.ve --nombre "Su nombre" --rol super
-BASE_URL=http://127.0.0.1:3000 node scripts/prueba-api.ts      # 79/79
+BASE_URL=http://127.0.0.1:3000 node scripts/prueba-api.ts      # 132/132 al 03/10/2026
 ```
 
 ## 4. Metabase
 
 - **Base interna.** Metabase guarda preguntas, tableros y usuarios en la base `metabase` (rol `metabase`) del mismo PostgreSQL, no en H2.
-- **Conexión a los datos.** Se agrega la base `elrenglon` con el rol **`metabase_lectura`** (`db/metabase/001_roles.sql`):
-  - solo `SELECT`, con `default_transaction_read_only` y `statement_timeout` de 120 s;
-  - esquemas `arancel`, `bcv`, `calendario`, `iva` y `rif`, incluidas las tablas que se creen después;
-  - de `core`, solo `auditoria`, `uso_diario` y `solicitud_api_key`. **No ve** `usuario`, `sesion` ni `api_key`.
+- **Conexión a los datos.** Se agrega la base `elrenglon` con el rol **`metabase_lectura`** (`db/metabase/001_roles.sql`): solo `SELECT`, con `default_transaction_read_only` y `statement_timeout` de 120 s.
+- **Qué ve en producción** (columna «Metabase» de cada tabla en [DATABASE.md](../DATABASE.md)):
+  - todas las tablas de `arancel`, `bcv`, `calendario`, `iva`, `rif`, `noticias`, `comparador` y `analitica`, incluidas las que se creen después;
+  - **todo `core`**, también `usuario`, `sesion` y `api_key` (decisión del responsable, 01/10/2026; ven hashes, no contraseñas ni tokens);
+  - **todo `directorio`**, con correos, teléfonos y personas naturales (decisión del responsable, 03/10/2026; contradice la intención de docs/25). Si Metabase se abre a otras personas, conviene restringirlo;
+  - de `avisos`, `prospeccion` y `contacto`, solo columnas sin secretos (sin endpoints ni claves push, sin el token de baja, sin el texto, el correo ni la IP de los mensajes).
+- **Ojo:** `db/metabase/001_roles.sql` deja el acceso **restringido** (sin `usuario`, `sesion` ni `api_key`). Una instalación desde cero queda así; los permisos ampliados de producción se dieron a mano.
 - **Configuración inicial antes de publicar.** El asistente de Metabase queda abierto para el primero que llegue. Complételo por un túnel (`ssh -L 3001:127.0.0.1:3001 servidor`, luego `http://localhost:3001`) o por la API (`POST /api/setup` con el `setup-token` de `/api/session/properties`) y **después** active su bloque en Caddy.
-- En la conexión, filtre los esquemas a `arancel,bcv,calendario,iva,rif,core`. El host es `db`, el puerto `5432` y el usuario `metabase_lectura`.
+- En la conexión, el host es `db`, el puerto `5432` y el usuario `metabase_lectura`. Tras crear esquemas o dar permisos nuevos: Administración → Bases de datos → El Renglón → «Sincronizar esquema ahora».
 
 ## 5. Dominio y TLS
 
@@ -86,11 +94,19 @@ Mientras el dominio no resuelva se puede publicar provisionalmente con `<ip-con-
 
 ## 6. Actualizar
 
+Procedimiento usado en cada despliegue:
+
 ```bash
+cd ~/renglon-produccion && set -a && . ./.env && set +a
+docker compose exec -T db pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc > ~/respaldos/elrenglon-$(date +%Y%m%d-%H%M).dump
 git pull && npm ci
-herramientas/instalar_bd.sh                 # si cambiaron esquemas o semillas (idempotente)
-docker compose up -d --build
+herramientas/instalar_bd.sh                 # esquemas y semillas (idempotente; también recarga el directorio si está su semilla)
+docker compose build app comparador && docker compose up -d
+BASE_URL=https://elrenglonve.org node scripts/prueba-api.ts
 ```
+
+- Los respaldos (`pg_dump -Fc`, solo legibles por el usuario) quedan en `~/respaldos/`. Restaurar: `pg_restore -c -d elrenglon` dentro del contenedor `db`.
+- Si cambiaron las tablas, regenerar [DATABASE.md](../DATABASE.md): `python3 herramientas/documentar_bd.py`.
 
 ## 7. Historial de la puesta en marcha (30/09/2026)
 
@@ -101,11 +117,30 @@ docker compose up -d --build
 5. `scripts/prueba-api.ts` contra `https://elrenglonve.org`: **79/79**.
 6. El Caddyfile con las direcciones provisionales quedó respaldado en el servidor como `/etc/caddy/Caddyfile.bak-sslip`.
 
+### Despliegues posteriores
+
+| Fecha | Versión | Qué entró |
+|---|---|---|
+| 30/09/2026 | PR #1 y #2 | Despliegue (Caddy, Metabase, reinicio de la base) e indexación en Google (robots, sitemap, canonical) |
+| 30/09/2026 | PR #3 | Noticiero: Alertas24 por RSS y TalCual por WorldNewsAPI (desde el servidor el bloqueo por IP es al revés) |
+| 01/10/2026 | `7960a05` | Comparador de precios (9 tiendas) y «El día en cifras» |
+| 01/10/2026 | `aa2824f` | Avisos push, analítica con cookie propia, `/privacidad`, «Mis deberes» y comparador con 12 cadenas; claves VAPID generadas y swap ampliado a 4 GB |
+| 03/10/2026 | PR #4 | Prospección por correo y directorio de contribuyentes (semilla copiada aparte; 639 contribuyentes especiales cargados como prospectos) |
+| 03/10/2026 | PR #5 | Buscador de prospectos, búsqueda en el directorio, «Ver su correo» y «Enviar ahora» |
+| 03/10/2026 | PR #6 | Botón flotante de contacto y Bandeja (ventas@ y soporte@) |
+
 ## 8. Tareas del responsable
 
-- [ ] **Cambiar las contraseñas temporales** del panel de El Renglón y de Metabase. El panel lo exige al primer ingreso y pide activar la **verificación en dos pasos**.
-- [ ] En Spaceship, subir el TTL del registro `@` de 5 a 30 minutos, igual que `www` y `metabase`. El TTL bajo solo hacía falta durante el cambio.
-- [ ] Mantener activa la **renovación automática del dominio** (vence al año de la compra, en septiembre de 2027). Si el dominio vence, se caen el sitio, la API y Metabase.
+Estado al 03/10/2026:
+
+- [x] Cambiar las contraseñas temporales del panel y de Metabase.
+- [x] Subir el TTL del registro `@` a 30 minutos en Spaceship.
+- [x] Google Search Console: dominio verificado, sitemap procesado e indexación de la portada solicitada (§9).
+- [ ] **Activar la verificación en dos pasos** de la cuenta de superadministrador (Panel → Mi cuenta). Es la única cuenta y tiene acceso total.
+- [ ] **Cambiar las contraseñas de los buzones** `ventas@`, `admin@` y `soporte@` por contraseñas generadas, antes de activar la prospección. Las nuevas de `ventas@` y `soporte@` van al `.env` entre comillas simples y hay que reiniciar los servicios.
+- [ ] Agregar `CORREO_SOPORTE_CLAVE` al `.env` para que la Bandeja lea soporte@ (docs/27).
+- [ ] Mantener activa la **renovación automática del dominio** (vence en septiembre de 2027) y del plan de Spacemail.
+- [ ] Recomendado: subir la VPS a 8 GB de RAM (§2).
 - [ ] Opcional: borrar la "Sample Database" de Metabase (Administración → Bases de datos).
 
 ## 9. Indexación en Google (SEO)
@@ -113,15 +148,15 @@ docker compose up -d --build
 | Pieza | Implementación |
 |---|---|
 | `/robots.txt` | `src/app/robots.ts`: permite todo el sitio, bloquea `/admin` y `/api/` y anuncia el sitemap |
-| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, `/noticias`, `/solicitar-api-key` y `/docs` con su URL canónica |
+| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, `/noticias`, `/solicitar-api-key`, `/docs` y `/privacidad` con su URL canónica |
 | Canonical | En cada página pública (`alternates.canonical`). No va en el layout raíz: todas las páginas lo heredarían y dirían ser la portada |
-| `noindex` | `/admin` (y sus páginas), `/ingresar` y `/sin-conexion` |
+| `noindex` | `/admin` (y sus páginas), `/ingresar`, `/sin-conexion` y `/baja` |
 | URL base | `src/core/sitio.ts` (`SITIO_URL`, por defecto `https://elrenglonve.org`): `metadataBase`, Open Graph (`es_VE`), robots y sitemap |
 | Versión canónica | `https://elrenglonve.org/`: `http://`, `www` y el IP redirigen a ella con 301/308 en un solo salto |
 
-`scripts/prueba-api.ts` verifica robots, sitemap, canonical y `noindex` (83 verificaciones en total).
+`scripts/prueba-api.ts` verifica robots, sitemap, canonical y `noindex`.
 
-**Google Search Console** (lo hace el responsable con su cuenta de Google):
+**Google Search Console** (hecho el 30/09/2026: propiedad de dominio verificada por TXT en Spaceship —no borrar ese registro—, sitemap procesado e indexación de la portada solicitada). Pasos, por si hay que repetirlos:
 1. Agregar una propiedad de tipo **Dominio** para `elrenglonve.org`.
 2. Copiar el registro **TXT** que entrega Google y crearlo en Spaceship (Host `@`, Tipo `TXT`). Después, pulsar **Verificar**.
 3. En **Sitemaps**, enviar `sitemap.xml`.

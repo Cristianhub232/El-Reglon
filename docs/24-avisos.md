@@ -67,6 +67,8 @@ Safari en iOS/iPadOS 16.4 o posterior solo admite avisos si El Renglón está **
 
 ## Producción
 
+> En servicio desde el 01/10/2026: claves VAPID de producción generadas en el servidor (no salen de su `.env`) y `VAPID_CONTACTO=mailto:soporte@elrenglonve.org`, que ya existe (Spacemail). **No regenerar las claves:** todas las suscripciones dejarían de funcionar.
+
 1. Generar las claves: `npx web-push generate-vapid-keys`. Copiarlas al `.env` del servidor (`VAPID_PUBLICO`, `VAPID_PRIVADO`).
 2. Aplicar la base de datos: `herramientas/instalar_bd.sh` (incluye `004_avisos.sql`).
 3. Reconstruir y reiniciar `app`, `bcv-programador` y `noticias-programador`: los tres usan las claves.

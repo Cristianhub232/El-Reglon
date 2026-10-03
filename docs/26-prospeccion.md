@@ -79,6 +79,13 @@ Lo que llama la atención es un dato útil, no el diseño (03/10/2026):
 
 `prospecto` (con `token` de baja), `baja` (supresión permanente), `envio` (historial, incluidas las pruebas) y `ajuste` (una fila). Metabase lee todo salvo el `token` de los prospectos.
 
+## Estado en producción (03/10/2026)
+
+- **En pausa:** no se ha enviado ningún correo a prospectos; solo pruebas a correos propios.
+- **639 prospectos** cargados desde el directorio (docs/25): contribuyentes especiales con correo, RIF J o C válido y sin entes de gobierno. Nombres en formato título (`nombrePropio`), en orden de mayor a menor pago al SENIAT; 2 correos repetidos se omitieron. Copia privada del CSV en `datos/directorio/prospectos_especiales.csv` (fuera del repositorio).
+- Las respuestas a `ventas@` actualizan el estado del prospecto solas (docs/27).
+- Antes de activar: cambiar las contraseñas de los buzones (docs/19 §8) y empezar con 5 correos al día.
+
 ## Pruebas
 
 `scripts/prueba-api.ts`, sección «Prospección por correo»: los ejemplos de IVA frente al clasificador, RIF y consentimiento obligatorios, los deberes reales de un RIF, el correo de personas con su comparación, las 16 plantillas (estilo carta sin imágenes ni botones, enlaces a las herramientas, escape, baja visible, tasa, sin doble punto tras «C.A.»), la validación, que abrir `/baja` no da de baja, la baja en un clic con un prospecto temporal, el panel sin sesión y el tope de 30 por día.
