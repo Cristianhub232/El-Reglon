@@ -56,6 +56,7 @@ Las tiendas se registran en `datos/comparador/tiendas.json`: id, nombre, sitio, 
 | Mercasa, Que Mantequilla | Next.js propio | — | **Pendientes.** Buscan desde el navegador por su `/api`, que su `robots.txt` prohíbe |
 | Multimax | Astro | — | **Excluida** (revisada de nuevo el 03/10/2026). Su `robots.txt` lo permite y con curl responde, pero al cliente del comparador Cloudflare le da un desafío antibots (403, `cf-mitigated: challenge`) en la búsqueda, las fichas y el sitemap de productos, y su API (`api.multimax.com.ve`) exige autenticación. Pasar el desafío imitando a un navegador sería evadir su protección. La vía es pedirle a Multimax que permita al comparador |
 | Plazas | Cloudflare | — | **Excluida.** Desafío antibots |
+| Soytechno | WordPress con WooCommerce y SearchWP | — | **Excluida** (revisada el 03/10/2026). Cloudflare le pone un desafío antibots (403, `cf-mitigated: challenge`) al comparador en todo el sitio: `robots.txt`, búsqueda, sitemaps y la API de WooCommerce. La vía es pedirle a la tienda que permita al comparador |
 | Makro (tienda.makro.com.co) | — | — | **Excluida.** Es de Colombia (pesos colombianos); Makro Venezuela no vende en línea |
 
 ### Tiendas por índice
