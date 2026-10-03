@@ -39,7 +39,7 @@ Solo cuenta lo que escribió la persona: el texto se corta en la cita del correo
 
 ## Base de datos (`db/contacto/001_esquema.sql`)
 
-`contacto.mensaje` y `contacto.cursor_buzon`. Metabase solo ve los conteos de los mensajes (sin correo, texto ni IP).
+`contacto.mensaje` y `contacto.cursor_buzon`. Metabase las lee completas (lectura completa de todos los esquemas desde el 03/10/2026, docs/19 §4).
 
 ## Pruebas
 

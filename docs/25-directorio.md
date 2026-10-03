@@ -12,7 +12,9 @@ Importadores y sistemas de facturación, cargados el 01/10/2026 desde dos export
 > - `datos/directorio/`;
 > - las hojas de cálculo y CSV sueltos en la raíz.
 >
-> Metabase no tiene acceso al esquema `directorio`.
+> **Metabase:** el diseño original no le daba acceso a este esquema. En producción, por decisión del responsable (03/10/2026), `metabase_lectura` lee **todo** el directorio, incluidos correos, teléfonos y personas naturales, como el resto de los esquemas. Si Metabase se abre a otras personas, conviene restringirlo a columnas sin datos de contacto (docs/19 §4).
+>
+> **Uso en la prospección:** el 03/10/2026 se cargaron como prospectos los 639 contribuyentes especiales con correo (RIF J o C válido; sin entes de gobierno) desde este directorio (docs/26).
 
 ## Saneamiento (`herramientas/directorio/sanear_directorio.py`)
 

@@ -52,6 +52,10 @@
 | Calendario | Mes con días inhábiles y vencimientos. Agregar un día inhábil (p. ej. un día no laborable decretado) **recalcula las prórrogas** del COT art. 10 en la misma transacción |
 | Noticiero | Estado de las 10 fuentes, lecturas horarias, «Leer ahora», pausar o reactivar una fuente y ocultar titulares ([docs/20](20-noticiero.md)). |
 | Comparador de precios | Estado de cada tienda (servicio PM2, última respuesta, productos con EAN), pausar o reactivar, lo más buscado y lo buscado sin resultado ([docs/22](22-comparador.md)) |
+| Avisos push | Dispositivos por tema y por servicio, envíos recientes, enviar una novedad a todos y una prueba al navegador propio; RIF seguidos solo para el superadministrador ([docs/24](24-avisos.md)) |
+| Prospección | Solo superadministrador. Ajustes (activa, límite diario, horario, seguimiento), vista previa de cada plantilla y del correo real de cada prospecto, pruebas, alta, importación CSV, buscador con filtros y páginas, búsqueda en el directorio, «Enviar ahora» y estados ([docs/26](26-prospeccion.md)) |
+| Bandeja | Solo superadministrador. Mensajes del botón de contacto (responder, atendido, spam) y correos de ventas@ y soporte@ en solo lectura; respuestas de prospectos detectadas ([docs/27](27-contacto-y-bandeja.md)) |
+| Visitas y RIF | Solo superadministrador. Visitas del sitio con cookie propia, dispositivos, páginas y RIF consultados ([docs/23](23-analitica.md)) |
 | Mi cuenta | Editar el nombre propio, cambiar la contraseña y activar o desactivar la 2FA |
 | Auditoría | Todos los eventos (sesiones, API keys, usuarios, lecturas del BCV, catálogos), con filtros, búsqueda, paginación y exportación CSV (celdas protegidas contra fórmulas) |
 
@@ -76,10 +80,15 @@ Los catálogos nacen de archivos versionados (`datos/…`). Lo que se edita en e
 | `APP_SECRETO` | Obligatoria para la verificación en dos pasos (`openssl rand -hex 32`) |
 | `TRUST_PROXY` | `1` detrás del proxy inverso (en el compose el puerto solo escucha en 127.0.0.1) |
 | `COOKIE_SEGURA` | `1` (por defecto): cookies solo por HTTPS |
-| `SOPORTE_WHATSAPP`, `SOPORTE_CORREO` | Canales de soporte del inicio de sesión (si están vacíos, no se muestran) |
+| `SOPORTE_WHATSAPP`, `SOPORTE_CORREO` | Canales de soporte del inicio de sesión y de `/privacidad` (si están vacíos, no se muestran). En producción, `SOPORTE_CORREO=soporte@elrenglonve.org` |
+| `VAPID_PUBLICO`, `VAPID_PRIVADO`, `VAPID_CONTACTO` | Avisos push ([docs/24](24-avisos.md)). No se cambian: invalidarían todas las suscripciones |
+| `CORREO_SMTP_*`, `CORREO_SOPORTE_CLAVE` | Envío de correos desde ventas@ y lectura de ventas@ y soporte@ ([docs/26](26-prospeccion.md), [docs/27](27-contacto-y-bandeja.md)). Entre comillas simples si tienen `#` o `$` |
+| `WORLDNEWS_API_KEY`, `NOTICIAS_MINUTO` | Noticiero ([docs/20](20-noticiero.md)) |
+| `COMPARADOR_INDICE` | Comparador: recorrer los sitemaps de las tiendas por índice ([docs/22](22-comparador.md)) |
+| `METABASE_*`, `MB_ENCRYPTION_SECRET_KEY`, `COMPOSE_PROFILES` | Metabase y perfiles de producción ([docs/19](19-despliegue-produccion.md)) |
 
 ## 8. Pendientes
 
-- Envío de correos (invitaciones, API keys aprobadas, recuperación de contraseña): hoy la contraseña temporal y el token se entregan por un canal que elige el administrador.
-- Notificaciones push de la PWA, por ejemplo al publicarse la tasa del BCV.
+- Envío por correo de invitaciones, API keys aprobadas y recuperación de contraseña: hoy la contraseña temporal y el token se entregan por un canal que elige el administrador. El envío de correos ya existe (Spacemail, [docs/26](26-prospeccion.md)) y se puede reutilizar.
+- ~~Notificaciones push de la PWA~~: implementadas ([docs/24](24-avisos.md)).
 - Métricas de uso compartidas si se despliegan varias instancias (hoy cada una escribe sus propios contadores, que se suman en la base).

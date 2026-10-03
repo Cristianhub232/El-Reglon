@@ -96,7 +96,7 @@ Errores: 400 (entrada inválida o sin `operacion`), 401, 403, 413, 415 y 429. La
 ```bash
 npm run iva:casos          # casos de referencia, sin base de datos
 npm run iva:cargar         # valida y carga (requiere pdftotext; sin él: -- --sin-pdf)
-BASE_URL=http://127.0.0.1:3000 npm run prueba:api   # 57 pruebas de extremo a extremo
+BASE_URL=http://127.0.0.1:3000 npm run prueba:api   # pruebas de extremo a extremo (132 al 03/10/2026; 21 del IVA)
 ```
 
 Para agregar un producto o un criterio:
@@ -113,4 +113,4 @@ La **UI de administración** (pendiente) editará el mismo catálogo, con audito
 - Marcar precios atípicos: más de 5 desviaciones de la mediana del producto en 30 días.
 - Umbral de 2 U.T. del art. 19.7 cuando exista el módulo U.T.
 - Tabla PLU → producto; búsqueda aproximada por nombre (`pg_trgm`) cuando no coincide ninguna regla; `coincidencias[]` desde la caché.
-- UI de consulta (A21) y de administración.
+- ~~UI de consulta (A21) y de administración~~: el clasificador público de la portada (sin cuenta, con límite por IP) y el «Catálogo legal IVA» del panel ([18](18-interfaz-pwa-panel.md)).

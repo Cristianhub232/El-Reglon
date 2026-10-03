@@ -51,7 +51,7 @@ Notificaciones del navegador (Web Push), decididas el 01/10/2026. Se activan **s
 - **`avisos.suscripcion_rif`:** RIF, tipo y condiciones; se borran en cascada con la suscripción.
 - **`avisos.envio`:** historial (tema, clave, texto, origen, quién, destinatarios, entregados, fallidos). Se purga a los 12 meses con `avisos.purgar()`.
 - **`avisos.envio_deber`:** control de vencimientos avisados. Se purga una semana después de la fecha límite.
-- **Metabase:** solo ve `avisos.envio` y columnas de `avisos.suscripcion` sin endpoint ni claves.
+- **Metabase:** lee todas las tablas completas, también los endpoints y claves de las suscripciones (lectura completa desde el 03/10/2026, docs/19 §4).
 
 ## Panel: «Avisos push»
 
@@ -66,6 +66,8 @@ Notificaciones del navegador (Web Push), decididas el 01/10/2026. Se activan **s
 Safari en iOS/iPadOS 16.4 o posterior solo admite avisos si El Renglón está **agregado a la pantalla de inicio** (Compartir → «Agregar a inicio») y se abre desde ese icono. La campana lo explica cuando detecta un iPhone o iPad sin la app instalada.
 
 ## Producción
+
+> En servicio desde el 01/10/2026: claves VAPID de producción generadas en el servidor (no salen de su `.env`) y `VAPID_CONTACTO=mailto:soporte@elrenglonve.org`, que ya existe (Spacemail). **No regenerar las claves:** todas las suscripciones dejarían de funcionar.
 
 1. Generar las claves: `npx web-push generate-vapid-keys`. Copiarlas al `.env` del servidor (`VAPID_PUBLICO`, `VAPID_PRIVADO`).
 2. Aplicar la base de datos: `herramientas/instalar_bd.sh` (incluye `004_avisos.sql`).
