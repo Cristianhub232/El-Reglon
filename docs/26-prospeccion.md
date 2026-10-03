@@ -68,6 +68,10 @@ Lo que llama la atención es un dato útil, no el diseño (03/10/2026):
 - **Ajustes:** activa o en pausa, límite diario, horario y días hasta el seguimiento.
 - **Vista previa** de cada plantilla (primer correo y seguimiento) y **envío de prueba** a cualquier dirección. Las pruebas no cuentan para el límite ni cambian ningún estado; su enlace de baja (`t=prueba`) no da de baja a nadie.
 - **Alta** de un prospecto e **importación CSV** (hasta 500 líneas; `empresa; contacto; correo; sector; origen; rif; consentimiento`). Sectores por clave, nombre o alias («especial», «persona natural»). Los repetidos y los dados de baja se omiten.
+- **Buscador de prospectos:** por empresa, contacto, correo o RIF (con o sin guiones), con filtros por sector y estado y páginas de 50. Los pendientes salen en el orden en que se les escribirá.
+- **Buscar en el directorio** (docs/25): razón social o RIF; muestra el correo registrado, si es especial (con su puesto en «Mejores pagadores»), importador o tiene sistema de facturación, y **si ya es prospecto**. «Agregar» propone el sector (especial, desarrollador, importador o general) y toma el correo y el nombre de la base, en formato título (`nombrePropio`). Las personas naturales (RIF V, E o P) no se agregan como empresa.
+- **Ver su correo:** la vista previa con los datos reales de ese prospecto (sus deberes, su nombre), primer correo o seguimiento según su estado.
+- **Enviar ahora:** manda en el momento el correo que le toca (primer correo o seguimiento). Respeta bajas y consentimiento y **cuenta para el límite diario**, aunque la prospección esté en pausa o fuera de horario. Usa la misma función que el programador (`enviarAProspecto`).
 - **Estados:** las respuestas llegan a `ventas@`; se marcan a mano con «Respondió». También «Descartar», «Volver a pendiente» y «Dar de baja».
 - Todo queda en la auditoría (`prospeccion.*`).
 

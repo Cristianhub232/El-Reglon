@@ -4,11 +4,11 @@ import Link from "next/link";
 import { consulta } from "../../../core/db.ts";
 import { requerirSeccion } from "../../../core/auth/dal.ts";
 import { contextoPara, correoConfigurado } from "../../../modules/prospeccion/envio.ts";
-import { armarCorreo, datosEjemplo, SECTORES, type Sector, type TipoCorreo } from "../../../modules/prospeccion/plantillas.ts";
-import { ESTADOS, type EstadoProspecto } from "../../../modules/prospeccion/prospectos.ts";
+import { armarCorreo, datosEjemplo, SECTORES, type DatosCorreo, type Sector, type TipoCorreo } from "../../../modules/prospeccion/plantillas.ts";
+import { buscarDirectorio, ESTADOS, listar, type EstadoProspecto } from "../../../modules/prospeccion/prospectos.ts";
 import { FormAccion } from "../../../ui/admin/FormAccion.tsx";
 import { fechaHora } from "../../../ui/formato.ts";
-import { accionAjustes, accionCrear, accionEstado, accionImportar, accionPrueba } from "./acciones.ts";
+import { accionAgregarDirectorio, accionAjustes, accionCrear, accionEnviarAhora, accionEstado, accionImportar, accionPrueba } from "./acciones.ts";
 import s from "../../../ui/admin/admin.module.css";
 
 export const metadata = { title: "Prospección" };
@@ -18,15 +18,28 @@ const COLOR: Record<EstadoProspecto, string> = {
   pendiente: "t-apagado", contactado: "t-reducida", seguimiento: "t-condicionado", respondio: "t-exento", descartado: "t-apagado", baja: "t-adicional", rebote: "t-adicional",
 };
 
-export default async function Prospeccion({ searchParams }: { searchParams: Promise<{ vista?: string; tipo?: string; estado?: string }> }) {
+type Parametros = { vista?: string; tipo?: string; estado?: string; sector?: string; q?: string; pagina?: string; ver?: string; dq?: string };
+
+export default async function Prospeccion({ searchParams }: { searchParams: Promise<Parametros> }) {
   await requerirSeccion("prospeccion");
   const q = await searchParams;
   const vista: Sector = q.vista && q.vista in SECTORES ? q.vista as Sector : "general";
   const tipo: TipoCorreo = q.tipo === "seguimiento" ? "seguimiento" : "inicial";
   const filtro = q.estado && q.estado in ESTADOS ? q.estado : null;
+  const sectorFiltro = q.sector && q.sector in SECTORES ? q.sector : null;
+  const texto = (q.q ?? "").trim().slice(0, 100), dq = (q.dq ?? "").trim().slice(0, 100);
+  // Enlaces que conservan la búsqueda actual y cambian solo lo indicado
+  const url = (cambios: Partial<Parametros>, ancla = "") => {
+    const u = new URLSearchParams(Object.entries({ ...q, ...cambios }).filter(([, v]) => v) as [string, string][]);
+    return `?${u}${ancla}`;
+  };
 
-  const ejemplo = datosEjemplo(vista);
-  const [[a], porEstado, prospectos, envios, contexto] = await Promise.all([
+  // Vista previa: la de un prospecto real (?ver=id) o la de ejemplo del sector
+  const [real] = q.ver ? await consulta<DatosCorreo & { id: number; estado: EstadoProspecto }>(
+    "SELECT id::int, empresa, contacto, sector, token, rif, estado FROM prospeccion.prospecto WHERE id = $1", [Number(q.ver) || 0]) : [];
+  const ejemplo: DatosCorreo = real ?? datosEjemplo(vista);
+  const tipoVista: TipoCorreo = real ? (real.estado === "contactado" ? "seguimiento" : "inicial") : tipo;
+  const [[a], porEstado, lista, envios, contexto, directorio] = await Promise.all([
     consulta<{ activo: boolean; limite_diario: number; hora_inicio: number; hora_fin: number; dias_seguimiento: number; proximo_envio: string | null; actualizado_por: string | null; enviados_hoy: number; bajas: number }>(
       `SELECT a.*, a.proximo_envio::text,
               (SELECT count(*)::int FROM prospeccion.envio WHERE tipo <> 'prueba' AND resultado = 'enviado'
@@ -34,17 +47,17 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
               (SELECT count(*)::int FROM prospeccion.baja) AS bajas
          FROM prospeccion.ajuste a`),
     consulta<{ estado: EstadoProspecto; n: number }>("SELECT estado, count(*)::int AS n FROM prospeccion.prospecto GROUP BY estado"),
-    consulta<{ id: number; empresa: string; contacto: string | null; correo: string; sector: Sector; origen: string; rif: string | null; estado: EstadoProspecto; envios: number; ultimo_envio: string | null }>(
-      `SELECT id::int, empresa, contacto, correo, sector, origen, rif, estado, envios, ultimo_envio::text FROM prospeccion.prospecto
-        WHERE ($1::text IS NULL OR estado = $1) ORDER BY actualizado_en DESC LIMIT 200`, [filtro]),
+    listar({ q: texto, estado: filtro, sector: sectorFiltro, pagina: Number(q.pagina) || 1 }),
     consulta<{ id: number; correo: string; tipo: string; asunto: string; resultado: string; error: string | null; creado_por: string | null; enviado_en: string }>(
       "SELECT id::int, correo, tipo, asunto, resultado, error, creado_por, enviado_en::text FROM prospeccion.envio ORDER BY enviado_en DESC LIMIT 30"),
     contextoPara(ejemplo),
+    dq ? buscarDirectorio(dq) : Promise.resolve(undefined),
   ]);
+  const prospectos = lista.filas;
   const n = (e: EstadoProspecto) => porEstado.find((x) => x.estado === e)?.n ?? 0;
   const total = porEstado.reduce((t, x) => t + x.n, 0);
   const configurado = correoConfigurado();
-  const muestra = armarCorreo(ejemplo, tipo, contexto);
+  const muestra = armarCorreo(ejemplo, tipoVista, contexto);
   const horas = Array.from({ length: 14 }, (_, i) => i + 7);
 
   return (
@@ -94,11 +107,20 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
         </div>
       </div>
 
-      <div className={s.tablaMarco}>
-        <div className={s.panelCabeza}><strong>Vista previa</strong>
-          <span className={s.apagado}>{Object.entries(SECTORES).map(([k, t], i) => <span key={k}>{i ? " · " : ""}{k === vista ? <strong>{t}</strong> : <Link href={`?vista=${k}&tipo=${tipo}`}>{t}</Link>}</span>)}
-            {" · "}{tipo === "inicial" ? <Link href={`?vista=${vista}&tipo=seguimiento`}>ver el seguimiento</Link> : <Link href={`?vista=${vista}`}>ver el primer correo</Link>}</span></div>
+      <div className={s.tablaMarco} id="vista">
+        {real ? (
+          <div className={s.panelCabeza}><strong>Correo para {real.empresa}</strong>
+            <span className={s.apagado}>{tipoVista === "inicial" ? "primer correo" : "seguimiento"} con sus datos reales · <Link href={url({ ver: "" }, "#vista")}>ver las plantillas</Link></span></div>
+        ) : (
+          <div className={s.panelCabeza}><strong>Vista previa</strong>
+            <span className={s.apagado}>{Object.entries(SECTORES).map(([k, t], i) => <span key={k}>{i ? " · " : ""}{k === vista ? <strong>{t}</strong> : <Link href={url({ vista: k }, "#vista")}>{t}</Link>}</span>)}
+              {" · "}{tipo === "inicial" ? <Link href={url({ tipo: "seguimiento" }, "#vista")}>ver el seguimiento</Link> : <Link href={url({ tipo: "" }, "#vista")}>ver el primer correo</Link>}</span></div>
+        )}
         <div className={s.panelCuerpo}>
+          {real && (real.estado === "pendiente" || real.estado === "contactado") && (
+            <FormAccion accion={accionEnviarAhora} boton="Enviar este correo ahora" limpiar={false} className=""
+              confirmar={`¿Enviar ahora este correo a ${real.empresa}? Cuenta para el límite de hoy.`}><input type="hidden" name="id" value={real.id} /></FormAccion>
+          )}
           <p style={{ fontSize: 14, margin: "0 0 10px" }}><span className={s.apagado}>Asunto:</span> <strong>{muestra.asunto}</strong></p>
           <iframe title="Vista previa del correo" srcDoc={muestra.html} sandbox="" style={{ width: "100%", height: 720, border: "1px solid var(--linea)", borderRadius: 8, background: "#fff" }} />
         </div>
@@ -134,11 +156,61 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
         </div>
       </div>
 
-      <div className={s.tablaMarco}>
+      <div className={s.tablaMarco} id="directorio">
+        <div className={s.panelCabeza}><strong>Buscar en el directorio</strong><span className={s.apagado}>empresas con su correo registrado; agrégalas con el sector adecuado</span></div>
+        <div className={s.panelCuerpo}>
+          <form method="get" action="#directorio" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {Object.entries(q).filter(([k, v]) => k !== "dq" && v).map(([k, v]) => <input key={k} type="hidden" name={k} value={v} />)}
+            <input className={s.campoChico} style={{ flex: "1 1 260px" }} name="dq" defaultValue={dq} minLength={3} placeholder="Razón social o RIF (al menos 3 caracteres)" />
+            <button type="submit" className="boton boton-chico boton-secundario">Buscar</button>
+          </form>
+        </div>
+        {directorio === null && <div className={s.vacio}>El directorio no está cargado en este servidor (docs/25).</div>}
+        {directorio && directorio.length === 0 && <div className={s.vacio}>Sin resultados para «{dq}».</div>}
+        {directorio && directorio.length > 0 && (
+          <table className={s.tabla} style={{ minWidth: 980 }}>
+            <thead><tr><th>Empresa</th><th>Correo</th><th>Datos</th><th>En prospección</th><th></th></tr></thead>
+            <tbody>
+              {directorio.map((d) => (
+                <tr key={d.rif}>
+                  <td style={{ maxWidth: 300 }}><span className={s.celdaNombre}><strong>{d.razon_social}</strong><span className="mono">{d.rif}</span></span></td>
+                  <td className="mono" style={{ fontSize: 13 }}>{d.correo ?? <span className={s.apagado}>sin correo</span>}</td>
+                  <td className={s.apagado} style={{ fontSize: 13 }}>{[d.especial && `especial${d.puesto ? ` · puesto ${d.puesto}` : ""}`, d.importador && "importador", d.software && "software"].filter(Boolean).join(" · ") || "—"}</td>
+                  <td>{d.prospecto_estado ? <span className={`punto ${COLOR[d.prospecto_estado]}`}>{ESTADOS[d.prospecto_estado]}</span> : <span className={s.apagado}>no</span>}</td>
+                  <td style={{ whiteSpace: "nowrap" }}>
+                    {!d.prospecto_estado && d.correo && (
+                      <FormAccion accion={accionAgregarDirectorio} boton="Agregar" estiloBoton="secundario" className="" limpiar={false}>
+                        <input type="hidden" name="rif" value={d.rif} />
+                        <select className={s.campoChico} name="sector" defaultValue={d.sugerido} style={{ width: "auto", padding: "6px 8px", fontSize: 13 }} aria-label="Sector">
+                          {Object.entries(SECTORES).filter(([k]) => k !== "consumidor").map(([k, tt]) => <option key={k} value={k}>{tt}</option>)}
+                        </select>
+                      </FormAccion>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      <div className={s.tablaMarco} id="prospectos">
         <div className={s.panelCabeza}><strong>Prospectos · {total}</strong>
-          <span className={s.apagado}>{filtro ? <Link href="?">todos</Link> : <strong>todos</strong>}{(Object.keys(ESTADOS) as EstadoProspecto[]).filter((e) => n(e)).map((e) =>
-            <span key={e}> · {e === filtro ? <strong>{ESTADOS[e]} {n(e)}</strong> : <Link href={`?estado=${e}`}>{ESTADOS[e]} {n(e)}</Link>}</span>)}</span></div>
-        {prospectos.length === 0 ? <div className={s.vacio}>Todavía no hay prospectos. Agrégalos uno a uno o importa un CSV.</div> : (
+          <span className={s.apagado}>{filtro ? <Link href={url({ estado: "", pagina: "" }, "#prospectos")}>todos</Link> : <strong>todos</strong>}{(Object.keys(ESTADOS) as EstadoProspecto[]).filter((e) => n(e)).map((e) =>
+            <span key={e}> · {e === filtro ? <strong>{ESTADOS[e]} {n(e)}</strong> : <Link href={url({ estado: e, pagina: "" }, "#prospectos")}>{ESTADOS[e]} {n(e)}</Link>}</span>)}</span></div>
+        <div className={s.panelCuerpo}>
+          <form method="get" action="#prospectos" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {Object.entries(q).filter(([k, v]) => !["q", "sector", "pagina"].includes(k) && v).map(([k, v]) => <input key={k} type="hidden" name={k} value={v} />)}
+            <input className={s.campoChico} style={{ flex: "1 1 260px" }} name="q" defaultValue={texto} placeholder="Buscar por empresa, correo, RIF o contacto" />
+            <select className={s.campoChico} style={{ width: "auto" }} name="sector" defaultValue={sectorFiltro ?? ""} aria-label="Sector">
+              <option value="">Todos los sectores</option>{Object.entries(SECTORES).map(([k, tt]) => <option key={k} value={k}>{tt}</option>)}
+            </select>
+            <button type="submit" className="boton boton-chico boton-secundario">Buscar</button>
+            {(texto || sectorFiltro || filtro) && <Link href={url({ q: "", sector: "", estado: "", pagina: "" }, "#prospectos")} className={s.botonTexto} style={{ alignSelf: "center" }}>Limpiar</Link>}
+          </form>
+          <p className={s.apagado} style={{ fontSize: 13, margin: "8px 0 0" }}>{lista.total === total && !texto ? `${total} prospectos` : `${lista.total} de ${total} prospectos`}{lista.paginas > 1 ? ` · página ${lista.pagina} de ${lista.paginas}` : ""}. Los pendientes aparecen en el orden en que se les escribirá.</p>
+        </div>
+        {prospectos.length === 0 ? <div className={s.vacio}>{total ? "Ningún prospecto coincide con la búsqueda." : "Todavía no hay prospectos. Agrégalos uno a uno, desde el directorio o importa un CSV."}</div> : (
           <table className={s.tabla} style={{ minWidth: 980 }}>
             <thead><tr><th>Empresa</th><th>Correo</th><th>Sector</th><th>Estado</th><th>Último envío</th><th></th></tr></thead>
             <tbody>
@@ -150,6 +222,9 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
                   <td><span className={`punto ${COLOR[p.estado]}`}>{ESTADOS[p.estado]}</span></td>
                   <td className={s.apagado} style={{ whiteSpace: "nowrap" }}>{p.ultimo_envio ? `${fechaHora(p.ultimo_envio)} · ${p.envios}` : "—"}</td>
                   <td style={{ whiteSpace: "nowrap" }}>
+                    <Link href={url({ ver: String(p.id) }, "#vista")} className={s.botonTexto}>Ver su correo</Link>
+                    {(p.estado === "pendiente" || p.estado === "contactado") && <FormAccion accion={accionEnviarAhora} boton={p.estado === "pendiente" ? "Enviar ahora" : "Enviar seguimiento"} estiloBoton="texto" className=""
+                      confirmar={`¿Enviar ahora a ${p.empresa} (${p.correo})? Cuenta para el límite de hoy.`}><input type="hidden" name="id" value={p.id} /></FormAccion>}
                     {(["contactado", "seguimiento"] as EstadoProspecto[]).includes(p.estado) && <FormAccion accion={accionEstado} boton="Respondió" estiloBoton="texto" className=""><input type="hidden" name="id" value={p.id} /><input type="hidden" name="estado" value="respondio" /></FormAccion>}
                     {(["pendiente", "contactado", "seguimiento"] as EstadoProspecto[]).includes(p.estado) && <FormAccion accion={accionEstado} boton="Descartar" estiloBoton="texto" className=""><input type="hidden" name="id" value={p.id} /><input type="hidden" name="estado" value="descartado" /></FormAccion>}
                     {p.estado === "descartado" && <FormAccion accion={accionEstado} boton="Volver a pendiente" estiloBoton="texto" className=""><input type="hidden" name="id" value={p.id} /><input type="hidden" name="estado" value="pendiente" /></FormAccion>}
@@ -159,6 +234,13 @@ export default async function Prospeccion({ searchParams }: { searchParams: Prom
               ))}
             </tbody>
           </table>
+        )}
+        {lista.paginas > 1 && (
+          <div className={s.panelCabeza} style={{ justifyContent: "center", gap: 18 }}>
+            {lista.pagina > 1 ? <Link href={url({ pagina: String(lista.pagina - 1) }, "#prospectos")}>← Anteriores</Link> : <span className={s.apagado}>← Anteriores</span>}
+            <span className={s.apagado}>Página {lista.pagina} de {lista.paginas}</span>
+            {lista.pagina < lista.paginas ? <Link href={url({ pagina: String(lista.pagina + 1) }, "#prospectos")}>Siguientes →</Link> : <span className={s.apagado}>Siguientes →</span>}
+          </div>
         )}
       </div>
 

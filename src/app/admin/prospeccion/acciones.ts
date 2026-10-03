@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { auditar, SinPermiso, usuarioConPermiso } from "../../../core/auth/dal.ts";
 import { correoConfigurado, enviarCorreo } from "../../../modules/prospeccion/envio.ts";
 import { datosEjemplo, SECTORES, type Sector } from "../../../modules/prospeccion/plantillas.ts";
-import { cambiarEstado, crear, guardarAjustes, importar } from "../../../modules/prospeccion/prospectos.ts";
+import { agregarDesdeDirectorio, cambiarEstado, crear, guardarAjustes, importar } from "../../../modules/prospeccion/prospectos.ts";
+import { enviarAProspecto } from "../../../modules/prospeccion/programador.ts";
 import type { EstadoAccion } from "../../../ui/admin/FormAccion.tsx";
 
 function error(e: unknown, que: string): EstadoAccion {
@@ -84,4 +85,32 @@ export async function accionPrueba(_p: EstadoAccion, form: FormData): Promise<Es
     refrescar();
     return r.ok ? { ok: `Prueba enviada a ${correo}: «${r.asunto}»` } : { error: `No se pudo enviar: ${r.error}` };
   } catch (e) { return error(e, "prueba"); }
+}
+
+// «Enviar ahora»: la invitación que le toca a este prospecto, en el momento (cuenta para el límite diario)
+export async function accionEnviarAhora(_p: EstadoAccion, form: FormData): Promise<EstadoAccion> {
+  try {
+    const u = await usuarioConPermiso("prospeccion.gestionar");
+    const id = num(form, "id");
+    const r = await enviarAProspecto(id, u.correo);
+    if ("error" in r) return { error: r.error };
+    await auditar(u, "prospeccion.enviar", { id, tipo: r.tipo, asunto: r.asunto });
+    refrescar();
+    return { ok: `Enviado (${r.tipo === "inicial" ? "primer correo" : "seguimiento"}): «${r.asunto}»` };
+  } catch (e) { return error(e, "enviar"); }
+}
+
+// Alta desde el directorio de contribuyentes, con el sector elegido
+export async function accionAgregarDirectorio(_p: EstadoAccion, form: FormData): Promise<EstadoAccion> {
+  try {
+    const u = await usuarioConPermiso("prospeccion.gestionar");
+    const rif = String(form.get("rif") ?? ""), sector = String(form.get("sector") ?? "");
+    const r = await agregarDesdeDirectorio(rif, sector, u.correo);
+    if ("error" in r) return { error: r.error };
+    if (r.alta === "duplicado") return { error: "Ese correo ya está en la lista de prospectos" };
+    if (r.alta === "en_baja") return { error: "Ese correo se dio de baja: no se le puede volver a escribir" };
+    await auditar(u, "prospeccion.crear", { empresa: r.empresa, correo: r.correo, sector, origen: "directorio" });
+    refrescar();
+    return { ok: `${r.empresa} agregada` };
+  } catch (e) { return error(e, "directorio"); }
 }

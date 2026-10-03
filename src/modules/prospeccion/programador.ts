@@ -48,17 +48,44 @@ async function unPaso(): Promise<Paso> {
      LIMIT 1`, [a.dias_seguimiento]);
   if (!p) return { motivo: "sin_prospectos" };
 
-  const r = await enviarCorreo(p.correo, p, p.tipo, { prospectoId: p.id, creadoPor: "programador" });
+  const r = await enviar(p, "programador");
+  // Espera hasta el próximo: el tiempo que queda de horario repartido entre los correos que faltan, ±40 %
+  const faltan = Math.max(1, a.limite_diario - a.enviados_hoy - (r.ok ? 1 : 0));
+  await esperar(Math.max(600, (a.segundos_restantes / faltan) * (0.6 + Math.random() * 0.8)));
+  return { enviado: { correo: p.correo, tipo: p.tipo, ok: r.ok, error: r.error } };
+}
+
+// Envía el correo que le toca a un prospecto y actualiza su estado (lo usan el programador y «Enviar ahora»)
+async function enviar(p: Candidato, creadoPor: string) {
+  const r = await enviarCorreo(p.correo, p, p.tipo, { prospectoId: p.id, creadoPor });
   if (r.ok) {
     await consulta(`UPDATE prospeccion.prospecto SET estado = $2, envios = envios + 1, ultimo_envio = now(), actualizado_en = now() WHERE id = $1`,
       [p.id, p.tipo === "inicial" ? "contactado" : "seguimiento"]);
   } else if (r.permanente) {
     await consulta("UPDATE prospeccion.prospecto SET estado = 'rebote', actualizado_en = now() WHERE id = $1", [p.id]);
   }
-  // Espera hasta el próximo: el tiempo que queda de horario repartido entre los correos que faltan, ±40 %
-  const faltan = Math.max(1, a.limite_diario - a.enviados_hoy - (r.ok ? 1 : 0));
-  await esperar(Math.max(600, (a.segundos_restantes / faltan) * (0.6 + Math.random() * 0.8)));
-  return { enviado: { correo: p.correo, tipo: p.tipo, ok: r.ok, error: r.error } };
+  return r;
+}
+
+// «Enviar ahora» desde el panel: el primer correo a un pendiente, o el seguimiento a un contactado. Respeta las bajas,
+// el consentimiento y el límite diario (cuenta como un envío más), aunque la prospección esté en pausa o fuera de horario.
+export async function enviarAProspecto(id: number, creadoPor: string): Promise<{ ok: true; tipo: string; asunto: string } | { error: string }> {
+  if (!correoConfigurado()) return { error: "Falta CORREO_SMTP_CLAVE en el servidor" };
+  const [p] = await consulta<Candidato & { estado: string; consentimiento: boolean; en_baja: boolean; enviados_hoy: number; limite: number }>(`
+    SELECT p.id::int, p.empresa, p.contacto, p.correo, p.sector, p.token, p.rif, p.estado, p.consentimiento,
+           CASE WHEN p.estado = 'contactado' THEN 'seguimiento' ELSE 'inicial' END AS tipo,
+           EXISTS (SELECT 1 FROM prospeccion.baja b WHERE b.correo = lower(p.correo)) AS en_baja,
+           (SELECT count(*)::int FROM prospeccion.envio WHERE tipo IN ('inicial', 'seguimiento') AND resultado = 'enviado'
+              AND (enviado_en AT TIME ZONE 'America/Caracas')::date = (now() AT TIME ZONE 'America/Caracas')::date) AS enviados_hoy,
+           (SELECT limite_diario FROM prospeccion.ajuste) AS limite
+      FROM prospeccion.prospecto p WHERE p.id = $1`, [id]);
+  if (!p) return { error: "El prospecto ya no existe" };
+  if (p.en_baja || p.estado === "baja") return { error: "Se dio de baja: no se le puede escribir" };
+  if (p.estado !== "pendiente" && p.estado !== "contactado") return { error: `No se envía: está como «${p.estado}» (ya recibió el seguimiento, respondió o se descartó)` };
+  if (p.sector === "consumidor" && !p.consentimiento) return { error: "Persona natural sin consentimiento" };
+  if (p.enviados_hoy >= p.limite) return { error: `Ya se enviaron ${p.enviados_hoy} de ${p.limite} correos hoy: es el límite diario` };
+  const r = await enviar(p, creadoPor);
+  return r.ok ? { ok: true, tipo: p.tipo, asunto: r.asunto } : { error: `No se pudo enviar: ${r.error}` };
 }
 
 // Un solo ciclo a la vez aunque haya dos procesos (cerrojo de PostgreSQL en una conexión propia)

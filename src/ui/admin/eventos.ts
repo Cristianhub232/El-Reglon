@@ -71,6 +71,7 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "prospeccion.crear": return `${t("empresa")} · ${t("correo")} (${t("sector")})`;
     case "prospeccion.importar": return `CSV: ${t("agregados")} agregados, ${t("duplicados")} repetidos, ${t("en_baja")} en baja${Number(d.errores) ? ` · ${t("errores")} con error` : ""}`;
     case "prospeccion.estado": return `${t("empresa")} · ${t("correo")} → ${t("estado")}`;
+    case "prospeccion.enviar": return `Envió ahora (${t("tipo")}): «${t("asunto")}»`;
     case "prospeccion.prueba": return `Prueba (${t("sector")}) a ${t("correo")}${d.ok ? "" : " · falló"}`;
     default: return Object.entries(d).slice(0, 4).map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`).join(" · ");
   }
