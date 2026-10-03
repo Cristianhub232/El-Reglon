@@ -180,15 +180,16 @@ ${p("Toque un producto para ver la comparación completa, o busque el suyo.", "c
     saludo, "", parrafos[0], "", ...bloqueTexto, parrafos[1], "",
     ...herramientas.flatMap(([t, ruta, x]) => [`- ${t}: ${x}.`, `  ${enlace(ruta, d.sector)}`]), "",
     ...(lineaTasa ? [lineaTasa, ""] : []),
-    cierre, "", "Saludos,", "El Renglón", SITIO_URL, "", "--", `${pieBaja} ${baja}`,
+    cierre, "", "Saludos,", "El Renglón", SITIO_URL, "", "--", `© ${new Date().getFullYear()} El Renglón · Todos los derechos reservados`, `${pieBaja} ${baja}`,
   ].join("\n");
 
   // ── HTML de carta ──
   const lista = `<ul style="margin:0 0 16px;padding-left:22px;${ESTILO}">${herramientas.map(([t, ruta, x]) =>
     `<li style="margin:0 0 8px;"><a href="${esc(enlace(ruta, d.sector))}" style="color:#1a56b0;font-weight:bold;">${esc(t)}</a>: ${esc(x)}.</li>`).join("")}</ul>`;
   const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(asunto)}</title></head>
-<body style="margin:0;padding:16px;background:#ffffff;">
-<div style="max-width:600px;">
+<body style="margin:0;padding:0;background:#ffffff;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center" style="padding:16px 12px;">
+<div style="max-width:600px;margin:0 auto;text-align:left;">
 ${p(esc(saludo))}
 ${p(esc(parrafos[0]))}
 ${bloqueHtml}
@@ -197,8 +198,14 @@ ${lista}
 ${lineaTasa ? p(esc(lineaTasa)) : ""}
 ${p(esc(cierre))}
 ${p(`Saludos,<br>El Renglón<br><a href="${esc(enlace("/", d.sector))}" style="color:#1a56b0;">elrenglonve.org</a>`)}
-<p style="margin:22px 0 0;padding-top:10px;border-top:1px solid #e5e5e5;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#777777;">${esc(pieBaja)} <a href="${esc(baja)}" style="color:#777777;">no recibir más correos</a>.</p>
+<div style="margin:24px 0 0;padding:18px 20px;background:#0E2440;border-radius:8px;text-align:center;font-family:Arial,Helvetica,sans-serif;">
+  <p style="margin:0 0 6px;font-size:15px;font-weight:bold;color:#ffffff;">El Renglón</p>
+  <p style="margin:0 0 10px;font-size:13px;line-height:1.5;color:#c9d3e3;">Información fiscal de Venezuela · <a href="${esc(enlace("/", d.sector))}" style="color:#F2B632;text-decoration:none;">elrenglonve.org</a></p>
+  <p style="margin:0 0 10px;font-size:12px;color:#c9d3e3;">© ${new Date().getFullYear()} El Renglón · Todos los derechos reservados</p>
+  <p style="margin:0;font-size:11px;line-height:1.5;color:#9aa8bf;">${esc(pieBaja)} <a href="${esc(baja)}" style="color:#9aa8bf;">no recibir más correos</a>.</p>
 </div>
+</div>
+</td></tr></table>
 </body></html>`;
 
   return { asunto, html, texto, urlBaja: baja };

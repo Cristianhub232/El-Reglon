@@ -26,7 +26,7 @@ Calentamiento recomendado del buzón: 5 al día las dos primeras semanas y luego
 
 ## Plantillas (`src/modules/prospeccion/plantillas.ts`)
 
-Un primer correo por sector y un seguimiento común, en **estilo de carta**: párrafos, una lista de **enlaces de texto directos a las herramientas** del sitio y la firma «El Renglón». Sin logo, sin botones y sin cajas de color.
+Un primer correo por sector y un seguimiento común, en **estilo de carta**: párrafos, una lista de **enlaces de texto directos a las herramientas** del sitio y la firma «El Renglón». Sin logo ni botones. El correo va centrado (el texto, a la izquierda) y cierra con un **pie azul tinta** centrado: «El Renglón», el enlace al sitio, «© {año} El Renglón · Todos los derechos reservados» y la baja. Con ese pie siguió llegando a Principal (03/10/2026).
 
 **Por qué así (03/10/2026):** la primera versión, con logo, botón azul, cajas de color, texto oculto de vista previa y cabeceras `List-Unsubscribe`, llegó a **Promociones** en Gmail; una prueba de texto simple había llegado a **Principal**. Gmail clasifica por el aspecto del correo.
 - **Sin `List-Unsubscribe`:** es la señal más clara de boletín. Gmail y Yahoo solo la exigen a quien envía más de 5.000 correos al día (aquí, 30 como mucho). La baja en un clic sigue disponible por si el volumen crece: `POST /api/publico/prospeccion/baja?t=…` (RFC 8058).
