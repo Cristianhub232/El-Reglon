@@ -2,6 +2,7 @@
 // solo si: está activa, es de lunes a viernes dentro del horario (hora de Caracas), no se llegó al límite del día y ya
 // pasó la espera aleatoria desde el envío anterior. Así los correos se reparten a lo largo del día, nunca en ráfaga.
 // Un seguimiento como máximo, a los N días del primer correo; quien está en prospeccion.baja nunca recibe nada.
+// Las personas naturales no entran aquí: solo reciben correos cuando un administrador pulsa «Enviar ahora».
 import { consulta, pool } from "../../core/db.ts";
 import { correoConfigurado, enviarCorreo } from "./envio.ts";
 import type { Sector } from "./plantillas.ts";
@@ -41,7 +42,7 @@ async function unPaso(): Promise<Paso> {
            CASE WHEN p.estado = 'contactado' THEN 'seguimiento' ELSE 'inicial' END AS tipo
       FROM prospeccion.prospecto p
      WHERE NOT EXISTS (SELECT 1 FROM prospeccion.baja b WHERE b.correo = lower(p.correo))
-       AND (p.sector <> 'consumidor' OR p.consentimiento)              -- particulares: solo con consentimiento
+       AND p.sector <> 'consumidor'          -- personas naturales: nunca automático; solo «Enviar ahora» de un administrador
        AND (p.estado = 'pendiente'
             OR (p.estado = 'contactado' AND p.envios = 1 AND p.ultimo_envio < now() - make_interval(days => $1)))
      ORDER BY (p.estado = 'contactado') DESC, coalesce(p.ultimo_envio, p.creado_en), p.id

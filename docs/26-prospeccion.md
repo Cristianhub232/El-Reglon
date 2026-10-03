@@ -11,6 +11,7 @@ Correos a empresas para ofrecerles El Renglón, decididos el 01/10/2026. **No es
 | Un solo seguimiento | A los N días (3 a 30) del primer correo, si no hubo respuesta ni baja. Después, nada más |
 | Baja permanente | Enlace al pie de cada correo (`/baja?t=…`) o responder «baja». La dirección queda en `prospeccion.baja`: no se puede volver a cargar ni recibe más correos |
 | Origen del contacto | Obligatorio al cargar cada prospecto: de dónde salió el correo (web de la empresa, directorio, tarjeta). Sin listas compradas |
+| Personas naturales: solo con consentimiento y **solo a mano** | El programador **nunca** les escribe: solo un administrador, con «Enviar ahora» en el panel (03/10/2026). Además: |
 | Personas naturales solo con consentimiento | Escribirle a un particular sin su permiso es spam en casi todas las legislaciones y lo que más daña la reputación del dominio. La base lo impide (`prospecto_consumidor_consentimiento`) y el programador lo vuelve a filtrar. A empresas, en cambio, es prospección comercial normal |
 | Contribuyentes especiales con RIF | La base exige el RIF (`prospecto_especial_rif`), validado con el dígito verificador oficial (`rif.validar`) |
 | Arranca en pausa | `activo = false` por defecto. Se activa desde el panel, con confirmación |
