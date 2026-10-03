@@ -271,6 +271,17 @@
       ],
       "puerto": 4114,
       "api": "https://search.naidahogarr2.arigato.ai/query?db=naidahogarpre_products"
+    },
+    {
+      "id": "riomarket",
+      "nombre": "Río Market",
+      "sitio": "https://www.riomarket.com",
+      "plataforma": "instaleap",
+      "moneda": "USD",
+      "rubros": [
+        "supermercado"
+      ],
+      "puerto": 4115
     }
   ]
 }

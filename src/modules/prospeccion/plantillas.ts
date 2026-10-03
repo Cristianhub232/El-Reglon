@@ -30,7 +30,7 @@ export interface Correo { asunto: string; html: string; texto: string; urlBaja: 
 const HERRAMIENTAS = {
   iva: ["Clasificador de IVA", "/#herramientas", "escriba un producto o su código de barras y vea si es exento, 8 %, 16 % o 31 %, con el artículo de la ley"],
   iva_arancel: ["Clasificador de IVA", "/#herramientas", "acepta también el código arancelario: alícuota en la importación y base legal"],
-  comparador: ["Comparador de precios", "/#comparador", "el precio del mismo producto en 14 cadenas del país"],
+  comparador: ["Comparador de precios", "/#comparador", "el precio del mismo producto en 15 cadenas del país"],
   comparador_farmacia: ["Comparador de precios", "/#comparador", "compare con Farmatodo, Locatel, Farmacias SAAS y otras cadenas"],
   deberes: ["Mis deberes tributarios", "/#deberes", "los próximos vencimientos con el SENIAT según el RIF, especiales u ordinarios"],
   tasas: ["Tasa oficial del BCV", "/#tasas", "la del día, su historial y un conversor de bolívares, dólares y euros"],

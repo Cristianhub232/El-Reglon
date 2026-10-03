@@ -67,7 +67,7 @@ export default async function Avisos() {
             <div className={s.panelCuerpo}>
               <FormAccion accion={accionEnviarNovedad} boton="Enviar a todos" confirmar={`¿Enviar este aviso a ${n("novedades")} dispositivos? No se puede deshacer.`}>
                 <label className={s.etiquetaChica}><span>Título</span><input className={s.campoChico} name="titulo" required minLength={3} maxLength={120} placeholder="Nuevo: comparador de precios" /></label>
-                <label className={s.etiquetaChica}><span>Texto <span className={s.apagado}>(opcional, hasta 400)</span></span><textarea className={s.campoChico} name="cuerpo" maxLength={400} rows={3} placeholder="Compara el precio de un producto en 14 cadenas…" /></label>
+                <label className={s.etiquetaChica}><span>Texto <span className={s.apagado}>(opcional, hasta 400)</span></span><textarea className={s.campoChico} name="cuerpo" maxLength={400} rows={3} placeholder="Compara el precio de un producto en 15 cadenas…" /></label>
                 <label className={s.etiquetaChica}><span>Enlace del sitio</span><input className={`${s.campoChico} mono`} name="url" defaultValue="/" maxLength={300} pattern="/.*" placeholder="/#comparador" /></label>
               </FormAccion>
             </div>
