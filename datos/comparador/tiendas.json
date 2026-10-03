@@ -282,6 +282,19 @@
         "supermercado"
       ],
       "puerto": 4115
+    },
+    {
+      "id": "mundototal",
+      "nombre": "Mundo Total",
+      "sitio": "https://www.tumundototal.com",
+      "plataforma": "vtex",
+      "moneda": "USD",
+      "rubros": [
+        "electronica",
+        "hogar"
+      ],
+      "puerto": 4116,
+      "nombre_vtex": "titulo"
     }
   ]
 }

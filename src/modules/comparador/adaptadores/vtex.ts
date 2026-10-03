@@ -1,10 +1,12 @@
-// Lector de tiendas VTEX (Locatel, Farmacias SAAS, Damasco): API pública de catálogo de la propia tienda,
-// la misma que usa su buscador. Devuelve nombre, marca, código de barras (EAN), precio y existencia.
+// Lector de tiendas VTEX (Locatel, Farmacias SAAS, Damasco, Mundo Total): API pública de catálogo de la propia tienda,
+// la misma que usa su buscador. Devuelve nombre, marca, código de barras (EAN), precio y existencia. Con
+// "nombre_vtex": "titulo" se usa el título del producto (Mundo Total pone ahí marca, capacidad y modelo; su nombre
+// corto solo dice "Lavadora Carga Frontal"), sin el " | <tienda>" del final.
 import type { Tienda } from "../tiendas.ts";
 import type { OfertaTienda } from "./tipos.ts";
 
 interface ProductoVtex {
-  productId: string; productName: string; brand?: string; link?: string;
+  productId: string; productName: string; productTitle?: string; brand?: string; link?: string;
   items?: { itemId: string; ean?: string; images?: { imageUrl?: string }[]; sellers?: { commertialOffer?: { Price?: number; ListPrice?: number; AvailableQuantity?: number; IsAvailable?: boolean } }[] }[];
 }
 
@@ -19,7 +21,7 @@ export async function buscarVtex(t: Tienda, consulta: string, limite: number, ag
     const oferta = item?.sellers?.[0]?.commertialOffer;
     if (!item || !oferta?.Price || oferta.Price <= 0 || !p.link?.startsWith(t.sitio)) return [];
     return [{
-      id_externo: `${p.productId}-${item.itemId}`, nombre: p.productName.trim(), marca: p.brand?.trim() || null, ean: item.ean?.trim() || null,
+      id_externo: `${p.productId}-${item.itemId}`, nombre: (t.nombre_vtex === "titulo" && p.productTitle?.trim() ? p.productTitle.replace(/\s*\|[^|]*$/, "") : p.productName).trim(), marca: p.brand?.trim() || null, ean: item.ean?.trim() || null,
       url: p.link, imagen: item.images?.[0]?.imageUrl?.replace(/^http:/, "https:") ?? null,
       precio: oferta.Price.toFixed(2), precio_lista: oferta.ListPrice && oferta.ListPrice > oferta.Price ? oferta.ListPrice.toFixed(2) : null,
       disponible: (oferta.AvailableQuantity ?? 0) > 0 || oferta.IsAvailable === true,
