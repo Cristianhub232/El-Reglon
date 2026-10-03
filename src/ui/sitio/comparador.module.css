@@ -5,19 +5,20 @@
   background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 39px, rgba(246, 243, 234, .05) 39px, rgba(246, 243, 234, .05) 40px);
 }
 /* Arriba: título, buscador y ejemplos a la izquierda; categorías rápidas a la derecha (debajo en pantallas angostas) */
-.arriba { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 560px); gap: 28px clamp(28px, 4vw, 64px); align-items: center; }
+.arriba { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px clamp(28px, 4vw, 64px); align-items: center; }
 .principal { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
-@media (max-width: 1180px) { .arriba { grid-template-columns: minmax(0, 1fr); } }
-.categorias { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-@media (max-width: 1180px) { .categorias { grid-template-columns: repeat(6, minmax(0, 1fr)); max-width: 900px; } }
+@media (max-width: 1400px) { .arriba { grid-template-columns: minmax(0, 1fr) minmax(0, 480px); } }
+@media (max-width: 1240px) { .arriba { grid-template-columns: minmax(0, 1fr); } }
+.categorias { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, .9vw, 16px); }
+@media (max-width: 1240px) { .categorias { grid-template-columns: repeat(6, minmax(0, 1fr)); max-width: 900px; } }
 @media (max-width: 720px) { .categorias { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; } }
 @media (max-width: 420px) { .categorias { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .categoria {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 92px; padding: 14px 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: clamp(96px, 7.5vw, 140px); padding: 14px 6px;
   border: 1px solid rgba(246, 243, 234, .22); border-radius: 12px; background: rgba(246, 243, 234, .04); color: var(--papel);
-  font: 600 14px var(--sans); cursor: pointer; text-align: center;
+  font: 600 clamp(14px, 1vw, 16px) var(--sans); cursor: pointer; text-align: center;
 }
-.categoria svg { color: var(--amarillo); flex: none; }
+.categoria svg { color: var(--amarillo); flex: none; width: clamp(28px, 2.6vw, 46px); height: clamp(28px, 2.6vw, 46px); }
 .categoria:hover { border-color: var(--amarillo); background: rgba(246, 243, 234, .08); }
 .categoria[aria-pressed="true"] { background: var(--amarillo); border-color: var(--amarillo); color: var(--tinta); }
 .categoria[aria-pressed="true"] svg { color: var(--tinta); }
