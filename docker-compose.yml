@@ -50,6 +50,7 @@ services:
       CORREO_SMTP_PUERTO: ${CORREO_SMTP_PUERTO:-465}
       CORREO_SMTP_USUARIO: ${CORREO_SMTP_USUARIO:-ventas@elrenglonve.org}
       CORREO_SMTP_CLAVE: ${CORREO_SMTP_CLAVE:-}                   # sin clave no se envía nada
+      CORREO_SOPORTE_CLAVE: ${CORREO_SOPORTE_CLAVE:-}             # bandeja del panel: lectura de soporte@ (docs/27)
       COMPARADOR_HOST: comparador                 # servicios de las tiendas del comparador (red interna); ver docs/22
     ports:
       - "127.0.0.1:${APP_PUERTO:-3000}:3000"   # publicar detrás de un proxy inverso con TLS

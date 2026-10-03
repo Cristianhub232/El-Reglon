@@ -13,7 +13,7 @@ export const CATEGORIAS: Record<Categoria, { titulo: string; clase: string }> = 
 export function categoria(accion: string): Categoria {
   const m = accion.split(".")[0];
   if (m === "bcv" || m === "iva" || m === "arancel" || m === "calendario" || m === "noticias") return m;
-  if (m === "pulso" || m === "comparador" || m === "prospeccion") return "noticias";
+  if (m === "pulso" || m === "comparador" || m === "prospeccion" || m === "contacto") return "noticias";
   return "acceso";
 }
 
@@ -72,6 +72,8 @@ export function describir(accion: string, d: Record<string, unknown>): string {
     case "prospeccion.importar": return `CSV: ${t("agregados")} agregados, ${t("duplicados")} repetidos, ${t("en_baja")} en baja${Number(d.errores) ? ` · ${t("errores")} con error` : ""}`;
     case "prospeccion.estado": return `${t("empresa")} · ${t("correo")} → ${t("estado")}`;
     case "prospeccion.enviar": return `Envió ahora (${t("tipo")}): «${t("asunto")}»`;
+    case "prospeccion.respuesta": return `${t("correo")} contestó a ventas@ → ${t("estado") === "baja" ? "baja" : t("estado") === "rebote" ? "rebotó" : "respondió"} (detectado en el buzón)`;
+    case "contacto.mensaje": return `Mensaje #${t("id")} de ${t("correo")} → ${t("estado")}`;
     case "prospeccion.prueba": return `Prueba (${t("sector")}) a ${t("correo")}${d.ok ? "" : " · falló"}`;
     default: return Object.entries(d).slice(0, 4).map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`).join(" · ");
   }

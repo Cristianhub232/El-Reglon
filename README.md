@@ -65,6 +65,7 @@ node scripts/usuario.ts crear --correo usted@empresa.com.ve --nombre "Su nombre"
 24. [Avisos push](docs/24-avisos.md): campana en la cabecera; tasa BCV al publicarse, noticias 3 veces al día, deberes por RIF 3 días antes y el día, y novedades desde el panel.
 25. [Directorio de contribuyentes](docs/25-directorio.md): importadores (CIF), sistemas de facturación y mayores pagadores por región, saneados sin duplicados; datos personales fuera del repositorio.
 26. [Prospección comercial por correo](docs/26-prospeccion.md): pocos correos al día a empresas, por sector, con un solo seguimiento, baja en un clic y lista de supresión permanente; remitente «El Renglón» (Spacemail).
+27. [Botón de contacto y bandeja](docs/27-contacto-y-bandeja.md): burbuja flotante para escribirnos (aviso a soporte@ y alta con consentimiento si pide novedades) y bandeja del panel con esos mensajes y los correos de ventas@ y soporte@; las respuestas de los prospectos actualizan su estado.
 - [Diseños](resources/): identidad de marca, logo, landing, inicio de sesión y panel (se abren en el navegador).
 
 > Resultado orientativo: cuando hay varias opciones, la selección corresponde al usuario bajo su responsabilidad y análisis. Las reglas deben ser validadas por un asesor tributario.

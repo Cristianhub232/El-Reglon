@@ -298,6 +298,32 @@ async function main() {
     verificar("la base rechaza más de 30 correos por día", limite === "rechazado");
   }
 
+  console.log("Contacto y bandeja");
+  {
+    const { textoPropio, pideBaja } = await import("../src/modules/contacto/buzon.ts");
+    r = await post("/api/publico/contacto", { mensaje: "Hola, quiero información" });
+    verificar("contacto sin correo → 400", r.estado === 400 && r.cuerpo?.error?.codigo === "correo_invalido", r.cuerpo);
+    const trampa = `robot-e2e-${Date.now()}@example.com`;
+    r = await post("/api/publico/contacto", { correo: trampa, mensaje: "compre ya", sitio_web: "http://spam.test" });
+    const [rob] = await consulta<{ n: number }>("SELECT count(*)::int AS n FROM contacto.mensaje WHERE correo = $1", [trampa]);
+    verificar("contacto: el campo trampa responde bien pero no guarda nada", r.estado === 200 && rob.n === 0, [r.estado, rob.n]);
+    const persona = `contacto-e2e-${Date.now()}@example.com`;
+    r = await post("/api/publico/contacto", { correo: persona, nombre: "Prueba E2E", mensaje: "¿El café lleva IVA?", novedades: true, pagina: "/#herramientas" });
+    const [msj] = await consulta<{ id: number; novedades: boolean }>("SELECT id::int, novedades FROM contacto.mensaje WHERE correo = $1", [persona]);
+    const [pro] = await consulta<{ sector: string; consentimiento: boolean }>("SELECT sector, consentimiento FROM prospeccion.prospecto WHERE correo = $1", [persona]);
+    verificar("contacto: se guarda y, con «novedades», queda como persona natural con consentimiento",
+      r.estado === 200 && r.cuerpo?.recibido === true && msj?.novedades === true && pro?.sector === "consumidor" && pro?.consentimiento === true, [r.cuerpo, msj, pro]);
+    await consulta("DELETE FROM contacto.mensaje WHERE correo = $1", [persona]);
+    await consulta("DELETE FROM prospeccion.prospecto WHERE correo = $1", [persona]);
+    const cita = "Gracias, me interesa probarlo.\n\nEl vie, 3 oct 2026 a las 10:00, El Renglón escribió:\n> Si prefiere no recibir más correos, responda con la palabra «baja»";
+    verificar("respuestas: la cita de nuestro correo no cuenta como «baja»; «baja, por favor» sí",
+      textoPropio(cita) === "Gracias, me interesa probarlo." && !pideBaja(textoPropio(cita)) && pideBaja(textoPropio("Baja, por favor.\n> correo original")), textoPropio(cita));
+    let r2 = await fetch(BASE + "/admin/bandeja", { redirect: "manual" });
+    verificar("bandeja sin sesión → redirige a /ingresar", r2.status === 307 && (r2.headers.get("location") ?? "").includes("/ingresar"));
+    r2 = await fetch(BASE + "/");
+    verificar("portada con el botón flotante de contacto", (await r2.text()).includes("Escríbanos"));
+  }
+
   console.log("IVA");
   const sinPrecios = { precio_compra: null, precio_venta: null, moneda: null };
   const clasificar = (c: Record<string, unknown>) => post("/api/v1/iva/clasificar", { operacion: "nacional", ...sinPrecios, ...c }, K);

@@ -13,7 +13,7 @@ const RESUMEN = [
   ["12 meses", "Después se borran solos. No vendemos ni compartimos estos datos."],
 ] as const;
 
-const SECCIONES = [["visitas", "Visitas"], ["rif", "RIF consultados"], ["avisos", "Avisos"], ["uso", "Para qué y quién los ve"], ["plazo", "Por cuánto tiempo"], ["derechos", "Tus derechos"]] as const;
+const SECCIONES = [["visitas", "Visitas"], ["rif", "RIF consultados"], ["avisos", "Avisos"], ["contacto", "Mensajes de contacto"], ["uso", "Para qué y quién los ve"], ["plazo", "Por cuánto tiempo"], ["derechos", "Tus derechos"]] as const;
 
 export default function Privacidad() {
   const correo = process.env.SOPORTE_CORREO;
@@ -62,6 +62,12 @@ export default function Privacidad() {
               <p>Si activas los avisos con la campana de la cabecera, guardamos la <strong>suscripción de tu navegador</strong> (la dirección que el servicio de notificaciones de tu navegador le asigna, con sus claves de cifrado), los temas que elegiste y, si sigues tus deberes tributarios, los <strong>RIF</strong> con su tipo de contribuyente y sus condiciones.</p>
               <p>Los usamos solo para enviarte esos avisos. El contenido de cada aviso va cifrado hasta tu navegador.</p>
               <p>Al pulsar «Desactivar avisos», o si quitas el permiso de notificaciones en tu navegador, la suscripción y sus RIF se borran.</p>
+            </section>
+
+            <section id="contacto">
+              <h2>Mensajes de contacto</h2>
+              <p>Si nos escribes con el botón de mensaje (abajo a la derecha), guardamos tu <strong>correo</strong>, tu nombre si lo indicas, el <strong>mensaje</strong>, la página desde la que escribiste, tu IP y tu navegador.</p>
+              <p>Los usamos para responderte y para evitar abusos. Si marcas «Quiero recibir novedades», te enviaremos novedades de El Renglón por correo; cada correo trae un enlace para darte de baja cuando quieras.</p>
             </section>
 
             <section id="uso">

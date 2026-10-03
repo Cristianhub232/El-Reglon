@@ -69,3 +69,11 @@ export async function enviarCorreo(para: string, d: DatosCorreo, tipo: TipoCorre
     [opciones.prospectoId ?? null, para, tipo, d.sector, r.asunto, r.ok ? "enviado" : "error", r.error ?? null, r.messageId ?? null, opciones.creadoPor]);
   return r;
 }
+
+// Aviso interno de texto (p. ej. un mensaje del botón de contacto a soporte@), con «Responder a» el usuario
+export async function enviarAviso(a: { para: string; responderA?: string; asunto: string; texto: string }): Promise<boolean> {
+  try {
+    await smtp().sendMail({ from: { name: "El Renglón (sitio web)", address: USUARIO() }, to: a.para, replyTo: a.responderA, subject: a.asunto, text: a.texto });
+    return true;
+  } catch (e) { console.error("[el-renglon] aviso por correo:", (e as Error).message); return false; }
+}
