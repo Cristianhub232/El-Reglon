@@ -55,23 +55,23 @@ sudo usermod -aG docker $USER            # y volver a entrar
   ```
 - **Memoria.** Metabase (Java) ocupa ~1,2 GB y el comparador ~440 MB (12 tiendas, unos 35–40 MB por tienda). Con 4 GB de RAM hay **4 GB de swap** (`/swapfile` y `/swapfile2`, ambos en `/etc/fstab`; `vm.swappiness=10`) y Java se limita con `METABASE_JAVA_OPTS=-Xmx1g`. **Recomendado: subir a 8 GB** si crecen las tiendas o el uso de Metabase.
 
-### Capacidad del servidor (medida el 03/10/2026)
+### Capacidad del servidor (medida el 03 y 04/10/2026)
 
 **Plan:** OVH **VPS-1 2027** (Ubuntu 26.04). Se amplía desde el panel de OVH («pasando a la gama superior»); los cambios de RAM o vCores suelen requerir un reinicio, tras el cual todo vuelve a arrancar solo.
 
 | Recurso | Capacidad | Uso medido | Margen |
 |---|---|---|---|
 | CPU | **2 vCores** (Intel Haswell) | carga media 0,2–0,35 | Sobrado |
-| RAM | **4 GB** | ~3 GB usados, ~840 MB disponibles | **Justo: es el límite del servidor** |
-| Swap | 4 GB (`/swapfile` y `/swapfile2`) | ~2,1 GB usados | Se usa de verdad: lo que va al swap responde más lento |
+| RAM | **4 GB** | ~2,3 GB usados, ~1,5 GB disponibles **con Metabase detenida** | **Justo: es el límite del servidor** |
+| Swap | 4 GB (`/swapfile` y `/swapfile2`) | ~1,4 GB usados con Metabase detenida (~2,7 GB con ella encendida y 19 cadenas) | Se usa de verdad: lo que va al swap responde más lento |
 | Disco | **40 GB** (sin discos adicionales) | ~16 GB usados, ~23 GB libres (tras limpiar la caché de builds) | Suficiente |
 
 **Memoria por servicio:**
 
 | Servicio | Memoria | Nota |
 |---|---|---|
-| `metabase` (Java) | ~0,9–1,2 GB | El mayor consumo. Limitado con `-Xmx1g` |
-| `comparador` | ~300–440 MB | 12 procesos PM2; unos 35–40 MB más por cada tienda nueva |
+| `metabase` (Java) | ~0,9–1,2 GB | El mayor consumo. Limitado con `-Xmx1g`. **Detenida desde el 04/10/2026** para liberar RAM (ver abajo) |
+| `comparador` | ~670 MB | **19 procesos PM2** (19 cadenas, 04/10/2026); unos 35 MB más por cada cadena nueva |
 | `db` (PostgreSQL) | ~170–330 MB | Crece con las consultas pesadas (el directorio tiene 2 millones de filas) |
 | `app` | ~100 MB | |
 | `noticias-programador` y `bcv-programador` | ~15–45 MB cada uno | |
@@ -79,11 +79,20 @@ sudo usermod -aG docker $USER            # y volver a entrar
 
 **Disco:** imágenes de Docker ~3,3 GB, volumen de PostgreSQL ~1,3 GB y respaldos en `~/respaldos/` (~41 MB cada uno; se conservan los 10 más recientes, §6). La caché de builds de Docker crece con cada despliegue: el 03/10/2026 se recuperaron 3,9 GB con `docker builder prune -f`, que no toca imágenes en uso, contenedores ni datos. Conviene repetirlo cuando el disco libre baje de 10 GB.
 
+### Metabase encendida o apagada
+
+Desde el 04/10/2026 Metabase está **detenida** para liberar RAM (con 19 cadenas en el comparador, casi toda Metabase pasaba al swap). Sus preguntas, tableros y usuarios siguen en la base `metabase`; vuelve tal cual. Mientras está apagada, `metabase.elrenglonve.org` responde 502.
+
+- En el `.env`, `COMPOSE_PROFILES=app` (sin `metabase`): así un despliegue (`docker compose up -d`) **no la vuelve a levantar**.
+- Encenderla un rato: `docker compose --profile metabase up -d metabase` (tarda ~1 minuto en arrancar).
+- Apagarla de nuevo: `docker compose --profile metabase stop metabase`.
+- Dejarla siempre encendida (por ejemplo, tras ampliar a 8 GB): volver a `COMPOSE_PROFILES=app,metabase` en el `.env` y `docker compose up -d`.
+
 ### Antes de desplegar otra API en este servidor
 
 La CPU y el disco alcanzan; **la RAM no tiene margen**. Una API de Node ocupa al menos 100–200 MB, y si trae su propia base de datos, otros 150–300 MB. Con 4 GB, todo eso iría al swap y el sitio, la API y Metabase responderían más lento.
 
-1. **Ampliar a 8 GB de RAM** (recomendado) desde el panel de OVH antes de desplegarla. Alternativas si no se amplía: detener Metabase cuando no se use (`docker compose stop metabase`, libera ~1 GB), o bajar su memoria (`METABASE_JAVA_OPTS=-Xmx768m`).
+1. **Ampliar a 8 GB de RAM** (recomendado) desde el panel de OVH antes de desplegarla. Si no se amplía: mantener Metabase detenida (ya lo está; libera ~1 GB) o bajar su memoria (`METABASE_JAVA_OPTS=-Xmx768m`).
 2. **Puertos:** ya usados `127.0.0.1:3000` (app), `3001` (Metabase) y `55432` (PostgreSQL). La nueva API debe escuchar solo en `127.0.0.1` y en otro puerto (p. ej. `3002`); nunca exponerla directamente.
 3. **Dirección pública:** un subdominio nuevo, con su registro **A** en Spaceship hacia `40.160.143.39` y su bloque en `/etc/caddy/Caddyfile` (`reverse_proxy 127.0.0.1:3002`). Caddy emite el certificado solo.
 4. **Separación:** su propio proyecto de Docker Compose y su propio `.env` (o un servicio aparte en este compose), con `restart: unless-stopped` y nombres de contenedor distintos de `elrenglon-*`.
