@@ -119,27 +119,27 @@ export default async function Portada() {
                 </span>
                 {d.p2p && (
                   <div className={s.p2p} aria-labelledby="p2p-titulo">
-                    <div className={s.tasaFila}>
+                    <div className={s.p2pCabeza}>
                       <span id="p2p-titulo" className={s.tasaMoneda}>USDT · Binance P2P</span>
                       <span className={s.p2pEtiqueta}>Referencia de mercado · no oficial</span>
                     </div>
-                    <div className={s.p2pFila}>
+                    <div className={s.p2pCentro}>
                       <span className={s.p2pValor}><span>Bs.</span><strong>{numero(d.p2p.promedio, 2)}</strong></span>
                       {d.p2p.brecha_pct && (
-                        <span className={s.brecha}>
-                          <strong>{Number(d.p2p.brecha_pct) >= 0 ? "+" : "−"}{numero(Math.abs(Number(d.p2p.brecha_pct)), 1)} %</strong> frente al BCV
+                        <span className={`${s.brecha} ${Number(d.p2p.brecha_pct) < 0 ? s.brechaBaja : ""}`}>
+                          <strong>{Number(d.p2p.brecha_pct) >= 0 ? "▲ +" : "▼ −"}{numero(Math.abs(Number(d.p2p.brecha_pct)), 1)} %</strong>
+                          <span>frente al BCV</span>
                         </span>
                       )}
                     </div>
-                    {d.p2p.ejemplo_100_usd && (
-                      <span className={s.p2pEjemplo}>
-                        US$ 100 = <b>Bs. {numero(d.p2p.ejemplo_100_usd.bcv_bs, 2)}</b> a tasa BCV · <b>Bs. {numero(d.p2p.ejemplo_100_usd.p2p_bs, 2)}</b> a tasa Binance
-                        {" "}(<b>Bs. {numero(d.p2p.ejemplo_100_usd.diferencia_bs, 2)}</b> de diferencia)
-                      </span>
-                    )}
+                    <span className={s.p2pNota}>promedio por 1 USDT</span>
+                    <dl className={s.p2pDatos}>
+                      <div><dt>Compra</dt><dd>Bs. {numero(d.p2p.compra, 2)}</dd></div>
+                      <div><dt>Venta</dt><dd>Bs. {numero(d.p2p.venta, 2)}</dd></div>
+                      {d.p2p.bcv && <div><dt>BCV</dt><dd>Bs. {numero(d.p2p.bcv.tasa, 2)}</dd></div>}
+                    </dl>
                     <span className={s.p2pPie}>
-                      Promedio por 1 USDT entre compra (Bs. {numero(d.p2p.compra, 2)}) y venta (Bs. {numero(d.p2p.venta, 2)}) · Fuente: Binance P2P vía CriptoYa
-                      {` · leída a las ${hora(d.p2p.leida_en)}`}. No es la tasa aplicable a efectos tributarios.
+                      Fuente: Binance P2P vía CriptoYa · leída a las {hora(d.p2p.leida_en)} · no es la tasa aplicable a efectos tributarios
                     </span>
                   </div>
                 )}

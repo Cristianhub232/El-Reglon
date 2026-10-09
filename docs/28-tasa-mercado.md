@@ -32,11 +32,12 @@ Referencia de mercado **no oficial**, que se muestra junto a la tasa BCV. Se agr
 
 ## Dónde se ve
 
-- **Portada**, tarjeta «Tasa oficial BCV», debajo de la fuente del BCV. Muestra:
+- **Portada**, tarjeta «Tasa oficial BCV», debajo de la fuente del BCV, en un panel propio. Muestra:
   - «USDT · Binance P2P» con la etiqueta «Referencia de mercado · no oficial»;
-  - el promedio y la brecha («+16,7 % frente al BCV»);
-  - el ejemplo «US$ 100 = Bs. … a tasa BCV · Bs. … a tasa Binance»;
-  - compra, venta, fuente y hora.
+  - el promedio por 1 USDT, centrado;
+  - la brecha en una pastilla ámbar («▲ +16,7 % frente al BCV»; verde si fuera negativa). No es verde ni roja, porque esos colores ya indican subida o bajada de la tasa oficial;
+  - una fila con compra, venta y la tasa BCV de referencia;
+  - la fuente y la hora.
 
   Si no hay lectura en 24 horas, el bloque no aparece.
 - **API:** `GET /api/v1/mercado/usdt` (permiso `bcv`) devuelve `compra`, `venta`, `promedio`, `bcv`, `brecha_pct`, `ejemplo_100_usd`, `oficial: false`, la fuente y una nota. Responde 503 `sin_datos` si no hay lectura reciente. Está documentada en Swagger.
