@@ -119,28 +119,22 @@ export default async function Portada() {
                 </span>
                 {d.p2p && (
                   <div className={s.p2p} aria-labelledby="p2p-titulo">
-                    <div className={s.p2pCabeza}>
+                    <div className={s.tasaFila}>
                       <span id="p2p-titulo" className={s.tasaMoneda}>USDT · Binance P2P</span>
-                      <span className={s.p2pEtiqueta}>Referencia de mercado · no oficial</span>
-                    </div>
-                    <div className={s.p2pCentro}>
-                      <span className={s.p2pValor}><span>Bs.</span><strong>{numero(d.p2p.promedio, 2)}</strong></span>
                       {d.p2p.brecha_pct && (
-                        <span className={`${s.brecha} ${Number(d.p2p.brecha_pct) < 0 ? s.brechaBaja : ""}`}>
-                          <strong>{Number(d.p2p.brecha_pct) >= 0 ? "▲ +" : "▼ −"}{numero(Math.abs(Number(d.p2p.brecha_pct)), 1)} %</strong>
-                          <span>frente al BCV</span>
+                        <span className={`${s.brecha} ${Number(d.p2p.brecha_pct) >= 0 ? s.brechaSube : s.brechaBaja}`}>
+                          {Number(d.p2p.brecha_pct) >= 0 ? "▲ +" : "▼ −"}{numero(Math.abs(Number(d.p2p.brecha_pct)), 1)} % <span>frente al BCV</span>
                         </span>
                       )}
                     </div>
+                    <span className={s.p2pValor}><span>Bs.</span><strong>{numero(d.p2p.promedio, 2)}</strong></span>
                     <span className={s.p2pNota}>promedio por 1 USDT</span>
                     <dl className={s.p2pDatos}>
                       <div><dt>Compra</dt><dd>Bs. {numero(d.p2p.compra, 2)}</dd></div>
                       <div><dt>Venta</dt><dd>Bs. {numero(d.p2p.venta, 2)}</dd></div>
                       {d.p2p.bcv && <div><dt>BCV</dt><dd>Bs. {numero(d.p2p.bcv.tasa, 2)}</dd></div>}
                     </dl>
-                    <span className={s.p2pPie}>
-                      Fuente: Binance P2P vía CriptoYa · leída a las {hora(d.p2p.leida_en)} · no es la tasa aplicable a efectos tributarios
-                    </span>
+                    <span className={s.p2pPie}>Fuente: Binance P2P</span>
                   </div>
                 )}
               </div>

@@ -46,29 +46,25 @@
 .tasaValor strong { font: 600 clamp(38px, 4.4vw, 60px)/1 var(--mono); color: var(--tinta); letter-spacing: -.02em; }
 .tasaNota { font-size: 13px; color: var(--texto-3); }
 .tasasPie { font-size: 12px; padding: 10px 0 14px; border-top: 1px solid var(--linea-suave); }
-/* Tasa de mercado USDT (Binance P2P): referencia no oficial en un panel propio, separado de la tasa oficial (sin sombras) */
-.p2p { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 6px 0 18px; padding: 16px clamp(14px, 2vw, 22px) 14px;
-  background: var(--papel); border: 1px solid var(--linea-suave); border-radius: 14px; }
-.p2pCabeza { align-self: stretch; display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; }
-.p2pCabeza .tasaMoneda { white-space: nowrap; }
-.p2pEtiqueta { white-space: nowrap; font-size: 12px; font-weight: 600; color: var(--condicionado-texto); background: var(--condicionado-fondo); border-radius: 999px; padding: 2px 10px; }
-.p2pCentro { display: flex; align-items: center; justify-content: center; gap: 10px 18px; flex-wrap: wrap; margin-top: 4px; }
-.p2pValor { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+/* Tasa de mercado USDT (Binance P2P): fondo blanco como el dólar y el euro, separada por una línea; precio centrado */
+.p2p { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 0 14px; border-top: 1px solid var(--linea-suave); }
+.p2p .tasaFila { align-self: stretch; }
+.p2pValor { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; margin-top: 4px; }
 .p2pValor span { font-size: 18px; font-weight: 600; color: var(--texto-3); }
-.p2pValor strong { font: 600 clamp(36px, 4vw, 54px)/1 var(--mono); color: var(--tinta); letter-spacing: -.02em; }
-/* La brecha en ámbar (no verde ni rojo: esos colores ya indican subida o bajada de la tasa oficial) */
-.brecha { display: inline-flex; align-items: baseline; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #FBE7C6; color: #7A4A00; white-space: nowrap; }
-.brecha strong { font: 700 17px var(--mono); }
-.brecha span { font-size: 13px; font-weight: 600; }
-.brechaBaja { background: #DCEFE4; color: #1F6B47; }
-.p2pNota { font-size: 13px; color: var(--texto-3); margin-top: -4px; }
-.p2pDatos { align-self: stretch; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 6px 0 0; border-top: 1px solid var(--linea-suave); }
+.p2pValor strong { font: 600 clamp(38px, 4.4vw, 60px)/1 var(--mono); color: var(--tinta); letter-spacing: -.02em; }
+/* Brecha frente al BCV: roja al alza, verde a la baja; sin fondo, como la variación de las otras tasas */
+.brecha { font: 600 14px var(--sans); white-space: nowrap; }
+.brecha span { font-weight: 500; color: var(--texto-3); }
+.brechaSube { color: var(--rojo); }
+.brechaBaja { color: #2E7D5B; }
+.p2pNota { font-size: 13px; color: var(--texto-3); }
+.p2pDatos { align-self: stretch; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 8px 0 0; border-top: 1px solid var(--linea-suave); }
 .p2pDatos > div { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px 2px; }
 .p2pDatos > div + div { border-left: 1px solid var(--linea-suave); }
 .p2pDatos dt { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--texto-3); }
 .p2pDatos dd { margin: 0; font: 600 15px var(--mono); color: var(--tinta); white-space: nowrap; }
 @media (max-width: 420px) { .p2pDatos dd { font-size: 13px; } }
-.p2pPie { font-size: 12px; line-height: 1.5; color: var(--texto-3); text-align: center; }
+.p2pPie { align-self: stretch; font-size: 12px; color: var(--texto-3); padding-top: 8px; }
 .aviso { font-size: 13px; color: var(--condicionado-texto); background: var(--condicionado-fondo); border-radius: 6px; padding: 6px 10px; margin: 4px 0 8px; }
 
 .foto { position: relative; flex: 1; min-height: 500px; background: var(--papel-oscuro); }
