@@ -70,6 +70,7 @@ node scripts/usuario.ts crear --correo usted@empresa.com.ve --nombre "Su nombre"
 25. [Directorio de contribuyentes](docs/25-directorio.md): importadores (CIF), sistemas de facturación y mayores pagadores por región, saneados sin duplicados; datos personales fuera del repositorio.
 26. [Prospección comercial por correo](docs/26-prospeccion.md): pocos correos al día a empresas, por sector, con un solo seguimiento, baja en un clic y lista de supresión permanente; remitente «El Renglón» (Spacemail).
 27. [Botón de contacto y bandeja](docs/27-contacto-y-bandeja.md): burbuja flotante para escribirnos (aviso a soporte@ y alta con consentimiento si pide novedades) y bandeja del panel con esos mensajes y los correos de ventas@ y soporte@; las respuestas de los prospectos actualizan su estado.
+28. [Tasa de mercado USDT/VES](docs/28-tasa-mercado.md): Binance P2P vía CriptoYa cada 30 min, referencia no oficial con la brecha frente al BCV, en la portada y en `/api/v1/mercado/usdt`.
 - [Diseños](resources/): identidad de marca, logo, landing, inicio de sesión y panel (se abren en el navegador).
 
 > Resultado orientativo: cuando hay varias opciones, la selección corresponde al usuario bajo su responsabilidad y análisis. Las reglas deben ser validadas por un asesor tributario.

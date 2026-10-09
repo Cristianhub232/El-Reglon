@@ -78,6 +78,11 @@ async function main() {
   verificar("moneda de mayor valor = EUR", r.cuerpo?.moneda === "EUR", r.cuerpo);
   r = await get("/api/v1/bcv/tasas/actual?fecha=2026-02-30", K);
   verificar("fecha inexistente → 400", r.estado === 400 && r.cuerpo?.error?.codigo === "fecha_invalida", r.cuerpo);
+  r = await get("/api/v1/mercado/usdt", K);
+  verificar("tasa de mercado USDT: no oficial, con brecha frente al BCV y ejemplo de US$ 100 (503 si no hay lectura en 24 h)",
+    (r.estado === 200 && r.cuerpo?.oficial === false && Number(r.cuerpo?.promedio) > 0 && r.cuerpo?.brecha_pct !== undefined && r.cuerpo?.ejemplo_100_usd !== undefined)
+      || (r.estado === 503 && r.cuerpo?.error?.codigo === "sin_datos"), r.cuerpo);
+  verificar("tasa de mercado USDT sin API key → 401", (await get("/api/v1/mercado/usdt")).estado === 401);
   r = await get("/api/v1/bcv/tasa-aplicable?fecha=2030-01-01", K);
   verificar("fecha futura sin publicación → 404 (no se estima)", r.estado === 404, r.cuerpo);
 

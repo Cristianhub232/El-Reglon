@@ -117,6 +117,32 @@ export default async function Portada() {
                   Fuente: Banco Central de Venezuela · tasa aplicable según art. 25 de la Ley de IVA
                   {d.bcv?.leida ? ` · leída a las ${hora(d.bcv.leida)}, hora de Caracas` : ""}
                 </span>
+                {d.p2p && (
+                  <div className={s.p2p} aria-labelledby="p2p-titulo">
+                    <div className={s.tasaFila}>
+                      <span id="p2p-titulo" className={s.tasaMoneda}>USDT · Binance P2P</span>
+                      <span className={s.p2pEtiqueta}>Referencia de mercado · no oficial</span>
+                    </div>
+                    <div className={s.p2pFila}>
+                      <span className={s.p2pValor}><span>Bs.</span><strong>{numero(d.p2p.promedio, 2)}</strong></span>
+                      {d.p2p.brecha_pct && (
+                        <span className={s.brecha}>
+                          <strong>{Number(d.p2p.brecha_pct) >= 0 ? "+" : "−"}{numero(Math.abs(Number(d.p2p.brecha_pct)), 1)} %</strong> frente al BCV
+                        </span>
+                      )}
+                    </div>
+                    {d.p2p.ejemplo_100_usd && (
+                      <span className={s.p2pEjemplo}>
+                        US$ 100 = <b>Bs. {numero(d.p2p.ejemplo_100_usd.bcv_bs, 2)}</b> a tasa BCV · <b>Bs. {numero(d.p2p.ejemplo_100_usd.p2p_bs, 2)}</b> a tasa Binance
+                        {" "}(<b>Bs. {numero(d.p2p.ejemplo_100_usd.diferencia_bs, 2)}</b> de diferencia)
+                      </span>
+                    )}
+                    <span className={s.p2pPie}>
+                      Promedio por 1 USDT entre compra (Bs. {numero(d.p2p.compra, 2)}) y venta (Bs. {numero(d.p2p.venta, 2)}) · Fuente: Binance P2P vía CriptoYa
+                      {` · leída a las ${hora(d.p2p.leida_en)}`}. No es la tasa aplicable a efectos tributarios.
+                    </span>
+                  </div>
+                )}
               </div>
               <div className={`${s.foto} ${d.enCifras.length ? s.fotoCifras : ""}`}>
                 {d.enCifras.length ? <DiaEnCifras tarjetas={d.enCifras} /> : (

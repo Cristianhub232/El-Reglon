@@ -5,6 +5,7 @@ import { consulta, pool } from "../src/core/db.ts";
 import { recolectar } from "../src/modules/noticias/recolector.ts";
 import { avisosProgramados } from "../src/modules/avisos/temas.ts";
 import { cicloProspeccion } from "../src/modules/prospeccion/programador.ts";
+import { leerP2P } from "../src/modules/mercado/p2p.ts";
 import { revisarRespuestas } from "../src/modules/contacto/buzon.ts";
 
 const minuto = Number(process.env.NOTICIAS_MINUTO ?? 5);
@@ -39,6 +40,11 @@ async function purgarAnalitica() {
 }
 
 // Prospección por correo (docs/26): cada 5 minutos; envía como mucho un correo por ciclo y solo si está activa
+// Tasa de mercado USDT/VES (Binance P2P vía CriptoYa, docs/28): cada 30 minutos
+async function p2p() {
+  try { await leerP2P(); } catch (e) { console.error(`[noticias-programador] tasa P2P: ${(e as Error).message}`); }
+}
+
 async function prospeccion() {
   try {
     const r = await cicloProspeccion();
@@ -62,6 +68,8 @@ async function ciclo(): Promise<never> {
   await purgarAnalitica();
   await avisos();
   setInterval(() => void prospeccion(), 5 * 60_000);
+  await p2p();
+  setInterval(() => void p2p(), 30 * 60_000);
   for (;;) {
     const t = proxima();
     console.log(`[noticias-programador] próxima lectura: ${new Date(t).toISOString()}`);

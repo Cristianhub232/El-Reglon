@@ -4,6 +4,7 @@ import { consulta } from "../../core/db.ts";
 import { hoyCaracas } from "../../core/validacion.ts";
 import { titularesPortada, ultimaLectura } from "../noticias/consultas.ts";
 import { diaEnCifras } from "./cifras.ts";
+import { tasaP2PActual } from "../mercado/p2p.ts";
 
 export interface Moneda { codigo: "USD" | "EUR"; tasa: string; variacion: number | null; serie: number[] }
 
@@ -38,18 +39,19 @@ async function tasas(hoy: string) {
 
 export async function datosPortada() {
   const hoy = hoyCaracas();
-  const [bcv, inhabiles, alicuotas, noticias, noticiasLeidas] = await Promise.all([
+  const [bcv, inhabiles, alicuotas, noticias, noticiasLeidas, p2p] = await Promise.all([
     tasas(hoy),
     consulta<{ fecha: string; descripcion: string; tipo: "NACIONAL" | "BANCARIO" }>(
       "SELECT fecha, descripcion, tipo FROM calendario.dia_inhabil WHERE fecha >= $1::date ORDER BY fecha LIMIT 6", [hoy]),
     consulta<{ codigo: string; porcentaje: string }>("SELECT codigo, porcentaje FROM iva.alicuotas_vigentes($1::date)", [hoy]),
     titularesPortada(5).catch(() => []),          // sin el esquema del noticiero, la portada sigue funcionando
     ultimaLectura().catch(() => null),
+    tasaP2PActual().catch(() => null),            // referencia de mercado no oficial (docs/28); sin ella, la tarjeta BCV sigue igual
   ]);
   const pct = (c: string) => alicuotas.find((a) => a.codigo === c)?.porcentaje ?? null;
 
   return {
-    hoy, bcv, inhabiles, noticias, noticiasLeidas, enCifras: await diaEnCifras(hoy, bcv?.fecha_valor ?? null),
+    hoy, bcv, p2p, inhabiles, noticias, noticiasLeidas, enCifras: await diaEnCifras(hoy, bcv?.fecha_valor ?? null),
     alicuotas: { general: pct("GENERAL"), reducida: pct("REDUCIDA"), adicional: pct("ADICIONAL_SUNTUARIA") },
   };
 }
