@@ -31,7 +31,7 @@ Un primer correo por sector y un seguimiento común, en **estilo de carta**: pá
 
 **Por qué así (03/10/2026):** la primera versión, con logo, botón azul, cajas de color, texto oculto de vista previa y cabeceras `List-Unsubscribe`, llegó a **Promociones** en Gmail; una prueba de texto simple había llegado a **Principal**. Gmail clasifica por el aspecto del correo.
 - **Sin `List-Unsubscribe`:** es la señal más clara de boletín. Gmail y Yahoo solo la exigen a quien envía más de 5.000 correos al día (aquí, 30 como mucho). La baja en un clic sigue disponible por si el volumen crece: `POST /api/publico/prospeccion/baja?t=…` (RFC 8058).
-- Los enlaces llevan a las secciones de la portada: `#herramientas` (clasificador de IVA), `#comparador`, `#deberes`, `#tasas`, y a `/docs` y `/solicitar-api-key`.
+- Los enlaces llevan a la página propia de cada herramienta: `/clasificador-iva`, `/comparador-de-precios`, `/deberes-tributarios` y `/tasa-bcv`, además de `/docs` y `/solicitar-api-key` (hasta el 14/10/2026 apuntaban a las secciones de la portada, que siguen funcionando).
 
 | Sector | Asunto del primer correo | Enlaces |
 |---|---|---|
@@ -51,8 +51,8 @@ El seguimiento lleva los dos primeros enlaces del sector.
 
 Lo que llama la atención es un dato útil, no el diseño (03/10/2026):
 - **Ejemplos de IVA** (general, comercio y farmacias): tres productos con su alícuota en una etiqueta de color (verde exento, naranja 16 %) y el artículo de la ley. Son fijos (`EJEMPLOS_IVA`) para no inflar las estadísticas del clasificador con cada correo; las pruebas los comparan con el clasificador real.
-- **Próximos deberes del RIF** (contribuyentes especiales): `misDeberes(rif, ESPECIAL)` del módulo Calendario. El enlace abre `/?rif=…&tipo=ESPECIAL#deberes`, y «Mis deberes» acepta ahora esos parámetros y consulta sola.
-- **Más barato hoy** (personas naturales): el mismo código de barras en al menos dos cadenas, con precio de las últimas 48 horas (US$ convertidos con la tasa del BCV) y más de 3 % de diferencia; uno por rubro (arroz, café, harina…), los 4 con mayor diferencia. Se calcula una vez al día. Cada producto enlaza a `/?comparar=…#comparador`.
+- **Próximos deberes del RIF** (contribuyentes especiales): `misDeberes(rif, ESPECIAL)` del módulo Calendario. El enlace abre `/deberes-tributarios?rif=…&tipo=ESPECIAL`, y «Mis deberes» acepta ahora esos parámetros y consulta sola.
+- **Más barato hoy** (personas naturales): el mismo código de barras en al menos dos cadenas, con precio de las últimas 48 horas (US$ convertidos con la tasa del BCV) y más de 3 % de diferencia; uno por rubro (arroz, café, harina…), los 4 con mayor diferencia. Se calcula una vez al día. Cada producto enlaza a `/comparador-de-precios?comparar=…`.
 - Asuntos con el dato concreto (p. ej. «la harina no paga IVA, el refresco sí (16 %)»).
 
 - Cada correo menciona la **tasa del BCV del día** (dólar y euro) en una frase.

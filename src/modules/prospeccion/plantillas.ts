@@ -28,12 +28,12 @@ export interface Correo { asunto: string; html: string; texto: string; urlBaja: 
 
 // Herramientas del sitio a las que enlaza el correo: [texto del enlace, ruta, para qué sirve]
 const HERRAMIENTAS = {
-  iva: ["Clasificador de IVA", "/#herramientas", "escriba un producto o su código de barras y vea si es exento, 8 %, 16 % o 31 %, con el artículo de la ley"],
-  iva_arancel: ["Clasificador de IVA", "/#herramientas", "acepta también el código arancelario: alícuota en la importación y base legal"],
-  comparador: ["Comparador de precios", "/#comparador", "el precio del mismo producto en 19 cadenas del país"],
-  comparador_farmacia: ["Comparador de precios", "/#comparador", "compare con Farmatodo, Locatel, Farmacias SAAS y otras cadenas"],
-  deberes: ["Mis deberes tributarios", "/#deberes", "los próximos vencimientos con el SENIAT según el RIF, especiales u ordinarios"],
-  tasas: ["Tasa oficial del BCV", "/#tasas", "la del día, su historial y un conversor de bolívares, dólares y euros"],
+  iva: ["Clasificador de IVA", "/clasificador-iva", "escriba un producto o su código de barras y vea si es exento, 8 %, 16 % o 31 %, con el artículo de la ley"],
+  iva_arancel: ["Clasificador de IVA", "/clasificador-iva", "acepta también el código arancelario: alícuota en la importación y base legal"],
+  comparador: ["Comparador de precios", "/comparador-de-precios", "el precio del mismo producto en 19 cadenas del país"],
+  comparador_farmacia: ["Comparador de precios", "/comparador-de-precios", "compare con Farmatodo, Locatel, Farmacias SAAS y otras cadenas"],
+  deberes: ["Mis deberes tributarios", "/deberes-tributarios", "los próximos vencimientos con el SENIAT según el RIF, especiales u ordinarios"],
+  tasas: ["Tasa oficial del BCV", "/tasa-bcv", "la del día, su historial y un conversor de bolívares, dólares y euros"],
   api: ["Documentación de la API", "/docs", "IVA, tasas del BCV, arancel, calendario tributario y RIF para su sistema"],
   apikey: ["API key gratuita", "/solicitar-api-key", "para empezar a integrar hoy mismo"],
 } as const;
@@ -154,12 +154,12 @@ export function armarCorreo(d: DatosCorreo, tipo: TipoCorreo, c: Contexto): Corr
     bloqueTexto = ["Algunos ejemplos de nuestro clasificador:", ...ej.map(([n, a, b]) => `- ${n}: ${a === "exento" ? "exento" : "16 %"} (${b})`), ""];
   } else if (tipo === "inicial" && d.sector === "especial" && c.deberes?.length) {
     bloqueHtml = `${tabla(["Vence", "Deber", "Período"], c.deberes.map((x) => [`<strong>${fechaCorta(x.fecha_limite)}</strong>`, esc(x.nombre), esc(x.periodo ? x.periodo.split(" al ").map(fechaCorta).join(" al ") : "—")]))}
-${p(`<a href="${esc(enlace("/#deberes", d.sector, { rif: rif ?? "", tipo: "ESPECIAL" }))}" style="color:#1a56b0;font-weight:bold;">Ver todos sus deberes y agregarlos a su calendario</a>, con aviso 3 días antes de cada vencimiento.`)}`;
+${p(`<a href="${esc(enlace("/deberes-tributarios", d.sector, { rif: rif ?? "", tipo: "ESPECIAL" }))}" style="color:#1a56b0;font-weight:bold;">Ver todos sus deberes y agregarlos a su calendario</a>, con aviso 3 días antes de cada vencimiento.`)}`;
     bloqueTexto = [...c.deberes.map((x) => `- ${fechaCorta(x.fecha_limite)}: ${x.nombre}${x.periodo ? ` (período ${x.periodo.split(" al ").map(fechaCorta).join(" al ")})` : ""}`), "",
-      `Ver todos sus deberes: ${enlace("/#deberes", d.sector, { rif: rif ?? "", tipo: "ESPECIAL" })}`, ""];
+      `Ver todos sus deberes: ${enlace("/deberes-tributarios", d.sector, { rif: rif ?? "", tipo: "ESPECIAL" })}`, ""];
   } else if (tipo === "inicial" && persona && c.precios?.length) {
     bloqueHtml = `${tabla(["Producto", "Más barato hoy", "En otra cadena"], c.precios.map((x) => [
-      `<a href="${esc(enlace("/#comparador", d.sector, { comparar: x.consulta }))}" style="color:#1a56b0;">${esc(x.producto)}</a>`,
+      `<a href="${esc(enlace("/comparador-de-precios", d.sector, { comparar: x.consulta }))}" style="color:#1a56b0;">${esc(x.producto)}</a>`,
       `<strong>Bs. ${bs(x.minimo)}</strong><br><span style="color:#666666;font-size:13px;">en ${esc(x.tienda)}</span>`,
       `<span style="color:#a8530b;">hasta Bs. ${bs(x.maximo)}</span><br><span style="color:#666666;font-size:13px;">${Math.round(100 * (1 - x.minimo / x.maximo))} % más caro</span>`]))}
 ${p("Toque un producto para ver la comparación completa, o busque el suyo.", "color:#666666;font-size:14px;")}`;

@@ -232,7 +232,7 @@ async function main() {
     verificar("plantillas: 8 sectores × 2 correos, estilo carta con enlaces a las herramientas, baja visible y datos escapados", correos.length === 16 && correos.every((c) =>
       c.asunto.length <= 100 && c.html.includes(`/baja?t=${"a".repeat(32)}`) && c.texto.includes("/baja?t=") && !c.html.includes("<b>La Esquina")
       && !/undefined|NaN/.test(c.html + c.texto) && c.html.includes("Bs. 190,50") && !/<img|<button/i.test(c.html)
-      && /href="https:\/\/[^"]*(#(herramientas|comparador|deberes|tasas)|\/docs|\/solicitar-api-key)/.test(c.html)), correos.map((c) => c.asunto));
+      && /href="https:\/\/[^"]*\/(clasificador-iva|comparador-de-precios|deberes-tributarios|tasa-bcv|docs|solicitar-api-key)/.test(c.html)), correos.map((c) => c.asunto));
     const ca = armarCorreo({ empresa: "Inversiones Ejemplo, C.A.", contacto: null, sector: "general", token: "a".repeat(32) }, "inicial", { tasa: null });
     verificar("plantillas: sin doble punto tras «C.A.»", !ca.texto.includes("C.A..") && ca.texto.includes("Inversiones Ejemplo, C.A."), ca.texto.split("\n")[2]);
     verificar("validación de prospectos: correo, sector y origen", validar({ empresa: "Farmacia X", correo: "a@b.co", sector: "Farmacias", origen: "web" }).ok
@@ -405,6 +405,15 @@ async function sitioYSesiones() {
   verificar("sitemap.xml con la portada y sin el panel", p.estado === 200 && /<loc>https:\/\/[^<]+\/<\/loc>/.test(p.texto) && !p.texto.includes("/admin"), p.texto.slice(0, 300));
   p = await pagina("/");
   verificar("portada: canonical y sin noindex", /<link rel="canonical" href="https:\/\/[^"]+\/?"/.test(p.texto) && !/noindex/.test(p.texto));
+  // Páginas propias de cada herramienta (indexables): canonical, título, datos estructurados, sitemap y enlace en el pie
+  const sitemap = (await pagina("/sitemap.xml")).texto;
+  for (const [ruta, h1] of [["/comparador-de-precios", "Dónde está más barato"], ["/clasificador-iva", "Lleva IVA"],
+    ["/deberes-tributarios", "deberes con el SENIAT"], ["/tasa-bcv", "Tasa oficial del BCV"]] as const) {
+    const x = await pagina(ruta);
+    verificar(`página ${ruta}: 200, canonical, título, datos estructurados, en el sitemap y en el pie`,
+      x.estado === 200 && x.texto.includes(`<link rel="canonical" href="https://elrenglonve.org${ruta}"`) && x.texto.includes(h1)
+      && x.texto.includes('"@type":"FAQPage"') && !/noindex/.test(x.texto) && sitemap.includes(`${ruta}</loc>`) && x.texto.includes(`href="${ruta}"`), x.estado);
+  }
   p = await pagina("/ingresar");
   verificar("inicio de sesión con noindex", /<meta name="robots" content="noindex/.test(p.texto));
   p = await pagina("/admin/usuarios");

@@ -22,6 +22,10 @@
 | Ruta | Contenido |
 |---|---|
 | `/` | Landing del diseño con datos reales: tasas BCV USD y EUR con variación y gráfica de las últimas 7 publicaciones, conversor, clasificador de IVA sin registro, cifras, noticias, alícuotas vigentes, próximos días inhábiles, módulos y ejemplo de la API |
+| `/comparador-de-precios` | «¿Dónde está más barato?»: el comparador con texto, cadenas y preguntas frecuentes (acepta `?comparar=`) |
+| `/clasificador-iva` | «¿Lleva IVA?»: el clasificador con las alícuotas vigentes y preguntas frecuentes |
+| `/deberes-tributarios` | Calendario de deberes por RIF (acepta `?rif=&tipo=`) con los próximos días inhábiles |
+| `/tasa-bcv` | Tasa oficial del BCV (dólar y euro), historial, conversor y USDT P2P |
 | `/solicitar-api-key` | Formulario de solicitud: queda pendiente hasta que un superadministrador la aprueba |
 | `/sin-conexion` | Página sin conexión de la PWA |
 | `/docs` | Swagger |
