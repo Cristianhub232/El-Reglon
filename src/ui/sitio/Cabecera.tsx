@@ -11,10 +11,11 @@ export function Cabecera() {
           <Logo tipo="horizontal" variante="claro" fondo="#F6F3EA" />
         </Link>
         <nav className={s.nav} aria-label="Principal">
-          <Link href="/#comparador">Comparador</Link>
-          <Link href="/#herramientas">Herramientas</Link>
-          <Link href="/#noticias">Noticias</Link>
-          <Link href="/#modulos">Módulos</Link>
+          <Link href="/comparador-de-precios">Comparador</Link>
+          <Link href="/clasificador-iva">IVA</Link>
+          <Link href="/deberes-tributarios">Deberes</Link>
+          <Link href="/tasa-bcv">Tasa BCV</Link>
+          <Link href="/noticias">Noticias</Link>
           <Link href="/#api" className={s.navOpcional2}>API</Link>
           <Link href="/docs" className={s.navOpcional}>Documentación</Link>
         </nav>
@@ -36,6 +37,14 @@ export function PiePagina() {
           <span className={s.pieSimbolo}><Logo tipo="simbolo" variante="claro" fondo="#F6F3EA" /></span>
           <span>Resultados orientativos: no constituyen asesoría tributaria ni aduanera.</span>
         </div>
+        <nav className={s.pieEnlaces} aria-label="Herramientas">
+          <Link href="/comparador-de-precios">Comparador de precios</Link>
+          <Link href="/clasificador-iva">Clasificador de IVA</Link>
+          <Link href="/deberes-tributarios">Deberes tributarios</Link>
+          <Link href="/tasa-bcv">Tasa BCV de hoy</Link>
+          <Link href="/noticias">Noticias</Link>
+          <Link href="/solicitar-api-key">Solicitar API key</Link>
+        </nav>
         <div className={s.pieEnlaces}>
           <span>Datos de productos: Open Food Facts (ODbL)</span>
           <a href="/api/salud">Estado del servicio</a>

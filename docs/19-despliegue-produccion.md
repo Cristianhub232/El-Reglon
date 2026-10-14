@@ -189,10 +189,12 @@ Estado al 03/10/2026:
 | Pieza | Implementación |
 |---|---|
 | `/robots.txt` | `src/app/robots.ts`: permite todo el sitio, bloquea `/admin` y `/api/` y anuncia el sitemap |
-| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, `/noticias`, `/solicitar-api-key`, `/docs` y `/privacidad` con su URL canónica |
+| `/sitemap.xml` | `src/app/sitemap.ts`: `/`, las páginas de cada herramienta (`/comparador-de-precios`, `/tasa-bcv`, `/clasificador-iva`, `/deberes-tributarios`), `/noticias`, `/solicitar-api-key`, `/docs` y `/privacidad` |
 | Canonical | En cada página pública (`alternates.canonical`). No va en el layout raíz: todas las páginas lo heredarían y dirían ser la portada |
 | `noindex` | `/admin` (y sus páginas), `/ingresar`, `/sin-conexion` y `/baja` |
 | URL base | `src/core/sitio.ts` (`SITIO_URL`, por defecto `https://elrenglonve.org`): `metadataBase`, Open Graph (`es_VE`), robots y sitemap |
+| Páginas de herramientas | Cada herramienta de la portada tiene su página propia (14/10/2026) para aparecer en Google con su búsqueda: título y descripción propios, texto explicativo, preguntas frecuentes y datos estructurados (`BreadcrumbList`, `FAQPage`). Plantilla `src/ui/sitio/PaginaHerramienta.tsx`; las tarjetas de tasas, alícuotas y días inhábiles se comparten con la portada (`src/ui/sitio/Tarjetas.tsx`). `/tasa-bcv` lleva la tasa del día en su título |
+| Enlaces internos | El menú y el pie de todas las páginas enlazan las herramientas, `/noticias` y `/solicitar-api-key` (Google prioriza lo que está enlazado) |
 | Versión canónica | `https://elrenglonve.org/`: `http://`, `www` y el IP redirigen a ella con 301/308 en un solo salto |
 
 `scripts/prueba-api.ts` verifica robots, sitemap, canonical y `noindex`.

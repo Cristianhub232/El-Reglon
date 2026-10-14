@@ -11,15 +11,14 @@ import { TitularItem, TitularPrincipal } from "../ui/sitio/Titulares.tsx";
 import { CasosDeUso } from "../ui/sitio/Casos.tsx";
 import { DiaEnCifras } from "../ui/sitio/DiaEnCifras.tsx";
 import { Comparador } from "../ui/sitio/Comparador.tsx";
-import { HistorialTasas } from "../ui/sitio/HistorialTasas.tsx";
 import { MisDeberes } from "../ui/sitio/MisDeberes.tsx";
 import { condiciones as condicionesCal } from "../modules/calendario/consultas.ts";
 import { tiendasActivas } from "../modules/comparador/buscador.ts";
 import { imagenReferencia } from "../modules/comparador/referencia.ts";
 import { datosCasos } from "../modules/web/casos.ts";
 import { Conversor } from "../ui/sitio/Conversor.tsx";
-import { Grafica } from "../ui/sitio/Grafica.tsx";
-import { diaSemana, fecha, fechaCorta, fechaLarga, hora, numero } from "../ui/formato.ts";
+import { TarjetaAlicuotas, TarjetaInhabiles, TarjetaTasas, Variacion } from "../ui/sitio/Tarjetas.tsx";
+import { fecha, fechaCorta, fechaLarga, hora, numero } from "../ui/formato.ts";
 import s from "../ui/sitio/portada.module.css";
 
 export const dynamic = "force-dynamic";
@@ -34,12 +33,6 @@ const MODULOS = [
   ["Noticias", "Titulares de diez medios venezolanos, actualizados cada hora, con enlace al artículo original.", "/api/v1/noticias"],
   ["Comparador", "Precio de un producto en varias tiendas venezolanas en línea, emparejado por código de barras, en Bs. y US$.", "/api/v1/comparador"],
 ] as const;
-
-function Variacion({ v, corta }: { v: number | null; corta?: boolean }) {
-  if (v === null) return null;
-  const txt = `${numero(Math.abs(v), 2)} %`;
-  return <span className={v >= 0 ? s.sube : s.baja}>{corta ? `${v >= 0 ? "+" : "−"}${txt}` : `${v >= 0 ? "▲" : "▼"} ${txt}`}</span>;
-}
 
 export default async function Portada() {
   const d = await datosPortada();
@@ -89,55 +82,7 @@ export default async function Portada() {
             </div>
 
             <div className={s.heroDatos}>
-              <div className={s.tasas} id="tasas">
-                <div className={s.tasasCabeza}>
-                  <strong>Tasa oficial BCV {d.bcv?.vigente ? "de hoy" : "vigente"}</strong>
-                  {d.bcv && <span className={s.tasasFecha}>Fecha valor {diaSemana(d.bcv.fecha_valor)} {fecha(d.bcv.fecha_valor)}{d.bcv.historial.length > 1 && <HistorialTasas historial={d.bcv.historial} />}</span>}
-                </div>
-                {d.bcv && !d.bcv.vigente && (
-                  <span className={s.aviso}>Aún no hay tasa publicada con fecha valor de hoy: se muestra la última publicación del BCV.</span>
-                )}
-                <div className={s.tasasRejilla}>
-                  {[usd, eur].filter(Boolean).map((m, i) => (
-                    <div key={m!.codigo} className={s.tasa}>
-                      <div className={s.tasaFila}>
-                        <span className={s.tasaMoneda}>{m!.codigo === "USD" ? "USD · Dólar" : "EUR · Euro"}</span>
-                        <span className={s.tasaVariacion}><Variacion v={m!.variacion} /></span>
-                      </div>
-                      <div className={s.tasaValorFila}>
-                        <span className={s.tasaValor}><span>Bs.</span><strong>{numero(m!.tasa, 4)}</strong></span>
-                        <Grafica valores={m!.serie} id={`g${m!.codigo}`} retraso={250 + i * 200}
-                          color={(m!.variacion ?? 0) >= 0 ? "#2E7D5B" : "#B8352B"} />
-                      </div>
-                      <span className={s.tasaNota}>por 1 {m!.codigo} · últimas {m!.serie.length} publicaciones</span>
-                    </div>
-                  ))}
-                </div>
-                <span className={s.tasasPie}>
-                  Fuente: Banco Central de Venezuela · tasa aplicable según art. 25 de la Ley de IVA
-                  {d.bcv?.leida ? ` · leída a las ${hora(d.bcv.leida)}, hora de Caracas` : ""}
-                </span>
-                {d.p2p && (
-                  <div className={s.p2p} aria-labelledby="p2p-titulo">
-                    <div className={s.tasaFila}>
-                      <span id="p2p-titulo" className={s.tasaMoneda}>USDT · Binance P2P</span>
-                      {d.p2p.brecha_pct && (
-                        <span className={`${s.brecha} ${Number(d.p2p.brecha_pct) >= 0 ? s.brechaSube : s.brechaBaja}`}>
-                          {Number(d.p2p.brecha_pct) >= 0 ? "▲ +" : "▼ −"}{numero(Math.abs(Number(d.p2p.brecha_pct)), 1)} % <span>frente al BCV</span>
-                        </span>
-                      )}
-                    </div>
-                    <span className={s.p2pValor}><span>Bs.</span><strong>{numero(d.p2p.promedio, 2)}</strong></span>
-                    <span className={s.p2pNota}>promedio por 1 USDT</span>
-                    <dl className={s.p2pDatos}>
-                      <div><dt>Compra</dt><dd>Bs. {numero(d.p2p.compra, 2)}</dd></div>
-                      <div><dt>Venta</dt><dd>Bs. {numero(d.p2p.venta, 2)}</dd></div>
-                      {d.p2p.bcv && <div><dt>BCV</dt><dd>Bs. {numero(d.p2p.bcv.tasa, 2)}</dd></div>}
-                    </dl>
-                    <span className={s.p2pPie}>Fuente: Binance P2P</span>
-                  </div>
-                )}
-              </div>
+              <TarjetaTasas bcv={d.bcv} p2p={d.p2p} />
               <div className={`${s.foto} ${d.enCifras.length ? s.fotoCifras : ""}`}>
                 {d.enCifras.length ? <DiaEnCifras tarjetas={d.enCifras} /> : (
                   <Image src="/imagenes/bodega.webp" alt="Comerciante venezolano en su bodega, con el punto de venta a la vista" fill priority
@@ -181,31 +126,8 @@ export default async function Portada() {
           <div className={s.herramientas}>
             <PanelClasificador />
             <div className={s.columna}>
-              <div className="tarjeta" style={{ overflow: "hidden" }}>
-                <div className={s.herramientaCabeza}>
-                  <h3>Alícuotas vigentes</h3>
-                  <span>Ley que establece el Impuesto al Valor Agregado</span>
-                </div>
-                <div className={s.tabla}>
-                  <div className={s.alicuota}><span className="t-exento">—</span><span>Exenta, exonerada o no sujeta</span><span>arts. 16–19</span></div>
-                  <div className={s.alicuota}><span className="t-reducida">{d.alicuotas.reducida ? `${numero(d.alicuotas.reducida, 0)} %` : "—"}</span><span>Alícuota reducida</span><span>art. 64</span></div>
-                  <div className={s.alicuota}><span className="t-general">{d.alicuotas.general ? `${numero(d.alicuotas.general, 0)} %` : "—"}</span><span>Alícuota general</span><span>art. 63</span></div>
-                  <div className={s.alicuota}><span className="t-adicional">{d.alicuotas.general && d.alicuotas.adicional ? `${numero(Number(d.alicuotas.general) + Number(d.alicuotas.adicional), 0)} %` : "—"}</span><span>General más adicional (consumo suntuario)</span><span>arts. 27, 61</span></div>
-                </div>
-              </div>
-              <div className={`tarjeta ${s.inhabiles}`}>
-                <div className={s.inhabilesCabeza}><h3>Próximos días inhábiles</h3><span>COT art. 10</span></div>
-                <div>
-                  {d.inhabiles.map((x) => (
-                    <div key={x.fecha} className={s.inhabil}>
-                      <span>{fechaCorta(x.fecha)}</span>
-                      <span>{x.descripcion.replace(/ \(.*\)$/, "")}<span className={s.apagado}> · {diaSemana(x.fecha)}</span></span>
-                      <span>{x.tipo === "NACIONAL" ? "Nacional" : "Bancario"}</span>
-                    </div>
-                  ))}
-                </div>
-                <span className="aviso-legal">Los días bancarios no laborables también son inhábiles para declarar y pagar tributos.</span>
-              </div>
+              <TarjetaAlicuotas alicuotas={d.alicuotas} />
+              <TarjetaInhabiles inhabiles={d.inhabiles} />
             </div>
             <MisDeberes condiciones={condicionesCalendario} />
           </div>
